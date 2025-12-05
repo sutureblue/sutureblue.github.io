@@ -2,43 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Bee Nix – Art & Play</title>
+  <title>Bee – Art & Experiments</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="icon" href="favicon.png" type="image/png" />
 </head>
 <body>
-  <!-- Page wrapper -->
   <div class="page">
 
-    <!-- Header / nav -->
-<header class="site-header">
-  <div class="site-title">
-    <span>Bee Nix</span>
-  </div>
-</header>
+    <!-- Header -->
+    <header class="site-header">
+      <div class="site-title">
+        <span>Bee Nix</span>
+      </div>
+    </header>
 
-
-    <!-- Hero -->
     <main>
+      <!-- Hero -->
       <section class="hero">
         <div class="hero-text">
-          <h1>Weird things on screens.</h1>
+          <h1>Soft weird things on screens.</h1>
           <p>
-            A small collection of projects.
+            A small collection of projects, visuals, and experiments.
             This is a quiet WIP space while I move away from Squarespace.
           </p>
         </div>
       </section>
 
-      <!-- Work section -->
-<section id="work" class="section">
-  <h2>Work</h2>
+      <!-- Work section with teal glow card -->
+      <section id="work" class="section">
+        <h2>Work</h2>
 
-  <a href="#" class="glow-card">
-    <div class="glow-card-inner"></div>
-  </a>
-</section>
+        <a href="#" class="glow-card">
+          <div class="glow-card-inner">
+            <!--
+              Later you can drop an image in here, e.g.:
+
+              <img src="assets/work-placeholder.jpg"
+                   alt="Preview of recent work">
+            -->
+          </div>
+        </a>
+      </section>
 
       <!-- About section -->
       <section id="about" class="section">
@@ -46,17 +51,18 @@
         <div class="about-layout">
           <div>
             <p>
-              I’m Bee, a maker who thinks and a thinker who makes.
-              Slowly building this site.
+              I’m Bee, an artist who likes mixing digital noise, soft color,
+              and a bit of code. This site is a slow-growing garden
+              for new work and small experiments.
             </p>
             <p>
-              Right now everything is getting blocked out. I’ll be replacing these
+              Right now everything is blocked out. I’ll be replacing these
               cards and sections with real pieces over time.
             </p>
           </div>
           <div class="about-meta">
             <p><strong>Currently:</strong><br /> moving things off Squarespace.</p>
-            <p><strong>Contact:</strong><br /> sutureblue@protonmail.com</p>
+            <p><strong>Contact:</strong><br /> your@email.here</p>
           </div>
         </div>
       </section>
@@ -64,20 +70,15 @@
 
     <!-- Footer -->
     <footer class="site-footer">
-  <div class="license-footer">
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">
-      <img src="assets/cc.png" alt="Creative Commons License" class="cc-icon">
-    </a>
-    <span>2025</span>
-  </div>
+      <div class="license-footer">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">
+          <img src="assets/cc.png" alt="Creative Commons License" class="cc-icon">
+        </a>
+        <span>2025</span>
+      </div>
 
-  <span class="footer-note">built by hand · gently under construction</span>
-</footer>
+      <span class="footer-note">built by hand · gently under construction</span>
+    </footer>
   </div>
-
-  <script>
-    // Simple: keep footer year updated
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
