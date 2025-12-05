@@ -138,7 +138,7 @@ body {
   max-width: 480px;
 }
 
-/* ===== Grid + Cards ===== */
+/* ===== Grid + Cards (not used yet, but kept) ===== */
 
 .grid {
   display: grid;
@@ -237,7 +237,8 @@ body {
   display: block;
   margin-top: 24px;
   max-width: 360px;
-  aspect-ratio: 4 / 3;        /* rectangle; change to 1 / 1 for a square */
+  height: 220px;              /* explicit height so it’s visible */
+  /* aspect-ratio: 4 / 3; */   /* optional, but height is the important bit */
   text-decoration: none;
   position: relative;
 }
@@ -290,7 +291,6 @@ body {
   transition: transform 0.18s ease;
 }
 
-
 /* ===== Responsive ===== */
 
 @media (max-width: 700px) {
@@ -308,5 +308,9 @@ body {
 
   .page {
     padding-inline: 12px;
+  }
+
+  .glow-card {
+    max-width: 100%;
   }
 }
