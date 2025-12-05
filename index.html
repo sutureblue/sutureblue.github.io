@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bee Nix – Art & Play</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Page wrapper -->
+  <div class="page">
+
+    <!-- Header / nav -->
+    <header class="site-header">
+      <div class="logo-mark">🐝</div>
+      <div class="site-title">
+        <span>Bee Nix</span>
+        <small>art, research, fabrications</small>
+      </div>
+      <nav class="site-nav">
+        <a href="#work">work</a>
+        <a href="#experiments">experiments</a>
+        <a href="#about">about</a>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <main>
+      <section class="hero">
+        <div class="hero-text">
+          <h1>Weird things on screens.</h1>
+          <p>
+            A small collection of projects.
+            This is a quiet WIP space while I move away from Squarespace.
+          </p>
+        </div>
+      </section>
+
+      <!-- Work section -->
+      <section id="work" class="section">
+        <h2>Selected work</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Project One</h3>
+            <p>Fill this in at some point.</p>
+          </article>
+          <article class="card">
+            <h3>Project Two</h3>
+            <p>Another space to fill.</p>
+          </article>
+          <article class="card">
+            <h3>Project Three</h3>
+            <p>Maybe a performance, installation, or digital artifact.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Experiments section -->
+      <section id="experiments" class="section section-muted">
+        <h2>Loose experiments</h2>
+        <p class="section-intro">
+          Quick sketches, doodles, broken things, half-thoughts.
+        </p>
+        <div class="grid">
+          <article class="card card-soft">
+            <h3>Sketch 01</h3>
+            <p>A placeholder.</p>
+          </article>
+          <article class="card card-soft">
+            <h3>Sketch 02</h3>
+            <p>Another placeholder.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- About section -->
+      <section id="about" class="section">
+        <h2>About</h2>
+        <div class="about-layout">
+          <div>
+            <p>
+              I’m Bee, a maker who thinks and a thinker who makes.
+              Slowly building this site.
+            </p>
+            <p>
+              Right now everything is getting blocked out. I’ll be replacing these
+              cards and sections with real pieces over time.
+            </p>
+          </div>
+          <div class="about-meta">
+            <p><strong>Currently:</strong><br /> moving things off Squarespace.</p>
+            <p><strong>Contact:</strong><br /> sutureblue@protonmail.com</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <span>© <span id="year"></span> Bee Nix</span>
+      <span class="footer-note">building by hand · gently under construction</span>
+    </footer>
+  </div>
+
+  <script>
+    // Simple: keep footer year updated
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
