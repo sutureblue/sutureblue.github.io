@@ -1,0 +1,240 @@
+/* ===== Base ===== */
+
+:root {
+  --bg: #050509;
+  --bg-soft: #101018;
+  --fg: #f7f5ff;
+  --muted: #a4a1c2;
+  --accent: #ffb84d;
+  --accent-2: #1be496;
+  --border-soft: rgba(255, 255, 255, 0.1);
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.6);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top left, #171728, #050509 55%);
+  color: var(--fg);
+}
+
+/* Page wrapper */
+
+.page {
+  min-height: 100vh;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+/* ===== Header ===== */
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(10, 10, 20, 0.85);
+  border: 1px solid var(--border-soft);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-soft);
+  position: sticky;
+  top: 16px;
+  z-index: 10;
+}
+
+.logo-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 20%, var(--accent), #e41b9e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.site-title span {
+  display: block;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.site-title small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.site-nav {
+  display: flex;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.site-nav a {
+  text-decoration: none;
+  color: var(--muted);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.site-nav a:hover {
+  color: var(--fg);
+  border-color: var(--border-soft);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ===== Hero ===== */
+
+.hero {
+  padding: 72px 8px 40px;
+}
+
+.hero-text h1 {
+  font-size: clamp(32px, 4vw, 42px);
+  line-height: 1.1;
+  margin: 0 0 12px;
+}
+
+.hero-text p {
+  max-width: 520px;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+/* ===== Sections ===== */
+
+.section {
+  padding: 32px 8px 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  margin-top: 8px;
+}
+
+.section-muted {
+  background: radial-gradient(circle at top, #171728, #080812 60%);
+  border-radius: var(--radius-lg);
+  margin-top: 24px;
+  border: 1px solid var(--border-soft);
+}
+
+.section h2 {
+  font-size: 18px;
+  margin: 0 0 12px;
+}
+
+.section-intro {
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 480px;
+}
+
+/* ===== Grid / cards ===== */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.card {
+  padding: 14px 14px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-soft);
+  background: rgba(10, 10, 20, 0.9);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.card-soft {
+  background: rgba(10, 10, 20, 0.7);
+}
+
+.card h3 {
+  font-size: 15px;
+  margin: 0 0 6px;
+}
+
+.card p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ===== About layout ===== */
+
+.about-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
+  gap: 18px;
+  margin-top: 12px;
+}
+
+.about-layout p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.about-meta {
+  font-size: 13px;
+  color: var(--muted);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-soft);
+  padding: 12px 14px;
+  background: rgba(10, 10, 20, 0.9);
+}
+
+/* ===== Footer ===== */
+
+.site-footer {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.footer-note {
+  opacity: 0.8;
+}
+
+/* ===== Responsive tweaks ===== */
+
+@media (max-width: 700px) {
+  .site-header {
+    align-items: flex-start;
+  }
+
+  .site-nav {
+    font-size: 12px;
+  }
+
+  .about-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .page {
+    padding-inline: 12px;
+  }
+}
