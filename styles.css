@@ -250,7 +250,7 @@ a:hover,
   position: absolute;
   inset: -4px; /* extends beyond image */
   max-width: 600px;
-  max-height: 220px;
+  max-height: 230px;
 
   background: rgba(10, 10, 20, 0.96);
   border: 3px solid #000;
