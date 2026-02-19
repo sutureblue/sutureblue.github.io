@@ -146,5 +146,28 @@
   readMore.addEventListener("click", openOverlay);
   closeBtn.addEventListener("click", closeOverlay);
 </script>
+  <script>
+  const track = document.querySelector(".carousel-track");
+  const slides = document.querySelectorAll(".carousel-image");
+  const prev = document.querySelector(".carousel-btn.prev");
+  const next = document.querySelector(".carousel-btn.next");
+
+  let index = 0;
+
+  function updateCarousel() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+  }
+
+  next.addEventListener("click", () => {
+    index = (index + 1) % slides.length;
+    updateCarousel();
+  });
+
+  prev.addEventListener("click", () => {
+    index = (index - 1 + slides.length) % slides.length;
+    updateCarousel();
+  });
+</script>
+
 </body>
 </html>
