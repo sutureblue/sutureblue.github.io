@@ -176,7 +176,7 @@ a:hover {
 .carousel-viewport {
   width: 100%;
   height: 100%;
-  overflow: hidden;        /* clip images to rounded corners */
+  overflow: visible;     /* <-- was hidden; this is why stacks vanished */
   border-radius: 22px;
 }
 
