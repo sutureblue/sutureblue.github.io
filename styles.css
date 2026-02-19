@@ -194,7 +194,9 @@ a:hover {
   height: 100%;
   object-fit: cover;
 
-  opacity: 0.2;                /* 20% for anything not active by default */
+  clip-path: inset(0 round 22px);  /* keeps rounded corners even with overflow visible */
+
+  opacity: 0.2;
   transform: translateX(0) scale(0.98);
   transition: transform 0.35s ease, opacity 0.35s ease;
   z-index: 1;
@@ -207,25 +209,24 @@ a:hover {
   z-index: 5;
 }
 
-/* Queue stack RIGHT: half off the edge */
 .carousel-image.queue-right {
   opacity: 0.2;
   transform:
-    translateX(55%)            /* halfway off canvas */
+    translateX(40%)                 /* visible stack peeking out */
     translateY(calc(var(--stack-i) * 3px))
     scale(0.92);
-  z-index: calc(4 - var(--stack-i));
+  z-index: 4;
 }
 
-/* Queue stack LEFT: half off the edge */
 .carousel-image.queue-left {
   opacity: 0.2;
   transform:
-    translateX(-55%)
+    translateX(-40%)
     translateY(calc(var(--stack-i) * 3px))
     scale(0.92);
-  z-index: calc(4 - var(--stack-i));
+  z-index: 4;
 }
+
 
 /* Arrows outside card */
 .carousel-btn {
