@@ -236,6 +236,55 @@ a:hover,
   color: var(--fg);
 }
 
+/* ===== Carousel ===== */
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+  max-width: 360px;
+  max-height: 220px;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.35s ease;
+}
+
+.carousel-image {
+  max-width: 360px;
+  max-height: 220px;
+  flex: 0 0 100%;
+  object-fit: cover;
+}
+
+/* Buttons */
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(10, 10, 20, 0.6);
+  border: none;
+  color: var(--fg);
+  font-size: 20px;
+  padding: 6px 10px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.carousel-btn.prev {
+  left: 8px;
+}
+
+.carousel-btn.next {
+  right: 8px;
+}
+
+.carousel-btn:hover {
+  background: rgba(10, 10, 20, 0.9);
+}
+
+
 
 /* ===== About ===== */
 
