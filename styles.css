@@ -237,10 +237,6 @@ transition: filter 0.22s ease;
   filter: invert(1) hue-rotate(180deg) contrast(1.05);
 }
 
-.glow-card:hover::before {
-  filter: blur(6px) invert(1);
-}
-
 /* ===== Stacks ===== */
 
 .carousel-stack {
