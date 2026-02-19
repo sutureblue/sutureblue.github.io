@@ -35,16 +35,13 @@ body {
 
 /* ===== Global Links ===== */
 
-a,
-.read-more {
+a {
   color: var(--link-blue);
   text-decoration: none;
   transition: color 0.15s ease;
-  cursor: pointer;
 }
 
-a:hover,
-.read-more:hover {
+a:hover {
   color: var(--glow-blue);
 }
 
@@ -86,13 +83,14 @@ a:hover,
 .hero h1 {
   font-size: clamp(32px, 4vw, 42px);
   line-height: 1.1;
+  margin: 0 0 12px;
   margin-left: auto;
   max-width: 720px;
 }
 
 .hero p {
   max-width: 520px;
-  margin-left: auto;
+  margin: 0 0 0 auto;
   font-size: 15px;
   color: var(--muted);
 }
@@ -153,10 +151,10 @@ a:hover,
 }
 
 .glow-card-inner {
-  position: relative;
+  position: relative;      /* needed for overlay & stacking */
   z-index: 1;
   border-radius: 22px;
-  overflow: visible;
+  overflow: visible;       /* arrows can sit outside */
   transition: transform 0.18s ease;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
 }
@@ -165,21 +163,21 @@ a:hover,
   transform: translateY(-2px);
 }
 
-/* ===== Carousel ===== */
-
-.carousel {
-  position: relative;
-  overflow: hidden;
-  max-width: 360px;
-  max-height: 220px;
-  border-radius: 22px;
-}
+/* ===== Stacked Carousel ===== */
 
 .carousel {
   position: relative;
   width: 360px;
   height: 220px;
   margin: 0 auto;
+  overflow: visible;       /* allow arrows outside the card */
+}
+
+.carousel-viewport {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;        /* clip images to rounded corners */
+  border-radius: 22px;
 }
 
 .carousel-track {
@@ -188,33 +186,42 @@ a:hover,
   height: 100%;
 }
 
+/* All slides stacked */
 .carousel-image {
   position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: all 0.4s ease;
+
+  opacity: 0;
+  transform: translateX(0) scale(0.96);
+  transition: transform 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
+  z-index: 1;
 }
 
-/* Center image */
+/* Center (active) */
 .carousel-image.active {
+  opacity: 1;
   transform: translateX(0) scale(1);
   z-index: 3;
-  opacity: 1;
+  filter: none;
 }
 
 /* Stack right */
 .carousel-image.stack-right {
-  transform: translateX(40px) scale(0.9);
-  opacity: 0.5;
+  opacity: 0.55;
+  transform: translateX(48px) scale(0.92);
   z-index: 2;
+  filter: blur(0.2px);
 }
 
 /* Stack left */
 .carousel-image.stack-left {
-  transform: translateX(-40px) scale(0.9);
-  opacity: 0.5;
-  z-index: 1;
+  opacity: 0.55;
+  transform: translateX(-48px) scale(0.92);
+  z-index: 2;
+  filter: blur(0.2px);
 }
 
 /* Arrows outside card */
@@ -222,46 +229,47 @@ a:hover,
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+
   background: none;
   border: none;
+  padding: 0;
+
   font-size: 28px;
-  cursor: pointer;
+  line-height: 1;
   color: var(--fg);
-  z-index: 5;
-}
-
-.carousel-btn.prev {
-  left: -30px;
-}
-
-.carousel-btn.next {
-  right: -30px;
-}
-
-/* Read more styling */
-.read-more {
-  font-weight: bold;
   cursor: pointer;
+
+  z-index: 10;
+  user-select: none;
+}
+
+.carousel-btn.prev { left: -32px; }
+.carousel-btn.next { right: -32px; }
+
+.carousel-btn:hover {
+  color: var(--glow-blue);
 }
 
 /* ===== Overlay ===== */
 
 .work-overlay {
   position: absolute;
-  inset: -4px; /* extends beyond image */
+  inset: -4px;             /* border extends beyond image */
   max-width: 600px;
-  max-height: 230px;
+  max-height: 220px;
 
   background: rgba(10, 10, 20, 0.96);
   border: 3px solid #000;
   border-radius: 26px;
 
-  padding: 18px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+  padding: 18px 18px 44px; /* room for bottom-left close */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
 
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
+
+  z-index: 20;             /* above carousel images */
 }
 
 .work-overlay.active {
@@ -269,12 +277,11 @@ a:hover,
   pointer-events: auto;
 }
 
-/* Close Button Bottom Left */
-
 .overlay-close {
   position: absolute;
   bottom: 12px;
   left: 14px;
+
   background: none;
   border: none;
   color: var(--fg);
@@ -292,6 +299,17 @@ a:hover,
 .work-meta h3 {
   margin: 0 0 4px;
   font-size: 15px;
+}
+
+.read-more {
+  font-weight: 700;        /* bold only */
+  color: var(--link-blue);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.read-more:hover {
+  color: var(--glow-blue);
 }
 
 /* ===== About ===== */
@@ -352,4 +370,8 @@ a:hover,
   .site-header {
     margin-bottom: 32px;
   }
+
+  /* Keep arrows closer on small screens */
+  .carousel-btn.prev { left: -22px; }
+  .carousel-btn.next { right: -22px; }
 }
