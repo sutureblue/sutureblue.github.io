@@ -230,11 +230,6 @@ body {
   display: block;
   -webkit-user-drag: none;
 
-transition: filter 0.22s ease;
-}
-
-.glow-card:hover .carousel-center img {
-  filter: invert(1) hue-rotate(180deg) contrast(1.05);
 }
 
 /* ===== Stacks ===== */
