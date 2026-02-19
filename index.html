@@ -16,7 +16,6 @@
     </header>
 
     <main>
-
       <section class="hero">
         <h1>Soft weird things on screens.</h1>
         <p>
@@ -31,31 +30,38 @@
         <h2>Work</h2>
 
         <div class="work-item">
-
           <div class="glow-card">
             <div class="glow-card-inner">
 
-              <!-- Stacked Carousel -->
-
+              <!-- Two-layer deck carousel -->
               <div class="carousel">
-  <button class="carousel-btn prev" type="button" aria-label="Previous image">‹</button>
+                <!-- LEFT click: pull from RIGHT stack into center (motion goes left) -->
+                <button class="carousel-btn left" type="button" aria-label="Move left">‹</button>
 
-  <div class="carousel-viewport">
-    <div class="carousel-track">
-      <img src="assets/gNg.png" class="carousel-image" alt="">
-      <img src="assets/gNg.png" class="carousel-image" alt="">
-      <img src="assets/gNg.png" class="carousel-image" alt="">
-    </div>
-  </div>
+                <div class="carousel-stage">
+                  <div class="carousel-stack left" aria-hidden="true"></div>
 
-  <button class="carousel-btn next" type="button" aria-label="Next image">›</button>
-</div>
+                  <div class="carousel-center">
+                    <img class="carousel-center-img" src="assets/gNg.png" alt="" />
+                  </div>
 
+                  <div class="carousel-stack right" aria-hidden="true"></div>
+                </div>
 
+                <!-- RIGHT click: pull from LEFT stack into center (motion goes right) -->
+                <button class="carousel-btn right" type="button" aria-label="Move right">›</button>
+
+                <!-- sources (loaded once, not displayed) -->
+                <div class="carousel-sources" hidden>
+                  <img src="assets/gNg.png" alt="">
+                  <img src="assets/gNg.png" alt="">
+                  <img src="assets/gNg.png" alt="">
+                </div>
+              </div>
 
               <!-- Overlay -->
-              <div class="work-overlay">
-                <button class="overlay-close">×</button>
+              <div class="work-overlay" aria-hidden="true">
+                <button class="overlay-close" type="button" aria-label="Close overlay">×</button>
                 <p>
                   filler filler filling this, this is filled
                   fill fill fill
@@ -68,9 +74,8 @@
 
           <div class="work-meta">
             <h3>Project Title</h3>
-            <span class="read-more">Read more...</span>
+            <span class="read-more" role="button" tabindex="0">Read more...</span>
           </div>
-
         </div>
       </section>
 
@@ -97,128 +102,138 @@
           </div>
         </div>
       </section>
-
     </main>
 
     <footer class="site-footer">
       <div class="license-footer">
-        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">
           <img src="assets/cc.png" alt="Creative Commons" class="cc-icon" />
         </a>
         <span>2025</span>
       </div>
 
-      <span class="footer-note">
-        built by hand · gently under construction
-      </span>
+      <span class="footer-note">built by hand · gently under construction</span>
     </footer>
-
   </div>
 
   <!-- Overlay Script -->
   <script>
     document.querySelectorAll(".work-item").forEach((workItem) => {
-
       const overlay = workItem.querySelector(".work-overlay");
       const readMore = workItem.querySelector(".read-more");
       const closeBtn = workItem.querySelector(".overlay-close");
-      const card = workItem.querySelector(".glow-card");
 
       function openOverlay(e) {
         e.stopPropagation();
         overlay.classList.add("active");
+        overlay.setAttribute("aria-hidden", "false");
       }
 
       function closeOverlay(e) {
         e.stopPropagation();
         overlay.classList.remove("active");
+        overlay.setAttribute("aria-hidden", "true");
       }
 
       readMore.addEventListener("click", openOverlay);
+      readMore.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") openOverlay(e);
+      });
+
       closeBtn.addEventListener("click", closeOverlay);
-
       overlay.addEventListener("click", closeOverlay);
-
+      overlay.querySelector("p").addEventListener("click", (e) => e.stopPropagation());
     });
   </script>
 
-  <!-- Stacked Carousel Script -->
-<script>
-  document.querySelectorAll(".carousel").forEach((carousel) => {
-    const slides = Array.from(carousel.querySelectorAll(".carousel-image"));
-    const prev = carousel.querySelector(".carousel-btn.prev");
-    const next = carousel.querySelector(".carousel-btn.next");
+  <!-- Two-layer Deck Carousel Script (true left/center/right piles + reversed arrows) -->
+  <script>
+    document.querySelectorAll(".carousel").forEach((carousel) => {
+      const sources = Array.from(carousel.querySelectorAll(".carousel-sources img"))
+        .map(img => img.getAttribute("src"));
 
-    // Deck state
-    let center = 0;
-    let leftStack = [];                 // indices
-    let rightStack = slides.map((_, i) => i).slice(1); // all except first
+      const centerImg = carousel.querySelector(".carousel-center-img");
+      const leftStackEl = carousel.querySelector(".carousel-stack.left");
+      const rightStackEl = carousel.querySelector(".carousel-stack.right");
 
-    function render() {
-      slides.forEach((slide) => {
-        slide.classList.remove(
-          "is-center",
-          "in-left-stack",
-          "in-right-stack"
-        );
-        slide.style.setProperty("--stack-i", "0");
+      const btnLeft = carousel.querySelector(".carousel-btn.left");
+      const btnRight = carousel.querySelector(".carousel-btn.right");
+
+      // Piles: left / center / right
+      let center = 0;
+      let leftStack = [];
+      let rightStack = sources.map((_, i) => i).slice(1); // start with everything queued on the right
+
+      function renderStacks() {
+        // clear stacks
+        leftStackEl.innerHTML = "";
+        rightStackEl.innerHTML = "";
+
+        // render left stack
+        leftStack.forEach((idx, i) => {
+          const card = document.createElement("div");
+          card.className = "stack-card";
+          card.style.setProperty("--stack-i", String(i));
+
+          const img = document.createElement("img");
+          img.src = sources[idx];
+          img.alt = "";
+
+          card.appendChild(img);
+          leftStackEl.appendChild(card);
+        });
+
+        // render right stack
+        rightStack.forEach((idx, i) => {
+          const card = document.createElement("div");
+          card.className = "stack-card";
+          card.style.setProperty("--stack-i", String(i));
+
+          const img = document.createElement("img");
+          img.src = sources[idx];
+          img.alt = "";
+
+          card.appendChild(img);
+          rightStackEl.appendChild(card);
+        });
+
+        // set center
+        centerImg.src = sources[center];
+
+        // disable if empty
+        btnLeft.disabled = rightStack.length === 0;  // LEFT pulls from RIGHT
+        btnRight.disabled = leftStack.length === 0;  // RIGHT pulls from LEFT
+      }
+
+      // LEFT click: pull from RIGHT into center; center goes to LEFT
+      btnLeft.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (rightStack.length === 0) return;
+
+        carousel.classList.add("moving-left");
+        setTimeout(() => carousel.classList.remove("moving-left"), 180);
+
+        leftStack.unshift(center);
+        center = rightStack.shift();
+        renderStacks();
       });
 
-      // Center card
-      slides[center].classList.add("is-center");
+      // RIGHT click: pull from LEFT into center; center goes to RIGHT
+      btnRight.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (leftStack.length === 0) return;
 
-      // Left stack (top card should be closest to center)
-      leftStack.forEach((idx, i) => {
-        slides[idx].classList.add("in-left-stack");
-        slides[idx].style.setProperty("--stack-i", String(i));
+        carousel.classList.add("moving-right");
+        setTimeout(() => carousel.classList.remove("moving-right"), 180);
+
+        rightStack.unshift(center);
+        center = leftStack.shift();
+        renderStacks();
       });
 
-      // Right stack
-      rightStack.forEach((idx, i) => {
-        slides[idx].classList.add("in-right-stack");
-        slides[idx].style.setProperty("--stack-i", String(i));
-      });
-
-      // Disable arrows if stack empty (nice UX)
-      prev.disabled = leftStack.length === 0;
-      next.disabled = rightStack.length === 0;
-      prev.style.opacity = prev.disabled ? "0.25" : "1";
-      next.style.opacity = next.disabled ? "0.25" : "1";
-      prev.style.cursor = prev.disabled ? "default" : "pointer";
-      next.style.cursor = next.disabled ? "default" : "pointer";
-    }
-
-    next.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (rightStack.length === 0) return;
-
-      // Move current center to left stack
-      leftStack.unshift(center);
-
-      // Bring first from right stack to center
-      center = rightStack.shift();
-
-      render();
+      renderStacks();
     });
-
-    prev.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (leftStack.length === 0) return;
-
-      // Move current center to right stack
-      rightStack.unshift(center);
-
-      // Bring first from left stack to center
-      center = leftStack.shift();
-
-      render();
-    });
-
-    render();
-  });
-</script>
-
-
+  </script>
 
 </body>
 </html>
