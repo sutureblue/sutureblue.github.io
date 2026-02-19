@@ -173,6 +173,10 @@ a:hover {
   overflow: visible;       /* allow arrows outside the card */
 }
 
+.carousel-image.is-center {
+  clip-path: inset(0 round 22px);
+}
+
 .carousel-viewport {
   width: 100%;
   height: 100%;
