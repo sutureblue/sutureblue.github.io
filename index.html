@@ -21,43 +21,55 @@
         <h1>Soft weird things on screens.</h1>
         <p>
           A small collection of projects, visuals, and experiments.
+          This is a quiet WIP space while I move away from Squarespace.
         </p>
       </section>
 
       <div class="section-divider"></div>
 
-      <section class="section">
+      <section id="work" class="section">
         <h2>Work</h2>
 
         <div class="work-item">
           <div class="glow-card">
             <div class="glow-card-inner">
 
-              <div class="carousel">
-                <button class="carousel-btn left">‹</button>
+              <!-- Two-layer deck carousel -->
+              <div class="carousel" aria-label="Image deck carousel">
+
+                <!-- Left arrow: pulls from RIGHT stack into center (as you have it now) -->
+                <button class="carousel-btn left" type="button" aria-label="Move left">‹</button>
 
                 <div class="carousel-stage">
-                  <div class="carousel-stack left"></div>
+                  <div class="carousel-stack left" aria-hidden="true"></div>
 
                   <div class="carousel-center">
-                    <img class="carousel-center-img" src="assets/gNg.png" alt="">
+                    <img class="carousel-center-img" src="assets/gNg.png" alt="" />
                   </div>
 
-                  <div class="carousel-stack right"></div>
+                  <div class="carousel-stack right" aria-hidden="true"></div>
                 </div>
 
-                <button class="carousel-btn right">›</button>
+                <!-- Right arrow: pulls from LEFT stack into center (as you have it now) -->
+                <button class="carousel-btn right" type="button" aria-label="Move right">›</button>
 
+                <!-- Sources: loaded once, never displayed -->
                 <div class="carousel-sources" hidden>
-                  <img src="assets/gNg.png">
-                  <img src="assets/gNg.png">
-                  <img src="assets/gNg.png">
+                  <img src="assets/gNg.png" alt="">
+                  <img src="assets/gNg.png" alt="">
+                  <img src="assets/gNg.png" alt="">
                 </div>
+
               </div>
 
-              <div class="work-overlay">
-                <button class="overlay-close">×</button>
-                <p>Filler text for overlay.</p>
+              <!-- Overlay -->
+              <div class="work-overlay" aria-hidden="true">
+                <button class="overlay-close" type="button" aria-label="Close overlay">×</button>
+                <p>
+                  filler filler filling this, this is filled
+                  fill fill fill
+                  filler filler fill.
+                </p>
               </div>
 
             </div>
@@ -65,81 +77,214 @@
 
           <div class="work-meta">
             <h3>Project Title</h3>
-            <span class="read-more">Read more...</span>
+            <span class="read-more" role="button" tabindex="0">Read more...</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <section id="about" class="section">
+        <h2>About</h2>
+
+        <div class="about-layout">
+          <div>
+            <p>
+              I’m Bee Nix, aka Suture Blue.
+              Mixing digital noise and overthinking.
+            </p>
+            <p>
+              This site is a slow-growing container for experiments
+              and unfinished thoughts.
+            </p>
           </div>
 
+          <div class="about-meta">
+            <p><strong>Currently</strong><br>moving off Squarespace</p>
+            <p><strong>Contact</strong><br>sutureblue@protonmail.com</p>
+          </div>
         </div>
-
       </section>
 
     </main>
+
+    <footer class="site-footer">
+      <div class="license-footer">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">
+          <img src="assets/cc.png" alt="Creative Commons" class="cc-icon" />
+        </a>
+        <span>2025</span>
+      </div>
+
+      <span class="footer-note">
+        built by hand · gently under construction
+      </span>
+    </footer>
+
   </div>
 
-  <!-- Overlay -->
+  <!-- Overlay Script -->
   <script>
-    const overlay = document.querySelector(".work-overlay");
-    document.querySelector(".read-more").onclick = () => overlay.classList.add("active");
-    document.querySelector(".overlay-close").onclick = () => overlay.classList.remove("active");
+    document.querySelectorAll(".work-item").forEach((workItem) => {
+      const overlay = workItem.querySelector(".work-overlay");
+      const readMore = workItem.querySelector(".read-more");
+      const closeBtn = workItem.querySelector(".overlay-close");
+
+      function openOverlay(e) {
+        e.stopPropagation();
+        overlay.classList.add("active");
+        overlay.setAttribute("aria-hidden", "false");
+      }
+
+      function closeOverlay(e) {
+        e.stopPropagation();
+        overlay.classList.remove("active");
+        overlay.setAttribute("aria-hidden", "true");
+      }
+
+      readMore.addEventListener("click", openOverlay);
+      readMore.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") openOverlay(e);
+      });
+
+      closeBtn.addEventListener("click", closeOverlay);
+
+      // Clicking the overlay background closes it (clicking text doesn't)
+      overlay.addEventListener("click", closeOverlay);
+      overlay.querySelector("p").addEventListener("click", (e) => e.stopPropagation());
+    });
   </script>
 
-  <!-- Deck Carousel Logic (LEFT pulls from RIGHT, RIGHT pulls from LEFT) -->
+  <!-- Carousel Script: arrows + drag
+       Arrow behavior preserved:
+       - Left arrow (‹): pull from RIGHT into center, center goes LEFT
+       - Right arrow (›): pull from LEFT into center, center goes RIGHT
+  -->
   <script>
-    const carousel = document.querySelector(".carousel");
-    const sources = Array.from(carousel.querySelectorAll(".carousel-sources img"))
-      .map(img => img.src);
+    document.querySelectorAll(".carousel").forEach((carousel) => {
+      const sources = Array.from(carousel.querySelectorAll(".carousel-sources img"))
+        .map(img => img.getAttribute("src"));
 
-    const centerImg = carousel.querySelector(".carousel-center-img");
-    const leftStackEl = carousel.querySelector(".carousel-stack.left");
-    const rightStackEl = carousel.querySelector(".carousel-stack.right");
+      const centerImg = carousel.querySelector(".carousel-center-img");
+      const centerArea = carousel.querySelector(".carousel-center");
+      const leftStackEl = carousel.querySelector(".carousel-stack.left");
+      const rightStackEl = carousel.querySelector(".carousel-stack.right");
 
-    const btnLeft = carousel.querySelector(".carousel-btn.left");
-    const btnRight = carousel.querySelector(".carousel-btn.right");
+      const btnLeft = carousel.querySelector(".carousel-btn.left");
+      const btnRight = carousel.querySelector(".carousel-btn.right");
 
-    let center = 0;
-    let leftStack = [];
-    let rightStack = sources.map((_, i) => i).slice(1);
+      // Piles: left / center / right
+      let center = 0;
+      let leftStack = [];
+      let rightStack = sources.map((_, i) => i).slice(1); // start queued on the right
 
-    function render() {
-      leftStackEl.innerHTML = "";
-      rightStackEl.innerHTML = "";
+      function renderStacks() {
+        leftStackEl.innerHTML = "";
+        rightStackEl.innerHTML = "";
 
-      centerImg.src = sources[center];
+        // render left stack
+        leftStack.forEach((idx, i) => {
+          const card = document.createElement("div");
+          card.className = "stack-card";
+          card.style.setProperty("--stack-i", String(i));
 
-      leftStack.forEach((idx, i) => {
-        const card = document.createElement("div");
-        card.className = "stack-card";
-        card.style.setProperty("--stack-i", i);
-        card.innerHTML = `<img src="${sources[idx]}">`;
-        leftStackEl.appendChild(card);
-      });
+          const img = document.createElement("img");
+          img.src = sources[idx];
+          img.alt = "";
 
-      rightStack.forEach((idx, i) => {
-        const card = document.createElement("div");
-        card.className = "stack-card";
-        card.style.setProperty("--stack-i", i);
-        card.innerHTML = `<img src="${sources[idx]}">`;
-        rightStackEl.appendChild(card);
-      });
+          card.appendChild(img);
+          leftStackEl.appendChild(card);
+        });
 
-      btnLeft.disabled = rightStack.length === 0;
-      btnRight.disabled = leftStack.length === 0;
-    }
+        // render right stack
+        rightStack.forEach((idx, i) => {
+          const card = document.createElement("div");
+          card.className = "stack-card";
+          card.style.setProperty("--stack-i", String(i));
 
-    btnLeft.onclick = () => {
-      if (!rightStack.length) return;
-      leftStack.unshift(center);
-      center = rightStack.shift();
-      render();
-    };
+          const img = document.createElement("img");
+          img.src = sources[idx];
+          img.alt = "";
 
-    btnRight.onclick = () => {
-      if (!leftStack.length) return;
-      rightStack.unshift(center);
-      center = leftStack.shift();
-      render();
-    };
+          card.appendChild(img);
+          rightStackEl.appendChild(card);
+        });
 
-    render();
+        centerImg.src = sources[center];
+
+        // enable/disable arrows based on available stacks (current behavior)
+        btnLeft.disabled = rightStack.length === 0; // left pulls from RIGHT
+        btnRight.disabled = leftStack.length === 0; // right pulls from LEFT
+      }
+
+      // Actions matching your current arrow behavior
+      function moveLeft() {
+        if (rightStack.length === 0) return;
+        leftStack.unshift(center);
+        center = rightStack.shift();
+        renderStacks();
+      }
+
+      function moveRight() {
+        if (leftStack.length === 0) return;
+        rightStack.unshift(center);
+        center = leftStack.shift();
+        renderStacks();
+      }
+
+      // Arrow clicks
+      btnLeft.addEventListener("click", (e) => { e.stopPropagation(); moveLeft(); });
+      btnRight.addEventListener("click", (e) => { e.stopPropagation(); moveRight(); });
+
+      // Drag / swipe
+      let dragging = false;
+      let startX = 0;
+      let lastX = 0;
+      const THRESHOLD_PX = 40;
+
+      function onDown(e) {
+        // don't swipe when overlay is open
+        const overlay = carousel.closest(".glow-card-inner")?.querySelector(".work-overlay");
+        if (overlay && overlay.classList.contains("active")) return;
+
+        dragging = true;
+        startX = e.clientX;
+        lastX = startX;
+
+        centerArea.setPointerCapture(e.pointerId);
+      }
+
+      function onMove(e) {
+        if (!dragging) return;
+        lastX = e.clientX;
+      }
+
+      function onUp(e) {
+        if (!dragging) return;
+        dragging = false;
+
+        const dx = lastX - startX;
+
+        // Drag left = show next from RIGHT stack (same as left arrow)
+        if (dx <= -THRESHOLD_PX) {
+          moveLeft();
+          return;
+        }
+
+        // Drag right = show next from LEFT stack (same as right arrow)
+        if (dx >= THRESHOLD_PX) {
+          moveRight();
+          return;
+        }
+      }
+
+      centerArea.addEventListener("pointerdown", onDown);
+      centerArea.addEventListener("pointermove", onMove);
+      centerArea.addEventListener("pointerup", onUp);
+      centerArea.addEventListener("pointercancel", onUp);
+
+      renderStacks();
+    });
   </script>
 
 </body>
