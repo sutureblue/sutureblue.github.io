@@ -40,7 +40,7 @@
                 type="translate"
                 from="-1 0"
                 to="1 0"
-                dur="7s"
+                dur="4s"
                 repeatCount="indefinite"
               />
             </linearGradient>
@@ -70,14 +70,14 @@
 
               <div class="carousel">
 
-                <!-- Left Arrow -->
-                <button class="carousel-btn left" type="button">‹</button>
+                <!-- Left Arrow (previous) -->
+                <button class="carousel-btn left" type="button" aria-label="Previous project">‹</button>
 
                 <div class="carousel-stage">
 
                   <div class="carousel-stack left"></div>
 
-                  <div class="carousel-center">
+                  <div class="carousel-center" role="button" tabindex="0" aria-label="Open project details">
                     <img class="carousel-center-img" src="assets/gNg.png" alt="">
                   </div>
 
@@ -85,8 +85,8 @@
 
                 </div>
 
-                <!-- Right Arrow -->
-                <button class="carousel-btn right" type="button">›</button>
+                <!-- Right Arrow (next) -->
+                <button class="carousel-btn right" type="button" aria-label="Next project">›</button>
 
                 <!-- Hidden Project Data -->
                 <div class="carousel-sources" hidden>
@@ -114,12 +114,14 @@
 
                 </div>
 
-              </div>
+                <!-- Overlay -->
+                <div class="work-overlay" aria-hidden="true">
+                  <div class="overlay-inner">
+                    <button class="overlay-close" type="button" aria-label="Close overlay">×</button>
+                    <p class="overlay-text"></p>
+                  </div>
+                </div>
 
-              <!-- Overlay -->
-              <div class="work-overlay" aria-hidden="true">
-                <button class="overlay-close" type="button">×</button>
-                <p class="overlay-text"></p>
               </div>
 
             </div>
@@ -149,7 +151,7 @@
                 type="translate"
                 from="-1 0"
                 to="1 0"
-                dur="7s"
+                dur="4s"
                 repeatCount="indefinite"
               />
             </linearGradient>
@@ -226,15 +228,14 @@
 
   </div>
 
-
-  <!-- Carousel + Overlay Script (NO DRAG SUPPORT) -->
+  <!-- Carousel + Overlay Script -->
   <script>
-
     document.querySelectorAll(".work-item").forEach((workItem) => {
 
       const carousel = workItem.querySelector(".carousel");
 
       const overlay = workItem.querySelector(".work-overlay");
+      const overlayInner = workItem.querySelector(".overlay-inner");
       const overlayText = workItem.querySelector(".overlay-text");
 
       const readMore = workItem.querySelector(".read-more");
@@ -269,7 +270,6 @@
       }
 
       function renderStacks() {
-
         leftStackEl.innerHTML = "";
         rightStackEl.innerHTML = "";
 
@@ -277,7 +277,7 @@
           const card = document.createElement("div");
           card.className = "stack-card";
           card.style.setProperty("--stack-i", i);
-          card.innerHTML = `<img src="${projects[idx].src}">`;
+          card.innerHTML = `<img src="${projects[idx].src}" alt="">`;
           leftStackEl.appendChild(card);
         });
 
@@ -285,57 +285,79 @@
           const card = document.createElement("div");
           card.className = "stack-card";
           card.style.setProperty("--stack-i", i);
-          card.innerHTML = `<img src="${projects[idx].src}">`;
+          card.innerHTML = `<img src="${projects[idx].src}" alt="">`;
           rightStackEl.appendChild(card);
         });
 
         centerImg.src = projects[center].src;
         updateMeta(center);
 
-        btnLeft.disabled = rightStack.length === 0;
-        btnRight.disabled = leftStack.length === 0;
+        // "Previous" is only possible if we have a left stack
+        btnLeft.disabled = leftStack.length === 0;
+
+        // "Next" is only possible if we have a right stack
+        btnRight.disabled = rightStack.length === 0;
       }
 
-      function moveLeft() {
+      // NEXT (advance forward): pull from rightStack
+      function goNext() {
         if (!rightStack.length) return;
         leftStack.unshift(center);
         center = rightStack.shift();
         renderStacks();
       }
 
-      function moveRight() {
+      // PREVIOUS (go back): pull from leftStack
+      function goPrev() {
         if (!leftStack.length) return;
         rightStack.unshift(center);
         center = leftStack.shift();
         renderStacks();
       }
 
-      btnLeft.onclick = moveLeft;
-      btnRight.onclick = moveRight;
+      btnLeft.onclick = goPrev;
+      btnRight.onclick = goNext;
 
       function openOverlay(e) {
-        e.stopPropagation();
+        if (e) e.stopPropagation();
         overlay.classList.add("active");
+        overlay.setAttribute("aria-hidden", "false");
       }
 
       function closeOverlay(e) {
-        e.stopPropagation();
+        if (e) e.stopPropagation();
         overlay.classList.remove("active");
+        overlay.setAttribute("aria-hidden", "true");
       }
 
       readMore.onclick = openOverlay;
       centerArea.onclick = openOverlay;
 
+      // keyboard open (center)
+      centerArea.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") openOverlay(e);
+      });
+
+      // keyboard open (read more)
+      readMore.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") openOverlay(e);
+      });
+
       closeBtn.onclick = closeOverlay;
 
+      // click outside content closes
       overlay.onclick = closeOverlay;
 
-      overlayText.onclick = (e) => e.stopPropagation();
+      // clicks inside content do not close
+      overlayInner.onclick = (e) => e.stopPropagation();
+
+      // escape closes
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeOverlay(e);
+      });
 
       renderStacks();
-
     });
-
   </script>
 
 </body>
