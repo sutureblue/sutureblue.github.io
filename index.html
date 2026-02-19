@@ -329,5 +329,21 @@
     });
   </script>
 
+  <script>
+  document.querySelectorAll(".squig-divider svg").forEach((svg) => {
+    // start paused
+    if (svg.pauseAnimations) svg.pauseAnimations();
+
+    const parent = svg.closest(".squig-divider");
+    parent.addEventListener("mouseenter", () => {
+      if (svg.unpauseAnimations) svg.unpauseAnimations();
+    });
+    parent.addEventListener("mouseleave", () => {
+      if (svg.pauseAnimations) svg.pauseAnimations();
+    });
+  });
+</script>
+
+
 </body>
 </html>
