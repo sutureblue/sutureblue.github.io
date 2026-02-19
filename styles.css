@@ -107,14 +107,20 @@ body {
   margin: 0 0 16px;
 }
 
+/* ===== Work Item ===== */
+
+.work-item {
+  max-width: 360px;
+  margin: 24px auto 0;
+}
+
 /* ===== Glow Card ===== */
 
 .glow-card {
-  display: block;
-  max-width: 360px;
-  height: 220px;
-  margin: 16px auto 0;
   position: relative;
+  display: inline-block;
+  max-width: 360px;
+  max-height: 220px;
   text-decoration: none;
 }
 
@@ -133,17 +139,83 @@ body {
 .glow-card-inner {
   position: relative;
   z-index: 1;
-  width: 100%;
-  height: 100%;
-  background: #ffffff;
+  display: inline-block;
   border-radius: 22px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
+  overflow: hidden;
   transition: transform 0.18s ease;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
 }
 
 .glow-card:hover .glow-card-inner {
   transform: translateY(-2px);
 }
+
+/* ===== Work Image ===== */
+
+.work-image {
+  display: block;
+  max-width: 360px;
+  max-height: 220px;
+  width: auto;
+  height: auto;
+}
+
+/* ===== Overlay ===== */
+
+.work-overlay {
+  position: absolute;
+  inset: 0;
+  max-width: 600px;
+  max-height: 220px;
+  background: rgba(10, 10, 20, 0.96);
+  color: var(--fg);
+  padding: 18px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.work-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.overlay-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--fg);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* ===== Meta Below Image ===== */
+
+.work-meta {
+  margin-top: 10px;
+  text-align: left;
+}
+
+.work-meta h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
+}
+
+.read-more {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.read-more:hover {
+  color: var(--fg);
+}
+
 
 /* ===== About ===== */
 
