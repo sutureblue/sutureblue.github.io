@@ -1,395 +1,223 @@
-/* ===== Variables ===== */
-
-:root {
-  --bg: #050509;
-  --fg: #f7f5ff;
-  --muted: #a4a1c2;
-  --border-soft: rgba(255, 255, 255, 0.08);
-  --radius-lg: 20px;
-  --radius-md: 14px;
-
-  --glow-blue: #17a2b8;
-  --link-blue: #0f7f91;
-}
-
-/* ===== Reset ===== */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: radial-gradient(circle at top left, #171728, #050509 55%);
-  color: var(--fg);
-  line-height: 1.5;
-}
-
-/* ===== Global Links ===== */
-
-a {
-  color: var(--link-blue);
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-a:hover {
-  color: var(--glow-blue);
-}
-
-/* ===== Page Wrapper ===== */
-
-.page {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 24px 16px 48px;
-}
-
-/* ===== Header Image ===== */
-
-.site-header {
-  position: sticky;
-  top: 16px;
-  z-index: 10;
-  width: 150px;
-  height: 150px;
-  margin-bottom: 40px;
-}
-
-.header-image {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 16px;
-  display: block;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65);
-}
-
-/* ===== Hero ===== */
-
-.hero {
-  padding: 32px 4px 24px;
-  text-align: right;
-}
-
-.hero h1 {
-  font-size: clamp(32px, 4vw, 42px);
-  line-height: 1.1;
-  margin: 0 0 12px;
-  margin-left: auto;
-  max-width: 720px;
-}
-
-.hero p {
-  max-width: 520px;
-  margin: 0 0 0 auto;
-  font-size: 15px;
-  color: var(--muted);
-}
-
-/* ===== Section Divider ===== */
-
-.section-divider {
-  height: 32px;
-  margin: 48px 0 40px;
-  background-image: url("assets/Border_01.png");
-  background-repeat: repeat-x;
-  background-position: center;
-  background-size: auto 100%;
-  transition: background-image 0.15s steps(1);
-  cursor: pointer;
-}
-
-.section-divider:hover {
-  background-image: url("assets/Border_02.png");
-}
-
-/* ===== Sections ===== */
-
-.section {
-  padding: 8px 4px 32px;
-}
-
-.section h2 {
-  font-size: 18px;
-  margin: 0 0 16px;
-}
-
-/* ===== Work Item ===== */
-
-.work-item {
-  max-width: 360px;
-  margin: 24px auto 0;
-}
-
-/* ===== Glow Card ===== */
-
-.glow-card {
-  position: relative;
-  display: inline-block;
-  text-decoration: none;
-}
-
-.glow-card::before {
-  content: "";
-  position: absolute;
-  inset: -18px;
-  border-radius: 26px;
-  background:
-    radial-gradient(circle at 20% 0%, rgba(23, 162, 184, 0.9), transparent 55%),
-    radial-gradient(circle at 80% 100%, rgba(23, 162, 184, 0.5), transparent 55%);
-  filter: blur(6px);
-  z-index: 0;
-}
-
-.glow-card-inner {
-  position: relative;
-  z-index: 1;
-  border-radius: 22px;
-  overflow: visible; /* allow arrows/stacks to peek */
-  transition: transform 0.18s ease;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
-}
-
-.glow-card:hover .glow-card-inner {
-  transform: translateY(-2px);
-}
-
-/* ===== Deck Carousel (left stack / center / right stack) ===== */
-
-.carousel {
-  position: relative;
-  width: 360px;
-  height: 220px;
-  margin: 0 auto;
-  overflow: visible; /* stacks + arrows */
-}
-
-/* viewport is visible so stacks can peek; we clip only the center slide via clip-path */
-.carousel-viewport {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  border-radius: 22px;
-  position: relative;
-}
-
-.carousel-track {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-/* base slide */
-.carousel-image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-
-  opacity: 0; /* hidden unless in a pile */
-  transform: translateX(0) scale(0.98);
-  transition: transform 0.35s ease, opacity 0.35s ease;
-  z-index: 1;
-  pointer-events: none; /* clicks won't snag invisible slides */
-}
-
-/* center card */
-.carousel-image.is-center {
-  opacity: 1;
-  transform: translateX(0) scale(1);
-  z-index: 10;
-
-  /* rounded corners restored for the active image */
-  clip-path: inset(0 round 22px);
-
-  pointer-events: auto;
-}
-
-/* stacks: 20% opacity, half off edge, slight offsets */
-.carousel-image.in-right-stack {
-  opacity: 0.2;
-  transform:
-    translateX(50%)
-    translateY(calc(var(--stack-i) * 3px))
-    scale(0.92);
-  z-index: calc(9 - var(--stack-i));
-}
-
-.carousel-image.in-left-stack {
-  opacity: 0.2;
-  transform:
-    translateX(-50%)
-    translateY(calc(var(--stack-i) * 3px))
-    scale(0.92);
-  z-index: calc(9 - var(--stack-i));
-}
-
-/* Arrows slightly outside the card */
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-
-  background: none;
-  border: none;
-  padding: 0;
-
-  font-size: 28px;
-  line-height: 1;
-  color: var(--fg);
-  cursor: pointer;
-
-  z-index: 25;
-  user-select: none;
-}
-
-.carousel-btn.prev { left: -32px; }
-.carousel-btn.next { right: -32px; }
-
-.carousel-btn:hover {
-  color: var(--glow-blue);
-}
-
-/* ===== Overlay ===== */
-
-.work-overlay {
-  position: absolute;
-  left: -4px;
-  right: -4px;
-  top: -4px;
-  bottom: -9px; /* extend a little lower to avoid "too short" */
-
-  max-width: 600px;
-  max-height: 220px;
-
-  background: rgba(10, 10, 20, 0.96);
-  border: 3px solid #000;
-  border-radius: 26px;
-
-  padding: 18px 18px 44px; /* room for bottom-left close */
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-
-  z-index: 30; /* above carousel/images */
-}
-
-.work-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.overlay-close {
-  position: absolute;
-  bottom: 12px;
-  left: 14px;
-
-  background: none;
-  border: none;
-  color: var(--fg);
-  font-size: 18px;
-  cursor: pointer;
-}
-
-/* ===== Work Meta ===== */
-
-.work-meta {
-  margin-top: 10px;
-  text-align: left;
-}
-
-.work-meta h3 {
-  margin: 0 0 4px;
-  font-size: 15px;
-}
-
-.read-more {
-  font-weight: 700; /* bold only */
-  color: var(--link-blue);
-  cursor: pointer;
-  transition: color 0.15s ease;
-}
-
-.read-more:hover {
-  color: var(--glow-blue);
-}
-
-/* ===== About ===== */
-
-.about-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
-  gap: 18px;
-}
-
-.about-layout p {
-  font-size: 14px;
-}
-
-.about-meta {
-  font-size: 13px;
-  color: var(--muted);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-soft);
-  padding: 12px 14px;
-  background: rgba(10, 10, 20, 0.9);
-}
-
-/* ===== Footer ===== */
-
-.site-footer {
-  margin-top: 48px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.license-footer {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.cc-icon {
-  width: 14px;
-  opacity: 0.8;
-}
-
-.footer-note {
-  opacity: 0.8;
-}
-
-/* ===== Responsive ===== */
-
-@media (max-width: 700px) {
-  .about-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .site-header {
-    margin-bottom: 32px;
-  }
-
-  /* Keep arrows closer on small screens */
-  .carousel-btn.prev { left: -22px; }
-  .carousel-btn.next { right: -22px; }
-
-  /* Reduce "half off" on small screens so stack remains visible */
-  .carousel-image.in-right-stack { transform: translateX(40%) translateY(calc(var(--stack-i) * 3px)) scale(0.92); }
-  .carousel-image.in-left-stack  { transform: translateX(-40%) translateY(calc(var(--stack-i) * 3px)) scale(0.92); }
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bee – Art & Experiments</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.png" type="image/png" />
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- Header -->
+    <header class="site-header">
+      <img
+        src="assets/glitchFace.png"
+        alt="Bee"
+        class="header-image"
+      />
+    </header>
+
+    <main>
+
+      <!-- Hero -->
+      <section class="hero">
+        <h1>Soft weird things on screens.</h1>
+        <p>
+          A small collection of projects, visuals, and experiments.
+          This is a quiet WIP space while I move away from Squarespace.
+        </p>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Work -->
+      <section id="work" class="section">
+        <h2>Work</h2>
+
+        <div class="work-item">
+
+          <div class="glow-card">
+            <div class="glow-card-inner">
+
+              <!-- Deck Carousel -->
+              <div class="carousel">
+                <button class="carousel-btn prev" type="button" aria-label="Previous image">‹</button>
+
+                <div class="carousel-viewport">
+                  <div class="carousel-track">
+                    <img src="assets/gNg.png" class="carousel-image" alt="" />
+                    <img src="assets/gNg.png" class="carousel-image" alt="" />
+                    <img src="assets/gNg.png" class="carousel-image" alt="" />
+                  </div>
+                </div>
+
+                <button class="carousel-btn next" type="button" aria-label="Next image">›</button>
+              </div>
+
+              <!-- Overlay -->
+              <div class="work-overlay" aria-hidden="true">
+                <button class="overlay-close" type="button" aria-label="Close overlay">×</button>
+                <p>
+                  filler filler filling this, this is filled
+                  fill fill fill
+                  filler filler fill.
+                </p>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="work-meta">
+            <h3>Project Title</h3>
+            <span class="read-more" role="button" tabindex="0">Read more...</span>
+          </div>
+
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- About -->
+      <section id="about" class="section">
+        <h2>About</h2>
+
+        <div class="about-layout">
+          <div>
+            <p>
+              I’m Bee Nix, aka Suture Blue.
+              Mixing digital noise and overthinking.
+            </p>
+            <p>
+              This site is a slow-growing container for experiments
+              and unfinished thoughts.
+            </p>
+          </div>
+
+          <div class="about-meta">
+            <p><strong>Currently</strong><br>moving off Squarespace</p>
+            <p><strong>Contact</strong><br>sutureblue@protonmail.com</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="license-footer">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">
+          <img src="assets/cc.png" alt="Creative Commons" class="cc-icon" />
+        </a>
+        <span>2025</span>
+      </div>
+
+      <span class="footer-note">
+        built by hand · gently under construction
+      </span>
+    </footer>
+
+  </div>
+
+  <!-- Overlay Script -->
+  <script>
+    document.querySelectorAll(".work-item").forEach((workItem) => {
+      const overlay = workItem.querySelector(".work-overlay");
+      const readMore = workItem.querySelector(".read-more");
+      const closeBtn = workItem.querySelector(".overlay-close");
+
+      function openOverlay(e) {
+        e.stopPropagation();
+        overlay.classList.add("active");
+        overlay.setAttribute("aria-hidden", "false");
+      }
+
+      function closeOverlay(e) {
+        e.stopPropagation();
+        overlay.classList.remove("active");
+        overlay.setAttribute("aria-hidden", "true");
+      }
+
+      readMore.addEventListener("click", openOverlay);
+      readMore.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") openOverlay(e);
+      });
+
+      closeBtn.addEventListener("click", closeOverlay);
+
+      // click on dark overlay closes it (but not clicks inside content)
+      overlay.addEventListener("click", closeOverlay);
+      overlay.querySelector("p").addEventListener("click", (e) => e.stopPropagation());
+    });
+  </script>
+
+  <!-- Deck Carousel Script (left stack / center / right stack) -->
+  <script>
+    document.querySelectorAll(".carousel").forEach((carousel) => {
+      const slides = Array.from(carousel.querySelectorAll(".carousel-image"));
+      const prev = carousel.querySelector(".carousel-btn.prev");
+      const next = carousel.querySelector(".carousel-btn.next");
+
+      // Deck state: left pile, center, right pile
+      let center = 0;
+      let leftStack = [];
+      let rightStack = slides.map((_, i) => i).slice(1);
+
+      function render() {
+        slides.forEach((slide) => {
+          slide.classList.remove("is-center", "in-left-stack", "in-right-stack");
+          slide.style.setProperty("--stack-i", "0");
+        });
+
+        slides[center].classList.add("is-center");
+
+        leftStack.forEach((idx, i) => {
+          slides[idx].classList.add("in-left-stack");
+          slides[idx].style.setProperty("--stack-i", String(i));
+        });
+
+        rightStack.forEach((idx, i) => {
+          slides[idx].classList.add("in-right-stack");
+          slides[idx].style.setProperty("--stack-i", String(i));
+        });
+
+        // Disable arrows if empty
+        const leftEmpty = leftStack.length === 0;
+        const rightEmpty = rightStack.length === 0;
+
+        prev.disabled = leftEmpty;
+        next.disabled = rightEmpty;
+
+        prev.style.opacity = leftEmpty ? "0.25" : "1";
+        next.style.opacity = rightEmpty ? "0.25" : "1";
+
+        prev.style.cursor = leftEmpty ? "default" : "pointer";
+        next.style.cursor = rightEmpty ? "default" : "pointer";
+      }
+
+      next.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (rightStack.length === 0) return;
+
+        leftStack.unshift(center);
+        center = rightStack.shift();
+        render();
+      });
+
+      prev.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (leftStack.length === 0) return;
+
+        rightStack.unshift(center);
+        center = leftStack.shift();
+        render();
+      });
+
+      render();
+    });
+  </script>
+
+</body>
+</html>
