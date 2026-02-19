@@ -9,6 +9,7 @@
   --fg: #f7f5ff;
   --muted: #a4a1c2;
   --border-soft: rgba(255, 255, 255, 0.08);
+
   --radius-lg: 20px;
   --radius-md: 14px;
 
@@ -28,7 +29,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow-x: hidden; /* prevents scrollbar from stacks */
 }
 
 body {
@@ -69,7 +70,7 @@ body {
 /* ===== Hero ===== */
 
 .hero {
-  padding: 100px 4px 24px; /* <-- adjust this top value for "Soft weird things..." position */
+  padding: 100px 4px 24px;
   text-align: right;
 }
 
@@ -88,21 +89,31 @@ body {
   color: var(--muted);
 }
 
-/* ===== Divider ===== */
+/* =========================
+   Animated Squiggly Divider
+   ========================= */
 
-.section-divider {
-  height: 32px;
+.squig-divider {
   margin: 48px 0 40px;
-  background-image: url("assets/Border_01.png");
-  background-repeat: repeat-x;
-  background-position: center;
-  background-size: auto 100%;
-  transition: background-image 0.15s steps(1);
-  cursor: pointer;
+  opacity: 0.9;
 }
 
-.section-divider:hover {
-  background-image: url("assets/Border_02.png");
+.squig-divider svg {
+  width: 100%;
+  height: 32px;
+  display: block;
+}
+
+.squig-path {
+  stroke-dasharray: 18 10;
+  animation: squigMove 1.2s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(23, 162, 184, 0.25));
+}
+
+@keyframes squigMove {
+  to {
+    stroke-dashoffset: -28;
+  }
 }
 
 /* ===== Sections ===== */
@@ -123,7 +134,9 @@ body {
   margin: 24px auto 0;
 }
 
-/* ===== Glow Card ===== */
+/* =========================
+   Glow Card
+   ========================= */
 
 .glow-card {
   position: relative;
@@ -134,18 +147,20 @@ body {
   position: absolute;
   inset: -18px;
   border-radius: 26px;
+
   background:
     radial-gradient(circle at 20% 0%, rgba(23, 162, 184, 0.9), transparent 55%),
     radial-gradient(circle at 80% 100%, rgba(23, 162, 184, 0.5), transparent 55%);
+
   filter: blur(6px);
   z-index: 0;
 }
 
 .glow-card-inner {
-  position: relative; /* critical: overlay anchors correctly */
+  position: relative;
   z-index: 1;
   border-radius: 22px;
-  overflow: visible; /* arrows + stacks can peek */
+  overflow: visible;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
   transition: transform 0.18s ease;
 }
@@ -155,11 +170,7 @@ body {
 }
 
 /* =========================
-   Two-layer Deck Carousel
-   - center is always clipped/rounded
-   - stacks are separate clipped cards
-   - arrows sit slightly outside
-   - drag supported (see JS)
+   Carousel
    ========================= */
 
 .carousel {
@@ -168,8 +179,6 @@ body {
   height: 220px;
   margin: 0 auto;
   overflow: visible;
-
-  /* no text selection / no image drag nonsense */
   user-select: none;
 }
 
@@ -177,47 +186,6 @@ body {
   user-select: none;
 }
 
-.carousel-center img {
-  -webkit-user-drag: none;
-  user-drag: none;
-}
-
-/* Arrows */
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-
-  background: none;
-  border: none;
-  padding: 0;
-
-  font-size: 28px;
-  line-height: 1;
-  color: var(--fg);
-  cursor: pointer;
-
-  z-index: 40;
-}
-
-.carousel-btn.left { left: -32px; }
-.carousel-btn.right { right: -32px; }
-
-.carousel-btn:hover { color: var(--glow-blue); }
-
-.carousel-btn:disabled {
-  opacity: 0.25;
-  cursor: default;
-}
-
-/* Stage (center + stacks) */
-.carousel-stage {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-/* Center image always clipped and rounded */
 .carousel-center {
   position: relative;
   width: 100%;
@@ -225,7 +193,7 @@ body {
   border-radius: 22px;
   overflow: hidden;
   z-index: 20;
-  touch-action: pan-y; /* allow vertical scroll, we handle horizontal drag */
+  cursor: pointer;
 }
 
 .carousel-center img {
@@ -233,15 +201,17 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
+  -webkit-user-drag: none;
 }
 
-/* Stacks */
+/* ===== Stacks ===== */
+
 .carousel-stack {
   position: absolute;
   top: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none; /* stacks are visual only */
+  pointer-events: none;
   z-index: 10;
 }
 
@@ -250,21 +220,17 @@ body {
   top: 0;
   width: 100%;
   height: 100%;
-
   border-radius: 22px;
   overflow: hidden;
-
-  opacity: 0.2; /* off-center cards at 20% */
+  opacity: 0.2;
 }
 
 .stack-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
-/* Right stack (half off the edge) */
 .carousel-stack.right .stack-card {
   transform:
     translateX(50%)
@@ -272,7 +238,6 @@ body {
     scale(0.92);
 }
 
-/* Left stack (half off the edge) */
 .carousel-stack.left .stack-card {
   transform:
     translateX(-50%)
@@ -280,16 +245,48 @@ body {
     scale(0.92);
 }
 
-/* ===== Overlay ===== */
+/* ===== Arrows ===== */
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: var(--fg);
+  cursor: pointer;
+  z-index: 40;
+}
+
+.carousel-btn.left {
+  left: -32px;
+}
+
+.carousel-btn.right {
+  right: -32px;
+}
+
+.carousel-btn:hover {
+  color: var(--glow-blue);
+}
+
+.carousel-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+/* =========================
+   Overlay
+   ========================= */
 
 .work-overlay {
   position: absolute;
-  inset: 0;                 /* aligns to card */
-  border-radius: 22px;      /* matches center rounding */
-
+  inset: 0;
+  border-radius: 22px;
   background: rgba(10, 10, 20, 0.96);
   border: 3px solid #000;
-  padding: 18px 18px 44px;  /* room for close button bottom-left */
+  padding: 18px 18px 44px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
 
   opacity: 0;
@@ -308,7 +305,6 @@ body {
   position: absolute;
   bottom: 12px;
   left: 14px;
-
   background: none;
   border: none;
   color: var(--fg);
@@ -319,7 +315,7 @@ body {
 /* ===== Work Meta ===== */
 
 .work-meta {
-  margin-top: 10px;
+  margin-top: 12px;
   text-align: left;
 }
 
@@ -329,7 +325,7 @@ body {
 }
 
 .read-more {
-  font-weight: 700;          /* bold only */
+  font-weight: 700;
   color: var(--link-blue);
   cursor: pointer;
   transition: color 0.15s ease;
@@ -339,7 +335,9 @@ body {
   color: var(--glow-blue);
 }
 
-/* ===== About ===== */
+/* =========================
+   About
+   ========================= */
 
 .about-layout {
   display: grid;
@@ -360,7 +358,9 @@ body {
   background: rgba(10, 10, 20, 0.9);
 }
 
-/* ===== Footer ===== */
+/* =========================
+   Footer
+   ========================= */
 
 .site-footer {
   margin-top: 48px;
@@ -387,9 +387,12 @@ body {
   opacity: 0.8;
 }
 
-/* ===== Responsive ===== */
+/* =========================
+   Responsive
+   ========================= */
 
 @media (max-width: 700px) {
+
   .about-layout {
     grid-template-columns: 1fr;
   }
@@ -398,14 +401,26 @@ body {
     margin-bottom: 32px;
   }
 
-  .carousel-btn.left { left: -22px; }
-  .carousel-btn.right { right: -22px; }
+  .carousel-btn.left {
+    left: -22px;
+  }
+
+  .carousel-btn.right {
+    right: -22px;
+  }
 
   .carousel-stack.right .stack-card {
-    transform: translateX(40%) translateY(calc(var(--stack-i) * 3px)) scale(0.92);
+    transform:
+      translateX(40%)
+      translateY(calc(var(--stack-i) * 3px))
+      scale(0.92);
   }
 
   .carousel-stack.left .stack-card {
-    transform: translateX(-40%) translateY(calc(var(--stack-i) * 3px)) scale(0.92);
+    transform:
+      translateX(-40%)
+      translateY(calc(var(--stack-i) * 3px))
+      scale(0.92);
   }
+
 }
