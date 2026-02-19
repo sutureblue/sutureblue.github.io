@@ -143,44 +143,53 @@
   </script>
 
   <!-- Stacked Carousel Script -->
-  <script>
-    document.querySelectorAll(".carousel").forEach((carousel) => {
+<script>
+  document.querySelectorAll(".carousel").forEach((carousel) => {
+    const slides = Array.from(carousel.querySelectorAll(".carousel-image"));
+    const prev = carousel.querySelector(".carousel-btn.prev");
+    const next = carousel.querySelector(".carousel-btn.next");
 
-      const slides = carousel.querySelectorAll(".carousel-image");
-      const prev = carousel.querySelector(".prev");
-      const next = carousel.querySelector(".next");
+    let index = 0;
+    let queueSide = "right"; // starts stacked on the right
 
-      let index = 0;
+    function update() {
+      slides.forEach((slide, i) => {
+        slide.classList.remove("active", "queue-right", "queue-left");
+        slide.style.setProperty("--stack-i", "0");
 
-      function update() {
-        slides.forEach((slide, i) => {
-          slide.classList.remove("active", "stack-right", "stack-left");
-
-          if (i === index) {
-            slide.classList.add("active");
-          } else if (i > index) {
-            slide.classList.add("stack-right");
-          } else {
-            slide.classList.add("stack-left");
-          }
-        });
-      }
-
-      next.addEventListener("click", (e) => {
-        e.stopPropagation();
-        index = (index + 1) % slides.length;
-        update();
+        if (i === index) {
+          slide.classList.add("active");
+        } else {
+          // everything not active goes into the current queue side
+          slide.classList.add(queueSide === "right" ? "queue-right" : "queue-left");
+        }
       });
 
-      prev.addEventListener("click", (e) => {
-        e.stopPropagation();
-        index = (index - 1 + slides.length) % slides.length;
-        update();
+      // give queued slides an order so they offset like a stack
+      const queued = slides.filter((_, i) => i !== index);
+      queued.forEach((slide, k) => {
+        slide.style.setProperty("--stack-i", String(k));
       });
+    }
 
+    next.addEventListener("click", (e) => {
+      e.stopPropagation();
+      queueSide = "left"; // moving forward pushes the old center into left stack vibe
+      index = (index + 1) % slides.length;
       update();
     });
-  </script>
+
+    prev.addEventListener("click", (e) => {
+      e.stopPropagation();
+      queueSide = "right"; // moving backward pushes the old center into right stack vibe
+      index = (index - 1 + slides.length) % slides.length;
+      update();
+    });
+
+    update();
+  });
+</script>
+
 
 </body>
 </html>
