@@ -205,34 +205,33 @@
         btnRight.disabled = leftStack.length === 0;  // RIGHT pulls from LEFT
       }
 
-      // LEFT click: pull from RIGHT into center; center goes to LEFT
-      btnLeft.addEventListener("click", (e) => {
-        e.stopPropagation();
-        if (rightStack.length === 0) return;
 
-        carousel.classList.add("moving-left");
-        setTimeout(() => carousel.classList.remove("moving-left"), 180);
+// LEFT click: pull from LEFT into center; center goes to RIGHT
+btnLeft.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (leftStack.length === 0) return;
 
-        leftStack.unshift(center);
-        center = rightStack.shift();
-        renderStacks();
-      });
+  carousel.classList.add("moving-left");
+  setTimeout(() => carousel.classList.remove("moving-left"), 180);
 
-      // RIGHT click: pull from LEFT into center; center goes to RIGHT
-      btnRight.addEventListener("click", (e) => {
-        e.stopPropagation();
-        if (leftStack.length === 0) return;
+  rightStack.unshift(center);
+  center = leftStack.shift();
+  renderStacks();
+});
 
-        carousel.classList.add("moving-right");
-        setTimeout(() => carousel.classList.remove("moving-right"), 180);
+// RIGHT click: pull from RIGHT into center; center goes to LEFT
+btnRight.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (rightStack.length === 0) return;
 
-        rightStack.unshift(center);
-        center = leftStack.shift();
-        renderStacks();
-      });
+  carousel.classList.add("moving-right");
+  setTimeout(() => carousel.classList.remove("moving-right"), 180);
 
-      renderStacks();
-    });
+  leftStack.unshift(center);
+  center = rightStack.shift();
+  renderStacks();
+});
+
   </script>
 
 </body>
