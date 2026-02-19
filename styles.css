@@ -7,8 +7,8 @@
   --border-soft: rgba(255, 255, 255, 0.08);
   --radius-lg: 20px;
   --radius-md: 14px;
-  --link-blue: #0f7f91;
 
+  --link-blue: #0f7f91;
 }
 
 /* ===== Reset ===== */
@@ -30,6 +30,20 @@ body {
   background: radial-gradient(circle at top left, #171728, #050509 55%);
   color: var(--fg);
   line-height: 1.5;
+}
+
+/* ===== Global Link Styling ===== */
+
+a,
+.read-more {
+  color: var(--link-blue);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover,
+.read-more:hover {
+  color: #17a2b8;
 }
 
 /* ===== Page Wrapper ===== */
