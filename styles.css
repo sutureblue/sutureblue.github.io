@@ -55,7 +55,7 @@ body {
   display: grid;
   grid-template-columns: 150px 1fr;
   column-gap: 28px;
-  align-items: start;
+  align-items: center;
   margin-bottom: 32px;
 }
 
