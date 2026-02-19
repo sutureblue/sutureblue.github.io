@@ -169,132 +169,160 @@
        - Left arrow (‹): pull from RIGHT into center, center goes LEFT
        - Right arrow (›): pull from LEFT into center, center goes RIGHT
   -->
-  <script>
-    document.querySelectorAll(".carousel").forEach((carousel) => {
-      const sources = Array.from(carousel.querySelectorAll(".carousel-sources img"))
-        .map(img => img.getAttribute("src"));
+<script>
+  document.querySelectorAll(".work-item").forEach((workItem) => {
+    const carousel = workItem.querySelector(".carousel");
+    const overlay = workItem.querySelector(".work-overlay");
+    const overlayText = workItem.querySelector(".overlay-text");
+    const readMore = workItem.querySelector(".read-more");
+    const closeBtn = workItem.querySelector(".overlay-close");
+    const titleEl = workItem.querySelector(".project-title");
 
-      const centerImg = carousel.querySelector(".carousel-center-img");
-      const centerArea = carousel.querySelector(".carousel-center");
-      const leftStackEl = carousel.querySelector(".carousel-stack.left");
-      const rightStackEl = carousel.querySelector(".carousel-stack.right");
+    // Collect project data from hidden source imgs
+    const sourceNodes = Array.from(carousel.querySelectorAll(".carousel-sources img"));
+    const projects = sourceNodes.map((img) => ({
+      src: img.getAttribute("src"),
+      title: img.dataset.title || "Untitled",
+      text: img.dataset.text || ""
+    }));
 
-      const btnLeft = carousel.querySelector(".carousel-btn.left");
-      const btnRight = carousel.querySelector(".carousel-btn.right");
+    // Carousel DOM
+    const centerImg = carousel.querySelector(".carousel-center-img");
+    const centerArea = carousel.querySelector(".carousel-center");
+    const leftStackEl = carousel.querySelector(".carousel-stack.left");
+    const rightStackEl = carousel.querySelector(".carousel-stack.right");
+    const btnLeft = carousel.querySelector(".carousel-btn.left");
+    const btnRight = carousel.querySelector(".carousel-btn.right");
 
-      // Piles: left / center / right
-      let center = 0;
-      let leftStack = [];
-      let rightStack = sources.map((_, i) => i).slice(1); // start queued on the right
+    // Deck state
+    let center = 0;
+    let leftStack = [];
+    let rightStack = projects.map((_, i) => i).slice(1); // queued on right
 
-      function renderStacks() {
-        leftStackEl.innerHTML = "";
-        rightStackEl.innerHTML = "";
+    function setMeta(idx) {
+      titleEl.textContent = projects[idx].title;
+      overlayText.textContent = projects[idx].text;
+    }
 
-        // render left stack
-        leftStack.forEach((idx, i) => {
-          const card = document.createElement("div");
-          card.className = "stack-card";
-          card.style.setProperty("--stack-i", String(i));
+    function renderStacks() {
+      leftStackEl.innerHTML = "";
+      rightStackEl.innerHTML = "";
 
-          const img = document.createElement("img");
-          img.src = sources[idx];
-          img.alt = "";
+      // render left stack
+      leftStack.forEach((idx, i) => {
+        const card = document.createElement("div");
+        card.className = "stack-card";
+        card.style.setProperty("--stack-i", String(i));
 
-          card.appendChild(img);
-          leftStackEl.appendChild(card);
-        });
+        const img = document.createElement("img");
+        img.src = projects[idx].src;
+        img.alt = "";
 
-        // render right stack
-        rightStack.forEach((idx, i) => {
-          const card = document.createElement("div");
-          card.className = "stack-card";
-          card.style.setProperty("--stack-i", String(i));
+        card.appendChild(img);
+        leftStackEl.appendChild(card);
+      });
 
-          const img = document.createElement("img");
-          img.src = sources[idx];
-          img.alt = "";
+      // render right stack
+      rightStack.forEach((idx, i) => {
+        const card = document.createElement("div");
+        card.className = "stack-card";
+        card.style.setProperty("--stack-i", String(i));
 
-          card.appendChild(img);
-          rightStackEl.appendChild(card);
-        });
+        const img = document.createElement("img");
+        img.src = projects[idx].src;
+        img.alt = "";
 
-        centerImg.src = sources[center];
+        card.appendChild(img);
+        rightStackEl.appendChild(card);
+      });
 
-        // enable/disable arrows based on available stacks (current behavior)
-        btnLeft.disabled = rightStack.length === 0; // left pulls from RIGHT
-        btnRight.disabled = leftStack.length === 0; // right pulls from LEFT
-      }
+      // center image + meta
+      centerImg.src = projects[center].src;
+      setMeta(center);
 
-      // Actions matching your current arrow behavior
-      function moveLeft() {
-        if (rightStack.length === 0) return;
-        leftStack.unshift(center);
-        center = rightStack.shift();
-        renderStacks();
-      }
+      // current arrow behavior preserved:
+      // left pulls from RIGHT
+      // right pulls from LEFT
+      btnLeft.disabled = rightStack.length === 0;
+      btnRight.disabled = leftStack.length === 0;
+    }
 
-      function moveRight() {
-        if (leftStack.length === 0) return;
-        rightStack.unshift(center);
-        center = leftStack.shift();
-        renderStacks();
-      }
-
-      // Arrow clicks
-      btnLeft.addEventListener("click", (e) => { e.stopPropagation(); moveLeft(); });
-      btnRight.addEventListener("click", (e) => { e.stopPropagation(); moveRight(); });
-
-      // Drag / swipe
-      let dragging = false;
-      let startX = 0;
-      let lastX = 0;
-      const THRESHOLD_PX = 40;
-
-      function onDown(e) {
-        // don't swipe when overlay is open
-        const overlay = carousel.closest(".glow-card-inner")?.querySelector(".work-overlay");
-        if (overlay && overlay.classList.contains("active")) return;
-
-        dragging = true;
-        startX = e.clientX;
-        lastX = startX;
-
-        centerArea.setPointerCapture(e.pointerId);
-      }
-
-      function onMove(e) {
-        if (!dragging) return;
-        lastX = e.clientX;
-      }
-
-      function onUp(e) {
-        if (!dragging) return;
-        dragging = false;
-
-        const dx = lastX - startX;
-
-        // Drag left = show next from RIGHT stack (same as left arrow)
-        if (dx <= -THRESHOLD_PX) {
-          moveLeft();
-          return;
-        }
-
-        // Drag right = show next from LEFT stack (same as right arrow)
-        if (dx >= THRESHOLD_PX) {
-          moveRight();
-          return;
-        }
-      }
-
-      centerArea.addEventListener("pointerdown", onDown);
-      centerArea.addEventListener("pointermove", onMove);
-      centerArea.addEventListener("pointerup", onUp);
-      centerArea.addEventListener("pointercancel", onUp);
-
+    // Actions (preserve your current behavior)
+    function moveLeft() {
+      if (rightStack.length === 0) return;
+      leftStack.unshift(center);
+      center = rightStack.shift();
       renderStacks();
+    }
+
+    function moveRight() {
+      if (leftStack.length === 0) return;
+      rightStack.unshift(center);
+      center = leftStack.shift();
+      renderStacks();
+    }
+
+    // Arrow clicks
+    btnLeft.addEventListener("click", (e) => { e.stopPropagation(); moveLeft(); });
+    btnRight.addEventListener("click", (e) => { e.stopPropagation(); moveRight(); });
+
+    // Drag / swipe
+    let dragging = false;
+    let startX = 0;
+    let lastX = 0;
+    const THRESHOLD_PX = 40;
+
+    function onDown(e) {
+      if (overlay.classList.contains("active")) return;
+      dragging = true;
+      startX = e.clientX;
+      lastX = startX;
+      centerArea.setPointerCapture(e.pointerId);
+    }
+    function onMove(e) {
+      if (!dragging) return;
+      lastX = e.clientX;
+    }
+    function onUp(e) {
+      if (!dragging) return;
+      dragging = false;
+      const dx = lastX - startX;
+
+      if (dx <= -THRESHOLD_PX) moveLeft();   // drag left -> next from right
+      if (dx >= THRESHOLD_PX) moveRight();  // drag right -> next from left
+    }
+
+    centerArea.addEventListener("pointerdown", onDown);
+    centerArea.addEventListener("pointermove", onMove);
+    centerArea.addEventListener("pointerup", onUp);
+    centerArea.addEventListener("pointercancel", onUp);
+
+    // Overlay open/close
+    function openOverlay(e) {
+      e.stopPropagation();
+      overlay.classList.add("active");
+      overlay.setAttribute("aria-hidden", "false");
+    }
+    function closeOverlay(e) {
+      e.stopPropagation();
+      overlay.classList.remove("active");
+      overlay.setAttribute("aria-hidden", "true");
+    }
+
+    readMore.addEventListener("click", openOverlay);
+    readMore.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") openOverlay(e);
     });
-  </script>
+
+    closeBtn.addEventListener("click", closeOverlay);
+    overlay.addEventListener("click", closeOverlay);
+    overlayText.addEventListener("click", (e) => e.stopPropagation());
+
+    // init
+    renderStacks();
+  });
+</script>
+
 
 </body>
 </html>
