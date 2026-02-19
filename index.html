@@ -11,11 +11,18 @@
 <body>
   <div class="page">
 
+    <!-- Header -->
     <header class="site-header">
-      <img src="assets/glitchFace.png" alt="Bee" class="header-image" />
+      <img
+        src="assets/glitchFace.png"
+        alt="Bee"
+        class="header-image"
+      />
     </header>
 
     <main>
+
+      <!-- Hero -->
       <section class="hero">
         <h1>Soft weird things on screens.</h1>
         <p>
@@ -26,39 +33,28 @@
 
       <div class="section-divider"></div>
 
+      <!-- Work -->
       <section id="work" class="section">
         <h2>Work</h2>
 
         <div class="work-item">
+
           <div class="glow-card">
             <div class="glow-card-inner">
 
-              <!-- Two-layer deck carousel -->
-              <div class="carousel" aria-label="Image deck carousel">
+              <!-- Deck Carousel -->
+              <div class="carousel">
+                <button class="carousel-btn prev" type="button" aria-label="Previous image">‹</button>
 
-                <!-- left arrow: (classic) pull from LEFT stack into center -->
-                <button class="carousel-btn left" type="button" aria-label="Previous">‹</button>
-
-                <div class="carousel-stage">
-                  <div class="carousel-stack left" aria-hidden="true"></div>
-
-                  <div class="carousel-center">
-                    <img class="carousel-center-img" src="assets/gNg.png" alt="" />
+                <div class="carousel-viewport">
+                  <div class="carousel-track">
+                    <img src="assets/gNg.png" class="carousel-image" alt="" />
+                    <img src="assets/gNg.png" class="carousel-image" alt="" />
+                    <img src="assets/gNg.png" class="carousel-image" alt="" />
                   </div>
-
-                  <div class="carousel-stack right" aria-hidden="true"></div>
                 </div>
 
-                <!-- right arrow: (classic) pull from RIGHT stack into center -->
-                <button class="carousel-btn right" type="button" aria-label="Next">›</button>
-
-                <!-- Sources: loaded once, NEVER displayed -->
-                <div class="carousel-sources" hidden>
-                  <img src="assets/gNg.png" alt="">
-                  <img src="assets/gNg.png" alt="">
-                  <img src="assets/gNg.png" alt="">
-                </div>
-
+                <button class="carousel-btn next" type="button" aria-label="Next image">›</button>
               </div>
 
               <!-- Overlay -->
@@ -78,11 +74,13 @@
             <h3>Project Title</h3>
             <span class="read-more" role="button" tabindex="0">Read more...</span>
           </div>
+
         </div>
       </section>
 
       <div class="section-divider"></div>
 
+      <!-- About -->
       <section id="about" class="section">
         <h2>About</h2>
 
@@ -104,8 +102,10 @@
           </div>
         </div>
       </section>
+
     </main>
 
+    <!-- Footer -->
     <footer class="site-footer">
       <div class="license-footer">
         <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">
@@ -114,7 +114,9 @@
         <span>2025</span>
       </div>
 
-      <span class="footer-note">built by hand · gently under construction</span>
+      <span class="footer-note">
+        built by hand · gently under construction
+      </span>
     </footer>
 
   </div>
@@ -145,91 +147,75 @@
 
       closeBtn.addEventListener("click", closeOverlay);
 
-      // clicking the overlay background closes
+      // click on dark overlay closes it (but not clicks inside content)
       overlay.addEventListener("click", closeOverlay);
       overlay.querySelector("p").addEventListener("click", (e) => e.stopPropagation());
     });
   </script>
 
-  <!-- Two-layer Deck Carousel Script (classic arrows) -->
+  <!-- Deck Carousel Script (left stack / center / right stack) -->
   <script>
     document.querySelectorAll(".carousel").forEach((carousel) => {
-      const sources = Array.from(carousel.querySelectorAll(".carousel-sources img"))
-        .map(img => img.getAttribute("src"));
+      const slides = Array.from(carousel.querySelectorAll(".carousel-image"));
+      const prev = carousel.querySelector(".carousel-btn.prev");
+      const next = carousel.querySelector(".carousel-btn.next");
 
-      const centerImg = carousel.querySelector(".carousel-center-img");
-      const leftStackEl = carousel.querySelector(".carousel-stack.left");
-      const rightStackEl = carousel.querySelector(".carousel-stack.right");
-
-      const btnLeft = carousel.querySelector(".carousel-btn.left");
-      const btnRight = carousel.querySelector(".carousel-btn.right");
-
-      // Piles: left / center / right
+      // Deck state: left pile, center, right pile
       let center = 0;
       let leftStack = [];
-      let rightStack = sources.map((_, i) => i).slice(1); // start queued on the right
+      let rightStack = slides.map((_, i) => i).slice(1);
 
-      function renderStacks() {
-        leftStackEl.innerHTML = "";
-        rightStackEl.innerHTML = "";
+      function render() {
+        slides.forEach((slide) => {
+          slide.classList.remove("is-center", "in-left-stack", "in-right-stack");
+          slide.style.setProperty("--stack-i", "0");
+        });
 
-        // render left stack
+        slides[center].classList.add("is-center");
+
         leftStack.forEach((idx, i) => {
-          const card = document.createElement("div");
-          card.className = "stack-card";
-          card.style.setProperty("--stack-i", String(i));
-
-          const img = document.createElement("img");
-          img.src = sources[idx];
-          img.alt = "";
-
-          card.appendChild(img);
-          leftStackEl.appendChild(card);
+          slides[idx].classList.add("in-left-stack");
+          slides[idx].style.setProperty("--stack-i", String(i));
         });
 
-        // render right stack
         rightStack.forEach((idx, i) => {
-          const card = document.createElement("div");
-          card.className = "stack-card";
-          card.style.setProperty("--stack-i", String(i));
-
-          const img = document.createElement("img");
-          img.src = sources[idx];
-          img.alt = "";
-
-          card.appendChild(img);
-          rightStackEl.appendChild(card);
+          slides[idx].classList.add("in-right-stack");
+          slides[idx].style.setProperty("--stack-i", String(i));
         });
 
-        // set center
-        centerImg.src = sources[center];
+        // Disable arrows if empty
+        const leftEmpty = leftStack.length === 0;
+        const rightEmpty = rightStack.length === 0;
 
-        // disable if empty (classic: left pulls from left, right pulls from right)
-        btnLeft.disabled = leftStack.length === 0;
-        btnRight.disabled = rightStack.length === 0;
+        prev.disabled = leftEmpty;
+        next.disabled = rightEmpty;
+
+        prev.style.opacity = leftEmpty ? "0.25" : "1";
+        next.style.opacity = rightEmpty ? "0.25" : "1";
+
+        prev.style.cursor = leftEmpty ? "default" : "pointer";
+        next.style.cursor = rightEmpty ? "default" : "pointer";
       }
 
-      // LEFT arrow: pull from LEFT into center; center goes to RIGHT
-      btnLeft.addEventListener("click", (e) => {
-        e.stopPropagation();
-        if (leftStack.length === 0) return;
-
-        rightStack.unshift(center);
-        center = leftStack.shift();
-        renderStacks();
-      });
-
-      // RIGHT arrow: pull from RIGHT into center; center goes to LEFT
-      btnRight.addEventListener("click", (e) => {
+      next.addEventListener("click", (e) => {
         e.stopPropagation();
         if (rightStack.length === 0) return;
 
         leftStack.unshift(center);
         center = rightStack.shift();
-        renderStacks();
+        render();
       });
 
-      renderStacks();
+      prev.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (leftStack.length === 0) return;
+
+        rightStack.unshift(center);
+        center = leftStack.shift();
+        render();
+      });
+
+      render();
     });
   </script>
 
