@@ -194,9 +194,9 @@ a:hover {
   height: 100%;
   object-fit: cover;
 
-  opacity: 0;
-  transform: translateX(0) scale(0.96);
-  transition: transform 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
+  opacity: 0.2;                /* 20% for anything not active by default */
+  transform: translateX(0) scale(0.98);
+  transition: transform 0.35s ease, opacity 0.35s ease;
   z-index: 1;
 }
 
@@ -204,24 +204,27 @@ a:hover {
 .carousel-image.active {
   opacity: 1;
   transform: translateX(0) scale(1);
-  z-index: 3;
-  filter: none;
+  z-index: 5;
 }
 
-/* Stack right */
-.carousel-image.stack-right {
-  opacity: 0.55;
-  transform: translateX(48px) scale(0.92);
-  z-index: 2;
-  filter: blur(0.2px);
+/* Queue stack RIGHT: half off the edge */
+.carousel-image.queue-right {
+  opacity: 0.2;
+  transform:
+    translateX(55%)            /* halfway off canvas */
+    translateY(calc(var(--stack-i) * 3px))
+    scale(0.92);
+  z-index: calc(4 - var(--stack-i));
 }
 
-/* Stack left */
-.carousel-image.stack-left {
-  opacity: 0.55;
-  transform: translateX(-48px) scale(0.92);
-  z-index: 2;
-  filter: blur(0.2px);
+/* Queue stack LEFT: half off the edge */
+.carousel-image.queue-left {
+  opacity: 0.2;
+  transform:
+    translateX(-55%)
+    translateY(calc(var(--stack-i) * 3px))
+    scale(0.92);
+  z-index: calc(4 - var(--stack-i));
 }
 
 /* Arrows outside card */
