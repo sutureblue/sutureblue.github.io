@@ -149,46 +149,75 @@
     const prev = carousel.querySelector(".carousel-btn.prev");
     const next = carousel.querySelector(".carousel-btn.next");
 
-    let index = 0;
-    let queueSide = "right"; // starts stacked on the right
+    // Deck state
+    let center = 0;
+    let leftStack = [];                 // indices
+    let rightStack = slides.map((_, i) => i).slice(1); // all except first
 
-    function update() {
-      slides.forEach((slide, i) => {
-        slide.classList.remove("active", "queue-right", "queue-left");
+    function render() {
+      slides.forEach((slide) => {
+        slide.classList.remove(
+          "is-center",
+          "in-left-stack",
+          "in-right-stack"
+        );
         slide.style.setProperty("--stack-i", "0");
-
-        if (i === index) {
-          slide.classList.add("active");
-        } else {
-          // everything not active goes into the current queue side
-          slide.classList.add(queueSide === "right" ? "queue-right" : "queue-left");
-        }
       });
 
-      // give queued slides an order so they offset like a stack
-      const queued = slides.filter((_, i) => i !== index);
-      queued.forEach((slide, k) => {
-        slide.style.setProperty("--stack-i", String(k));
+      // Center card
+      slides[center].classList.add("is-center");
+
+      // Left stack (top card should be closest to center)
+      leftStack.forEach((idx, i) => {
+        slides[idx].classList.add("in-left-stack");
+        slides[idx].style.setProperty("--stack-i", String(i));
       });
+
+      // Right stack
+      rightStack.forEach((idx, i) => {
+        slides[idx].classList.add("in-right-stack");
+        slides[idx].style.setProperty("--stack-i", String(i));
+      });
+
+      // Disable arrows if stack empty (nice UX)
+      prev.disabled = leftStack.length === 0;
+      next.disabled = rightStack.length === 0;
+      prev.style.opacity = prev.disabled ? "0.25" : "1";
+      next.style.opacity = next.disabled ? "0.25" : "1";
+      prev.style.cursor = prev.disabled ? "default" : "pointer";
+      next.style.cursor = next.disabled ? "default" : "pointer";
     }
 
     next.addEventListener("click", (e) => {
       e.stopPropagation();
-      queueSide = "left"; // moving forward pushes the old center into left stack vibe
-      index = (index + 1) % slides.length;
-      update();
+      if (rightStack.length === 0) return;
+
+      // Move current center to left stack
+      leftStack.unshift(center);
+
+      // Bring first from right stack to center
+      center = rightStack.shift();
+
+      render();
     });
 
     prev.addEventListener("click", (e) => {
       e.stopPropagation();
-      queueSide = "right"; // moving backward pushes the old center into right stack vibe
-      index = (index - 1 + slides.length) % slides.length;
-      update();
+      if (leftStack.length === 0) return;
+
+      // Move current center to right stack
+      rightStack.unshift(center);
+
+      // Bring first from left stack to center
+      center = leftStack.shift();
+
+      render();
     });
 
-    update();
+    render();
   });
 </script>
+
 
 
 </body>
