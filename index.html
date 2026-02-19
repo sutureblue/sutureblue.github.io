@@ -11,7 +11,7 @@
 <body>
   <div class="page">
 
-    <!-- Header image -->
+    <!-- Header -->
     <header class="site-header">
       <img
         src="assets/glitchFace.png"
@@ -31,53 +31,53 @@
         </p>
       </section>
 
-      <!-- Divider -->
       <div class="section-divider"></div>
 
       <!-- Work -->
-     <section id="work" class="section">
-  <h2>Work</h2>
+      <section id="work" class="section">
+        <h2>Work</h2>
 
-  <div class="work-item">
+        <div class="work-item">
 
-    <div class="glow-card">
-      <div class="glow-card-inner">
+          <div class="glow-card">
+            <div class="glow-card-inner">
 
-<div class="carousel">
+              <!-- Carousel -->
+              <div class="carousel">
 
-  <button class="carousel-btn prev">‹</button>
+                <button class="carousel-btn prev">‹</button>
 
-  <div class="carousel-track">
-    <img src="assets/gNg.png" class="carousel-image" />
-    <img src="assets/gNg.png" class="carousel-image" />
-    <img src="assets/gNg.png" class="carousel-image" />
-  </div>
+                <div class="carousel-track">
+                  <img src="assets/gNg.png" class="carousel-image" />
+                  <img src="assets/gNg.png" class="carousel-image" />
+                  <img src="assets/gNg.png" class="carousel-image" />
+                </div>
 
-  <button class="carousel-btn next">›</button>
+                <button class="carousel-btn next">›</button>
 
-</div>
+              </div>
 
-        <div class="work-overlay">
-          <button class="overlay-close">×</button>
-          <p>
-            filler filler filling this, this is filled
-            fill fill fill
-            filler filler fill.
-          </p>
+              <!-- Overlay -->
+              <div class="work-overlay">
+                <button class="overlay-close">×</button>
+                <p>
+                  filler filler filling this, this is filled
+                  fill fill fill
+                  filler filler fill.
+                </p>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="work-meta">
+            <h3>Project Title</h3>
+            <button class="read-more">Read more...</button>
+          </div>
+
         </div>
+      </section>
 
-      </div>
-    </div>
-
-    <div class="work-meta">
-      <h3>Project Title</h3>
-      <button class="read-more">Read more...</button>
-    </div>
-
-  </div>
-</section>
-
-      <!-- Divider -->
       <div class="section-divider"></div>
 
       <!-- About -->
@@ -127,47 +127,60 @@
     </footer>
 
   </div>
+
+  <!-- Overlay Script -->
   <script>
-  const workItem = document.querySelector(".work-item");
-  const overlay = workItem.querySelector(".work-overlay");
-  const image = workItem.querySelector(".work-image");
-  const readMore = workItem.querySelector(".read-more");
-  const closeBtn = workItem.querySelector(".overlay-close");
+    document.querySelectorAll(".work-item").forEach((workItem) => {
 
-  function openOverlay() {
-    overlay.classList.add("active");
-  }
+      const overlay = workItem.querySelector(".work-overlay");
+      const readMore = workItem.querySelector(".read-more");
+      const closeBtn = workItem.querySelector(".overlay-close");
+      const card = workItem.querySelector(".glow-card");
 
-  function closeOverlay() {
-    overlay.classList.remove("active");
-  }
+      function openOverlay() {
+        overlay.classList.add("active");
+      }
 
-  image.addEventListener("click", openOverlay);
-  readMore.addEventListener("click", openOverlay);
-  closeBtn.addEventListener("click", closeOverlay);
-</script>
+      function closeOverlay() {
+        overlay.classList.remove("active");
+      }
+
+      card.addEventListener("click", openOverlay);
+      readMore.addEventListener("click", openOverlay);
+      closeBtn.addEventListener("click", closeOverlay);
+
+    });
+  </script>
+
+  <!-- Carousel Script -->
   <script>
-  const track = document.querySelector(".carousel-track");
-  const slides = document.querySelectorAll(".carousel-image");
-  const prev = document.querySelector(".carousel-btn.prev");
-  const next = document.querySelector(".carousel-btn.next");
+    document.querySelectorAll(".carousel").forEach((carousel) => {
 
-  let index = 0;
+      const track = carousel.querySelector(".carousel-track");
+      const slides = carousel.querySelectorAll(".carousel-image");
+      const prev = carousel.querySelector(".carousel-btn.prev");
+      const next = carousel.querySelector(".carousel-btn.next");
 
-  function updateCarousel() {
-    track.style.transform = `translateX(-${index * 100}%)`;
-  }
+      let index = 0;
 
-  next.addEventListener("click", () => {
-    index = (index + 1) % slides.length;
-    updateCarousel();
-  });
+      function updateCarousel() {
+        track.style.transform = `translateX(-${index * 100}%)`;
+      }
 
-  prev.addEventListener("click", () => {
-    index = (index - 1 + slides.length) % slides.length;
-    updateCarousel();
-  });
-</script>
+      next.addEventListener("click", (e) => {
+        e.stopPropagation();
+        index = (index + 1) % slides.length;
+        updateCarousel();
+      });
+
+      prev.addEventListener("click", (e) => {
+        e.stopPropagation();
+        index = (index - 1 + slides.length) % slides.length;
+        updateCarousel();
+      });
+
+    });
+  </script>
 
 </body>
 </html>
