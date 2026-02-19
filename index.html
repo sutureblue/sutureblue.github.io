@@ -119,5 +119,24 @@
     </footer>
 
   </div>
+  <script>
+  const workItem = document.querySelector(".work-item");
+  const overlay = workItem.querySelector(".work-overlay");
+  const image = workItem.querySelector(".work-image");
+  const readMore = workItem.querySelector(".read-more");
+  const closeBtn = workItem.querySelector(".overlay-close");
+
+  function openOverlay() {
+    overlay.classList.add("active");
+  }
+
+  function closeOverlay() {
+    overlay.classList.remove("active");
+  }
+
+  image.addEventListener("click", openOverlay);
+  readMore.addEventListener("click", openOverlay);
+  closeBtn.addEventListener("click", closeOverlay);
+</script>
 </body>
 </html>
