@@ -34,9 +34,10 @@
             <div class="glow-card-inner">
 
               <!-- Two-layer deck carousel -->
-              <div class="carousel">
-                <!-- LEFT click: pull from RIGHT stack into center (motion goes left) -->
-                <button class="carousel-btn left" type="button" aria-label="Move left">‹</button>
+              <div class="carousel" aria-label="Image deck carousel">
+
+                <!-- left arrow: (classic) pull from LEFT stack into center -->
+                <button class="carousel-btn left" type="button" aria-label="Previous">‹</button>
 
                 <div class="carousel-stage">
                   <div class="carousel-stack left" aria-hidden="true"></div>
@@ -48,15 +49,16 @@
                   <div class="carousel-stack right" aria-hidden="true"></div>
                 </div>
 
-                <!-- RIGHT click: pull from LEFT stack into center (motion goes right) -->
-                <button class="carousel-btn right" type="button" aria-label="Move right">›</button>
+                <!-- right arrow: (classic) pull from RIGHT stack into center -->
+                <button class="carousel-btn right" type="button" aria-label="Next">›</button>
 
-                <!-- sources (loaded once, not displayed) -->
+                <!-- Sources: loaded once, NEVER displayed -->
                 <div class="carousel-sources" hidden>
                   <img src="assets/gNg.png" alt="">
                   <img src="assets/gNg.png" alt="">
                   <img src="assets/gNg.png" alt="">
                 </div>
+
               </div>
 
               <!-- Overlay -->
@@ -114,6 +116,7 @@
 
       <span class="footer-note">built by hand · gently under construction</span>
     </footer>
+
   </div>
 
   <!-- Overlay Script -->
@@ -141,12 +144,14 @@
       });
 
       closeBtn.addEventListener("click", closeOverlay);
+
+      // clicking the overlay background closes
       overlay.addEventListener("click", closeOverlay);
       overlay.querySelector("p").addEventListener("click", (e) => e.stopPropagation());
     });
   </script>
 
-  <!-- Two-layer Deck Carousel Script (true left/center/right piles + reversed arrows) -->
+  <!-- Two-layer Deck Carousel Script (classic arrows) -->
   <script>
     document.querySelectorAll(".carousel").forEach((carousel) => {
       const sources = Array.from(carousel.querySelectorAll(".carousel-sources img"))
@@ -162,10 +167,9 @@
       // Piles: left / center / right
       let center = 0;
       let leftStack = [];
-      let rightStack = sources.map((_, i) => i).slice(1); // start with everything queued on the right
+      let rightStack = sources.map((_, i) => i).slice(1); // start queued on the right
 
       function renderStacks() {
-        // clear stacks
         leftStackEl.innerHTML = "";
         rightStackEl.innerHTML = "";
 
@@ -200,38 +204,33 @@
         // set center
         centerImg.src = sources[center];
 
-        // disable if empty
-        btnLeft.disabled = rightStack.length === 0;  // LEFT pulls from RIGHT
-        btnRight.disabled = leftStack.length === 0;  // RIGHT pulls from LEFT
+        // disable if empty (classic: left pulls from left, right pulls from right)
+        btnLeft.disabled = leftStack.length === 0;
+        btnRight.disabled = rightStack.length === 0;
       }
 
+      // LEFT arrow: pull from LEFT into center; center goes to RIGHT
+      btnLeft.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (leftStack.length === 0) return;
 
-// LEFT click: pull from LEFT into center; center goes to RIGHT
-btnLeft.addEventListener("click", (e) => {
-  e.stopPropagation();
-  if (leftStack.length === 0) return;
+        rightStack.unshift(center);
+        center = leftStack.shift();
+        renderStacks();
+      });
 
-  carousel.classList.add("moving-left");
-  setTimeout(() => carousel.classList.remove("moving-left"), 180);
+      // RIGHT arrow: pull from RIGHT into center; center goes to LEFT
+      btnRight.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (rightStack.length === 0) return;
 
-  rightStack.unshift(center);
-  center = leftStack.shift();
-  renderStacks();
-});
+        leftStack.unshift(center);
+        center = rightStack.shift();
+        renderStacks();
+      });
 
-// RIGHT click: pull from RIGHT into center; center goes to LEFT
-btnRight.addEventListener("click", (e) => {
-  e.stopPropagation();
-  if (rightStack.length === 0) return;
-
-  carousel.classList.add("moving-right");
-  setTimeout(() => carousel.classList.remove("moving-right"), 180);
-
-  leftStack.unshift(center);
-  center = rightStack.shift();
-  renderStacks();
-});
-
+      renderStacks();
+    });
   </script>
 
 </body>
