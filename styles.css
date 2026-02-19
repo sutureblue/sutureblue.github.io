@@ -105,23 +105,32 @@ body {
 }
 
 .squig-path {
-  stroke-dasharray: 18 10;
-  animation: squigMove 1.2s linear infinite;
-  filter: drop-shadow(0 0 10px rgba(23, 162, 184, 0.25));
+  /* dots instead of dashes */
+  stroke-dasharray: 0.01 12;    /* tiny “on”, larger “off” = dotted */
+  stroke-linecap: round;
 
-  /* paused by default */
-  animation-play-state: paused;
+  /* make the dots drift slowly */
+  animation: dotDrift 3.2s linear infinite;
+
+  filter: drop-shadow(0 0 10px rgba(23, 162, 184, 0.22));
 }
 
-/* Pause SVG gradient animation by default */
-.squig-divider animateTransform {
-  animation-play-state: paused; /* (doesn't always affect SVG animations) */
+@keyframes dotDrift {
+  to { stroke-dashoffset: -12; }
 }
 
-/* Resume on hover */
-.squig-divider:hover .squig-path {
-  animation-play-state: running;
+/* subtle whole-divider wiggle (slow) */
+.squig-divider {
+  animation: squigWiggle 6.5s ease-in-out infinite;
+  transform-origin: center;
 }
+
+@keyframes squigWiggle {
+  0%   { transform: translateY(0px) rotate(0deg); }
+  50%  { transform: translateY(2px) rotate(-0.2deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
 
 
 /* ===== Sections ===== */
