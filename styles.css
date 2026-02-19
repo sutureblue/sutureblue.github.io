@@ -108,13 +108,21 @@ body {
   stroke-dasharray: 18 10;
   animation: squigMove 1.2s linear infinite;
   filter: drop-shadow(0 0 10px rgba(23, 162, 184, 0.25));
+
+  /* paused by default */
+  animation-play-state: paused;
 }
 
-@keyframes squigMove {
-  to {
-    stroke-dashoffset: -28;
-  }
+/* Pause SVG gradient animation by default */
+.squig-divider animateTransform {
+  animation-play-state: paused; /* (doesn't always affect SVG animations) */
 }
+
+/* Resume on hover */
+.squig-divider:hover .squig-path {
+  animation-play-state: running;
+}
+
 
 /* ===== Sections ===== */
 
