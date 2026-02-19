@@ -151,10 +151,10 @@ a:hover {
 }
 
 .glow-card-inner {
-  position: relative;      /* needed for overlay & stacking */
+  position: relative;
   z-index: 1;
   border-radius: 22px;
-  overflow: visible;       /* arrows can sit outside */
+  overflow: visible; /* allow arrows/stacks to peek */
   transition: transform 0.18s ease;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
 }
@@ -163,26 +163,23 @@ a:hover {
   transform: translateY(-2px);
 }
 
-/* ===== Stacked Carousel ===== */
+/* ===== Deck Carousel (left stack / center / right stack) ===== */
 
 .carousel {
   position: relative;
   width: 360px;
   height: 220px;
   margin: 0 auto;
-  overflow: visible;       /* allow arrows outside the card */
+  overflow: visible; /* stacks + arrows */
 }
 
-.carousel-image.is-center {
-  clip-path: inset(0 round 22px);
-}
-
+/* viewport is visible so stacks can peek; we clip only the center slide via clip-path */
 .carousel-viewport {
   width: 100%;
   height: 100%;
-  overflow: visible;     /* <-- was hidden; this is why stacks vanished */
+  overflow: visible;
   border-radius: 22px;
-  z-index: 2;
+  position: relative;
 }
 
 .carousel-track {
@@ -191,7 +188,7 @@ a:hover {
   height: 100%;
 }
 
-/* All slides stacked */
+/* base slide */
 .carousel-image {
   position: absolute;
   inset: 0;
@@ -199,41 +196,45 @@ a:hover {
   height: 100%;
   object-fit: cover;
 
-  clip-path: inset(0 round 22px);  /* keeps rounded corners even with overflow visible */
-
-  opacity: 0.2;
+  opacity: 0; /* hidden unless in a pile */
   transform: translateX(0) scale(0.98);
   transition: transform 0.35s ease, opacity 0.35s ease;
   z-index: 1;
+  pointer-events: none; /* clicks won't snag invisible slides */
 }
 
-/* Center (active) */
-.carousel-image.active {
+/* center card */
+.carousel-image.is-center {
   opacity: 1;
   transform: translateX(0) scale(1);
-  z-index: 5;
+  z-index: 10;
+
+  /* rounded corners restored for the active image */
+  clip-path: inset(0 round 22px);
+
+  pointer-events: auto;
 }
 
-.carousel-image.queue-right {
+/* stacks: 20% opacity, half off edge, slight offsets */
+.carousel-image.in-right-stack {
   opacity: 0.2;
   transform:
-    translateX(40%)                 /* visible stack peeking out */
+    translateX(50%)
     translateY(calc(var(--stack-i) * 3px))
     scale(0.92);
-  z-index: 4;
+  z-index: calc(9 - var(--stack-i));
 }
 
-.carousel-image.queue-left {
+.carousel-image.in-left-stack {
   opacity: 0.2;
   transform:
-    translateX(-40%)
+    translateX(-50%)
     translateY(calc(var(--stack-i) * 3px))
     scale(0.92);
-  z-index: 4;
+  z-index: calc(9 - var(--stack-i));
 }
 
-
-/* Arrows outside card */
+/* Arrows slightly outside the card */
 .carousel-btn {
   position: absolute;
   top: 50%;
@@ -248,7 +249,7 @@ a:hover {
   color: var(--fg);
   cursor: pointer;
 
-  z-index: 10;
+  z-index: 25;
   user-select: none;
 }
 
@@ -266,7 +267,8 @@ a:hover {
   left: -4px;
   right: -4px;
   top: -4px;
-  bottom: -9px;             /* border extends beyond image */
+  bottom: -9px; /* extend a little lower to avoid "too short" */
+
   max-width: 600px;
   max-height: 220px;
 
@@ -281,7 +283,7 @@ a:hover {
   pointer-events: none;
   transition: opacity 0.2s ease;
 
-  z-index: 30;             /* above carousel images */
+  z-index: 30; /* above carousel/images */
 }
 
 .work-overlay.active {
@@ -314,7 +316,7 @@ a:hover {
 }
 
 .read-more {
-  font-weight: 700;        /* bold only */
+  font-weight: 700; /* bold only */
   color: var(--link-blue);
   cursor: pointer;
   transition: color 0.15s ease;
@@ -386,4 +388,8 @@ a:hover {
   /* Keep arrows closer on small screens */
   .carousel-btn.prev { left: -22px; }
   .carousel-btn.next { right: -22px; }
+
+  /* Reduce "half off" on small screens so stack remains visible */
+  .carousel-image.in-right-stack { transform: translateX(40%) translateY(calc(var(--stack-i) * 3px)) scale(0.92); }
+  .carousel-image.in-left-stack  { transform: translateX(-40%) translateY(calc(var(--stack-i) * 3px)) scale(0.92); }
 }
