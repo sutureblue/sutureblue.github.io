@@ -96,7 +96,6 @@ body {
 .squig-divider {
   margin: 48px 0 40px;
   opacity: 0.9;
-
   animation: squigWiggle 7s ease-in-out infinite;
 }
 
@@ -107,7 +106,6 @@ body {
 }
 
 .squig-path {
-
   /* dots */
   stroke-dasharray: 0.01 18;
   stroke-linecap: round;
@@ -127,7 +125,6 @@ body {
 
 /* subtle divider wiggle */
 @keyframes squigWiggle {
-
   0% {
     transform: translateY(0px) rotate(0deg);
   }
@@ -139,7 +136,6 @@ body {
   100% {
     transform: translateY(0px) rotate(0deg);
   }
-
 }
 
 /* ===== Sections ===== */
@@ -169,41 +165,31 @@ body {
 }
 
 .glow-card::before {
-
   content: "";
-
   position: absolute;
-
   inset: -18px;
-
   border-radius: 26px;
 
   background:
     radial-gradient(circle at 20% 0%,
       rgba(23, 162, 184, 0.9),
       transparent 55%),
-
     radial-gradient(circle at 80% 100%,
       rgba(23, 162, 184, 0.5),
       transparent 55%);
 
   filter: blur(6px);
-
   z-index: 0;
 }
 
 .glow-card-inner {
-
   position: relative;
-
   z-index: 1;
 
   border-radius: 22px;
-
   overflow: visible;
 
-  box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
 
   transition: transform 0.18s ease;
 }
@@ -217,7 +203,6 @@ body {
    ========================= */
 
 .carousel {
-
   position: relative;
 
   width: 360px;
@@ -234,17 +219,22 @@ body {
   user-select: none;
 }
 
+/* NEW: stage container to anchor absolute children */
+.carousel-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 /* center image */
 
 .carousel-center {
-
   position: relative;
 
   width: 100%;
   height: 100%;
 
   border-radius: 22px;
-
   overflow: hidden;
 
   z-index: 20;
@@ -253,7 +243,6 @@ body {
 }
 
 .carousel-center img {
-
   width: 100%;
   height: 100%;
 
@@ -267,9 +256,7 @@ body {
 /* ===== Stacks ===== */
 
 .carousel-stack {
-
   position: absolute;
-
   top: 0;
 
   width: 100%;
@@ -281,9 +268,7 @@ body {
 }
 
 .stack-card {
-
   position: absolute;
-
   top: 0;
 
   width: 100%;
@@ -297,7 +282,6 @@ body {
 }
 
 .stack-card img {
-
   width: 100%;
   height: 100%;
 
@@ -307,7 +291,6 @@ body {
 /* right stack */
 
 .carousel-stack.right .stack-card {
-
   transform:
     translateX(50%)
     translateY(calc(var(--stack-i) * 3px))
@@ -317,7 +300,6 @@ body {
 /* left stack */
 
 .carousel-stack.left .stack-card {
-
   transform:
     translateX(-50%)
     translateY(calc(var(--stack-i) * 3px))
@@ -327,19 +309,14 @@ body {
 /* ===== Arrows ===== */
 
 .carousel-btn {
-
   position: absolute;
-
   top: 50%;
-
   transform: translateY(-50%);
 
   background: none;
-
   border: none;
 
   font-size: 28px;
-
   color: var(--fg);
 
   cursor: pointer;
@@ -369,15 +346,12 @@ body {
    ========================= */
 
 .work-overlay {
-
   position: absolute;
-
   inset: 0;
 
   border-radius: 22px;
 
   background: rgba(10, 10, 20, 0.96);
-
   border: 3px solid #000;
 
   padding: 18px 18px 44px;
@@ -385,7 +359,6 @@ body {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
 
   opacity: 0;
-
   pointer-events: none;
 
   transition: opacity 0.2s ease;
@@ -394,26 +367,26 @@ body {
 }
 
 .work-overlay.active {
-
   opacity: 1;
-
   pointer-events: auto;
 }
 
-.overlay-close {
+/* NEW: inner wrapper so clicks inside don't close overlay */
+.overlay-inner {
+  position: relative;
+  height: 100%;
+}
 
+.overlay-close {
   position: absolute;
 
   bottom: 12px;
-
   left: 14px;
 
   background: none;
-
   border: none;
 
   color: var(--fg);
-
   font-size: 18px;
 
   cursor: pointer;
@@ -422,25 +395,18 @@ body {
 /* ===== Work Meta ===== */
 
 .work-meta {
-
   margin-top: 12px;
-
   text-align: left;
 }
 
 .work-meta h3 {
-
   margin: 0 0 4px;
-
   font-size: 15px;
 }
 
 .read-more {
-
   font-weight: 700;
-
   color: var(--link-blue);
-
   cursor: pointer;
 
   transition: color 0.15s ease;
@@ -450,12 +416,21 @@ body {
   color: var(--glow-blue);
 }
 
+/* NEW: focus styles */
+.carousel-btn:focus-visible,
+.overlay-close:focus-visible,
+.read-more:focus-visible,
+.carousel-center:focus-visible {
+  outline: 2px solid rgba(23, 162, 184, 0.8);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
 /* =========================
    About
    ========================= */
 
 .about-layout {
-
   display: grid;
 
   grid-template-columns:
@@ -470,7 +445,6 @@ body {
 }
 
 .about-meta {
-
   font-size: 13px;
 
   color: var(--muted);
@@ -489,7 +463,6 @@ body {
    ========================= */
 
 .site-footer {
-
   margin-top: 48px;
 
   padding-top: 16px;
@@ -507,18 +480,13 @@ body {
 }
 
 .license-footer {
-
   display: flex;
-
   align-items: center;
-
   gap: 4px;
 }
 
 .cc-icon {
-
   width: 14px;
-
   opacity: 0.8;
 }
 
@@ -527,11 +495,25 @@ body {
 }
 
 /* =========================
+   Reduced Motion
+   ========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .squig-divider,
+  .squig-path {
+    animation: none !important;
+  }
+
+  .glow-card-inner {
+    transition: none;
+  }
+}
+
+/* =========================
    Responsive
    ========================= */
 
 @media (max-width: 700px) {
-
   .about-layout {
     grid-template-columns: 1fr;
   }
@@ -561,5 +543,4 @@ body {
       translateY(calc(var(--stack-i) * 3px))
       scale(0.92);
   }
-
 }
