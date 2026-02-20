@@ -56,7 +56,7 @@
 
     <main>
 
-      <!-- Practice Desktop -->
+      <!-- Practice Desktop Windows -->
       <section id="practice" class="section">
         <div class="practice-controls">
           <button id="practiceReset" class="practice-reset" type="button" aria-label="Reset practice windows" title="Reset">
@@ -67,6 +67,37 @@
         <div id="practiceDesktop" class="practice-desktop" aria-label="Draggable practice windows">
           <!-- windows injected by JS -->
         </div>
+
+        <!-- Practice text templates (edit these whenever) -->
+        <template id="tpl-colourorgan">
+          <p><strong>Colour Organ</strong></p>
+          <p>Drop your text here. If it gets long, it will scroll.</p>
+        </template>
+
+        <template id="tpl-discussiongame">
+          <p><strong>Discussion Game</strong></p>
+          <p>Drop your text here. If it gets long, it will scroll.</p>
+        </template>
+
+        <template id="tpl-drawing">
+          <p><strong>Drawing</strong></p>
+          <p>Drop your text here. If it gets long, it will scroll.</p>
+        </template>
+
+        <template id="tpl-fabrication">
+          <p><strong>Fabrication</strong></p>
+          <p>Drop your text here. If it gets long, it will scroll.</p>
+        </template>
+
+        <template id="tpl-lightsleeper">
+          <p><strong>Light Sleeper</strong></p>
+          <p>Drop your text here. If it gets long, it will scroll.</p>
+        </template>
+
+        <template id="tpl-uncanny">
+          <p><strong>Uncanny</strong></p>
+          <p>Drop your text here. If it gets long, it will scroll.</p>
+        </template>
       </section>
 
       <!-- Work -->
@@ -112,7 +143,7 @@
                   </div>
                 </div>
 
-              </div><!-- /.carousel -->
+              </div>
 
             </div>
           </div>
@@ -331,26 +362,30 @@
       renderStacks();
     });
 
-    /* ---------- Practice windows: drag + close + reset ---------- */
+    /* ---------- Practice windows: drag + close + image-click overlay + reset ---------- */
     (() => {
       const desktop = document.getElementById("practiceDesktop");
       const resetBtn = document.getElementById("practiceReset");
       if (!desktop || !resetBtn) return;
 
-      // Your 6 practice images
       const PRACTICE = [
-        { src: "assets/ColourOrgan_1.png",     title: "Colour Organ",     x: 40,  y: 20  },
-        { src: "assets/DiscussionGame_1.png",  title: "Discussion Game",  x: 380, y: 10  },
-        { src: "assets/Drawing_1.png",         title: "Drawing",          x: 220, y: 160 },
-        { src: "assets/Fabrication_1.png",     title: "Fabrication",      x: 60,  y: 310 },
-        { src: "assets/LightSleeper_1.png",    title: "Light Sleeper",    x: 420, y: 290 },
-        { src: "assets/Uncanny_1.png",         title: "Uncanny",          x: 250, y: 420 }
+        { id:"colourorgan",    src:"assets/ColourOrgan_1.png",    title:"Colour Organ",     x: 0,   y: 10  },
+        { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game", x: 330, y: 0   },
+        { id:"drawing",        src:"assets/Drawing_1.png",        title:"Drawing",         x: 180, y: 170 },
+        { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication",     x: 10,  y: 320 },
+        { id:"lightsleeper",   src:"assets/LightSleeper_1.png",   title:"Light Sleeper",   x: 360, y: 300 },
+        { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"Uncanny",         x: 200, y: 430 }
       ];
 
       let zTop = 10;
 
       function clamp(n, min, max) {
         return Math.max(min, Math.min(max, n));
+      }
+
+      function getTemplateHTML(id) {
+        const tpl = document.getElementById(`tpl-${id}`);
+        return tpl ? tpl.innerHTML : `<p><strong>${id}</strong></p>`;
       }
 
       function createWindow(item) {
@@ -365,31 +400,83 @@
             <button class="pwin-close" type="button" aria-label="Close window">×</button>
             <div class="pwin-title" title="${item.title}">${item.title}</div>
           </div>
-          <div class="pwin-body">
+
+          <div class="pwin-body" role="button" tabindex="0" aria-label="Open description">
             <img src="${item.src}" alt="${item.title}">
+          </div>
+
+          <div class="pwin-overlay" aria-hidden="true">
+            <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
+            <div class="pwin-overlay-scroll">
+              <div class="pwin-overlay-text"></div>
+            </div>
           </div>
         `;
 
         const bar = win.querySelector(".pwin-bar");
         const close = win.querySelector(".pwin-close");
+        const body = win.querySelector(".pwin-body");
 
-        // close removes window
+        const overlay = win.querySelector(".pwin-overlay");
+        const minBtn = win.querySelector(".pwin-min");
+        const overlayScroll = win.querySelector(".pwin-overlay-scroll");
+        const overlayText = win.querySelector(".pwin-overlay-text");
+
+        function bringToFront() {
+          win.style.zIndex = String(++zTop);
+        }
+
+        function openOverlay(e) {
+          if (e) e.stopPropagation();
+          bringToFront();
+
+          overlayText.innerHTML = getTemplateHTML(item.id);
+          overlay.classList.add("active");
+          overlay.setAttribute("aria-hidden", "false");
+          overlayScroll.scrollTop = 0;
+
+          // focus minimize for keyboard users
+          minBtn.focus();
+        }
+
+        function closeOverlay(e) {
+          if (e) e.stopPropagation();
+          overlay.classList.remove("active");
+          overlay.setAttribute("aria-hidden", "true");
+        }
+
+        // close window removes it
         close.addEventListener("click", (e) => {
           e.stopPropagation();
           win.remove();
         });
 
-        // bring to front on pointerdown anywhere
-        win.addEventListener("pointerdown", () => {
-          win.style.zIndex = String(++zTop);
+        // bring to front on pointer down
+        win.addEventListener("pointerdown", bringToFront);
+
+        // click image/body to open overlay
+        body.addEventListener("click", openOverlay);
+        body.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") openOverlay(e);
         });
 
-        // drag only from titlebar (not the close button)
+        // minimize overlay
+        minBtn.addEventListener("click", closeOverlay);
+
+        // don't allow clicks inside overlay to drag or re-open
+        overlay.addEventListener("click", (e) => e.stopPropagation());
+
+        // Esc closes overlay if open
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
+        });
+
+        // drag only from titlebar (not close)
         bar.addEventListener("pointerdown", (e) => {
           if (e.target === close) return;
 
           e.preventDefault();
-          win.style.zIndex = String(++zTop);
+          bringToFront();
 
           const rectDesk = desktop.getBoundingClientRect();
           const rectWin = win.getBoundingClientRect();
@@ -406,7 +493,7 @@
             const dx = ev.clientX - startX;
             const dy = ev.clientY - startY;
 
-            // keep inside desktop bounds (soft clamp)
+            // clamp flush to edges (0..max)
             const maxLeft = rectDesk.width  - rectWin.width;
             const maxTop  = rectDesk.height - rectWin.height;
 
@@ -438,7 +525,6 @@
       }
 
       resetBtn.addEventListener("click", populate);
-
       populate();
     })();
   </script>
