@@ -37,11 +37,11 @@ body {
   color: var(--fg);
   line-height: 1.5;
 
-  /* near-black, subtle grey bloom (no blue cast) */
+  /* true near-black base */
   background:
-    radial-gradient(circle at 20% 15%, rgba(255,255,255,0.06), rgba(0,0,0,0) 45%),
-    radial-gradient(circle at 80% 85%, rgba(255,255,255,0.035), rgba(0,0,0,0) 55%),
-    linear-gradient(#010102, #010102);
+    radial-gradient(circle at 18% 12%, rgba(255,255,255,0.035), transparent 45%),
+    radial-gradient(circle at 82% 88%, rgba(255,255,255,0.02), transparent 55%),
+    #010102;
 
   min-height: 100vh;
   position: relative;
