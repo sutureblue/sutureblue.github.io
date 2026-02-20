@@ -9,7 +9,6 @@
 </head>
 
 <body>
-
   <div class="page">
 
     <div class="top">
@@ -56,61 +55,16 @@
 
     <main>
 
-      <!-- Practice Desktop Windows -->
+      <!-- PRACTICE -->
       <section id="practice" class="section">
-        <div class="practice-controls">
-          <button id="practiceReset" class="practice-reset" type="button" aria-label="Reset practice windows" title="Reset">
-            ↺
-          </button>
-        </div>
+        <h2>Practice</h2>
 
-        <div id="practiceDesktop" class="practice-desktop" aria-label="Draggable practice windows">
-          <!-- windows injected by JS -->
-        </div>
-
-        <!-- Practice text templates (edit these whenever) -->
-        <template id="tpl-colourorgan">
-          <p><strong>Colour Organ</strong></p>
-          <p>Drop your text here. If it gets long, it will scroll.</p>
-        </template>
-
-        <template id="tpl-discussiongame">
-          <p><strong>Discussion Game</strong></p>
-          <p>Drop your text here. If it gets long, it will scroll.</p>
-        </template>
-
-        <template id="tpl-drawing">
-          <p><strong>Drawing</strong></p>
-          <p>Drop your text here. If it gets long, it will scroll.</p>
-        </template>
-
-        <template id="tpl-fabrication">
-          <p><strong>Fabrication</strong></p>
-          <p>Drop your text here. If it gets long, it will scroll.</p>
-        </template>
-
-        <template id="tpl-lightsleeper">
-          <p><strong>Light Sleeper</strong></p>
-          <p>Drop your text here. If it gets long, it will scroll.</p>
-        </template>
-
-        <template id="tpl-uncanny">
-          <p><strong>Uncanny</strong></p>
-          <p>Drop your text here. If it gets long, it will scroll.</p>
-        </template>
-      </section>
-
-      <!-- Work -->
-      <section id="work" class="section">
-        <h2>Work</h2>
-
+        <!-- Carousel -->
         <div class="work-item">
-
           <div class="glow-card">
             <div class="glow-card-inner">
 
               <div class="carousel">
-
                 <button class="carousel-btn left" type="button" aria-label="Previous project">‹</button>
 
                 <div class="carousel-stage">
@@ -143,7 +97,7 @@
                   </div>
                 </div>
 
-              </div>
+              </div><!-- /.carousel -->
 
             </div>
           </div>
@@ -153,6 +107,7 @@
             <button class="read-more" type="button">Read more...</button>
           </div>
 
+          <!-- Carousel templates -->
           <template class="tpl-glitchplay">
             <p>
               Glitch Play is my MFA thesis in Interactive Media and Game Development. It investigates engaging with glitches as a form of play that reveals and enables renegotiations with the structure of digital systems.
@@ -184,8 +139,49 @@
               Those of us working on this project believe that the more you rely on open software, the more accessible an archive becomes. That community projects can operate with more integrity when they remain unaffiliated with any institution(s). And most of all, we actively go against writing any “defining narrative(s),” but rather aim to offer an index of searchable artists and artists’ works, as well as any affiliated history, to enable many narratives to overlap, web and be formed by people of the community, in hopes for a more holistic history to be available to those who care to have it.
             </p>
           </template>
-
         </div>
+
+        <!-- Reset button BELOW carousel -->
+        <div class="practice-controls">
+          <button id="practiceReset" class="practice-reset" type="button" aria-label="Reset practice windows" title="Reset">↺</button>
+        </div>
+
+        <!-- Starting area BELOW reset -->
+        <div id="practiceDesktop" class="practice-desktop" aria-label="Draggable practice windows">
+          <!-- windows injected by JS -->
+        </div>
+
+        <!-- Practice text templates -->
+        <template id="tpl-colourorgan">
+          <p><strong>Colour Organ</strong></p>
+          <p>Put your description here. Long text will scroll.</p>
+        </template>
+
+        <template id="tpl-discussiongame">
+          <p><strong>Discussion Game</strong></p>
+          <p>Put your description here. Long text will scroll.</p>
+        </template>
+
+        <template id="tpl-drawing">
+          <p><strong>Drawing</strong></p>
+          <p>Put your description here. Long text will scroll.</p>
+        </template>
+
+        <template id="tpl-fabrication">
+          <p><strong>Fabrication</strong></p>
+          <p>Put your description here. Long text will scroll.</p>
+        </template>
+
+        <template id="tpl-lightsleeper">
+          <p><strong>Light Sleeper</strong></p>
+          <p>Put your description here. Long text will scroll.</p>
+        </template>
+
+        <template id="tpl-uncanny">
+          <p><strong>Uncanny</strong></p>
+          <p>Put your description here. Long text will scroll.</p>
+        </template>
+
       </section>
 
       <!-- About -->
@@ -235,7 +231,7 @@
   </div>
 
   <script>
-    /* ---------- Work carousel logic ---------- */
+    /* ---------- Carousel + Overlay ---------- */
     document.querySelectorAll(".work-item").forEach((workItem) => {
       const carousel = workItem.querySelector(".carousel");
 
@@ -331,16 +327,14 @@
         overlay.setAttribute("aria-hidden", "false");
         overlayScroll.scrollTop = 0;
 
-        closeBtn.focus();
+        closeBtn.focus({ preventScroll: true });
       }
 
       function closeOverlay(e) {
         if (e) e.stopPropagation();
-
         overlay.classList.remove("active");
         overlay.setAttribute("aria-hidden", "true");
-
-        if (lastFocusEl) lastFocusEl.focus();
+        if (lastFocusEl) lastFocusEl.focus({ preventScroll: true });
       }
 
       readMore.onclick = openOverlay;
@@ -351,7 +345,6 @@
       });
 
       closeBtn.onclick = closeOverlay;
-
       overlay.onclick = closeOverlay;
       overlayInner.onclick = (e) => e.stopPropagation();
 
@@ -362,26 +355,22 @@
       renderStacks();
     });
 
-    /* ---------- Practice windows: drag + close + image-click overlay + reset ---------- */
+    /* ---------- Practice Windows (NO snapping, NO clamping) ---------- */
     (() => {
       const desktop = document.getElementById("practiceDesktop");
       const resetBtn = document.getElementById("practiceReset");
       if (!desktop || !resetBtn) return;
 
       const PRACTICE = [
-        { id:"colourorgan",    src:"assets/ColourOrgan_1.png",    title:"Colour Organ",     x: 0,   y: 10  },
-        { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game", x: 330, y: 0   },
-        { id:"drawing",        src:"assets/Drawing_1.png",        title:"Drawing",         x: 180, y: 170 },
-        { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication",     x: 10,  y: 320 },
-        { id:"lightsleeper",   src:"assets/LightSleeper_1.png",   title:"Light Sleeper",   x: 360, y: 300 },
-        { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"Uncanny",         x: 200, y: 430 }
+        { id:"colourorgan",    src:"assets/ColourOrgan_1.png",    title:"Colour Organ",     x: 20,  y: 20  },
+        { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game", x: 360, y: 10  },
+        { id:"drawing",        src:"assets/Drawing_1.png",        title:"Drawing",         x: 210, y: 180 },
+        { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication",     x: 30,  y: 340 },
+        { id:"lightsleeper",   src:"assets/LightSleeper_1.png",   title:"Light Sleeper",   x: 400, y: 320 },
+        { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"Uncanny",         x: 240, y: 470 }
       ];
 
       let zTop = 10;
-
-      function clamp(n, min, max) {
-        return Math.max(min, Math.min(max, n));
-      }
 
       function getTemplateHTML(id) {
         const tpl = document.getElementById(`tpl-${id}`);
@@ -435,8 +424,7 @@
           overlay.setAttribute("aria-hidden", "false");
           overlayScroll.scrollTop = 0;
 
-          // focus minimize for keyboard users
-          minBtn.focus();
+          minBtn.focus({ preventScroll: true });
         }
 
         function closeOverlay(e) {
@@ -445,36 +433,34 @@
           overlay.setAttribute("aria-hidden", "true");
         }
 
-        // close window removes it
         close.addEventListener("click", (e) => {
           e.stopPropagation();
           win.remove();
         });
 
-        // bring to front on pointer down
         win.addEventListener("pointerdown", bringToFront);
 
-        // click image/body to open overlay
         body.addEventListener("click", openOverlay);
         body.addEventListener("keydown", (e) => {
           if (e.key === "Enter" || e.key === " ") openOverlay(e);
         });
 
-        // minimize overlay
+        // minimize button (works)
+        minBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
         minBtn.addEventListener("click", closeOverlay);
 
-        // don't allow clicks inside overlay to drag or re-open
+        // prevent overlay from triggering drag
+        overlay.addEventListener("pointerdown", (e) => e.stopPropagation());
         overlay.addEventListener("click", (e) => e.stopPropagation());
 
-        // Esc closes overlay if open
+        // Esc closes only if that overlay is open
         document.addEventListener("keydown", (e) => {
           if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
         });
 
-        // drag only from titlebar (not close)
+        // Drag ONLY from titlebar (no clamping; drag anywhere)
         bar.addEventListener("pointerdown", (e) => {
           if (e.target === close) return;
-
           e.preventDefault();
           bringToFront();
 
@@ -493,15 +479,9 @@
             const dx = ev.clientX - startX;
             const dy = ev.clientY - startY;
 
-            // clamp flush to edges (0..max)
-            const maxLeft = rectDesk.width  - rectWin.width;
-            const maxTop  = rectDesk.height - rectWin.height;
-
-            const nextLeft = clamp(startLeft + dx, 0, maxLeft);
-            const nextTop  = clamp(startTop  + dy, 0, maxTop);
-
-            win.style.left = nextLeft + "px";
-            win.style.top  = nextTop  + "px";
+            // NO snapping. NO clamping. Just pure gremlin freedom.
+            win.style.left = (startLeft + dx) + "px";
+            win.style.top  = (startTop + dy) + "px";
           }
 
           function onUp() {
