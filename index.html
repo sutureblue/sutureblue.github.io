@@ -295,22 +295,25 @@
       const btnLeft = carousel.querySelector(".carousel-btn.left");
       const btnRight = carousel.querySelector(".carousel-btn.right");
 
-      const projects = Array.from(
-        carousel.querySelectorAll(".carousel-sources img")
-      ).map(img => ({
-        src: img.getAttribute("src"),
-        title: img.dataset.title || "Untitled",
-        text: img.dataset.text || ""
-      }));
+const projects = Array.from(
+  carousel.querySelectorAll(".carousel-sources img")
+).map(img => ({
+  src: img.getAttribute("src"),
+  title: img.dataset.title || "Untitled",
+  text: img.dataset.text || "",
+  template: img.dataset.template || ""
+}));
 
-      let center = 0;
-      let leftStack = [];
-      let rightStack = projects.map((_, i) => i).slice(1);
+function updateMeta(index) {
+  titleEl.textContent = projects[index].title;
 
-      function updateMeta(index) {
-        titleEl.textContent = projects[index].title;
-        overlayText.innerHTML = projects[index].text;
-    }
+  if (projects[index].template) {
+    const tpl = document.querySelector(projects[index].template);
+    overlayText.innerHTML = tpl ? tpl.innerHTML : "";
+  } else {
+    overlayText.innerHTML = projects[index].text;
+  }
+}
 
       function renderStacks() {
         leftStackEl.innerHTML = "";
