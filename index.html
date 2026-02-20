@@ -85,8 +85,8 @@
                   <img src="assets/mfru.png"       data-title="MFRU (2023)" data-template=".tpl-mfru" alt="">
                 </div>
 
-                <!-- NOTE: no role/aria-modal hardcoded while hidden -->
-                <div class="work-overlay" aria-hidden="true">
+                <!-- RESTORED: exactly as your original -->
+                <div class="work-overlay" aria-hidden="true" role="dialog" aria-modal="true">
                   <div class="overlay-inner">
                     <div class="overlay-scroll">
                       <div class="overlay-text"></div>
@@ -148,7 +148,7 @@
         </div>
 
         <!-- Starting area BELOW reset -->
-        <div id="practiceDesktop" class="practice-desktop" aria-label="Practice windows area">
+        <div id="practiceDesktop" class="practice-desktop" aria-label="Draggable practice windows">
           <!-- windows injected by JS -->
         </div>
 
@@ -232,156 +232,131 @@
   </div>
 
   <script>
-    /* =========================================================
-       Carousel + Overlay (fixed aria + no listener leaks)
-       ========================================================= */
-    (() => {
-      const allWorkItems = Array.from(document.querySelectorAll(".work-item"));
+    /* ---------- Carousel + Overlay (RESTORED: your original) ---------- */
+    document.querySelectorAll(".work-item").forEach((workItem) => {
+      const carousel = workItem.querySelector(".carousel");
 
-      allWorkItems.forEach((workItem) => {
-        const carousel = workItem.querySelector(".carousel");
-        if (!carousel) return;
+      const overlay = workItem.querySelector(".work-overlay");
+      const overlayInner = workItem.querySelector(".overlay-inner");
+      const overlayScroll = workItem.querySelector(".overlay-scroll");
+      const overlayText = workItem.querySelector(".overlay-text");
 
-        const overlay = workItem.querySelector(".work-overlay");
-        const overlayInner = workItem.querySelector(".overlay-inner");
-        const overlayScroll = workItem.querySelector(".overlay-scroll");
-        const overlayText = workItem.querySelector(".overlay-text");
+      const readMore = workItem.querySelector(".read-more");
+      const closeBtn = workItem.querySelector(".overlay-close");
 
-        const readMore = workItem.querySelector(".read-more");
-        const closeBtn = workItem.querySelector(".overlay-close");
+      const titleEl = workItem.querySelector(".project-title");
 
-        const titleEl = workItem.querySelector(".project-title");
+      const centerImg = carousel.querySelector(".carousel-center-img");
+      const centerArea = carousel.querySelector(".carousel-center");
 
-        const centerImg = carousel.querySelector(".carousel-center-img");
-        const centerArea = carousel.querySelector(".carousel-center");
+      const leftStackEl = carousel.querySelector(".carousel-stack.left");
+      const rightStackEl = carousel.querySelector(".carousel-stack.right");
 
-        const leftStackEl = carousel.querySelector(".carousel-stack.left");
-        const rightStackEl = carousel.querySelector(".carousel-stack.right");
+      const btnLeft = carousel.querySelector(".carousel-btn.left");
+      const btnRight = carousel.querySelector(".carousel-btn.right");
 
-        const btnLeft = carousel.querySelector(".carousel-btn.left");
-        const btnRight = carousel.querySelector(".carousel-btn.right");
+      let lastFocusEl = null;
 
-        let lastFocusEl = null;
+      const projects = Array.from(
+        carousel.querySelectorAll(".carousel-sources img")
+      ).map(img => ({
+        src: img.getAttribute("src"),
+        title: img.dataset.title || "Untitled",
+        template: img.dataset.template || ""
+      }));
 
-        const projects = Array.from(
-          carousel.querySelectorAll(".carousel-sources img")
-        ).map(img => ({
-          src: img.getAttribute("src"),
-          title: img.dataset.title || "Untitled",
-          template: img.dataset.template || ""
-        }));
+      let center = 0;
+      let leftStack = [];
+      let rightStack = projects.map((_, i) => i).slice(1);
 
-        let center = 0;
-        let leftStack = [];
-        let rightStack = projects.map((_, i) => i).slice(1);
+      function updateMeta(index) {
+        titleEl.textContent = projects[index].title;
+        const sel = projects[index].template;
+        const tpl = sel ? workItem.querySelector(sel) : null;
+        overlayText.innerHTML = tpl ? tpl.innerHTML : "";
+      }
 
-        function updateMeta(index) {
-          titleEl.textContent = projects[index].title;
-          const sel = projects[index].template;
-          const tpl = sel ? workItem.querySelector(sel) : null;
-          overlayText.innerHTML = tpl ? tpl.innerHTML : "";
-        }
+      function renderStacks() {
+        leftStackEl.innerHTML = "";
+        rightStackEl.innerHTML = "";
 
-        function renderStacks() {
-          leftStackEl.innerHTML = "";
-          rightStackEl.innerHTML = "";
-
-          leftStack.forEach((idx, i) => {
-            const card = document.createElement("div");
-            card.className = "stack-card";
-            card.style.setProperty("--stack-i", i);
-            card.innerHTML = `<img src="${projects[idx].src}" alt="">`;
-            leftStackEl.appendChild(card);
-          });
-
-          rightStack.forEach((idx, i) => {
-            const card = document.createElement("div");
-            card.className = "stack-card";
-            card.style.setProperty("--stack-i", i);
-            card.innerHTML = `<img src="${projects[idx].src}" alt="">`;
-            rightStackEl.appendChild(card);
-          });
-
-          centerImg.src = projects[center].src;
-          updateMeta(center);
-
-          btnLeft.disabled = leftStack.length === 0;
-          btnRight.disabled = rightStack.length === 0;
-        }
-
-        function goNext() {
-          if (!rightStack.length) return;
-          leftStack.unshift(center);
-          center = rightStack.shift();
-          renderStacks();
-        }
-
-        function goPrev() {
-          if (!leftStack.length) return;
-          rightStack.unshift(center);
-          center = leftStack.shift();
-          renderStacks();
-        }
-
-        btnLeft.onclick = goPrev;
-        btnRight.onclick = goNext;
-
-        function openOverlay(e) {
-          if (e) e.stopPropagation();
-          lastFocusEl = document.activeElement;
-
-          overlay.classList.add("active");
-          overlay.setAttribute("aria-hidden", "false");
-          overlay.setAttribute("role", "dialog");
-          overlay.setAttribute("aria-modal", "true");
-
-          overlayScroll.scrollTop = 0;
-          closeBtn.focus({ preventScroll: true });
-        }
-
-        function closeOverlay(e) {
-          if (e) e.stopPropagation();
-          overlay.classList.remove("active");
-          overlay.setAttribute("aria-hidden", "true");
-          overlay.removeAttribute("role");
-          overlay.removeAttribute("aria-modal");
-
-          if (lastFocusEl) lastFocusEl.focus({ preventScroll: true });
-        }
-
-        readMore.onclick = openOverlay;
-        centerArea.onclick = openOverlay;
-
-        centerArea.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === " ") openOverlay(e);
+        leftStack.forEach((idx, i) => {
+          const card = document.createElement("div");
+          card.className = "stack-card";
+          card.style.setProperty("--stack-i", i);
+          card.innerHTML = `<img src="${projects[idx].src}" alt="">`;
+          leftStackEl.appendChild(card);
         });
 
-        closeBtn.onclick = closeOverlay;
-        overlay.onclick = closeOverlay;
-        overlayInner.onclick = (e) => e.stopPropagation();
+        rightStack.forEach((idx, i) => {
+          const card = document.createElement("div");
+          card.className = "stack-card";
+          card.style.setProperty("--stack-i", i);
+          card.innerHTML = `<img src="${projects[idx].src}" alt="">`;
+          rightStackEl.appendChild(card);
+        });
 
+        centerImg.src = projects[center].src;
+        updateMeta(center);
+
+        btnLeft.disabled = leftStack.length === 0;
+        btnRight.disabled = rightStack.length === 0;
+      }
+
+      function goNext() {
+        if (!rightStack.length) return;
+        leftStack.unshift(center);
+        center = rightStack.shift();
         renderStacks();
+      }
+
+      function goPrev() {
+        if (!leftStack.length) return;
+        rightStack.unshift(center);
+        center = leftStack.shift();
+        renderStacks();
+      }
+
+      btnLeft.onclick = goPrev;
+      btnRight.onclick = goNext;
+
+      function openOverlay(e) {
+        if (e) e.stopPropagation();
+        lastFocusEl = document.activeElement;
+
+        overlay.classList.add("active");
+        overlay.setAttribute("aria-hidden", "false");
+        overlayScroll.scrollTop = 0;
+
+        closeBtn.focus({ preventScroll: true });
+      }
+
+      function closeOverlay(e) {
+        if (e) e.stopPropagation();
+        overlay.classList.remove("active");
+        overlay.setAttribute("aria-hidden", "true");
+        if (lastFocusEl) lastFocusEl.focus({ preventScroll: true });
+      }
+
+      readMore.onclick = openOverlay;
+      centerArea.onclick = openOverlay;
+
+      centerArea.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") openOverlay(e);
       });
 
-      // ONE global Esc handler for carousel overlays
+      closeBtn.onclick = closeOverlay;
+      overlay.onclick = closeOverlay;
+      overlayInner.onclick = (e) => e.stopPropagation();
+
       document.addEventListener("keydown", (e) => {
-        if (e.key !== "Escape") return;
-        const active = document.querySelector(".work-overlay.active");
-        if (active) {
-          active.classList.remove("active");
-          active.setAttribute("aria-hidden", "true");
-          active.removeAttribute("role");
-          active.removeAttribute("aria-modal");
-        }
+        if (e.key === "Escape") closeOverlay(e);
       });
-    })();
 
-    /* =========================================================
-       Practice Windows
-       - Mobile: stacked vertical, alternating left/right
-       - Touch: press-and-hold to drag (so you can still scroll)
-       - No per-window Escape listeners (single global)
-       ========================================================= */
+      renderStacks();
+    });
+
+    /* ---------- Practice Windows (mobile stacked + bigger + no random resets) ---------- */
     (() => {
       const desktop = document.getElementById("practiceDesktop");
       const resetBtn = document.getElementById("practiceReset");
@@ -396,10 +371,10 @@
         { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"Uncanny",         x: 240, y: 470 }
       ];
 
-      let zTop = 10;
-
       const mqMobile = window.matchMedia("(max-width: 760px)");
       const isMobile = () => mqMobile.matches;
+
+      let zTop = 10;
 
       function getTemplateHTML(id) {
         const tpl = document.getElementById(`tpl-${id}`);
@@ -415,7 +390,6 @@
         win.className = "pwin";
         win.dataset.id = item.id;
 
-        // initial placement: desktop coords (mobile will be re-laid out after creation)
         win.style.left = item.x + "px";
         win.style.top  = item.y + "px";
         win.style.zIndex = String(++zTop);
@@ -455,7 +429,6 @@
           overlay.classList.add("active");
           overlay.setAttribute("aria-hidden", "false");
           overlayScroll.scrollTop = 0;
-
           minBtn.focus({ preventScroll: true });
         }
 
@@ -468,7 +441,7 @@
         close.addEventListener("click", (e) => {
           e.stopPropagation();
           win.remove();
-          if (isMobile()) layoutMobile(); // keep stack tight if one is closed
+          if (isMobile()) layoutMobile(true);
         });
 
         win.addEventListener("pointerdown", () => bringToFront(win));
@@ -484,13 +457,15 @@
         overlay.addEventListener("pointerdown", (e) => e.stopPropagation());
         overlay.addEventListener("click", (e) => e.stopPropagation());
 
-        /* -------------------------
-           Dragging:
-           Desktop: immediate drag from bar
-           Mobile: press-and-hold to drag (prevents scroll misery)
-           ------------------------- */
+        // --- Dragging: desktop immediate, mobile press-and-hold (prevents scroll fights) ---
         let holdTimer = null;
-        let dragging = false;
+
+        function clearHold() {
+          if (holdTimer) {
+            clearTimeout(holdTimer);
+            holdTimer = null;
+          }
+        }
 
         function startDrag(e) {
           if (e.target === close) return;
@@ -507,45 +482,31 @@
           const startLeft = rectWin.left - rectDesk.left;
           const startTop  = rectWin.top  - rectDesk.top;
 
-          dragging = true;
           desktop.classList.add("is-dragging");
-          win.classList.add("is-dragging");
-
           win.setPointerCapture(e.pointerId);
 
           function onMove(ev) {
             const dx = ev.clientX - startX;
             const dy = ev.clientY - startY;
-
             win.style.left = (startLeft + dx) + "px";
             win.style.top  = (startTop + dy) + "px";
           }
 
-          function endDrag() {
-            dragging = false;
-            desktop.classList.remove("is-dragging");
-            win.classList.remove("is-dragging");
-
+          function onUp() {
             try { win.releasePointerCapture(e.pointerId); } catch (_) {}
-
+            desktop.classList.remove("is-dragging");
             win.removeEventListener("pointermove", onMove);
-            win.removeEventListener("pointerup", endDrag);
-            win.removeEventListener("pointercancel", endDrag);
+            win.removeEventListener("pointerup", onUp);
+            win.removeEventListener("pointercancel", onUp);
 
-            // after drag on mobile, update stack height so it doesn’t cut off shadows
+            // critical: once user moves a window, never auto-restack on resize
+            desktop.dataset.userMoved = "1";
             if (isMobile()) updateDesktopHeightForMobile();
           }
 
           win.addEventListener("pointermove", onMove);
-          win.addEventListener("pointerup", endDrag);
-          win.addEventListener("pointercancel", endDrag);
-        }
-
-        function clearHold() {
-          if (holdTimer) {
-            clearTimeout(holdTimer);
-            holdTimer = null;
-          }
+          win.addEventListener("pointerup", onUp);
+          win.addEventListener("pointercancel", onUp);
         }
 
         bar.addEventListener("pointerdown", (e) => {
@@ -555,10 +516,8 @@
             return;
           }
 
-          // mobile: press-and-hold to drag
           clearHold();
           holdTimer = setTimeout(() => {
-            // prevent the “tap” from doing anything else
             e.preventDefault();
             startDrag(e);
           }, 140);
@@ -567,24 +526,24 @@
         bar.addEventListener("pointerup", clearHold);
         bar.addEventListener("pointercancel", clearHold);
         bar.addEventListener("pointermove", (e) => {
-          // if they start moving before hold triggers, cancel (so scroll wins)
+          // if they move before hold triggers, cancel the hold so scrolling wins
           if (!isMobile() || !holdTimer) return;
           if (Math.abs(e.movementX) + Math.abs(e.movementY) > 2) clearHold();
         });
 
-        // allow tap on titlebar to just bring front on mobile (nice feel)
-        bar.addEventListener("click", () => bringToFront(win));
-
         return win;
       }
 
-      /* -------------------------
-         Mobile zig-zag layout
-         ------------------------- */
-      function layoutMobile() {
+      // tighter zig-zag stack
+      function layoutMobile(force = false) {
         if (!isMobile()) {
-          // restore desktop height when not mobile
           desktop.style.height = "";
+          return;
+        }
+
+        // If user dragged windows, don't restack unless forced (reset / initial)
+        if (!force && desktop.dataset.userMoved === "1") {
+          updateDesktopHeightForMobile();
           return;
         }
 
@@ -592,33 +551,30 @@
         if (!wins.length) return;
 
         const deskRect = desktop.getBoundingClientRect();
-        const padTop = 10;
-        const gapY = 18;
 
-        // Read the computed --win-w so we place correctly
-        // (falls back to 150px per your media query)
-        const tmp = wins[0];
-        const cs = getComputedStyle(tmp);
-        const winW = parseFloat(cs.getPropertyValue("--win-w")) || tmp.getBoundingClientRect().width || 150;
+        const cs = getComputedStyle(wins[0]);
+        const winW = parseFloat(cs.getPropertyValue("--win-w")) || 200;
+        const imgH = parseFloat(cs.getPropertyValue("--img-h")) || 167;
+        const barH = parseFloat(cs.getPropertyValue("--bar-h")) || 36;
+
+        const padTop = 8;
+        const gapY = 8;
 
         const leftX = 10;
         const rightX = Math.max(10, Math.floor(deskRect.width - winW - 10));
 
+        const blockH = barH + imgH;
+
         let y = padTop;
 
         wins.forEach((win, i) => {
-          const rect = win.getBoundingClientRect();
-          const h = rect.height || 170;
-
           const x = (i % 2 === 0) ? leftX : rightX;
-
           win.style.left = x + "px";
           win.style.top  = y + "px";
-
-          y += h + gapY;
+          y += blockH + gapY;
         });
 
-        desktop.style.height = y + "px";
+        desktop.style.height = (y + 18) + "px";
       }
 
       function updateDesktopHeightForMobile() {
@@ -626,7 +582,6 @@
         const wins = Array.from(desktop.querySelectorAll(".pwin"));
         if (!wins.length) return;
 
-        // Ensure desktop height covers the lowest window + shadow room
         let maxBottom = 0;
         for (const win of wins) {
           const top = parseFloat(win.style.top || "0");
@@ -639,18 +594,26 @@
       function populate() {
         desktop.innerHTML = "";
         PRACTICE.forEach(item => desktop.appendChild(createWindow(item)));
-        layoutMobile();
+
+        // allow auto-stack until user drags
+        desktop.dataset.userMoved = "0";
+        layoutMobile(true);
       }
 
       resetBtn.addEventListener("click", populate);
       populate();
 
-      // re-layout when orientation/size changes
+      // Debounced resize; won't restack after user moves a window
+      let resizeTimer = null;
       window.addEventListener("resize", () => {
-        layoutMobile();
+        if (desktop.classList.contains("is-dragging")) return; // don't fight drag
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          layoutMobile(false);
+        }, 150);
       });
 
-      // ONE global Esc handler for practice overlays (topmost z-index wins)
+      // Esc closes only the topmost open overlay
       document.addEventListener("keydown", (e) => {
         if (e.key !== "Escape") return;
 
