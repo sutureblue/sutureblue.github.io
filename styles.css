@@ -116,15 +116,16 @@ body {
 .section { padding: 8px 4px 32px; }
 .section h2 { font-size: 18px; margin: 0 0 16px; }
 
-/* =========================
-   PRACTICE (carousel)
-   ========================= */
-
-#practice-carousel h2 {
+/* Practice header aligned with carousel width */
+#practice h2 {
   width: 360px;
   margin: 0 auto 18px;
   text-align: left;
 }
+
+/* =========================
+   Carousel
+   ========================= */
 
 .work-item {
   max-width: 360px;
@@ -223,7 +224,7 @@ body {
 .carousel-btn:hover { color: var(--glow-blue); }
 .carousel-btn:disabled { opacity: 0.25; cursor: default; }
 
-/* Overlay (blue scrollbars) */
+/* Carousel overlay + BLUE scrollbars */
 .work-overlay {
   position: absolute;
   inset: 0;
@@ -241,7 +242,6 @@ body {
   display: flex;
   flex-direction: column;
 }
-
 .work-overlay.active { opacity: 1; pointer-events: auto; }
 
 .overlay-inner { position: relative; height: 100%; display: flex; flex-direction: column; }
@@ -258,18 +258,11 @@ body {
   scrollbar-width: thin;
   scrollbar-color: rgba(23,162,184,0.55) transparent;
 }
-
 .overlay-scroll::-webkit-scrollbar { width: 6px; }
-.overlay-scroll::-webkit-scrollbar-thumb {
-  background: rgba(23, 162, 184, 0.55);
-  border-radius: 4px;
-}
-.overlay-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(23, 162, 184, 0.8);
-}
+.overlay-scroll::-webkit-scrollbar-thumb { background: rgba(23,162,184,0.55); border-radius: 4px; }
+.overlay-scroll::-webkit-scrollbar-thumb:hover { background: rgba(23,162,184,0.8); }
 
 .overlay-actions { position: sticky; bottom: 0; display: flex; justify-content: flex-start; padding-top: 10px; }
-
 .overlay-close {
   background: none;
   border: none;
@@ -280,7 +273,6 @@ body {
   line-height: 1;
   border-radius: 10px;
 }
-
 .overlay-close:hover { color: var(--glow-blue); }
 
 .overlay-text { font-size: 14px; color: rgba(247, 245, 255, 0.92); }
@@ -293,11 +285,7 @@ body {
   border-bottom: 1px solid rgba(23,162,184,0.4);
   transition: all 0.2s ease;
 }
-
-.overlay-text a:hover {
-  color: #7fd3e0;
-  border-bottom-color: rgba(23,162,184,0.8);
-}
+.overlay-text a:hover { color: #7fd3e0; border-bottom-color: rgba(23,162,184,0.8); }
 
 .work-meta { margin-top: 12px; text-align: left; }
 .work-meta h3 { margin: 0 0 4px; font-size: 15px; }
@@ -314,12 +302,12 @@ body {
 .read-more:hover { color: var(--glow-blue); }
 
 /* =========================
-   DRAG WINDOWS (full width)
+   Reset + Starting area
    ========================= */
 
-.practice-controls.wide {
+.practice-controls {
   width: 100%;
-  margin: 0 0 10px;
+  margin: 22px 0 10px; /* breathing room under carousel */
   display: flex;
   justify-content: flex-start;
 }
@@ -338,27 +326,27 @@ body {
     0 10px 24px rgba(0,0,0,0.55),
     0 0 14px rgba(23,162,184,0.14);
 }
+.practice-reset:hover { color: var(--glow-blue); border-color: rgba(23,162,184,0.35); }
 
-.practice-reset:hover {
-  color: var(--glow-blue);
-  border-color: rgba(23,162,184,0.35);
-}
-
-/* full page width, no outline box */
-.practice-desktop.wide {
+/* Full-width “starting section” (visible but subtle; no outline) */
+.practice-desktop {
   position: relative;
   width: 100%;
   height: 620px;
   margin: 0;
 
   border: none;
-  background: transparent;
-  box-shadow: none;
+  border-radius: 16px;
+  background: rgba(0,0,0,0.10); /* subtle area */
+  box-shadow: 0 18px 46px rgba(0,0,0,0.28);
 
-  overflow: hidden;
+  overflow: visible; /* key: drag beyond this area if you want */
 }
 
-/* Window */
+/* =========================
+   Window
+   ========================= */
+
 .pwin {
   position: absolute;
   width: var(--win-w, 300px);
@@ -374,7 +362,6 @@ body {
   padding: 0 10px;
   cursor: grab;
 }
-
 .pwin-bar:active { cursor: grabbing; }
 
 .pwin-close {
@@ -387,7 +374,6 @@ body {
   cursor: pointer;
   opacity: 0.95;
 }
-
 .pwin-close:hover { color: var(--glow-blue); }
 
 .pwin-title {
@@ -427,7 +413,7 @@ body {
   display: block;
 }
 
-/* Image click overlay */
+/* Image overlay + BLUE scrollbars */
 .pwin-overlay {
   position: absolute;
   left: 0;
@@ -467,7 +453,6 @@ body {
   line-height: 1;
   z-index: 3;
 }
-
 .pwin-min:hover { color: var(--glow-blue); border-color: rgba(23,162,184,0.35); }
 
 .pwin-overlay-scroll {
@@ -478,21 +463,14 @@ body {
   scrollbar-width: thin;
   scrollbar-color: rgba(23,162,184,0.55) transparent;
 }
-
 .pwin-overlay-scroll::-webkit-scrollbar { width: 6px; }
-.pwin-overlay-scroll::-webkit-scrollbar-thumb {
-  background: rgba(23, 162, 184, 0.55);
-  border-radius: 4px;
-}
-.pwin-overlay-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(23, 162, 184, 0.8);
-}
+.pwin-overlay-scroll::-webkit-scrollbar-thumb { background: rgba(23,162,184,0.55); border-radius: 4px; }
+.pwin-overlay-scroll::-webkit-scrollbar-thumb:hover { background: rgba(23,162,184,0.8); }
 
 .pwin-overlay-text {
   font-size: 13px;
   color: rgba(247,245,255,0.92);
 }
-
 .pwin-overlay-text p { margin: 0 0 10px; }
 .pwin-overlay-text p:last-child { margin-bottom: 0; }
 
@@ -501,7 +479,6 @@ body {
   text-decoration: none;
   border-bottom: 1px solid rgba(23,162,184,0.4);
 }
-
 .pwin-overlay-text a:hover {
   color: #7fd3e0;
   border-bottom-color: rgba(23,162,184,0.8);
@@ -517,12 +494,13 @@ body {
 .cc-icon { width: 14px; opacity: 0.8; }
 .footer-note { opacity: 0.8; }
 
-/* Responsive: halve window size */
+/* Responsive: half-size windows */
 @media (max-width: 760px) {
   .top { grid-template-columns: 1fr; row-gap: 18px; }
   .hero { text-align: left; }
   .about-layout { grid-template-columns: 1fr; }
-  #practice-carousel h2 { width: 100%; }
+
+  #practice h2 { width: 100%; }
 
   .pwin {
     --win-w: 150px;
@@ -531,5 +509,5 @@ body {
     --title-size: 12px;
   }
 
-  .practice-desktop.wide { height: 620px; }
+  .practice-desktop { height: 620px; }
 }
