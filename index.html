@@ -9,58 +9,56 @@
 </head>
 
 <body>
-  
-<div class="page">
 
-  <div class="top">
-    <header class="site-header">
-<video class="header-image" autoplay muted loop playsinline>
-  <source src="assets/icon.webm" type="video/webm">
-  <source src="assets/icon.mp4" type="video/mp4">
-</video>
-    </header>
+  <div class="page">
 
-    <section class="hero">
-      <h1>Bee Nix // Suture Blue</h1>
-      <p>
-        Thinking. Creating. Playing.
-      </p>
-      <p>
-        Animations. Interactives. Games. Lectures. Discussions.
-      </p>
-    </section>
-  </div>
+    <div class="top">
+      <header class="site-header">
+        <video class="header-image" autoplay muted loop playsinline>
+          <source src="assets/icon.webm" type="video/webm">
+          <source src="assets/icon.mp4" type="video/mp4">
+        </video>
+      </header>
 
-      <!-- Squiggly Divider 1 -->
-      <div class="squig-divider" aria-hidden="true">
-        <svg viewBox="0 0 1200 40" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="squigGrad1" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stop-color="#17a2b8" />
-              <stop offset="50%" stop-color="#ffb84d" />
-              <stop offset="100%" stop-color="#1be496" />
-              <animateTransform
-                attributeName="gradientTransform"
-                type="translate"
-                from="-1 0"
-                to="1 0"
-                dur="10s"
-                repeatCount="indefinite"
-              />
-            </linearGradient>
-          </defs>
+      <section class="hero">
+        <h1>Bee Nix // Suture Blue</h1>
+        <p>Thinking. Creating. Playing.</p>
+        <p>Animations. Interactives. Games. Lectures. Discussions.</p>
+      </section>
+    </div>
 
-          <path
-            d="M0,20 C80,5 160,35 240,20 C320,5 400,35 480,20 C560,5 640,35 720,20 C800,5 880,35 960,20 C1040,5 1120,35 1200,20"
-            fill="none"
-            stroke="url(#squigGrad1)"
-            stroke-width="6"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="squig-path"
-          />
-        </svg>
-      </div>
+    <!-- Squiggly Divider 1 -->
+    <div class="squig-divider" aria-hidden="true">
+      <svg viewBox="0 0 1200 40" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="squigGrad1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#17a2b8" />
+            <stop offset="50%" stop-color="#ffb84d" />
+            <stop offset="100%" stop-color="#1be496" />
+            <animateTransform
+              attributeName="gradientTransform"
+              type="translate"
+              from="-1 0"
+              to="1 0"
+              dur="10s"
+              repeatCount="indefinite"
+            />
+          </linearGradient>
+        </defs>
+
+        <path
+          d="M0,20 C80,5 160,35 240,20 C320,5 400,35 480,20 C560,5 640,35 720,20 C800,5 880,35 960,20 C1040,5 1120,35 1200,20"
+          fill="none"
+          stroke="url(#squigGrad1)"
+          stroke-width="6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="squig-path"
+        />
+      </svg>
+    </div>
+
+    <main>
 
       <!-- Work -->
       <section id="work" class="section">
@@ -78,7 +76,6 @@
                 <button class="carousel-btn left" type="button" aria-label="Previous project">‹</button>
 
                 <div class="carousel-stage">
-
                   <div class="carousel-stack left"></div>
 
                   <div class="carousel-center" role="button" tabindex="0" aria-label="Open project details">
@@ -86,7 +83,6 @@
                   </div>
 
                   <div class="carousel-stack right"></div>
-
                 </div>
 
                 <!-- Right Arrow (next) -->
@@ -94,17 +90,16 @@
 
                 <!-- Hidden Project Data -->
                 <div class="carousel-sources" hidden>
-
                   <img
                     src="assets/gNg.png"
                     data-title="Project One"
                     data-text="This exhibition explored the intertwined histories of glitch art and video games,
-                    featuring 40+ artists from over 5 countries, across two Pittsburgh venues. 
-                    As producer, curator, and organizer alongside John Bumstead and Nick Liberatore, 
-                    I developed the show's conceptual framework and programmed workshops, discussions, 
-                    and live demonstrations. I created and moderated the Discussion Game, a participatory 
-                    conversation format that gathered artists, theorists, and gamers to explore themes of 
-                    play, control, and system disruption."
+featuring 40+ artists from over 5 countries, across two Pittsburgh venues.
+As producer, curator, and organizer alongside John Bumstead and Nick Liberatore,
+I developed the show's conceptual framework and programmed workshops, discussions,
+and live demonstrations. I created and moderated the Discussion Game, a participatory
+conversation format that gathered artists, theorists, and gamers to explore themes of
+play, control, and system disruption."
                     alt=""
                   >
 
@@ -121,14 +116,20 @@
                     data-text="This project investigates digital decay and motion drift."
                     alt=""
                   >
-
                 </div>
 
                 <!-- Overlay -->
                 <div class="work-overlay" aria-hidden="true">
                   <div class="overlay-inner">
-                    <button class="overlay-close" type="button" aria-label="Close overlay">×</button>
-                    <p class="overlay-text"></p>
+
+                    <div class="overlay-scroll">
+                      <p class="overlay-text"></p>
+                    </div>
+
+                    <div class="overlay-actions">
+                      <button class="overlay-close" type="button" aria-label="Close overlay">×</button>
+                    </div>
+
                   </div>
                 </div>
 
@@ -184,7 +185,6 @@
         <h2>About</h2>
 
         <div class="about-layout">
-
           <div>
             <p>
               I’m Bee Nix, aka Suture Blue.
@@ -208,7 +208,6 @@
               sutureblue@protonmail.com
             </p>
           </div>
-
         </div>
       </section>
 
@@ -216,24 +215,20 @@
 
     <!-- Footer -->
     <footer class="site-footer">
-
       <div class="license-footer">
         <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
            target="_blank"
            rel="noreferrer">
-
           <img src="assets/cc.png"
                alt="Creative Commons"
                class="cc-icon" />
         </a>
-
         <span>2025</span>
       </div>
 
       <span class="footer-note">
         built by hand · gently under construction
       </span>
-
     </footer>
 
   </div>
@@ -241,11 +236,11 @@
   <!-- Carousel + Overlay Script -->
   <script>
     document.querySelectorAll(".work-item").forEach((workItem) => {
-
       const carousel = workItem.querySelector(".carousel");
 
       const overlay = workItem.querySelector(".work-overlay");
       const overlayInner = workItem.querySelector(".overlay-inner");
+      const overlayScroll = workItem.querySelector(".overlay-scroll");
       const overlayText = workItem.querySelector(".overlay-text");
 
       const readMore = workItem.querySelector(".read-more");
@@ -302,14 +297,10 @@
         centerImg.src = projects[center].src;
         updateMeta(center);
 
-        // "Previous" is only possible if we have a left stack
         btnLeft.disabled = leftStack.length === 0;
-
-        // "Next" is only possible if we have a right stack
         btnRight.disabled = rightStack.length === 0;
       }
 
-      // NEXT (advance forward): pull from rightStack
       function goNext() {
         if (!rightStack.length) return;
         leftStack.unshift(center);
@@ -317,7 +308,6 @@
         renderStacks();
       }
 
-      // PREVIOUS (go back): pull from leftStack
       function goPrev() {
         if (!leftStack.length) return;
         rightStack.unshift(center);
@@ -332,6 +322,7 @@
         if (e) e.stopPropagation();
         overlay.classList.add("active");
         overlay.setAttribute("aria-hidden", "false");
+        overlayScroll.scrollTop = 0;
       }
 
       function closeOverlay(e) {
@@ -343,25 +334,19 @@
       readMore.onclick = openOverlay;
       centerArea.onclick = openOverlay;
 
-      // keyboard open (center)
       centerArea.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") openOverlay(e);
       });
 
-      // keyboard open (read more)
       readMore.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") openOverlay(e);
       });
 
       closeBtn.onclick = closeOverlay;
 
-      // click outside content closes
       overlay.onclick = closeOverlay;
-
-      // clicks inside content do not close
       overlayInner.onclick = (e) => e.stopPropagation();
 
-      // escape closes
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeOverlay(e);
       });
