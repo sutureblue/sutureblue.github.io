@@ -18,7 +18,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow-x: hidden; /* you said you aren't seeing bars, but this keeps ghosts away */
 }
 
 body {
@@ -130,6 +130,12 @@ body {
 .work-item {
   max-width: 360px;
   margin: 24px auto 0;
+
+  /* optional overflow hardening */
+  overflow-x: clip;
+}
+@supports not (overflow: clip) {
+  .work-item { overflow-x: hidden; }
 }
 
 .glow-card { position: relative; }
@@ -175,6 +181,14 @@ body {
   z-index: 20;
   cursor: pointer;
 }
+.carousel-center::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+  pointer-events:none;
+}
+.carousel-center:hover { filter: brightness(1.03); }
 
 .carousel-center img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
@@ -307,7 +321,7 @@ body {
 
 .practice-controls {
   width: 100%;
-  margin: 22px 0 10px; /* breathing room under carousel */
+  margin: 22px 0 10px;
   display: flex;
   justify-content: flex-start;
 }
@@ -328,7 +342,7 @@ body {
 }
 .practice-reset:hover { color: var(--glow-blue); border-color: rgba(23,162,184,0.35); }
 
-/* Full-width “starting section” (visible but subtle; no outline) */
+/* Full-width “starting section” (subtle) */
 .practice-desktop {
   position: relative;
   width: 100%;
@@ -337,11 +351,16 @@ body {
 
   border: none;
   border-radius: 16px;
-  background: rgba(0,0,0,0.10); /* subtle area */
+  background: rgba(0,0,0,0.10);
   box-shadow: 0 18px 46px rgba(0,0,0,0.28);
 
-  overflow: visible; /* key: drag beyond this area if you want */
+  overflow: visible;
 }
+
+/* IMPORTANT:
+   On touch devices, dragging fights scrolling.
+   We only disable touch scrolling WHILE dragging (desktop gets class). */
+.practice-desktop.is-dragging { touch-action: none; overscroll-behavior: contain; }
 
 /* =========================
    Window
@@ -351,7 +370,10 @@ body {
   position: absolute;
   width: var(--win-w, 300px);
   user-select: none;
+  -webkit-user-select: none;
 }
+
+.pwin * { user-select: none; -webkit-user-select: none; }
 
 .pwin-bar {
   height: var(--bar-h, 34px);
@@ -361,8 +383,13 @@ body {
   justify-content: space-between;
   padding: 0 10px;
   cursor: grab;
+
+  /* helps pointer events on touch */
+  touch-action: none;
 }
 .pwin-bar:active { cursor: grabbing; }
+
+.pwin.is-dragging { opacity: 0.96; }
 
 .pwin-close {
   background: none;
@@ -494,7 +521,7 @@ body {
 .cc-icon { width: 14px; opacity: 0.8; }
 .footer-note { opacity: 0.8; }
 
-/* Responsive: half-size windows */
+/* Responsive: half-size windows + mobile stack */
 @media (max-width: 760px) {
   .top { grid-template-columns: 1fr; row-gap: 18px; }
   .hero { text-align: left; }
@@ -505,9 +532,23 @@ body {
   .pwin {
     --win-w: 150px;
     --img-h: 125px;
-    --bar-h: 28px;
+    --bar-h: 34px;
     --title-size: 12px;
   }
 
-  .practice-desktop { height: 620px; }
+  /* Let JS set a correct height for the stacked layout */
+  .practice-desktop {
+    height: auto;
+    padding-bottom: 16px;
+  }
+
+  /* Bigger tap targets */
+  .pwin-close {
+    font-size: 20px;
+    padding: 6px 8px;
+  }
+
+  .pwin-bar {
+    padding: 0 12px;
+  }
 }
