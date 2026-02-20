@@ -37,7 +37,6 @@ body {
   color: var(--fg);
   line-height: 1.5;
 
-  /* true near-black base */
   background:
     radial-gradient(circle at 18% 12%, rgba(255,255,255,0.035), transparent 45%),
     radial-gradient(circle at 82% 88%, rgba(255,255,255,0.02), transparent 55%),
@@ -46,7 +45,6 @@ body {
   min-height: 100vh;
   position: relative;
 }
-
 
 /* ===== Page Wrapper ===== */
 
@@ -130,20 +128,18 @@ body {
   stroke-dasharray: 0.01 18;
   stroke-linecap: round;
   animation: dotDrift 4s linear infinite;
-    filter:
+  filter:
     drop-shadow(0 0 6px rgba(23, 162, 184, 0.35))
     drop-shadow(0 0 12px rgba(23, 162, 184, 0.15));
 }
 
 @keyframes dotDrift {
-  to {
-    stroke-dashoffset: -18;
-  }
+  to { stroke-dashoffset: -18; }
 }
 
 @keyframes squigWiggle {
-  0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(2px) rotate(-0.2deg); }
+  0%   { transform: translateY(0px) rotate(0deg); }
+  50%  { transform: translateY(2px) rotate(-0.2deg); }
   100% { transform: translateY(0px) rotate(0deg); }
 }
 
@@ -157,7 +153,9 @@ body {
   font-size: 18px;
   margin: 0 0 16px;
 }
-/* Align Work header with carousel */
+
+/* Align Practice/Work headers with carousel width */
+#practice h2,
 #work h2 {
   width: 360px;
   margin: 0 auto 18px;
@@ -323,9 +321,6 @@ body {
   border-radius: 22px;
   background: rgba(6, 6, 10, 0.96);
   border: 3px solid #000;
-
-  /* IMPORTANT: padding now only gives the frame breathing room.
-     Actual scroll area is inside .overlay-scroll */
   padding: 14px;
 
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
@@ -346,15 +341,14 @@ body {
 .overlay-inner {
   position: relative;
   height: 100%;
-
   display: flex;
   flex-direction: column;
 }
 
 /* Scroll area only */
 .overlay-scroll {
-  flex: 1;          /* fills available space */
-  min-height: 0;    /* IMPORTANT: allows shrinking */
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
 
   padding: 10px 10px 14px;
@@ -368,10 +362,8 @@ body {
 .overlay-actions {
   position: sticky;
   bottom: 0;
-
   display: flex;
   justify-content: flex-start;
-
   padding-top: 10px;
 }
 
@@ -410,27 +402,19 @@ body {
   scrollbar-color: rgba(23,162,184,0.45) transparent;
 }
 
-/* Text styling inside overlay */
+/* Text inside overlay */
 .overlay-text {
   font-size: 14px;
   color: rgba(247, 245, 255, 0.92);
 }
 
-/* Control paragraph spacing cleanly */
 .overlay-text p {
   margin: 0 0 12px;
 }
 
-/* Remove extra space at top and bottom */
-.overlay-text p:first-child {
-  margin-top: 0;
-}
+.overlay-text p:first-child { margin-top: 0; }
+.overlay-text p:last-child { margin-bottom: 0; }
 
-.overlay-text p:last-child {
-  margin-bottom: 0;
-}
-
-/* Links */
 .overlay-text a {
   color: #17a2b8;
   text-decoration: none;
@@ -455,7 +439,8 @@ body {
   font-size: 15px;
 }
 
-.read-more {
+/* Read more is now a button */
+.read-more{
   background: none;
   border: none;
   padding: 0;
@@ -564,6 +549,12 @@ body {
 
   .about-layout {
     grid-template-columns: 1fr;
+  }
+
+  #practice h2,
+  #work h2 {
+    width: 100%;
+    text-align: left;
   }
 
   .carousel-btn.left { left: -22px; }
