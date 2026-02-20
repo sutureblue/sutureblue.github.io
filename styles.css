@@ -431,14 +431,15 @@ body::after {
 .overlay-inner {
   position: relative;
   height: 100%;
+
   display: flex;
   flex-direction: column;
 }
 
 /* Scroll area only */
 .overlay-scroll {
-  flex: none;              /* THIS is the key fix */
-  height: 160px;           /* adjust this number freely */
+  flex: 1;          /* fills available space */
+  min-height: 0;    /* IMPORTANT: allows shrinking */
   overflow-y: auto;
 
   padding: 10px 10px 14px;
