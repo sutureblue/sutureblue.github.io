@@ -406,11 +406,25 @@ body {
 
 /* Text styling inside overlay */
 .overlay-text {
-  margin: 0;
   font-size: 14px;
   color: rgba(247, 245, 255, 0.92);
-  white-space: pre-line;
 }
+
+/* Control paragraph spacing cleanly */
+.overlay-text p {
+  margin: 0 0 12px;
+}
+
+/* Remove extra space at top and bottom */
+.overlay-text p:first-child {
+  margin-top: 0;
+}
+
+.overlay-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* Links */
 .overlay-text a {
   color: #17a2b8;
   text-decoration: none;
