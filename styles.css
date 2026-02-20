@@ -411,6 +411,17 @@ body {
   color: rgba(247, 245, 255, 0.92);
   white-space: pre-line;
 }
+.overlay-text a {
+  color: #17a2b8;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(23,162,184,0.4);
+  transition: all 0.2s ease;
+}
+
+.overlay-text a:hover {
+  color: #7fd3e0;
+  border-bottom-color: rgba(23,162,184,0.8);
+}
 
 /* ===== Work Meta ===== */
 
