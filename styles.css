@@ -437,7 +437,7 @@ body::after {
 
 /* Scroll area only */
 .overlay-scroll {
-  max-height: 180px;
+  height: 180px;
   overflow-y: auto;
 
   border-radius: 14px;
