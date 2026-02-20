@@ -530,10 +530,10 @@ body {
   #practice h2 { width: 100%; }
 
   .pwin {
-    --win-w: 150px;
-    --img-h: 125px;
-    --bar-h: 34px;
-    --title-size: 12px;
+    --win-w: 200px;   /* 150 * 1.33 = ~200 */
+    --img-h: 167px;   /* 125 * 1.33 = ~167 */
+    --bar-h: 36px;    /* slightly taller for touch */
+    --title-size: 13px;
   }
 
   /* Let JS set a correct height for the stacked layout */
