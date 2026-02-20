@@ -2,8 +2,6 @@
    Bee Nix — styles.css
    ========================= */
 
-/* ===== Variables ===== */
-
 :root {
   --bg: #020203;
   --fg: #f7f5ff;
@@ -154,79 +152,70 @@ body {
   margin: 0 0 16px;
 }
 
-/* Align Practice/Work headers with carousel width */
-#practice h2,
+/* Align Work header with carousel width */
 #work h2 {
   width: 360px;
   margin: 0 auto 18px;
   text-align: left;
 }
 
-/* ===== Work Item ===== */
-
-.work-item {
-  max-width: 360px;
-  margin: 24px auto 0;
-}
-
 /* =========================
-   Practice Cards
+   Practice Grid
    ========================= */
 
-.practice-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 26px;
+.practice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 360px);
+  justify-content: center;
+  gap: 26px 28px;
 }
 
-/* Individual card */
 .practice-card {
-  width: 560px;
+  width: 360px;
 }
 
-/* Media container */
 .practice-media {
-  width: 560px;
-  height: 360px;
+  width: 360px;
+  height: 260px;
 
-  border-radius: 18px;
+  border-radius: 16px;
   overflow: hidden;
 
-  position: relative;
-
-  box-shadow:
-    0 12px 30px rgba(0,0,0,0.65);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.6);
 
   transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
 }
 
-/* Image */
 .practice-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-
   display: block;
 }
 
-/* Hover effect (subtle, matches site language) */
 .practice-card:hover .practice-media {
   transform: translateY(-2px);
-
   box-shadow:
-    0 18px 42px rgba(0,0,0,0.85),
-    0 0 18px rgba(23,162,184,0.25);
+    0 16px 36px rgba(0,0,0,0.85),
+    0 0 14px rgba(23,162,184,0.22);
 }
 
-/* Title */
 .practice-card h3 {
-  margin: 10px 0 0;
-  font-size: 15px;
+  margin: 8px 0 0;
+  font-size: 14px;
   font-weight: 400;
   color: var(--fg);
+}
+
+/* =========================
+   Work Item
+   ========================= */
+
+.work-item {
+  max-width: 360px;
+  margin: 24px auto 0;
 }
 
 /* =========================
@@ -372,7 +361,7 @@ body {
 }
 
 /* =========================
-   Overlay (scrollable text; fixed close button)
+   Overlay
    ========================= */
 
 .work-overlay {
@@ -405,7 +394,6 @@ body {
   flex-direction: column;
 }
 
-/* Scroll area only */
 .overlay-scroll {
   flex: 1;
   min-height: 0;
@@ -418,7 +406,6 @@ body {
   border-radius: 14px;
 }
 
-/* Close bar stays pinned at bottom */
 .overlay-actions {
   position: sticky;
   bottom: 0;
@@ -427,7 +414,6 @@ body {
   padding-top: 10px;
 }
 
-/* Close button */
 .overlay-close {
   background: none;
   border: none;
@@ -443,7 +429,6 @@ body {
   color: var(--glow-blue);
 }
 
-/* Scrollbar styling */
 .overlay-scroll::-webkit-scrollbar {
   width: 6px;
 }
@@ -462,7 +447,6 @@ body {
   scrollbar-color: rgba(23,162,184,0.45) transparent;
 }
 
-/* Text inside overlay */
 .overlay-text {
   font-size: 14px;
   color: rgba(247, 245, 255, 0.92);
@@ -499,7 +483,7 @@ body {
   font-size: 15px;
 }
 
-/* Read more is now a button */
+/* Read more button */
 .read-more{
   background: none;
   border: none;
@@ -515,7 +499,6 @@ body {
 }
 
 /* Focus accessibility */
-
 .carousel-btn:focus-visible,
 .overlay-close:focus-visible,
 .read-more:focus-visible,
@@ -531,9 +514,7 @@ body {
 
 .about-layout {
   display: grid;
-  grid-template-columns:
-    minmax(0, 2fr)
-    minmax(0, 1.2fr);
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
   gap: 18px;
 }
 
@@ -596,19 +577,13 @@ body {
    Responsive
    ========================= */
 
-@media (max-width: 700px) {
-
-   .practice-card {
-  width: 100%;
-  max-width: 560px;
+@media (max-width: 1100px) {
+  .practice-grid {
+    grid-template-columns: repeat(2, 360px);
+  }
 }
 
-.practice-media {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 14 / 9;
-}
-
+@media (max-width: 760px) {
   .top {
     grid-template-columns: 1fr;
     row-gap: 18px;
@@ -622,10 +597,13 @@ body {
     grid-template-columns: 1fr;
   }
 
-  #practice h2,
   #work h2 {
     width: 100%;
-    text-align: left;
+  }
+
+  .practice-grid {
+    grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .carousel-btn.left { left: -22px; }
