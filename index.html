@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -31,24 +31,23 @@
     <div class="squig-divider" aria-hidden="true">
       <svg viewBox="0 0 1200 40" preserveAspectRatio="none">
         <defs>
-<linearGradient id="squigGrad1" x1="0" y1="0" x2="1" y2="0">
-  <!-- Seamless loop: 0% and 100% are the same -->
-  <stop offset="0%"   stop-color="#0b5f6b" />
-  <stop offset="18%"  stop-color="#17a2b8" />
-  <stop offset="38%"  stop-color="#cfd2d6" />
-  <stop offset="55%"  stop-color="#f2f4f7" />
-  <stop offset="72%"  stop-color="#cfd2d6" />
-  <stop offset="88%"  stop-color="#17a2b8" />
-  <stop offset="100%" stop-color="#0b5f6b" />
+          <linearGradient id="squigGrad1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%"   stop-color="#0b5f6b" />
+            <stop offset="18%"  stop-color="#17a2b8" />
+            <stop offset="38%"  stop-color="#cfd2d6" />
+            <stop offset="55%"  stop-color="#f2f4f7" />
+            <stop offset="72%"  stop-color="#cfd2d6" />
+            <stop offset="88%"  stop-color="#17a2b8" />
+            <stop offset="100%" stop-color="#0b5f6b" />
 
-  <animateTransform
-    attributeName="gradientTransform"
-    type="translate"
-    values="-1 0; 1 0"
-    dur="10s"
-    repeatCount="indefinite"
-  />
-</linearGradient>
+            <animateTransform
+              attributeName="gradientTransform"
+              type="translate"
+              values="-1 0; 1 0"
+              dur="10s"
+              repeatCount="indefinite"
+            />
+          </linearGradient>
         </defs>
 
         <path
@@ -93,68 +92,34 @@
                 <!-- Right Arrow (next) -->
                 <button class="carousel-btn right" type="button" aria-label="Next project">›</button>
 
-<!-- Hidden Project Data -->
-      <div class="carousel-sources" hidden>
-        <img
-          src="assets/glitchplay.png"
-          data-title="Glitch Play (2025)"
-          data-template="#glitchplay-text"
-          alt=""
-        >
-        <img
-          src="assets/gNg.png"
-          data-title="Glitch'N'Games (2024)"
-          data-template="#gng-text"
-          alt=""
-        >
-        <img
-          src="assets/mfru.png"
-          data-title="MFRU (2023)"
-          data-template="#mfru-text"
-          alt=""
-        >
-      </div>
-
-    <!-- Project Text Templates -->
-    <template id="glitchplay-text">
-      <p>
-        Glitch Play is my MFA thesis in Interactive Media and Game Development. It investigates engaging with glitches as a form of play that reveals and enables renegotiations with the structure of digital systems.
-        You can
-        <a href="https://archive.org/details/glitch_play" target="_blank" rel="noreferrer">read it here.</a>
-      </p>
-    </template>
-
-    <template id="gng-text">
-      <p>
-        This exhibition explored the intertwined histories of glitch art and video games, featuring 40+ artists from over 5 countries, across two Pittsburgh venues.
-      </p>
-      <p>
-        As producer, curator, and organizer alongside John Bumstead and Nick Liberatore, I developed the show's conceptual framework and programmed workshops, discussions, and live demonstrations.
-      </p>
-      <p>
-        I created and moderated the Discussion Game, a participatory conversation format that gathered artists, theorists, and gamers to explore themes of play, control, and system disruption.
-      </p>
-    </template>
-
-    <template id="mfru-text">
-      <p>
-        This panel of digital artists was brought together in Maribor, Slovenia to discuss digital archiving for community by community for
-        <a href="https://www.mfru.org/events/panel-sustainability-and-autonomy-of-digital-art" target="_blank" rel="noreferrer">MFRU 2023.</a>
-      </p>
-      <p>
-        My IRL contributions to the discussion were not so much about my experience as an artist, but rather as a Do-It-Together (DIT) media archivist who is currently organizing, with a couple others— a free, downloadable, public access digital archive for the Glitch Art community.
-      </p>
-      <p>
-        Those of us working on this project believe that the more you rely on open software, the more accessible an archive becomes. That community projects can operate with more integrity when they remain unaffiliated with any institution(s). And most of all, we actively go against writing any “defining narrative(s),” but rather aim to offer an index of searchable artists and artists’ works, as well as any affiliated history, to enable many narratives to overlap, web and be formed by people of the community, in hopes for a more holistic history to be available to those who care to have it.
-      </p>
-    </template>
+                <!-- Hidden Project Data -->
+                <div class="carousel-sources" hidden>
+                  <img
+                    src="assets/glitchplay.png"
+                    data-title="Glitch Play (2025)"
+                    data-template="#glitchplay-text"
+                    alt=""
+                  >
+                  <img
+                    src="assets/gNg.png"
+                    data-title="Glitch'N'Games (2024)"
+                    data-template="#gng-text"
+                    alt=""
+                  >
+                  <img
+                    src="assets/mfru.png"
+                    data-title="MFRU (2023)"
+                    data-template="#mfru-text"
+                    alt=""
+                  >
+                </div>
 
                 <!-- Overlay -->
                 <div class="work-overlay" aria-hidden="true" role="dialog" aria-modal="true">
                   <div class="overlay-inner">
 
                     <div class="overlay-scroll">
-                      <p class="overlay-text"></p>
+                      <div class="overlay-text"></div>
                     </div>
 
                     <div class="overlay-actions">
@@ -164,45 +129,74 @@
                   </div>
                 </div>
 
-              </div>
+              </div><!-- /.carousel -->
 
             </div>
           </div>
 
           <!-- Meta outside glow -->
           <div class="work-meta">
-              <h3 class="project-title"></h3>
-
-            <button class="read-more" type="button">
-              Read more...
-            </button>
+            <h3 class="project-title"></h3>
+            <button class="read-more" type="button">Read more...</button>
           </div>
 
-        </div>
+          <!-- Project Text Templates (keep inside this work-item) -->
+          <template id="glitchplay-text">
+            <p>
+              Glitch Play is my MFA thesis in Interactive Media and Game Development. It investigates engaging with glitches as a form of play that reveals and enables renegotiations with the structure of digital systems.
+              You can <a href="https://archive.org/details/glitch_play" target="_blank" rel="noreferrer">read it here.</a>
+            </p>
+          </template>
+
+          <template id="gng-text">
+            <p>
+              This exhibition explored the intertwined histories of glitch art and video games, featuring 40+ artists from over 5 countries, across two Pittsburgh venues.
+            </p>
+            <p>
+              As producer, curator, and organizer alongside John Bumstead and Nick Liberatore, I developed the show's conceptual framework and programmed workshops, discussions, and live demonstrations.
+            </p>
+            <p>
+              I created and moderated the Discussion Game, a participatory conversation format that gathered artists, theorists, and gamers to explore themes of play, control, and system disruption.
+            </p>
+          </template>
+
+          <template id="mfru-text">
+            <p>
+              This panel of digital artists was brought together in Maribor, Slovenia to discuss digital archiving for community by community for
+              <a href="https://www.mfru.org/events/panel-sustainability-and-autonomy-of-digital-art" target="_blank" rel="noreferrer">MFRU 2023.</a>
+            </p>
+            <p>
+              My IRL contributions to the discussion were not so much about my experience as an artist, but rather as a Do-It-Together (DIT) media archivist who is currently organizing, with a couple others— a free, downloadable, public access digital archive for the Glitch Art community.
+            </p>
+            <p>
+              Those of us working on this project believe that the more you rely on open software, the more accessible an archive becomes. That community projects can operate with more integrity when they remain unaffiliated with any institution(s). And most of all, we actively go against writing any “defining narrative(s),” but rather aim to offer an index of searchable artists and artists’ works, as well as any affiliated history, to enable many narratives to overlap, web and be formed by people of the community, in hopes for a more holistic history to be available to those who care to have it.
+            </p>
+          </template>
+
+        </div><!-- /.work-item -->
       </section>
 
       <!-- Squiggly Divider 2 -->
       <div class="squig-divider" aria-hidden="true">
         <svg viewBox="0 0 1200 40" preserveAspectRatio="none">
           <defs>
-<linearGradient id="squigGrad2" x1="0" y1="0" x2="1" y2="0">
-  <!-- Seamless loop: 0% and 100% are the same -->
-  <stop offset="0%"   stop-color="#0b5f6b" />
-  <stop offset="18%"  stop-color="#17a2b8" />
-  <stop offset="38%"  stop-color="#cfd2d6" />
-  <stop offset="55%"  stop-color="#f2f4f7" />
-  <stop offset="72%"  stop-color="#cfd2d6" />
-  <stop offset="88%"  stop-color="#17a2b8" />
-  <stop offset="100%" stop-color="#0b5f6b" />
+            <linearGradient id="squigGrad2" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%"   stop-color="#0b5f6b" />
+              <stop offset="18%"  stop-color="#17a2b8" />
+              <stop offset="38%"  stop-color="#cfd2d6" />
+              <stop offset="55%"  stop-color="#f2f4f7" />
+              <stop offset="72%"  stop-color="#cfd2d6" />
+              <stop offset="88%"  stop-color="#17a2b8" />
+              <stop offset="100%" stop-color="#0b5f6b" />
 
-  <animateTransform
-    attributeName="gradientTransform"
-    type="translate"
-    values="-1 0; 1 0"
-    dur="10s"
-    repeatCount="indefinite"
-  />
-</linearGradient>
+              <animateTransform
+                attributeName="gradientTransform"
+                type="translate"
+                values="-1 0; 1 0"
+                dur="10s"
+                repeatCount="indefinite"
+              />
+            </linearGradient>
           </defs>
 
           <path
@@ -223,9 +217,7 @@
 
         <div class="about-layout">
           <div>
-            <p>
-              I’m Bee Nix, aka Suture Blue.
-            </p>
+            <p>I’m Bee Nix, aka Suture Blue.</p>
             <p>
               As a system amongst systems, I trace how internal states entangle with
               the larger technosocial worlds by interweaving play, technology, and social structures.
@@ -255,19 +247,13 @@
     <!-- Footer -->
     <footer class="site-footer">
       <div class="license-footer">
-        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
-           target="_blank"
-           rel="noreferrer">
-          <img src="assets/cc.png"
-               alt="Creative Commons"
-               class="cc-icon" />
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">
+          <img src="assets/cc.png" alt="Creative Commons" class="cc-icon" />
         </a>
         <span>2025</span>
       </div>
 
-      <span class="footer-note">
-        built by hand · gently under construction
-      </span>
+      <span class="footer-note">built by hand · gently under construction</span>
     </footer>
 
   </div>
@@ -296,27 +282,31 @@
       const btnLeft = carousel.querySelector(".carousel-btn.left");
       const btnRight = carousel.querySelector(".carousel-btn.right");
 
-        let lastFocusEl = null;
+      let lastFocusEl = null;
 
-const projects = Array.from(
-  carousel.querySelectorAll(".carousel-sources img")
-).map(img => ({
-  src: img.getAttribute("src"),
-  title: img.dataset.title || "Untitled",
-  text: img.dataset.text || "",
-  template: img.dataset.template || ""
-}));
+      const projects = Array.from(
+        carousel.querySelectorAll(".carousel-sources img")
+      ).map(img => ({
+        src: img.getAttribute("src"),
+        title: img.dataset.title || "Untitled",
+        template: img.dataset.template || ""
+      }));
 
-function updateMeta(index) {
-  titleEl.textContent = projects[index].title;
+      // ✅ THESE WERE MISSING — REQUIRED
+      let center = 0;
+      let leftStack = [];
+      let rightStack = projects.map((_, i) => i).slice(1);
 
-  if (projects[index].template) {
-    const tpl = document.querySelector(projects[index].template);
-    overlayText.innerHTML = tpl ? tpl.innerHTML : "";
-  } else {
-    overlayText.innerHTML = projects[index].text;
-  }
-}
+      function updateMeta(index) {
+        titleEl.textContent = projects[index].title;
+
+        if (projects[index].template) {
+          const tpl = workItem.querySelector(projects[index].template);
+          overlayText.innerHTML = tpl ? tpl.innerHTML : "";
+        } else {
+          overlayText.innerHTML = "";
+        }
+      }
 
       function renderStacks() {
         leftStackEl.innerHTML = "";
@@ -362,36 +352,30 @@ function updateMeta(index) {
       btnLeft.onclick = goPrev;
       btnRight.onclick = goNext;
 
-    function openOverlay(e) {
-    if (e) e.stopPropagation();
+      function openOverlay(e) {
+        if (e) e.stopPropagation();
+        lastFocusEl = document.activeElement;
 
-    lastFocusEl = document.activeElement;
+        overlay.classList.add("active");
+        overlay.setAttribute("aria-hidden", "false");
 
-    overlay.classList.add("active");
-    overlay.setAttribute("aria-hidden", "false");
+        overlayScroll.scrollTop = 0;
+        closeBtn.focus();
+      }
 
-    overlayScroll.scrollTop = 0;
+      function closeOverlay(e) {
+        if (e) e.stopPropagation();
 
-    closeBtn.focus();
-  }
+        overlay.classList.remove("active");
+        overlay.setAttribute("aria-hidden", "true");
 
-    function closeOverlay(e) {
-    if (e) e.stopPropagation();
-
-    overlay.classList.remove("active");
-    overlay.setAttribute("aria-hidden", "true");
-
-    if (lastFocusEl) lastFocusEl.focus();
-  }
+        if (lastFocusEl) lastFocusEl.focus();
+      }
 
       readMore.onclick = openOverlay;
       centerArea.onclick = openOverlay;
 
       centerArea.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") openOverlay(e);
-      });
-
-      readMore.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") openOverlay(e);
       });
 
