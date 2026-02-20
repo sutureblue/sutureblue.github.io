@@ -1,70 +1,447 @@
-// ---------- Practice pile hover "repel" ----------
-(() => {
-  const pile = document.getElementById("practicePile");
-  if (!pile) return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>hello there.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.png" type="image/png" />
+</head>
 
-  const photos = Array.from(pile.querySelectorAll(".practice-photo"));
+<body>
 
-  function parsePx(v) {
-    const n = parseFloat(String(v).replace("px",""));
-    return Number.isFinite(n) ? n : 0;
-  }
+  <div class="page">
 
-  function getXY(el) {
-    const styles = getComputedStyle(el);
-    // pull the layout vars you set inline
-    const x = parsePx(styles.getPropertyValue("--x"));
-    const y = parsePx(styles.getPropertyValue("--y"));
-    return { x, y };
-  }
+    <div class="top">
+      <header class="site-header">
+        <video class="header-image" autoplay muted loop playsinline>
+          <source src="assets/icon.webm" type="video/webm">
+          <source src="assets/icon.mp4" type="video/mp4">
+        </video>
+      </header>
 
-  function setPush(el, px, py) {
-    el.style.setProperty("--pushx", `${px}px`);
-    el.style.setProperty("--pushy", `${py}px`);
-  }
+      <section class="hero">
+        <h1>Bee Nix // Suture Blue</h1>
+        <p>Thinking. Creating. Playing.</p>
+        <p>Animations. Interactives. Games. Lectures. Discussions.</p>
+      </section>
+    </div>
 
-  function clearPushAll() {
-    photos.forEach(p => {
-      p.classList.remove("is-active");
-      p.style.removeProperty("--pushx");
-      p.style.removeProperty("--pushy");
-    });
-    pile.classList.remove("is-hovering");
-  }
+    <!-- Squiggly Divider 1 -->
+    <div class="squig-divider" aria-hidden="true">
+      <svg viewBox="0 0 1200 40" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="squigGrad1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%"   stop-color="#0b5f6b" />
+            <stop offset="18%"  stop-color="#17a2b8" />
+            <stop offset="38%"  stop-color="#cfd2d6" />
+            <stop offset="55%"  stop-color="#f2f4f7" />
+            <stop offset="72%"  stop-color="#cfd2d6" />
+            <stop offset="88%"  stop-color="#17a2b8" />
+            <stop offset="100%" stop-color="#0b5f6b" />
+            <animateTransform
+              attributeName="gradientTransform"
+              type="translate"
+              values="-1 0; 1 0"
+              dur="10s"
+              repeatCount="indefinite"
+            />
+          </linearGradient>
+        </defs>
 
-  photos.forEach(active => {
-    active.addEventListener("mouseenter", () => {
-      pile.classList.add("is-hovering");
-      photos.forEach(p => p.classList.remove("is-active"));
-      active.classList.add("is-active");
+        <path
+          d="M0,20 C80,5 160,35 240,20 C320,5 400,35 480,20 C560,5 640,35 720,20 C800,5 880,35 960,20 C1040,5 1120,35 1200,20"
+          fill="none"
+          stroke="url(#squigGrad1)"
+          stroke-width="6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="squig-path"
+        />
+      </svg>
+    </div>
 
-      const a = getXY(active);
+    <main>
 
-      photos.forEach(p => {
-        if (p === active) return;
+      <!-- Practice pile (no header) -->
+      <section id="practice" class="section">
+        <div class="practice-pile" id="practicePile" aria-label="Practice pile">
 
-        const b = getXY(p);
-        let dx = b.x - a.x;
-        let dy = b.y - a.y;
+          <button class="practice-photo" type="button"
+            style="--x:-130px; --y:0px; --rot:-4deg; --z:1; --badge-x:12px; --badge-y:192px;"
+            aria-label="Colour Organ">
+            <img src="assets/ColourOrgan_1.png" alt="Colour Organ">
+            <span class="photo-badge">Colour Organ</span>
+          </button>
 
-        // normalize direction (avoid divide by 0)
-        const mag = Math.hypot(dx, dy) || 1;
-        dx /= mag;
-        dy /= mag;
+          <button class="practice-photo" type="button"
+            style="--x:60px; --y:-35px; --rot:3deg; --z:2; --badge-x:170px; --badge-y:18px;"
+            aria-label="Discussion Game">
+            <img src="assets/DiscussionGame_1.png" alt="Discussion Game">
+            <span class="photo-badge">Discussion Game</span>
+          </button>
 
-        // how far others move away (tweak these numbers)
-        const strength = 10;      // pixels
-        setPush(p, dx * strength, dy * strength);
+          <button class="practice-photo" type="button"
+            style="--x:-25px; --y:40px; --rot:1deg; --z:3; --badge-x:80px; --badge-y:195px;"
+            aria-label="Drawing">
+            <img src="assets/Drawing_1.png" alt="Drawing">
+            <span class="photo-badge">Drawing</span>
+          </button>
+
+          <button class="practice-photo" type="button"
+            style="--x:-145px; --y:160px; --rot:-2deg; --z:2; --badge-x:14px; --badge-y:18px;"
+            aria-label="Fabrication">
+            <img src="assets/Fabrication_1.png" alt="Fabrication">
+            <span class="photo-badge">Fabrication</span>
+          </button>
+
+          <button class="practice-photo" type="button"
+            style="--x:95px; --y:130px; --rot:4deg; --z:4; --badge-x:165px; --badge-y:192px;"
+            aria-label="Light Sleeper">
+            <img src="assets/LightSleeper_1.png" alt="Light Sleeper">
+            <span class="photo-badge">Light Sleeper</span>
+          </button>
+
+          <button class="practice-photo" type="button"
+            style="--x:0px; --y:235px; --rot:-1deg; --z:1; --badge-x:92px; --badge-y:195px;"
+            aria-label="Uncanny">
+            <img src="assets/Uncanny_1.png" alt="Uncanny">
+            <span class="photo-badge">Uncanny</span>
+          </button>
+
+        </div>
+      </section>
+
+      <!-- Work -->
+      <section id="work" class="section">
+        <h2>Work</h2>
+
+        <div class="work-item">
+
+          <div class="glow-card">
+            <div class="glow-card-inner">
+
+              <div class="carousel">
+
+                <button class="carousel-btn left" type="button" aria-label="Previous project">‹</button>
+
+                <div class="carousel-stage">
+                  <div class="carousel-stack left"></div>
+
+                  <div class="carousel-center" role="button" tabindex="0" aria-label="Open project details">
+                    <img class="carousel-center-img" src="assets/gNg.png" alt="">
+                  </div>
+
+                  <div class="carousel-stack right"></div>
+                </div>
+
+                <button class="carousel-btn right" type="button" aria-label="Next project">›</button>
+
+                <div class="carousel-sources" hidden>
+                  <img src="assets/glitchplay.png" data-title="Glitch Play (2025)" data-template=".tpl-glitchplay" alt="">
+                  <img src="assets/gNg.png"        data-title="Glitch'N'Games (2024)" data-template=".tpl-gng" alt="">
+                  <img src="assets/mfru.png"       data-title="MFRU (2023)" data-template=".tpl-mfru" alt="">
+                </div>
+
+                <div class="work-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+                  <div class="overlay-inner">
+                    <div class="overlay-scroll">
+                      <div class="overlay-text"></div>
+                    </div>
+
+                    <div class="overlay-actions">
+                      <button class="overlay-close" type="button" aria-label="Close overlay">×</button>
+                    </div>
+                  </div>
+                </div>
+
+              </div><!-- /.carousel -->
+
+            </div>
+          </div>
+
+          <div class="work-meta">
+            <h3 class="project-title"></h3>
+            <button class="read-more" type="button">Read more...</button>
+          </div>
+
+          <!-- Templates (scoped to this work-item) -->
+          <template class="tpl-glitchplay">
+            <p>
+              Glitch Play is my MFA thesis in Interactive Media and Game Development. It investigates engaging with glitches as a form of play that reveals and enables renegotiations with the structure of digital systems.
+              You can <a href="https://archive.org/details/glitch_play" target="_blank" rel="noreferrer">read it here.</a>
+            </p>
+          </template>
+
+          <template class="tpl-gng">
+            <p>
+              This exhibition explored the intertwined histories of glitch art and video games, featuring 40+ artists from over 5 countries, across two Pittsburgh venues.
+            </p>
+            <p>
+              As producer, curator, and organizer alongside John Bumstead and Nick Liberatore, I developed the show's conceptual framework and programmed workshops, discussions, and live demonstrations.
+            </p>
+            <p>
+              I created and moderated the Discussion Game, a participatory conversation format that gathered artists, theorists, and gamers to explore themes of play, control, and system disruption.
+            </p>
+          </template>
+
+          <template class="tpl-mfru">
+            <p>
+              This panel of digital artists was brought together in Maribor, Slovenia to discuss digital archiving for community by community for
+              <a href="https://www.mfru.org/events/panel-sustainability-and-autonomy-of-digital-art" target="_blank" rel="noreferrer">MFRU 2023.</a>
+            </p>
+            <p>
+              My IRL contributions to the discussion were not so much about my experience as an artist, but rather as a Do-It-Together (DIT) media archivist who is currently organizing, with a couple others— a free, downloadable, public access digital archive for the Glitch Art community.
+            </p>
+            <p>
+              Those of us working on this project believe that the more you rely on open software, the more accessible an archive becomes. That community projects can operate with more integrity when they remain unaffiliated with any institution(s). And most of all, we actively go against writing any “defining narrative(s),” but rather aim to offer an index of searchable artists and artists’ works, as well as any affiliated history, to enable many narratives to overlap, web and be formed by people of the community, in hopes for a more holistic history to be available to those who care to have it.
+            </p>
+          </template>
+
+        </div>
+      </section>
+
+      <!-- About -->
+      <section id="about" class="section">
+        <h2>About</h2>
+
+        <div class="about-layout">
+          <div>
+            <p>I’m Bee Nix, aka Suture Blue.</p>
+            <p>
+              As a system amongst systems, I trace how internal states entangle with
+              the larger technosocial worlds by interweaving play, technology, and social structures.
+              Time-based and experiential works tend to be what I make the most.
+            </p>
+          </div>
+
+          <div class="about-meta">
+            <p>
+              <strong>Currently</strong><br>
+              Residing in Pittsburgh, PA;
+              Working in the exhibits department at the Children's Museum as a designer/builder;
+              Slowly making this website; Practicing maintaining center; Trying to get Glitch'N'Games 2 going;
+              Creating art, curating things, talking to others.
+            </p>
+
+            <p>
+              <strong>Contact</strong><br>
+              sutureblue@protonmail.com
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="license-footer">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">
+          <img src="assets/cc.png" alt="Creative Commons" class="cc-icon" />
+        </a>
+        <span>2025</span>
+      </div>
+
+      <span class="footer-note">built by hand · gently under construction</span>
+    </footer>
+
+  </div>
+
+  <script>
+    /* ---------- Work carousel logic ---------- */
+    document.querySelectorAll(".work-item").forEach((workItem) => {
+      const carousel = workItem.querySelector(".carousel");
+
+      const overlay = workItem.querySelector(".work-overlay");
+      const overlayInner = workItem.querySelector(".overlay-inner");
+      const overlayScroll = workItem.querySelector(".overlay-scroll");
+      const overlayText = workItem.querySelector(".overlay-text");
+
+      const readMore = workItem.querySelector(".read-more");
+      const closeBtn = workItem.querySelector(".overlay-close");
+
+      const titleEl = workItem.querySelector(".project-title");
+
+      const centerImg = carousel.querySelector(".carousel-center-img");
+      const centerArea = carousel.querySelector(".carousel-center");
+
+      const leftStackEl = carousel.querySelector(".carousel-stack.left");
+      const rightStackEl = carousel.querySelector(".carousel-stack.right");
+
+      const btnLeft = carousel.querySelector(".carousel-btn.left");
+      const btnRight = carousel.querySelector(".carousel-btn.right");
+
+      let lastFocusEl = null;
+
+      const projects = Array.from(
+        carousel.querySelectorAll(".carousel-sources img")
+      ).map(img => ({
+        src: img.getAttribute("src"),
+        title: img.dataset.title || "Untitled",
+        template: img.dataset.template || ""
+      }));
+
+      let center = 0;
+      let leftStack = [];
+      let rightStack = projects.map((_, i) => i).slice(1);
+
+      function updateMeta(index) {
+        titleEl.textContent = projects[index].title;
+        const sel = projects[index].template;
+        const tpl = sel ? workItem.querySelector(sel) : null;
+        overlayText.innerHTML = tpl ? tpl.innerHTML : "";
+      }
+
+      function renderStacks() {
+        leftStackEl.innerHTML = "";
+        rightStackEl.innerHTML = "";
+
+        leftStack.forEach((idx, i) => {
+          const card = document.createElement("div");
+          card.className = "stack-card";
+          card.style.setProperty("--stack-i", i);
+          card.innerHTML = `<img src="${projects[idx].src}" alt="">`;
+          leftStackEl.appendChild(card);
+        });
+
+        rightStack.forEach((idx, i) => {
+          const card = document.createElement("div");
+          card.className = "stack-card";
+          card.style.setProperty("--stack-i", i);
+          card.innerHTML = `<img src="${projects[idx].src}" alt="">`;
+          rightStackEl.appendChild(card);
+        });
+
+        centerImg.src = projects[center].src;
+        updateMeta(center);
+
+        btnLeft.disabled = leftStack.length === 0;
+        btnRight.disabled = rightStack.length === 0;
+      }
+
+      function goNext() {
+        if (!rightStack.length) return;
+        leftStack.unshift(center);
+        center = rightStack.shift();
+        renderStacks();
+      }
+
+      function goPrev() {
+        if (!leftStack.length) return;
+        rightStack.unshift(center);
+        center = leftStack.shift();
+        renderStacks();
+      }
+
+      btnLeft.onclick = goPrev;
+      btnRight.onclick = goNext;
+
+      function openOverlay(e) {
+        if (e) e.stopPropagation();
+        lastFocusEl = document.activeElement;
+
+        overlay.classList.add("active");
+        overlay.setAttribute("aria-hidden", "false");
+        overlayScroll.scrollTop = 0;
+
+        closeBtn.focus();
+      }
+
+      function closeOverlay(e) {
+        if (e) e.stopPropagation();
+
+        overlay.classList.remove("active");
+        overlay.setAttribute("aria-hidden", "true");
+
+        if (lastFocusEl) lastFocusEl.focus();
+      }
+
+      readMore.onclick = openOverlay;
+      centerArea.onclick = openOverlay;
+
+      centerArea.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") openOverlay(e);
       });
+
+      closeBtn.onclick = closeOverlay;
+
+      overlay.onclick = closeOverlay;
+      overlayInner.onclick = (e) => e.stopPropagation();
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeOverlay(e);
+      });
+
+      renderStacks();
     });
 
-    active.addEventListener("mouseleave", () => {
-      // gentle reset (small delay feels nicer)
-      setTimeout(() => {
-        if (!pile.matches(":hover")) clearPushAll();
-      }, 30);
-    });
-  });
+    /* ---------- Practice pile repel hover ---------- */
+    (() => {
+      const pile = document.getElementById("practicePile");
+      if (!pile) return;
 
-  pile.addEventListener("mouseleave", clearPushAll);
-})();
+      const photos = Array.from(pile.querySelectorAll(".practice-photo"));
+
+      function parsePx(v) {
+        const n = parseFloat(String(v).replace("px",""));
+        return Number.isFinite(n) ? n : 0;
+      }
+
+      function getXY(el) {
+        const styles = getComputedStyle(el);
+        const x = parsePx(styles.getPropertyValue("--x"));
+        const y = parsePx(styles.getPropertyValue("--y"));
+        return { x, y };
+      }
+
+      function setPush(el, px, py) {
+        el.style.setProperty("--pushx", `${px}px`);
+        el.style.setProperty("--pushy", `${py}px`);
+      }
+
+      function clearAll() {
+        pile.classList.remove("is-hovering");
+        photos.forEach(p => {
+          p.classList.remove("is-active");
+          p.style.removeProperty("--pushx");
+          p.style.removeProperty("--pushy");
+        });
+      }
+
+      photos.forEach(active => {
+        active.addEventListener("mouseenter", () => {
+          pile.classList.add("is-hovering");
+          photos.forEach(p => p.classList.remove("is-active"));
+          active.classList.add("is-active");
+
+          const a = getXY(active);
+
+          photos.forEach(p => {
+            if (p === active) return;
+
+            const b = getXY(p);
+            let dx = b.x - a.x;
+            let dy = b.y - a.y;
+
+            const mag = Math.hypot(dx, dy) || 1;
+            dx /= mag;
+            dy /= mag;
+
+            const strength = 10; // tweak this
+            setPush(p, dx * strength, dy * strength);
+          });
+        });
+
+        active.addEventListener("mouseleave", () => {
+          setTimeout(() => {
+            if (!pile.matches(":hover")) clearAll();
+          }, 30);
+        });
+      });
+
+      pile.addEventListener("mouseleave", clearAll);
+    })();
+  </script>
+
+</body>
+</html>
