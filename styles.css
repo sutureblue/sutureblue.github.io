@@ -437,20 +437,15 @@ body::after {
 
 /* Scroll area only */
 .overlay-scroll {
-  height: 230px;
+  flex: none;              /* THIS is the key fix */
+  height: 160px;           /* adjust this number freely */
   overflow-y: auto;
 
-  border-radius: 14px;
-
-  /* inner padding for readable text */
   padding: 10px 10px 14px;
 
-  /* leave room so text never sits under the close bar */
-  padding-bottom: 18px;
-
-  /* subtle inner panel */
   background: rgba(0, 0, 0, 0.18);
   border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
 }
 
 /* Close bar stays pinned at bottom */
