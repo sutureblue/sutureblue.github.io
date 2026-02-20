@@ -436,6 +436,11 @@ body {
 }
 
 .read-more {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
   font-weight: 400;
   color: var(--muted);
 }
