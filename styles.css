@@ -48,92 +48,113 @@ body {
 }
 
 /* =========================
-   Corner Static (Top Right / Bottom Left)
+   Corner Static (CRT-ish)
    ========================= */
 
-/* Two corner layers; subtle animated "static" using repeating gradients */
 body::before,
 body::after {
   content: "";
   position: fixed;
-  z-index: 0;
   pointer-events: none;
-  opacity: 0.12;
+  z-index: 0;
+
+  width: 46vw;
+  height: 46vh;
+
+  /* important: makes the white speckle pop without tinting */
   mix-blend-mode: screen;
-  filter: contrast(120%) brightness(110%);
+  opacity: 0.22;
+
+  /* soften the edges so it lives in the corner */
+  -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1), rgba(0,0,0,0) 70%);
+  mask-image: radial-gradient(circle at center, rgba(0,0,0,1), rgba(0,0,0,0) 70%);
 }
 
-/* top-right */
+/* TOP RIGHT */
 body::before {
   top: 0;
   right: 0;
-  width: 42vw;
-  height: 42vh;
 
   background:
-    radial-gradient(circle at 90% 10%, rgba(23, 162, 184, 0.15), transparent 55%),
+    /* thick scanlines (high contrast) */
     repeating-linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.08) 0px,
-      rgba(255, 255, 255, 0.08) 1px,
-      rgba(0, 0, 0, 0) 2px,
-      rgba(0, 0, 0, 0) 4px
+      180deg,
+      rgba(255,255,255,0.24) 0px,
+      rgba(255,255,255,0.24) 1px,
+      rgba(0,0,0,0) 3px,
+      rgba(0,0,0,0) 6px
     ),
+
+    /* finer interlace */
     repeating-linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.04) 0px,
-      rgba(255, 255, 255, 0.04) 1px,
-      rgba(0, 0, 0, 0) 3px,
-      rgba(0, 0, 0, 0) 6px
-    );
+      180deg,
+      rgba(255,255,255,0.10) 0px,
+      rgba(255,255,255,0.10) 1px,
+      rgba(0,0,0,0) 2px,
+      rgba(0,0,0,0) 4px
+    ),
 
-  -webkit-mask-image: radial-gradient(circle at 90% 10%, rgba(0,0,0,1), rgba(0,0,0,0) 70%);
-  mask-image: radial-gradient(circle at 90% 10%, rgba(0,0,0,1), rgba(0,0,0,0) 70%);
+    /* grain speckle (multi-layer, “crunchy”) */
+    radial-gradient(circle at 12% 28%, rgba(255,255,255,0.20) 0 1px, transparent 2px),
+    radial-gradient(circle at 68% 41%, rgba(255,255,255,0.18) 0 1px, transparent 2px),
+    radial-gradient(circle at 33% 77%, rgba(255,255,255,0.16) 0 1px, transparent 2px),
+    radial-gradient(circle at 88% 84%, rgba(255,255,255,0.14) 0 1px, transparent 2px);
 
-  animation: staticDriftTR 14s linear infinite;
+  filter: contrast(180%) brightness(110%);
+  animation: crtJitterTR 8s steps(12) infinite;
 }
 
-/* bottom-left */
+/* BOTTOM LEFT */
 body::after {
   bottom: 0;
   left: 0;
-  width: 42vw;
-  height: 42vh;
 
   background:
-    radial-gradient(circle at 10% 90%, rgba(255, 184, 77, 0.10), transparent 60%),
     repeating-linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.07) 0px,
-      rgba(255, 255, 255, 0.07) 1px,
-      rgba(0, 0, 0, 0) 2px,
-      rgba(0, 0, 0, 0) 5px
+      180deg,
+      rgba(255,255,255,0.22) 0px,
+      rgba(255,255,255,0.22) 1px,
+      rgba(0,0,0,0) 3px,
+      rgba(0,0,0,0) 7px
     ),
+
     repeating-linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.03) 0px,
-      rgba(255, 255, 255, 0.03) 1px,
-      rgba(0, 0, 0, 0) 4px,
-      rgba(0, 0, 0, 0) 8px
-    );
+      180deg,
+      rgba(255,255,255,0.09) 0px,
+      rgba(255,255,255,0.09) 1px,
+      rgba(0,0,0,0) 2px,
+      rgba(0,0,0,0) 5px
+    ),
 
-  -webkit-mask-image: radial-gradient(circle at 10% 90%, rgba(0,0,0,1), rgba(0,0,0,0) 70%);
-  mask-image: radial-gradient(circle at 10% 90%, rgba(0,0,0,1), rgba(0,0,0,0) 70%);
+    radial-gradient(circle at 22% 18%, rgba(255,255,255,0.20) 0 1px, transparent 2px),
+    radial-gradient(circle at 57% 52%, rgba(255,255,255,0.17) 0 1px, transparent 2px),
+    radial-gradient(circle at 74% 70%, rgba(255,255,255,0.15) 0 1px, transparent 2px),
+    radial-gradient(circle at 10% 88%, rgba(255,255,255,0.13) 0 1px, transparent 2px);
 
-  animation: staticDriftBL 18s linear infinite;
+  filter: contrast(185%) brightness(108%);
+  animation: crtJitterBL 11s steps(14) infinite;
 }
 
-@keyframes staticDriftTR {
-  0%   { transform: translate3d(0, 0, 0); }
-  50%  { transform: translate3d(-14px, 10px, 0); }
-  100% { transform: translate3d(0, 0, 0); }
+/* jitter: tiny jumps + line drift, like unstable signal */
+@keyframes crtJitterTR {
+  0%   { transform: translate(0,0); background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+  20%  { transform: translate(-2px, 1px); background-position: 0 6px, 0 2px, 0 0, 0 0, 0 0, 0 0; }
+  40%  { transform: translate(1px, -1px); background-position: 0 12px, 0 4px, 0 0, 0 0, 0 0, 0 0; }
+  60%  { transform: translate(-1px, 0px); background-position: 0 18px, 0 6px, 0 0, 0 0, 0 0, 0 0; }
+  80%  { transform: translate(2px, 1px); background-position: 0 24px, 0 8px, 0 0, 0 0, 0 0, 0 0; }
+  100% { transform: translate(0,0); background-position: 0 30px, 0 10px, 0 0, 0 0, 0 0, 0 0; }
 }
 
-@keyframes staticDriftBL {
-  0%   { transform: translate3d(0, 0, 0); }
-  50%  { transform: translate3d(12px, -10px, 0); }
-  100% { transform: translate3d(0, 0, 0); }
+@keyframes crtJitterBL {
+  0%   { transform: translate(0,0); background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+  25%  { transform: translate(1px, 1px); background-position: 0 7px, 0 3px, 0 0, 0 0, 0 0, 0 0; }
+  50%  { transform: translate(-2px, 0px); background-position: 0 14px, 0 6px, 0 0, 0 0, 0 0, 0 0; }
+  75%  { transform: translate(1px, -1px); background-position: 0 21px, 0 9px, 0 0, 0 0, 0 0, 0 0; }
+  100% { transform: translate(0,0); background-position: 0 28px, 0 12px, 0 0, 0 0, 0 0, 0 0; }
 }
+
+/* keep content above static */
+.page { position: relative; z-index: 1; }
 
 /* Keep actual page content above corner static */
 .page {
