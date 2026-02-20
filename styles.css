@@ -130,7 +130,9 @@ body {
   stroke-dasharray: 0.01 18;
   stroke-linecap: round;
   animation: dotDrift 4s linear infinite;
-  filter: drop-shadow(0 0 10px rgba(23, 162, 184, 0.25));
+    filter:
+    drop-shadow(0 0 6px rgba(23, 162, 184, 0.35))
+    drop-shadow(0 0 12px rgba(23, 162, 184, 0.15));
 }
 
 @keyframes dotDrift {
