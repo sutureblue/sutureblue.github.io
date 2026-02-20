@@ -325,6 +325,28 @@ body {
 .overlay-inner {
   position: relative;
   height: 100%;
+  overflow-y: auto;
+
+  padding-right: 6px;   /* prevents text from touching scrollbar */
+  padding-bottom: 28px; /* space for close button */
+}
+
+.overlay-inner::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overlay-inner::-webkit-scrollbar-thumb {
+  background: rgba(23, 162, 184, 0.5);
+  border-radius: 4px;
+}
+
+.overlay-inner::-webkit-scrollbar-thumb:hover {
+  background: rgba(23, 162, 184, 0.8);
+}
+
+.overlay-inner {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(23,162,184,0.5) transparent;
 }
 
 .overlay-close {
