@@ -296,6 +296,8 @@
       const btnLeft = carousel.querySelector(".carousel-btn.left");
       const btnRight = carousel.querySelector(".carousel-btn.right");
 
+        let lastFocusEl = null;
+
 const projects = Array.from(
   carousel.querySelectorAll(".carousel-sources img")
 ).map(img => ({
@@ -360,18 +362,27 @@ function updateMeta(index) {
       btnLeft.onclick = goPrev;
       btnRight.onclick = goNext;
 
-      function openOverlay(e) {
-        if (e) e.stopPropagation();
-        overlay.classList.add("active");
-        overlay.setAttribute("aria-hidden", "false");
-        overlayScroll.scrollTop = 0;
-      }
+    function openOverlay(e) {
+    if (e) e.stopPropagation();
 
-      function closeOverlay(e) {
-        if (e) e.stopPropagation();
-        overlay.classList.remove("active");
-        overlay.setAttribute("aria-hidden", "true");
-      }
+    lastFocusEl = document.activeElement;
+
+    overlay.classList.add("active");
+    overlay.setAttribute("aria-hidden", "false");
+
+    overlayScroll.scrollTop = 0;
+
+    closeBtn.focus();
+  }
+
+    function closeOverlay(e) {
+    if (e) e.stopPropagation();
+
+    overlay.classList.remove("active");
+    overlay.setAttribute("aria-hidden", "true");
+
+    if (lastFocusEl) lastFocusEl.focus();
+  }
 
       readMore.onclick = openOverlay;
       centerArea.onclick = openOverlay;
