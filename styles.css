@@ -1,3 +1,7 @@
+/* =========================
+   Bee Nix — styles.css
+   ========================= */
+
 :root {
   --bg: #020203;
   --fg: #f7f5ff;
@@ -11,11 +15,16 @@
   --link-blue: #0f7f91;
 }
 
+/* ===== Reset ===== */
+
 *,
 *::before,
-*::after { box-sizing: border-box; }
+*::after {
+  box-sizing: border-box;
+}
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
@@ -25,13 +34,17 @@ body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--fg);
   line-height: 1.5;
+
   background:
     radial-gradient(circle at 18% 12%, rgba(255,255,255,0.035), transparent 45%),
     radial-gradient(circle at 82% 88%, rgba(255,255,255,0.02), transparent 55%),
     #010102;
+
   min-height: 100vh;
   position: relative;
 }
+
+/* ===== Page Wrapper ===== */
 
 .page {
   max-width: 1080px;
@@ -39,7 +52,10 @@ body {
   padding: 24px 16px 48px;
 }
 
-/* Top layout */
+/* =========================
+   Top Layout (Header + Hero)
+   ========================= */
+
 .top {
   display: grid;
   grid-template-columns: 150px 1fr;
@@ -47,6 +63,8 @@ body {
   align-items: center;
   margin-bottom: 32px;
 }
+
+/* ===== Header ===== */
 
 .site-header {
   position: sticky;
@@ -65,6 +83,8 @@ body {
   display: block;
   box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65);
 }
+
+/* ===== Hero ===== */
 
 .hero {
   padding: 0 4px 24px;
@@ -86,14 +106,21 @@ body {
   color: var(--muted);
 }
 
-/* Squig */
+/* =========================
+   Animated Squiggly Divider
+   ========================= */
+
 .squig-divider {
   margin: 48px 0 40px;
   opacity: 0.9;
   animation: squigWiggle 7s ease-in-out infinite;
 }
 
-.squig-divider svg { width: 100%; height: 32px; display: block; }
+.squig-divider svg {
+  width: 100%;
+  height: 32px;
+  display: block;
+}
 
 .squig-path {
   stroke-dasharray: 0.01 18;
@@ -104,16 +131,21 @@ body {
     drop-shadow(0 0 12px rgba(23, 162, 184, 0.15));
 }
 
-@keyframes dotDrift { to { stroke-dashoffset: -18; } }
+@keyframes dotDrift {
+  to { stroke-dashoffset: -18; }
+}
 
 @keyframes squigWiggle {
-  0%   { transform: translateY(0px) rotate(0deg); }
-  50%  { transform: translateY(2px) rotate(-0.2deg); }
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(2px) rotate(-0.2deg); }
   100% { transform: translateY(0px) rotate(0deg); }
 }
 
-/* Sections */
-.section { padding: 8px 4px 32px; }
+/* ===== Sections ===== */
+
+.section {
+  padding: 8px 4px 32px;
+}
 
 .section h2 {
   font-size: 18px;
@@ -128,69 +160,59 @@ body {
 }
 
 /* =========================
-   Practice Grid (300x250)
+   Practice: photo pile
    ========================= */
 
-.practice-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 300px);
-  justify-content: center;
-  gap: 22px 26px;
-}
-
-.practice-card {
+.practice-pile {
   position: relative;
-  width: 300px;
+  width: min(900px, 100%);
+  height: 640px;
+  margin: 10px auto 0;
 }
 
-/* Clickable media */
-.practice-media {
+/* Each photo */
+.practice-photo {
+  position: absolute;
+  left: 50%;
+  top: 0;
+
   width: 300px;
   height: 250px;
 
-  border: none;
   padding: 0;
+  border: none;
   background: none;
   cursor: pointer;
 
-  border-radius: 14px;
+  border-radius: 12px;
   overflow: hidden;
 
-  position: relative;
+  transform: translate(calc(-50% + var(--x)), var(--y)) rotate(var(--rot));
+  z-index: var(--z);
 
-  /* black-shadow vibe, but glow-blue */
   box-shadow:
     0 16px 0 rgba(0,0,0,0.95),
     0 10px 28px rgba(0,0,0,0.75),
     0 0 22px rgba(23,162,184,0.18);
 
   transition:
-    transform 0.22s ease,
-    box-shadow 0.22s ease;
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    filter 220ms ease;
 }
 
-.practice-media img {
+.practice-photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-/* Hover */
-.practice-card:hover .practice-media {
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 18px 0 rgba(0,0,0,0.98),
-    0 14px 34px rgba(0,0,0,0.85),
-    0 0 28px rgba(23,162,184,0.26);
-}
-
-/* Title badge hovering on image */
-.practice-badge {
+/* Title badge */
+.photo-badge {
   position: absolute;
-  left: 12px;
-  bottom: 12px;
+  left: var(--badge-x);
+  top: var(--badge-y);
 
   background: rgba(0,0,0,0.92);
   color: #fff;
@@ -207,16 +229,170 @@ body {
     0 0 10px rgba(23,162,184,0.15);
 }
 
+/* Hovered photo rises */
+.practice-photo.is-active {
+  z-index: 999;
+  box-shadow:
+    0 18px 0 rgba(0,0,0,0.98),
+    0 14px 34px rgba(0,0,0,0.85),
+    0 0 28px rgba(23,162,184,0.28);
+  filter: saturate(1.05) contrast(1.03);
+}
+
+/* Others subtly push away (JS sets --pushx/--pushy) */
+.practice-pile.is-hovering .practice-photo:not(.is-active) {
+  transform:
+    translate(calc(-50% + var(--x) + var(--pushx, 0px)),
+              calc(var(--y) + var(--pushy, 0px)))
+    rotate(var(--rot));
+}
+
+/* Focus */
+.practice-photo:focus-visible {
+  outline: 2px solid rgba(23, 162, 184, 0.8);
+  outline-offset: 4px;
+}
+
 /* =========================
-   Shared Overlay Styles
-   (used by .work-overlay and .practice-overlay)
+   Work carousel
    ========================= */
 
-.work-overlay,
-.practice-overlay {
+.work-item {
+  max-width: 360px;
+  margin: 24px auto 0;
+}
+
+.glow-card {
+  position: relative;
+}
+
+.glow-card::before {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  border-radius: 26px;
+
+  background:
+    radial-gradient(circle at 20% 0%,
+      rgba(23, 162, 184, 0.9),
+      transparent 55%),
+    radial-gradient(circle at 80% 100%,
+      rgba(23, 162, 184, 0.5),
+      transparent 55%);
+
+  filter: blur(6px);
+  z-index: 0;
+}
+
+.glow-card-inner {
+  position: relative;
+  z-index: 1;
+  border-radius: 22px;
+  overflow: visible;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
+}
+
+.carousel {
+  position: relative;
+  width: 360px;
+  height: 220px;
+  margin: 0 auto;
+  overflow: visible;
+  user-select: none;
+}
+
+.carousel * { user-select: none; }
+
+.carousel-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-center {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 22px;
+  overflow: hidden;
+  z-index: 20;
+  cursor: pointer;
+}
+
+.carousel-center img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  -webkit-user-drag: none;
+}
+
+.carousel-stack {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.stack-card {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 22px;
+  overflow: hidden;
+  opacity: 0.2;
+}
+
+.stack-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-stack.right .stack-card {
+  transform:
+    translateX(50%)
+    translateY(calc(var(--stack-i) * 3px))
+    scale(0.92);
+}
+
+.carousel-stack.left .stack-card {
+  transform:
+    translateX(-50%)
+    translateY(calc(var(--stack-i) * 3px))
+    scale(0.92);
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: var(--fg);
+  cursor: pointer;
+  z-index: 40;
+}
+
+.carousel-btn.left { left: -32px; }
+.carousel-btn.right { right: -32px; }
+
+.carousel-btn:hover { color: var(--glow-blue); }
+
+.carousel-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+/* Overlay (Work) */
+.work-overlay {
   position: absolute;
   inset: 0;
-  border-radius: 14px;
+  border-radius: 22px;
   background: rgba(6, 6, 10, 0.96);
   border: 3px solid #000;
   padding: 14px;
@@ -231,8 +407,7 @@ body {
   flex-direction: column;
 }
 
-.work-overlay.active,
-.practice-overlay.active {
+.work-overlay.active {
   opacity: 1;
   pointer-events: auto;
 }
@@ -248,9 +423,7 @@ body {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-
   padding: 10px 10px 14px;
-
   background: rgba(0, 0, 0, 0.18);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 14px;
@@ -314,130 +487,16 @@ body {
   border-bottom-color: rgba(23,162,184,0.8);
 }
 
-/* Focus */
-.practice-media:focus-visible,
-.carousel-btn:focus-visible,
-.overlay-close:focus-visible,
-.read-more:focus-visible,
-.carousel-center:focus-visible {
-  outline: 2px solid rgba(23, 162, 184, 0.8);
-  outline-offset: 3px;
-  border-radius: 10px;
+/* Work meta */
+.work-meta {
+  margin-top: 12px;
+  text-align: left;
 }
 
-/* =========================
-   Work carousel (unchanged styles you had)
-   ========================= */
-
-.work-item {
-  max-width: 360px;
-  margin: 24px auto 0;
+.work-meta h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
 }
-
-.glow-card { position: relative; }
-
-.glow-card::before {
-  content: "";
-  position: absolute;
-  inset: -18px;
-  border-radius: 26px;
-  background:
-    radial-gradient(circle at 20% 0%, rgba(23, 162, 184, 0.9), transparent 55%),
-    radial-gradient(circle at 80% 100%, rgba(23, 162, 184, 0.5), transparent 55%);
-  filter: blur(6px);
-  z-index: 0;
-}
-
-.glow-card-inner {
-  position: relative;
-  z-index: 1;
-  border-radius: 22px;
-  overflow: visible;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
-}
-
-.carousel {
-  position: relative;
-  width: 360px;
-  height: 220px;
-  margin: 0 auto;
-  overflow: visible;
-  user-select: none;
-}
-
-.carousel * { user-select: none; }
-
-.carousel-stage { position: relative; width: 100%; height: 100%; }
-
-.carousel-center {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 22px;
-  overflow: hidden;
-  z-index: 20;
-  cursor: pointer;
-}
-
-.carousel-center img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  -webkit-user-drag: none;
-}
-
-.carousel-stack {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.stack-card {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 22px;
-  overflow: hidden;
-  opacity: 0.2;
-}
-
-.stack-card img { width: 100%; height: 100%; object-fit: cover; }
-
-.carousel-stack.right .stack-card {
-  transform: translateX(50%) translateY(calc(var(--stack-i) * 3px)) scale(0.92);
-}
-
-.carousel-stack.left .stack-card {
-  transform: translateX(-50%) translateY(calc(var(--stack-i) * 3px)) scale(0.92);
-}
-
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 28px;
-  color: var(--fg);
-  cursor: pointer;
-  z-index: 40;
-}
-
-.carousel-btn.left { left: -32px; }
-.carousel-btn.right { right: -32px; }
-
-.carousel-btn:hover { color: var(--glow-blue); }
-
-.carousel-btn:disabled { opacity: 0.25; cursor: default; }
-
-.work-meta { margin-top: 12px; text-align: left; }
-
-.work-meta h3 { margin: 0 0 4px; font-size: 15px; }
 
 .read-more {
   background: none;
@@ -451,7 +510,7 @@ body {
 
 .read-more:hover { color: var(--glow-blue); }
 
-/* About + Footer */
+/* About */
 .about-layout {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
@@ -469,6 +528,7 @@ body {
   background: rgba(10, 10, 20, 0.9);
 }
 
+/* Footer */
 .site-footer {
   margin-top: 48px;
   padding-top: 16px;
@@ -479,13 +539,17 @@ body {
   color: var(--muted);
 }
 
-.license-footer { display: flex; align-items: center; gap: 4px; }
+.license-footer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 
 .cc-icon { width: 14px; opacity: 0.8; }
 
 .footer-note { opacity: 0.8; }
 
-/* Reduced Motion */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .squig-divider,
   .squig-path {
@@ -494,19 +558,20 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 1100px) {
-  .practice-grid { grid-template-columns: repeat(2, 300px); }
-}
-
 @media (max-width: 760px) {
-  .top { grid-template-columns: 1fr; row-gap: 18px; }
+  .top {
+    grid-template-columns: 1fr;
+    row-gap: 18px;
+  }
+
   .hero { text-align: left; }
+
   .about-layout { grid-template-columns: 1fr; }
+
   #work h2 { width: 100%; }
 
-  .practice-grid {
-    grid-template-columns: 1fr;
-    justify-items: center;
+  .practice-pile {
+    height: 820px; /* extra space on mobile */
   }
 
   .carousel-btn.left { left: -22px; }
@@ -515,6 +580,7 @@ body {
   .carousel-stack.right .stack-card {
     transform: translateX(40%) translateY(calc(var(--stack-i) * 3px)) scale(0.92);
   }
+
   .carousel-stack.left .stack-card {
     transform: translateX(-40%) translateY(calc(var(--stack-i) * 3px)) scale(0.92);
   }
