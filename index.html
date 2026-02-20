@@ -39,14 +39,7 @@
             <stop offset="72%"  stop-color="#cfd2d6" />
             <stop offset="88%"  stop-color="#17a2b8" />
             <stop offset="100%" stop-color="#0b5f6b" />
-
-            <animateTransform
-              attributeName="gradientTransform"
-              type="translate"
-              values="-1 0; 1 0"
-              dur="10s"
-              repeatCount="indefinite"
-            />
+            <animateTransform attributeName="gradientTransform" type="translate" values="-1 0; 1 0" dur="10s" repeatCount="indefinite" />
           </linearGradient>
         </defs>
 
@@ -64,121 +57,52 @@
 
     <main>
 
-<!-- Practice -->
-<section id="practice" class="section">
-  <h2>Practice</h2>
+      <!-- Practice (no header, grid only) -->
+      <section id="practice" class="section">
 
-  <div class="practice-list">
+        <div class="practice-grid">
 
-    <div class="practice-card">
-      <div class="practice-media">
-        <img src="assets/ColourOrgan_1.png" alt="Colour Organ">
-      </div>
-      <h3>Colour Organ</h3>
-    </div>
-
-    <div class="practice-card">
-      <div class="practice-media">
-        <img src="assets/DiscussionGame_1.png" alt="Discussion Game">
-      </div>
-      <h3>Discussion Game</h3>
-    </div>
-
-    <div class="practice-card">
-      <div class="practice-media">
-        <img src="assets/Drawing_1.png" alt="Drawing">
-      </div>
-      <h3>Drawing</h3>
-    </div>
-
-    <div class="practice-card">
-      <div class="practice-media">
-        <img src="assets/Fabrication_1.png" alt="Fabrication">
-      </div>
-      <h3>Fabrication</h3>
-    </div>
-
-    <div class="practice-card">
-      <div class="practice-media">
-        <img src="assets/LightSleeper_1.png" alt="Light Sleeper">
-      </div>
-      <h3>Light Sleeper</h3>
-    </div>
-
-    <div class="practice-card">
-      <div class="practice-media">
-        <img src="assets/Uncanny_1.png" alt="Uncanny">
-      </div>
-      <h3>Uncanny</h3>
-    </div>
-
-  </div>
-</section>
-
-                <button class="carousel-btn right" type="button" aria-label="Next project">›</button>
-
-                <!-- Hidden Project Data -->
-                <div class="carousel-sources" hidden>
-                  <img src="assets/glitchplay.png" data-title="Glitch Play (2025)" data-template=".tpl-glitchplay" alt="">
-                  <img src="assets/gNg.png"        data-title="Glitch'N'Games (2024)" data-template=".tpl-gng" alt="">
-                  <img src="assets/mfru.png"       data-title="MFRU (2023)" data-template=".tpl-mfru" alt="">
-                </div>
-
-                <!-- Overlay -->
-                <div class="work-overlay" aria-hidden="true" role="dialog" aria-modal="true">
-                  <div class="overlay-inner">
-                    <div class="overlay-scroll">
-                      <div class="overlay-text"></div>
-                    </div>
-
-                    <div class="overlay-actions">
-                      <button class="overlay-close" type="button" aria-label="Close overlay">×</button>
-                    </div>
-                  </div>
-                </div>
-
-              </div><!-- /.carousel -->
-
+          <div class="practice-card">
+            <div class="practice-media">
+              <img src="assets/ColourOrgan_1.png" alt="Colour Organ">
             </div>
+            <h3>Colour Organ</h3>
           </div>
 
-          <div class="work-meta">
-            <h3 class="project-title"></h3>
-            <button class="read-more" type="button">Read more...</button>
+          <div class="practice-card">
+            <div class="practice-media">
+              <img src="assets/DiscussionGame_1.png" alt="Discussion Game">
+            </div>
+            <h3>Discussion Game</h3>
           </div>
 
-          <!-- Templates (scoped to this work-item) -->
-          <template class="tpl-glitchplay">
-            <p>
-              Glitch Play is my MFA thesis in Interactive Media and Game Development. It investigates engaging with glitches as a form of play that reveals and enables renegotiations with the structure of digital systems.
-              You can <a href="https://archive.org/details/glitch_play" target="_blank" rel="noreferrer">read it here.</a>
-            </p>
-          </template>
+          <div class="practice-card">
+            <div class="practice-media">
+              <img src="assets/Drawing_1.png" alt="Drawing">
+            </div>
+            <h3>Drawing</h3>
+          </div>
 
-          <template class="tpl-gng">
-            <p>
-              This exhibition explored the intertwined histories of glitch art and video games, featuring 40+ artists from over 5 countries, across two Pittsburgh venues.
-            </p>
-            <p>
-              As producer, curator, and organizer alongside John Bumstead and Nick Liberatore, I developed the show's conceptual framework and programmed workshops, discussions, and live demonstrations.
-            </p>
-            <p>
-              I created and moderated the Discussion Game, a participatory conversation format that gathered artists, theorists, and gamers to explore themes of play, control, and system disruption.
-            </p>
-          </template>
+          <div class="practice-card">
+            <div class="practice-media">
+              <img src="assets/Fabrication_1.png" alt="Fabrication">
+            </div>
+            <h3>Fabrication</h3>
+          </div>
 
-          <template class="tpl-mfru">
-            <p>
-              This panel of digital artists was brought together in Maribor, Slovenia to discuss digital archiving for community by community for
-              <a href="https://www.mfru.org/events/panel-sustainability-and-autonomy-of-digital-art" target="_blank" rel="noreferrer">MFRU 2023.</a>
-            </p>
-            <p>
-              My IRL contributions to the discussion were not so much about my experience as an artist, but rather as a Do-It-Together (DIT) media archivist who is currently organizing, with a couple others— a free, downloadable, public access digital archive for the Glitch Art community.
-            </p>
-            <p>
-              Those of us working on this project believe that the more you rely on open software, the more accessible an archive becomes. That community projects can operate with more integrity when they remain unaffiliated with any institution(s). And most of all, we actively go against writing any “defining narrative(s),” but rather aim to offer an index of searchable artists and artists’ works, as well as any affiliated history, to enable many narratives to overlap, web and be formed by people of the community, in hopes for a more holistic history to be available to those who care to have it.
-            </p>
-          </template>
+          <div class="practice-card">
+            <div class="practice-media">
+              <img src="assets/LightSleeper_1.png" alt="Light Sleeper">
+            </div>
+            <h3>Light Sleeper</h3>
+          </div>
+
+          <div class="practice-card">
+            <div class="practice-media">
+              <img src="assets/Uncanny_1.png" alt="Uncanny">
+            </div>
+            <h3>Uncanny</h3>
+          </div>
 
         </div>
       </section>
@@ -188,6 +112,7 @@
         <h2>Work</h2>
 
         <div class="work-item">
+
           <div class="glow-card">
             <div class="glow-card-inner">
 
@@ -285,14 +210,7 @@
               <stop offset="72%"  stop-color="#cfd2d6" />
               <stop offset="88%"  stop-color="#17a2b8" />
               <stop offset="100%" stop-color="#0b5f6b" />
-
-              <animateTransform
-                attributeName="gradientTransform"
-                type="translate"
-                values="-1 0; 1 0"
-                dur="10s"
-                repeatCount="indefinite"
-              />
+              <animateTransform attributeName="gradientTransform" type="translate" values="-1 0; 1 0" dur="10s" repeatCount="indefinite" />
             </linearGradient>
           </defs>
 
@@ -341,7 +259,6 @@
 
     </main>
 
-    <!-- Footer -->
     <footer class="site-footer">
       <div class="license-footer">
         <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">
@@ -355,6 +272,7 @@
 
   </div>
 
+  <!-- Carousel + Overlay Script (only affects .work-item) -->
   <script>
     document.querySelectorAll(".work-item").forEach((workItem) => {
       const carousel = workItem.querySelector(".carousel");
