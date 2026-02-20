@@ -437,7 +437,7 @@ body::after {
 
 /* Scroll area only */
 .overlay-scroll {
-  max-height: 70%;
+  max-height: 85%;
   overflow-y: auto;
 
   border-radius: 14px;
@@ -461,7 +461,7 @@ body::after {
   display: flex;
   justify-content: flex-start;
 
-  padding-top: 30px;
+  padding-top: 40px;
 }
 
 /* Close button */
