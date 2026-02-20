@@ -282,8 +282,8 @@
 
       function updateMeta(index) {
         titleEl.textContent = projects[index].title;
-        overlayText.textContent = projects[index].text;
-      }
+        overlayText.innerHTML = projects[index].text;
+    }
 
       function renderStacks() {
         leftStackEl.innerHTML = "";
