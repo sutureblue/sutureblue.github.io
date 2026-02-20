@@ -436,7 +436,7 @@ body {
 }
 
 .read-more {
-  font-weight: 700;
+  font-weight: 400;
   color: var(--link-blue);
   cursor: pointer;
   transition: color 0.15s ease;
