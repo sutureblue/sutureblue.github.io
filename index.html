@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -93,32 +93,61 @@
                 <!-- Right Arrow (next) -->
                 <button class="carousel-btn right" type="button" aria-label="Next project">›</button>
 
-                <!-- Hidden Project Data -->
-                <div class="carousel-sources" hidden>
-                  <img
-                    src="assets/glitchplay.png"
-                    data-title="Glitch Play (2025)"
-                    data-text="Glitch Play is my MFA thesis in Interactive Media and Game Development. It investigates engaging with glitches as a form of play that reveals and enables renegotiations with the structure of digital systems. You can <a href='https://archive.org/details/glitch_play' target='_blank'>read it here.</a>"
-                    alt=""
-                  >
-                  <img
-                    src="assets/gNg.png"
-                    data-title="Glitch'N'Games (2024)"
-                    data-text="This exhibition explored the intertwined histories of glitch art and video games, featuring 40+ artists from over 5 countries, across two Pittsburgh venues. As producer, curator, and organizer alongside John Bumstead and Nick Liberatore, I developed the show's conceptual framework and programmed workshops, discussions, and live demonstrations. I created and moderated the Discussion Game, a participatory conversation format that gathered artists, theorists, and gamers to explore themes of play, control, and system disruption."
-                    alt=""
-                  >
+<!-- Hidden Project Data -->
+      <div class="carousel-sources" hidden>
+        <img
+          src="assets/glitchplay.png"
+          data-title="Glitch Play (2025)"
+          data-template="#glitchplay-text"
+          alt=""
+        >
+        <img
+          src="assets/gNg.png"
+          data-title="Glitch'N'Games (2024)"
+          data-template="#gng-text"
+          alt=""
+        >
+        <img
+          src="assets/mfru.png"
+          data-title="MFRU (2023)"
+          data-template="#mfru-text"
+          alt=""
+        >
+      </div>
 
-                  <img
-                    src="assets/mfru.png"
-                    data-title="MFRU (2023)"
-                    data-text="This panel of digital artists was brought together in Maribor, Slovenia to discuss digital archiving for community by community for <a href='https://www.mfru.org/events/panel-sustainability-and-autonomy-of-digital-art' target='_blank'>MFRU 2023.</a>
-                   
-                    My IRL contributions to the discussion were not so much about my experience as an artist, but rather as a Do-It-Together (DIT) media archivist who is currently organizing, with a couple others— a free, downloadable, public access digital archive for the Glitch Art community.
-                   
-                    Those of us working on this project believe that the more you rely on open software, the more accessible an archive becomes. That community projects can operate with more integrity when they remain unaffiliated with any institution(s). And most of all, we actively go against writing any “defining narrative(s),” but rather aim to offer an index of searchable artists and artists’ works, as well as any affiliated history, to enable many narratives to overlap, web and be formed by people of the community, in hopes for a more holistic history to be available to those who care to have it."
-                    alt=""
-                  >
-                </div>
+    <!-- Project Text Templates -->
+    <template id="glitchplay-text">
+      <p>
+        Glitch Play is my MFA thesis in Interactive Media and Game Development. It investigates engaging with glitches as a form of play that reveals and enables renegotiations with the structure of digital systems.
+        You can
+        <a href="https://archive.org/details/glitch_play" target="_blank" rel="noreferrer">read it here.</a>
+      </p>
+    </template>
+
+    <template id="gng-text">
+      <p>
+        This exhibition explored the intertwined histories of glitch art and video games, featuring 40+ artists from over 5 countries, across two Pittsburgh venues.
+      </p>
+      <p>
+        As producer, curator, and organizer alongside John Bumstead and Nick Liberatore, I developed the show's conceptual framework and programmed workshops, discussions, and live demonstrations.
+      </p>
+      <p>
+        I created and moderated the Discussion Game, a participatory conversation format that gathered artists, theorists, and gamers to explore themes of play, control, and system disruption.
+      </p>
+    </template>
+
+    <template id="mfru-text">
+      <p>
+        This panel of digital artists was brought together in Maribor, Slovenia to discuss digital archiving for community by community for
+        <a href="https://www.mfru.org/events/panel-sustainability-and-autonomy-of-digital-art" target="_blank" rel="noreferrer">MFRU 2023.</a>
+      </p>
+      <p>
+        My IRL contributions to the discussion were not so much about my experience as an artist, but rather as a Do-It-Together (DIT) media archivist who is currently organizing, with a couple others— a free, downloadable, public access digital archive for the Glitch Art community.
+      </p>
+      <p>
+        Those of us working on this project believe that the more you rely on open software, the more accessible an archive becomes. That community projects can operate with more integrity when they remain unaffiliated with any institution(s). And most of all, we actively go against writing any “defining narrative(s),” but rather aim to offer an index of searchable artists and artists’ works, as well as any affiliated history, to enable many narratives to overlap, web and be formed by people of the community, in hopes for a more holistic history to be available to those who care to have it.
+      </p>
+    </template>
 
                 <!-- Overlay -->
                 <div class="work-overlay" aria-hidden="true">
