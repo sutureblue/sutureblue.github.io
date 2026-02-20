@@ -39,16 +39,9 @@
             <stop offset="72%"  stop-color="#cfd2d6" />
             <stop offset="88%"  stop-color="#17a2b8" />
             <stop offset="100%" stop-color="#0b5f6b" />
-            <animateTransform
-              attributeName="gradientTransform"
-              type="translate"
-              values="-1 0; 1 0"
-              dur="10s"
-              repeatCount="indefinite"
-            />
+            <animateTransform attributeName="gradientTransform" type="translate" values="-1 0; 1 0" dur="10s" repeatCount="indefinite" />
           </linearGradient>
         </defs>
-
         <path
           d="M0,20 C80,5 160,35 240,20 C320,5 400,35 480,20 C560,5 640,35 720,20 C800,5 880,35 960,20 C1040,5 1120,35 1200,20"
           fill="none"
@@ -63,52 +56,16 @@
 
     <main>
 
-      <!-- Practice pile (no header) -->
+      <!-- Practice Desktop -->
       <section id="practice" class="section">
-        <div class="practice-pile" id="practicePile" aria-label="Practice pile">
-
-          <button class="practice-photo" type="button"
-            style="--x:-130px; --y:0px; --rot:-4deg; --z:1; --badge-x:12px; --badge-y:192px;"
-            aria-label="Colour Organ">
-            <img src="assets/ColourOrgan_1.png" alt="Colour Organ">
-            <span class="photo-badge">Colour Organ</span>
+        <div class="practice-controls">
+          <button id="practiceReset" class="practice-reset" type="button" aria-label="Reset practice windows" title="Reset">
+            ↺
           </button>
+        </div>
 
-          <button class="practice-photo" type="button"
-            style="--x:60px; --y:-35px; --rot:3deg; --z:2; --badge-x:170px; --badge-y:18px;"
-            aria-label="Discussion Game">
-            <img src="assets/DiscussionGame_1.png" alt="Discussion Game">
-            <span class="photo-badge">Discussion Game</span>
-          </button>
-
-          <button class="practice-photo" type="button"
-            style="--x:-25px; --y:40px; --rot:1deg; --z:3; --badge-x:80px; --badge-y:195px;"
-            aria-label="Drawing">
-            <img src="assets/Drawing_1.png" alt="Drawing">
-            <span class="photo-badge">Drawing</span>
-          </button>
-
-          <button class="practice-photo" type="button"
-            style="--x:-145px; --y:160px; --rot:-2deg; --z:2; --badge-x:14px; --badge-y:18px;"
-            aria-label="Fabrication">
-            <img src="assets/Fabrication_1.png" alt="Fabrication">
-            <span class="photo-badge">Fabrication</span>
-          </button>
-
-          <button class="practice-photo" type="button"
-            style="--x:95px; --y:130px; --rot:4deg; --z:4; --badge-x:165px; --badge-y:192px;"
-            aria-label="Light Sleeper">
-            <img src="assets/LightSleeper_1.png" alt="Light Sleeper">
-            <span class="photo-badge">Light Sleeper</span>
-          </button>
-
-          <button class="practice-photo" type="button"
-            style="--x:0px; --y:235px; --rot:-1deg; --z:1; --badge-x:92px; --badge-y:195px;"
-            aria-label="Uncanny">
-            <img src="assets/Uncanny_1.png" alt="Uncanny">
-            <span class="photo-badge">Uncanny</span>
-          </button>
-
+        <div id="practiceDesktop" class="practice-desktop" aria-label="Draggable practice windows">
+          <!-- windows injected by JS -->
         </div>
       </section>
 
@@ -165,7 +122,6 @@
             <button class="read-more" type="button">Read more...</button>
           </div>
 
-          <!-- Templates (scoped to this work-item) -->
           <template class="tpl-glitchplay">
             <p>
               Glitch Play is my MFA thesis in Interactive Media and Game Development. It investigates engaging with glitches as a form of play that reveals and enables renegotiations with the structure of digital systems.
@@ -375,71 +331,115 @@
       renderStacks();
     });
 
-    /* ---------- Practice pile repel hover ---------- */
+    /* ---------- Practice windows: drag + close + reset ---------- */
     (() => {
-      const pile = document.getElementById("practicePile");
-      if (!pile) return;
+      const desktop = document.getElementById("practiceDesktop");
+      const resetBtn = document.getElementById("practiceReset");
+      if (!desktop || !resetBtn) return;
 
-      const photos = Array.from(pile.querySelectorAll(".practice-photo"));
+      // Your 6 practice images
+      const PRACTICE = [
+        { src: "assets/ColourOrgan_1.png",     title: "Colour Organ",     x: 40,  y: 20  },
+        { src: "assets/DiscussionGame_1.png",  title: "Discussion Game",  x: 380, y: 10  },
+        { src: "assets/Drawing_1.png",         title: "Drawing",          x: 220, y: 160 },
+        { src: "assets/Fabrication_1.png",     title: "Fabrication",      x: 60,  y: 310 },
+        { src: "assets/LightSleeper_1.png",    title: "Light Sleeper",    x: 420, y: 290 },
+        { src: "assets/Uncanny_1.png",         title: "Uncanny",          x: 250, y: 420 }
+      ];
 
-      function parsePx(v) {
-        const n = parseFloat(String(v).replace("px",""));
-        return Number.isFinite(n) ? n : 0;
+      let zTop = 10;
+
+      function clamp(n, min, max) {
+        return Math.max(min, Math.min(max, n));
       }
 
-      function getXY(el) {
-        const styles = getComputedStyle(el);
-        const x = parsePx(styles.getPropertyValue("--x"));
-        const y = parsePx(styles.getPropertyValue("--y"));
-        return { x, y };
-      }
+      function createWindow(item) {
+        const win = document.createElement("div");
+        win.className = "pwin";
+        win.style.left = item.x + "px";
+        win.style.top  = item.y + "px";
+        win.style.zIndex = String(++zTop);
 
-      function setPush(el, px, py) {
-        el.style.setProperty("--pushx", `${px}px`);
-        el.style.setProperty("--pushy", `${py}px`);
-      }
+        win.innerHTML = `
+          <div class="pwin-bar" role="toolbar">
+            <button class="pwin-close" type="button" aria-label="Close window">×</button>
+            <div class="pwin-title" title="${item.title}">${item.title}</div>
+          </div>
+          <div class="pwin-body">
+            <img src="${item.src}" alt="${item.title}">
+          </div>
+        `;
 
-      function clearAll() {
-        pile.classList.remove("is-hovering");
-        photos.forEach(p => {
-          p.classList.remove("is-active");
-          p.style.removeProperty("--pushx");
-          p.style.removeProperty("--pushy");
-        });
-      }
+        const bar = win.querySelector(".pwin-bar");
+        const close = win.querySelector(".pwin-close");
 
-      photos.forEach(active => {
-        active.addEventListener("mouseenter", () => {
-          pile.classList.add("is-hovering");
-          photos.forEach(p => p.classList.remove("is-active"));
-          active.classList.add("is-active");
-
-          const a = getXY(active);
-
-          photos.forEach(p => {
-            if (p === active) return;
-
-            const b = getXY(p);
-            let dx = b.x - a.x;
-            let dy = b.y - a.y;
-
-            const mag = Math.hypot(dx, dy) || 1;
-            dx /= mag;
-            dy /= mag;
-
-            const strength = 10; // tweak this
-            setPush(p, dx * strength, dy * strength);
-          });
+        // close removes window
+        close.addEventListener("click", (e) => {
+          e.stopPropagation();
+          win.remove();
         });
 
-        active.addEventListener("mouseleave", () => {
-          setTimeout(() => {
-            if (!pile.matches(":hover")) clearAll();
-          }, 30);
+        // bring to front on pointerdown anywhere
+        win.addEventListener("pointerdown", () => {
+          win.style.zIndex = String(++zTop);
         });
-      });
 
-      pile.addEventListener("mouseleave", clearAll);
+        // drag only from titlebar (not the close button)
+        bar.addEventListener("pointerdown", (e) => {
+          if (e.target === close) return;
+
+          e.preventDefault();
+          win.style.zIndex = String(++zTop);
+
+          const rectDesk = desktop.getBoundingClientRect();
+          const rectWin = win.getBoundingClientRect();
+
+          const startX = e.clientX;
+          const startY = e.clientY;
+
+          const startLeft = rectWin.left - rectDesk.left;
+          const startTop  = rectWin.top  - rectDesk.top;
+
+          win.setPointerCapture(e.pointerId);
+
+          function onMove(ev) {
+            const dx = ev.clientX - startX;
+            const dy = ev.clientY - startY;
+
+            // keep inside desktop bounds (soft clamp)
+            const maxLeft = rectDesk.width  - rectWin.width;
+            const maxTop  = rectDesk.height - rectWin.height;
+
+            const nextLeft = clamp(startLeft + dx, 0, maxLeft);
+            const nextTop  = clamp(startTop  + dy, 0, maxTop);
+
+            win.style.left = nextLeft + "px";
+            win.style.top  = nextTop  + "px";
+          }
+
+          function onUp() {
+            win.releasePointerCapture(e.pointerId);
+            win.removeEventListener("pointermove", onMove);
+            win.removeEventListener("pointerup", onUp);
+            win.removeEventListener("pointercancel", onUp);
+          }
+
+          win.addEventListener("pointermove", onMove);
+          win.addEventListener("pointerup", onUp);
+          win.addEventListener("pointercancel", onUp);
+        });
+
+        return win;
+      }
+
+      function populate() {
+        desktop.innerHTML = "";
+        PRACTICE.forEach(item => desktop.appendChild(createWindow(item)));
+      }
+
+      resetBtn.addEventListener("click", populate);
+
+      populate();
     })();
   </script>
 
