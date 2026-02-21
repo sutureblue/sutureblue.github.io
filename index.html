@@ -312,6 +312,9 @@
       }
 
       centerArea.onclick = openOverlay;
+      
+      titleEl.style.cursor = "pointer";
+      titleEl.onclick = openOverlay;
 
       centerArea.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") openOverlay(e);
