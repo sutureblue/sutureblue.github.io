@@ -295,7 +295,8 @@ body {
 .practice-desktop {
   position: relative;
   width: 100%;
-  height: 620px;
+  min-height: 360px;   /* tune this number to adjust space under windows */
+  height: auto;
   margin: 0;
 
   border: none;
