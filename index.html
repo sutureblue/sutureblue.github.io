@@ -371,214 +371,288 @@
       });
     })();
 
-    /* ---------- Practice Windows
-       Desktop: EXACT current behavior (draggable, absolute)
-       Mobile: 2-col grid (no drag). Close = tile disappears and grid reflows. Reset repopulates.
-    ---------- */
-    (() => {
-      const desktop = document.getElementById("practiceDesktop");
-      const resetBtn = document.getElementById("practiceReset");
-      if (!desktop || !resetBtn) return;
+/* ---------- Practice Windows
+   Desktop: draggable windows + right-splayed randomized zig-zag spawn (like your screenshot)
+   Mobile: 2-col grid; close removes tile and grid reflows; reset repopulates.
+---------- */
+(() => {
+  const desktop = document.getElementById("practiceDesktop");
+  const resetBtn = document.getElementById("practiceReset");
+  if (!desktop || !resetBtn) return;
 
-      const PRACTICE = [
-        { id:"colourorgan",    src:"assets/ColourOrgan_1.png",    title:"Colour Organ",     x: 20,  y: 20  },
-        { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game", x: 360, y: 10  },
-        { id:"drawing",        src:"assets/Drawing_1.png",        title:"Drawing",         x: 210, y: 180 },
-        { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication",     x: 30,  y: 340 },
-        { id:"lightsleeper",   src:"assets/LightSleeper_1.png",   title:"Light Sleeper",   x: 400, y: 320 },
-        { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"Uncanny",         x: 240, y: 470 }
-      ];
+  const PRACTICE = [
+    { id:"colourorgan",    src:"assets/ColourOrgan_1.png",    title:"Colour Organ" },
+    { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game" },
+    { id:"drawing",        src:"assets/Drawing_1.png",        title:"Drawing" },
+    { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication" },
+    { id:"lightsleeper",   src:"assets/LightSleeper_1.png",   title:"Light Sleeper" },
+    { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"Uncanny" }
+  ];
 
-      const mqMobile = window.matchMedia("(max-width: 760px)");
-      const isMobile = () => mqMobile.matches;
+  const mqMobile = window.matchMedia("(max-width: 760px)");
+  const isMobile = () => mqMobile.matches;
 
-      let zTop = 10;
+  let zTop = 10;
 
-      function getTemplateHTML(id) {
-        const tpl = document.getElementById(`tpl-${id}`);
-        return tpl ? tpl.innerHTML : `<p><strong>${id}</strong></p>`;
+  function getTemplateHTML(id) {
+    const tpl = document.getElementById(`tpl-${id}`);
+    return tpl ? tpl.innerHTML : `<p><strong>${id}</strong></p>`;
+  }
+
+  function bringToFront(win) {
+    win.style.zIndex = String(++zTop);
+  }
+
+  function randBetween(min, max) {
+    return min + Math.random() * (max - min);
+  }
+
+  function clamp(n, min, max) {
+    return Math.max(min, Math.min(max, n));
+  }
+
+  // Compute right-splayed zig-zag spawn positions for DESKTOP mode
+  function computeSplayPositions(count) {
+    // Use known default window dimensions on desktop (your CSS defaults)
+    const WIN_W = 300;
+    const BAR_H = 34;
+    const IMG_H = 250;
+    const WIN_H = BAR_H + IMG_H;
+
+    // Ensure desktop has a measurable rect (in case of first load)
+    const rect = desktop.getBoundingClientRect();
+    const deskW = Math.max(320, rect.width || 320);
+    const deskH = Math.max(520, rect.height || 520);
+
+    // You can tune these to taste
+    const startX  = 30;
+    const startY  = 24;
+    const stepX   = 140; // splay right
+    const stepY   = 18;  // gentle descent
+    const zigAmp  = 44;  // up/down swing
+    const jitterX = 14;  // slight hand-placed feel
+    const jitterY = 10;
+
+    // bounds: avoid starting in the void
+    const minX = 8;
+    const minY = 8;
+    const maxX = Math.max(minX, Math.floor(deskW - WIN_W - 8));
+    const maxY = Math.max(minY, Math.floor(deskH - WIN_H - 8));
+
+    const pos = [];
+
+    for (let i = 0; i < count; i++) {
+      const zig = (i % 2 === 0) ? -zigAmp : zigAmp;
+
+      let x = startX + i * stepX + randBetween(-jitterX, jitterX);
+      let y = startY + i * stepY + zig + randBetween(-jitterY, jitterY);
+
+      // clamp so they're visible initially
+      x = clamp(x, minX, maxX);
+      y = clamp(y, minY, maxY);
+
+      pos.push({ x, y });
+    }
+
+    return pos;
+  }
+
+  function applyDesktopPosition(win) {
+    const x = parseFloat(win.dataset.x || "0");
+    const y = parseFloat(win.dataset.y || "0");
+    win.style.left = x + "px";
+    win.style.top  = y + "px";
+  }
+
+  function applyMobilePosition(win) {
+    // Grid places it; remove absolute offsets
+    win.style.left = "";
+    win.style.top = "";
+  }
+
+  function syncModeClass() {
+    if (isMobile()) desktop.classList.add("is-mobile");
+    else desktop.classList.remove("is-mobile");
+
+    const wins = Array.from(desktop.querySelectorAll(".pwin"));
+    wins.forEach(win => {
+      if (isMobile()) applyMobilePosition(win);
+      else applyDesktopPosition(win);
+    });
+  }
+
+  function createWindow(item) {
+    const win = document.createElement("div");
+    win.className = "pwin";
+    win.dataset.id = item.id;
+    win.style.zIndex = String(++zTop);
+
+    // placement happens after creation (populate assigns x/y)
+    win.innerHTML = `
+      <div class="pwin-bar" role="toolbar">
+        <button class="pwin-close" type="button" aria-label="Close window">×</button>
+        <div class="pwin-title" title="${item.title}">${item.title}</div>
+      </div>
+
+      <div class="pwin-body" role="button" tabindex="0" aria-label="Open description">
+        <img src="${item.src}" alt="${item.title}">
+      </div>
+
+      <div class="pwin-overlay" aria-hidden="true">
+        <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
+        <div class="pwin-overlay-scroll">
+          <div class="pwin-overlay-text"></div>
+        </div>
+      </div>
+    `;
+
+    const bar = win.querySelector(".pwin-bar");
+    const close = win.querySelector(".pwin-close");
+    const body = win.querySelector(".pwin-body");
+
+    const overlay = win.querySelector(".pwin-overlay");
+    const minBtn = win.querySelector(".pwin-min");
+    const overlayScroll = win.querySelector(".pwin-overlay-scroll");
+    const overlayText = win.querySelector(".pwin-overlay-text");
+
+    function openOverlay(e) {
+      if (e) e.stopPropagation();
+      bringToFront(win);
+
+      overlayText.innerHTML = getTemplateHTML(item.id);
+      overlay.classList.add("active");
+      overlay.setAttribute("aria-hidden", "false");
+      overlayScroll.scrollTop = 0;
+
+      minBtn.focus({ preventScroll: true });
+    }
+
+    function closeOverlay(e) {
+      if (e) e.stopPropagation();
+      overlay.classList.remove("active");
+      overlay.setAttribute("aria-hidden", "true");
+    }
+
+    // Close window
+    close.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      // In mobile grid, do a little fade/shrink; grid reflows naturally
+      if (isMobile()) {
+        win.classList.add("removing");
+        setTimeout(() => win.remove(), 140);
+      } else {
+        win.remove();
+      }
+    });
+
+    win.addEventListener("pointerdown", () => bringToFront(win));
+
+    body.addEventListener("click", openOverlay);
+    body.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") openOverlay(e);
+    });
+
+    // minimize overlay
+    minBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
+    minBtn.addEventListener("click", closeOverlay);
+
+    // prevent overlay from triggering drag
+    overlay.addEventListener("pointerdown", (e) => e.stopPropagation());
+    overlay.addEventListener("click", (e) => e.stopPropagation());
+
+    // Esc closes only if that overlay is open
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
+    });
+
+    // Drag ONLY from titlebar (DESKTOP ONLY) — your existing behavior
+    bar.addEventListener("pointerdown", (e) => {
+      if (isMobile()) return; // mobile grid: no drag
+      if (e.target === close) return;
+      if (overlay.classList.contains("active")) return;
+
+      e.preventDefault();
+      bringToFront(win);
+
+      const rectDesk = desktop.getBoundingClientRect();
+      const rectWin = win.getBoundingClientRect();
+
+      const startX = e.clientX;
+      const startY = e.clientY;
+
+      const startLeft = rectWin.left - rectDesk.left;
+      const startTop  = rectWin.top  - rectDesk.top;
+
+      win.setPointerCapture(e.pointerId);
+
+      function onMove(ev) {
+        const dx = ev.clientX - startX;
+        const dy = ev.clientY - startY;
+
+        const nextLeft = startLeft + dx;
+        const nextTop  = startTop + dy;
+
+        // NO snapping. NO clamping. Pure gremlin freedom (as requested earlier).
+        win.style.left = nextLeft + "px";
+        win.style.top  = nextTop + "px";
+
+        // persist position (so if you resize then return to desktop mode)
+        win.dataset.x = String(nextLeft);
+        win.dataset.y = String(nextTop);
       }
 
-      function bringToFront(win) {
-        win.style.zIndex = String(++zTop);
+      function onUp() {
+        try { win.releasePointerCapture(e.pointerId); } catch (_) {}
+        win.removeEventListener("pointermove", onMove);
+        win.removeEventListener("pointerup", onUp);
+        win.removeEventListener("pointercancel", onUp);
       }
 
-      function applyDesktopPosition(win) {
-        const x = parseFloat(win.dataset.x || "0");
-        const y = parseFloat(win.dataset.y || "0");
-        win.style.left = x + "px";
-        win.style.top  = y + "px";
-      }
+      win.addEventListener("pointermove", onMove);
+      win.addEventListener("pointerup", onUp);
+      win.addEventListener("pointercancel", onUp);
+    });
 
-      function applyMobilePosition(win) {
-        // Let CSS grid place it. Remove absolute offsets.
-        win.style.left = "";
-        win.style.top = "";
-      }
+    return win;
+  }
 
-      function syncModeClass() {
-        if (isMobile()) desktop.classList.add("is-mobile");
-        else desktop.classList.remove("is-mobile");
+  function populate() {
+    desktop.innerHTML = "";
 
-        // Update existing windows when switching modes
-        const wins = Array.from(desktop.querySelectorAll(".pwin"));
-        wins.forEach(win => {
-          if (isMobile()) applyMobilePosition(win);
-          else applyDesktopPosition(win);
-        });
-      }
+    // Create all windows first
+    const wins = PRACTICE.map(item => {
+      const w = createWindow(item);
+      desktop.appendChild(w);
+      return w;
+    });
 
-      function createWindow(item) {
-        const win = document.createElement("div");
-        win.className = "pwin";
-        win.dataset.id = item.id;
-        win.dataset.x = String(item.x);
-        win.dataset.y = String(item.y);
-
-        win.style.zIndex = String(++zTop);
-
-        // apply initial placement based on mode
-        if (isMobile()) applyMobilePosition(win);
-        else applyDesktopPosition(win);
-
-        win.innerHTML = `
-          <div class="pwin-bar" role="toolbar">
-            <button class="pwin-close" type="button" aria-label="Close window">×</button>
-            <div class="pwin-title" title="${item.title}">${item.title}</div>
-          </div>
-
-          <div class="pwin-body" role="button" tabindex="0" aria-label="Open description">
-            <img src="${item.src}" alt="${item.title}">
-          </div>
-
-          <div class="pwin-overlay" aria-hidden="true">
-            <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
-            <div class="pwin-overlay-scroll">
-              <div class="pwin-overlay-text"></div>
-            </div>
-          </div>
-        `;
-
-        const bar = win.querySelector(".pwin-bar");
-        const close = win.querySelector(".pwin-close");
-        const body = win.querySelector(".pwin-body");
-
-        const overlay = win.querySelector(".pwin-overlay");
-        const minBtn = win.querySelector(".pwin-min");
-        const overlayScroll = win.querySelector(".pwin-overlay-scroll");
-        const overlayText = win.querySelector(".pwin-overlay-text");
-
-        function openOverlay(e) {
-          if (e) e.stopPropagation();
-          bringToFront(win);
-
-          overlayText.innerHTML = getTemplateHTML(item.id);
-          overlay.classList.add("active");
-          overlay.setAttribute("aria-hidden", "false");
-          overlayScroll.scrollTop = 0;
-
-          minBtn.focus({ preventScroll: true });
-        }
-
-        function closeOverlay(e) {
-          if (e) e.stopPropagation();
-          overlay.classList.remove("active");
-          overlay.setAttribute("aria-hidden", "true");
-        }
-
-        // Close window: on mobile we animate it shrinking a bit; grid reflows automatically
-        close.addEventListener("click", (e) => {
-          e.stopPropagation();
-
-          win.classList.add("removing");
-          // after transition ends, remove
-          const t = isMobile() ? 140 : 0;
-          setTimeout(() => win.remove(), t);
-        });
-
-        win.addEventListener("pointerdown", () => bringToFront(win));
-
-        body.addEventListener("click", openOverlay);
-        body.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === " ") openOverlay(e);
-        });
-
-        minBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
-        minBtn.addEventListener("click", closeOverlay);
-
-        overlay.addEventListener("pointerdown", (e) => e.stopPropagation());
-        overlay.addEventListener("click", (e) => e.stopPropagation());
-
-        // Esc closes only if that overlay is open (same as your original intent)
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
-        });
-
-        // DRAG (DESKTOP ONLY): this keeps your current web behavior intact.
-        bar.addEventListener("pointerdown", (e) => {
-          if (isMobile()) return; // mobile grid: no drag
-          if (e.target === close) return;
-          e.preventDefault();
-          bringToFront(win);
-
-          const rectDesk = desktop.getBoundingClientRect();
-          const rectWin = win.getBoundingClientRect();
-
-          const startX = e.clientX;
-          const startY = e.clientY;
-
-          const startLeft = rectWin.left - rectDesk.left;
-          const startTop  = rectWin.top  - rectDesk.top;
-
-          win.setPointerCapture(e.pointerId);
-
-          function onMove(ev) {
-            const dx = ev.clientX - startX;
-            const dy = ev.clientY - startY;
-
-            const nextLeft = startLeft + dx;
-            const nextTop  = startTop + dy;
-
-            win.style.left = nextLeft + "px";
-            win.style.top  = nextTop + "px";
-
-            // persist position so if you rotate/switch back, it keeps the moved spot
-            win.dataset.x = String(nextLeft);
-            win.dataset.y = String(nextTop);
-          }
-
-          function onUp() {
-            win.releasePointerCapture(e.pointerId);
-            win.removeEventListener("pointermove", onMove);
-            win.removeEventListener("pointerup", onUp);
-            win.removeEventListener("pointercancel", onUp);
-          }
-
-          win.addEventListener("pointermove", onMove);
-          win.addEventListener("pointerup", onUp);
-          win.addEventListener("pointercancel", onUp);
-        });
-
-        return win;
-      }
-
-      function populate() {
-        desktop.innerHTML = "";
-        PRACTICE.forEach(item => desktop.appendChild(createWindow(item)));
-        syncModeClass();
-      }
-
-      resetBtn.addEventListener("click", populate);
-      populate();
-
-      // On resize/orientation, only adjust mode (do NOT reposition desktop windows)
-      let resizeTimer = null;
-      window.addEventListener("resize", () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(syncModeClass, 120);
+    // Desktop: assign the splayed positions (new randomness each reset)
+    if (!isMobile()) {
+      const positions = computeSplayPositions(wins.length);
+      wins.forEach((win, i) => {
+        win.dataset.x = String(positions[i].x);
+        win.dataset.y = String(positions[i].y);
+        applyDesktopPosition(win);
       });
-      mqMobile.addEventListener?.("change", syncModeClass);
-    })();
+    }
+
+    syncModeClass();
+  }
+
+  resetBtn.addEventListener("click", populate);
+  populate();
+
+  // On resize/orientation: only switch mode; do not re-splay unless reset is pressed.
+  let resizeTimer = null;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(syncModeClass, 120);
+  });
+
+  // Some browsers support matchMedia change
+  mqMobile.addEventListener?.("change", syncModeClass);
+})();
   </script>
 
 </body>
