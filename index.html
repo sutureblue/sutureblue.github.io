@@ -215,7 +215,6 @@
       const overlayScroll = workItem.querySelector(".overlay-scroll");
       const overlayText = workItem.querySelector(".overlay-text");
 
-      const readMore = workItem.querySelector(".read-more");
       const closeBtn = workItem.querySelector(".overlay-close");
 
       const titleEl = workItem.querySelector(".project-title");
@@ -312,7 +311,6 @@
         if (lastFocusEl) lastFocusEl.focus({ preventScroll: true });
       }
 
-      readMore.onclick = openOverlay;
       centerArea.onclick = openOverlay;
 
       centerArea.addEventListener("keydown", (e) => {
