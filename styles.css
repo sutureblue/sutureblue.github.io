@@ -521,12 +521,11 @@ body {
   }
 
   /* remove the heavy “base slab” shadow on mobile if it feels too chunky */
-  .practice-desktop.is-mobile .pwin-body {
-    box-shadow:
-      0 10px 0 rgba(0,0,0,0.92),
-      0 10px 24px rgba(0,0,0,0.70),
-      0 0 18px rgba(23,162,184,0.14);
-  }
+.practice-desktop.is-mobile .pwin-body {
+  box-shadow:
+    0 10px 24px rgba(0,0,0,0.70),
+    0 0 18px rgba(23,162,184,0.14);
+}
 
   .practice-desktop.is-mobile .pwin-close {
     font-size: 20px;
