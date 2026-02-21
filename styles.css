@@ -476,20 +476,6 @@ body {
 .footer-note { opacity: 0.8; }
 
 /* CV button/link */
-.cv-btn {
-  margin-top: 10px;
-  background: rgba(0,0,0,0.55);
-  border: 1px solid rgba(255,255,255,0.10);
-  color: var(--fg);
-  border-radius: 12px;
-  padding: 10px 12px;
-  cursor: pointer;
-  box-shadow:
-    0 10px 24px rgba(0,0,0,0.55),
-    0 0 14px rgba(23,162,184,0.14);
-}
-.cv-btn:hover { color: var(--glow-blue); border-color: rgba(23,162,184,0.35); }
-
 .cv-link {
   display: inline-block;
   margin-left: 10px;
