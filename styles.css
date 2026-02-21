@@ -265,6 +265,15 @@ body {
 .work-meta { margin-top: 12px; text-align: left; }
 .work-meta h3 { margin: 0 0 4px; font-size: 15px; }
 
+.project-title {
+  cursor: pointer;
+}
+
+.project-title:hover {
+  color: var(--glow-blue);
+}
+
+
 /* =========================
    Reset + Starting area
    ========================= */
