@@ -574,28 +574,35 @@
     return win;
   }
 
-  function populate() {
-    desktop.innerHTML = "";
+function populate() {
+  desktop.innerHTML = "";
 
-    // Create all windows first
-    const wins = PRACTICE.map(item => {
-      const w = createWindow(item);
-      desktop.appendChild(w);
-      return w;
-    });
+  const wins = PRACTICE.map(item => {
+    const w = createWindow(item);
+    desktop.appendChild(w);
+    return w;
+  });
 
-    // Desktop: assign the splayed positions (new randomness each reset)
-    if (!isMobile()) {
-      const positions = computeSplayPositions(wins.length);
-      wins.forEach((win, i) => {
-        win.dataset.x = String(positions[i].x);
-        win.dataset.y = String(positions[i].y);
-        applyDesktopPosition(win);
-      });
+  // Let layout settle before we measure + place (prevents bad clamping / weird stacks)
+  const placeDesktop = () => {
+    if (isMobile()) {
+      syncModeClass();
+      return;
     }
 
+    const positions = computeSplayPositions(wins.length);
+    wins.forEach((win, i) => {
+      win.dataset.x = String(positions[i].x);
+      win.dataset.y = String(positions[i].y);
+      applyDesktopPosition(win);
+    });
+
     syncModeClass();
-  }
+  };
+
+  // 2 RAFs makes this resilient to late layout shifts (video/font)
+  requestAnimationFrame(() => requestAnimationFrame(placeDesktop));
+}
 
   resetBtn.addEventListener("click", populate);
   populate();
