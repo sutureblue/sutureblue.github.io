@@ -303,9 +303,10 @@ body {
 
 .practice-label {
   font-size: 14px;
-  color: var(--fg);   /* white */
+  color: var(--glow-blue);
   font-weight: 600;   /* bold */
   letter-spacing: 0.2px;
+  text-shadow: 0 0 6px rgba(23,162,184,0.35);
 }
 
 .practice-desktop {
