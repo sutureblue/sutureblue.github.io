@@ -279,10 +279,10 @@ body {
    ========================= */
 
 .practice-controls {
-  width: 100%;
-  margin: 22px 0 10px;
   display: flex;
-  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  margin: 22px 0 10px;
 }
 
 .practice-reset {
@@ -302,9 +302,9 @@ body {
 .practice-reset:hover { color: var(--glow-blue); border-color: rgba(23,162,184,0.35); }
 
 .practice-label {
-  margin-left: 10px;
   font-size: 14px;
-  color: var(--muted);
+  color: var(--fg);   /* white */
+  font-weight: 600;   /* bold */
   letter-spacing: 0.2px;
 }
 
