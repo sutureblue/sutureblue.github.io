@@ -352,39 +352,44 @@ body {
   user-select: none;
 }
 
-.pwin-bar {
+.pwin-bar{
   height: var(--bar-h, 34px);
   background: rgba(0,0,0,0.92);
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto; /* title takes the space, X is fixed */
   align-items: center;
-  justify-content: space-between;
   padding: 0 10px;
   cursor: grab;
+  gap: 10px;
 }
 .pwin-bar:active { cursor: grabbing; }
 
-.pwin-close {
+.pwin-close{
+  justify-self: end;
   background: none;
   border: none;
   color: #fff;
   font-size: 18px;
   line-height: 1;
-  padding: 0;
+  padding: 6px 8px;
+  border-radius: 10px;
   cursor: pointer;
   opacity: 0.95;
 }
 .pwin-close:hover { color: var(--glow-blue); }
 
-.pwin-title {
+.pwin-title{
+  justify-self: start;
+  text-align: left;
   color: #fff;
   font-size: var(--title-size, 14px);
   font-weight: 600;
   letter-spacing: 0.2px;
-  text-align: right;
 
-  max-width: calc(var(--win-w, 300px) - 70px);
-  white-space: nowrap;
+  /* prevent overlap: title truncates before it reaches the X */
+  min-width: 0;              /* critical for truncation in grid/flex */
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
 
