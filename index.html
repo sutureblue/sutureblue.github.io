@@ -358,17 +358,6 @@
       renderStacks();
     });
 
-    /* ---------- CV: open PDF in a new tab ---------- */
-    (() => {
-      const btn = document.getElementById("openCv");
-      if (!btn) return;
-
-      btn.addEventListener("click", () => {
-        // opens a new tab/window without giving it access to your page
-        window.open("assets/BeeNix_CV_2026.pdf", "_blank", "noopener,noreferrer");
-      });
-    })();
-
 /* ---------- Practice Windows
    Desktop: draggable windows + right-splayed randomized zig-zag spawn (like your screenshot)
    Mobile: 2-col grid; close removes tile and grid reflows; reset repopulates.
