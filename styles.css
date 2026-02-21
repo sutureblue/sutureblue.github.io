@@ -291,7 +291,7 @@ body {
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,0.10);
   background: rgba(0,0,0,0.55);
-  color: var(--fg);
+  color: rgb(23, 162, 184);
   cursor: pointer;
   display: grid;
   place-items: center;
