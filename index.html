@@ -731,6 +731,9 @@
 // browser hover tooltip
 a.title = proj.label;
 a.setAttribute("aria-label", proj.label);
+
+// remove tooltip on mobile (keep your tap-to-show label flow)
+if (isMobile()) a.removeAttribute("title");
             
             a.style.left = `${x}px`;
             a.style.top = `${y}px`;
