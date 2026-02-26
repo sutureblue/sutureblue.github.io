@@ -655,51 +655,105 @@ function populate() {
   mqMobile.addEventListener?.("change", syncModeClass);
 })();
 
+    
+
     /* ---------- Pixel Links ---------- */
   (() => {
-    const layer = document.getElementById("pixelLinks");
-    const page = document.querySelector(".page");
-    if (!layer || !page) return;
+  const layer = document.getElementById("pixelLinks");
+  if (!layer) return;
 
-    const EXTRA = [
-      { href: "https://example.com/project-1", label: "Project 1" },
-      { href: "https://example.com/project-2", label: "Project 2" },
-      { href: "https://example.com/project-3", label: "Project 3" },
-    ];
+  // Add your extra projects here
+  const EXTRA = [
+    { href: "https://example.com/project-1", label: "Project 1" },
+    { href: "https://example.com/project-2", label: "Project 2" },
+    { href: "https://example.com/project-3", label: "Project 3" },
+  ];
 
-    const COLORS = [
-      "#17a2b8", "#7fd3e0", "#b7ff5a", "#ff4fd8", "#ffd24f", "#7a5cff"
-    ];
+  const COLORS = ["#17a2b8", "#7fd3e0", "#b7ff5a", "#ff4fd8", "#ffd24f", "#7a5cff"];
 
-    function rand(min, max){ return min + Math.random() * (max - min); }
-    function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+  // “avoid” targets (only these)
+  const AVOID_SELECTORS = [".carousel", ".about-meta"];
 
-    function clearPixels() {
-      layer.innerHTML = "";
+  // Tune these
+  const RELOCATE_MS = 30000;
+  const AVOID_PADDING = 18;      // extra breathing room around avoided areas
+  const PIXEL_SIZE = 6;
+  const COUNT_DESKTOP = 26;
+  const COUNT_MOBILE = 16;
+
+  const rand = (min, max) => min + Math.random() * (max - min);
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+  function clearPixels() {
+    layer.innerHTML = "";
+  }
+
+  function getAvoidRects() {
+    const rects = [];
+    AVOID_SELECTORS.forEach(sel => {
+      const el = document.querySelector(sel);
+      if (!el) return;
+
+      const r = el.getBoundingClientRect();
+
+      // Skip if element is basically offscreen (helps avoid “ghost blocking”)
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const offscreen =
+        r.bottom < 0 || r.top > vh || r.right < 0 || r.left > vw;
+      if (offscreen) return;
+
+      rects.push({
+        left: r.left - AVOID_PADDING,
+        top: r.top - AVOID_PADDING,
+        right: r.right + AVOID_PADDING,
+        bottom: r.bottom + AVOID_PADDING
+      });
+    });
+    return rects;
+  }
+
+  function pointInRect(x, y, r) {
+    return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+  }
+
+  function safeSpot(x, y, avoidRects) {
+    // check the pixel’s center point
+    const cx = x + PIXEL_SIZE / 2;
+    const cy = y + PIXEL_SIZE / 2;
+    for (const r of avoidRects) {
+      if (pointInRect(cx, cy, r)) return false;
     }
+    return true;
+  }
 
-    function spawnPixels() {
-      clearPixels();
+  function spawnPixels() {
+    clearPixels();
 
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const r = page.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
 
-      const leftGutterMaxX = Math.max(0, r.left - 10);
-      const rightGutterMinX = Math.min(vw, r.right + 10);
+    const avoidRects = getAvoidRects();
 
-      const leftGutterW  = leftGutterMaxX;
-      const rightGutterW = vw - rightGutterMinX;
-      const gutterArea = (leftGutterW + rightGutterW) * vh;
+    const count = (vw <= 760) ? COUNT_MOBILE : COUNT_DESKTOP;
 
-      if (gutterArea < 20000) return;
+    // If there are no links, don’t create dead pixels (unless you want that vibe)
+    if (!EXTRA.length) return;
 
-      const pixels = Math.min(60, Math.max(18, Math.floor(gutterArea / 45000)));
+    // Shuffle so which projects appear changes each cycle
+    const shuffled = [...EXTRA].sort(() => Math.random() - 0.5);
 
-      const shuffled = [...EXTRA].sort(() => Math.random() - 0.5);
+    const maxAttemptsPerPixel = 120;
 
-      for (let i = 0; i < pixels; i++) {
-        const proj = shuffled[i % shuffled.length];
+    for (let i = 0; i < count; i++) {
+      const proj = shuffled[i % shuffled.length];
+
+      let placed = false;
+
+      for (let attempt = 0; attempt < maxAttemptsPerPixel; attempt++) {
+        const x = rand(6, vw - (PIXEL_SIZE + 6));
+        const y = rand(6, vh - (PIXEL_SIZE + 6));
+
+        if (!safeSpot(x, y, avoidRects)) continue;
 
         const a = document.createElement("a");
         a.className = "pixel-link";
@@ -707,33 +761,35 @@ function populate() {
         a.target = "_blank";
         a.rel = "noreferrer";
         a.title = proj.label;
-
-        const color = pick(COLORS);
-        a.style.background = color;
-
-        const chooseLeft = Math.random() < (leftGutterW / (leftGutterW + rightGutterW));
-
-        let x;
-        if (chooseLeft) x = rand(6, Math.max(6, leftGutterMaxX - 10));
-        else x = rand(Math.min(vw - 10, rightGutterMinX + 6), vw - 10);
-
-        const y = rand(10, vh - 10);
-
+        a.style.background = pick(COLORS);
         a.style.left = `${x}px`;
         a.style.top = `${y}px`;
 
         layer.appendChild(a);
+        placed = true;
+        break;
       }
+
+      // If we failed to place (very small screens + big avoid zones), just skip that pixel.
+      if (!placed) continue;
     }
+  }
 
-    let t = null;
-    window.addEventListener("resize", () => {
-      clearTimeout(t);
-      t = setTimeout(spawnPixels, 120);
-    });
+  // Respawn on resize and on scroll (scroll matters because avoid rects move)
+  let t = null;
+  function scheduleSpawn() {
+    clearTimeout(t);
+    t = setTimeout(spawnPixels, 80);
+  }
 
-    spawnPixels();
-  })();
+  window.addEventListener("resize", scheduleSpawn, { passive: true });
+  window.addEventListener("scroll", scheduleSpawn, { passive: true });
+
+  // Relocate periodically
+  setInterval(spawnPixels, RELOCATE_MS);
+
+  spawnPixels();
+})();
     
   </script>
 
