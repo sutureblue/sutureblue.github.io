@@ -95,19 +95,39 @@ body {
   pointer-events: none; /* container ignores clicks */
 }
 
-.pixel-link{
+.pixel-label{
   position: absolute;
-  width: 6px;
-  height: 6px;
-  border-radius: 1px;
-  pointer-events: auto; /* link clickable */
-  opacity: 0.85;
-  box-shadow: 0 0 10px rgba(255,255,255,0.10);
+  left: 14px;
+  top: -6px;
+  font-size: 12px;
+  color: #17a2b8;
+  background: rgba(0,0,0,0.85);
+  padding: 3px 6px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: auto;
+  border: 1px solid rgba(23,162,184,0.35);
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity 120ms ease, transform 120ms ease;
 }
 
+.pixel-link.show-label .pixel-label{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* desktop hover = nice */
 .pixel-link:hover{
   opacity: 1;
   transform: scale(1.6);
+}
+
+/* touch devices: don’t do hover scaling */
+@media (pointer: coarse){
+  .pixel-link:hover{
+    transform: none;
+  }
 }
 
 /* optional: subtle “twinkle” so they feel alive */
@@ -117,6 +137,7 @@ body {
 }
 .pixel-link.twinkle{
   animation: pixelTwinkle 2.2s ease-in-out infinite;
+  animation-delay: var(--twinkle-delay, 0s);
 }
 
 /* Sections */
