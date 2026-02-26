@@ -664,9 +664,11 @@ function populate() {
 
   // Add your extra projects here
   const EXTRA = [
-    { href: "https://example.com/project-1", label: "Project 1" },
-    { href: "https://example.com/project-2", label: "Project 2" },
-    { href: "https://example.com/project-3", label: "Project 3" },
+    { href: "https://www.youtube.com/live/q7vPZkCKukQ", label: "Speedrun" },
+    { href: "https://www.youtube.com/watch?v=tWp3CEuwzdE", label: "Totally Not" },
+    { href: "https://www.youtube.com/watch?v=u7pGPptqkjs", label: "AI" },
+    { href: "https://youtu.be/2FZ3mJfzuf0?si=Zpk4Jbf2mxt8pVf-", label: "Gork" },
+    { href: "https://youtu.be/pT5MtQJTCVA", label: "Scanlines" },
   ];
 
   const COLORS = ["#17a2b8", "#7fd3e0", "#b7ff5a", "#ff4fd8", "#ffd24f", "#7a5cff"];
@@ -678,8 +680,8 @@ function populate() {
   const RELOCATE_MS = 30000;
   const AVOID_PADDING = 18;      // extra breathing room around avoided areas
   const PIXEL_SIZE = 6;
-  const COUNT_DESKTOP = 26;
-  const COUNT_MOBILE = 16;
+  const COUNT_DESKTOP = 5;
+  const COUNT_MOBILE = 5;
 
   const rand = (min, max) => min + Math.random() * (max - min);
   const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
