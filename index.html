@@ -587,7 +587,7 @@
         const nextLeft = startLeft + dx;
         const nextTop  = startTop + dy;
 
-        // NO snapping. NO clamping. Pure gremlin freedom (as requested earlier).
+        // NO snapping. NO clamping. Pure gremlin freedom
         win.style.left = nextLeft + "px";
         win.style.top  = nextTop + "px";
 
@@ -654,6 +654,87 @@ function populate() {
   // Some browsers support matchMedia change
   mqMobile.addEventListener?.("change", syncModeClass);
 })();
+
+    /* ---------- Pixel Links ---------- */
+  (() => {
+    const layer = document.getElementById("pixelLinks");
+    const page = document.querySelector(".page");
+    if (!layer || !page) return;
+
+    const EXTRA = [
+      { href: "https://example.com/project-1", label: "Project 1" },
+      { href: "https://example.com/project-2", label: "Project 2" },
+      { href: "https://example.com/project-3", label: "Project 3" },
+    ];
+
+    const COLORS = [
+      "#17a2b8", "#7fd3e0", "#b7ff5a", "#ff4fd8", "#ffd24f", "#7a5cff"
+    ];
+
+    function rand(min, max){ return min + Math.random() * (max - min); }
+    function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+
+    function clearPixels() {
+      layer.innerHTML = "";
+    }
+
+    function spawnPixels() {
+      clearPixels();
+
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const r = page.getBoundingClientRect();
+
+      const leftGutterMaxX = Math.max(0, r.left - 10);
+      const rightGutterMinX = Math.min(vw, r.right + 10);
+
+      const leftGutterW  = leftGutterMaxX;
+      const rightGutterW = vw - rightGutterMinX;
+      const gutterArea = (leftGutterW + rightGutterW) * vh;
+
+      if (gutterArea < 20000) return;
+
+      const pixels = Math.min(60, Math.max(18, Math.floor(gutterArea / 45000)));
+
+      const shuffled = [...EXTRA].sort(() => Math.random() - 0.5);
+
+      for (let i = 0; i < pixels; i++) {
+        const proj = shuffled[i % shuffled.length];
+
+        const a = document.createElement("a");
+        a.className = "pixel-link";
+        a.href = proj.href;
+        a.target = "_blank";
+        a.rel = "noreferrer";
+        a.title = proj.label;
+
+        const color = pick(COLORS);
+        a.style.background = color;
+
+        const chooseLeft = Math.random() < (leftGutterW / (leftGutterW + rightGutterW));
+
+        let x;
+        if (chooseLeft) x = rand(6, Math.max(6, leftGutterMaxX - 10));
+        else x = rand(Math.min(vw - 10, rightGutterMinX + 6), vw - 10);
+
+        const y = rand(10, vh - 10);
+
+        a.style.left = `${x}px`;
+        a.style.top = `${y}px`;
+
+        layer.appendChild(a);
+      }
+    }
+
+    let t = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(t);
+      t = setTimeout(spawnPixels, 120);
+    });
+
+    spawnPixels();
+  })();
+    
   </script>
 
 </body>
