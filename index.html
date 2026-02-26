@@ -773,6 +773,8 @@ function populate() {
         a.style.width = `${PIXEL_SIZE}px`;
         a.style.height = `${PIXEL_SIZE}px`;
         a.style.background = proj.color || "#17a2b8";
+        a.classList.add("twinkle");
+        a.style.setProperty("--twinkle-delay", `${Math.random() * 2.2}s`);
 
         // label (shown on mobile-first tap)
         const label = document.createElement("span");
