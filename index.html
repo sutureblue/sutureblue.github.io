@@ -668,10 +668,8 @@ function populate() {
     { href: "https://www.youtube.com/watch?v=tWp3CEuwzdE", label: "Totally not a Speedrun /’fubar/ 2o22", color: "#ff4fd8"},
     { href: "https://www.youtube.com/watch?v=u7pGPptqkjs", label: "A.I. and Online Communities", color: "#ffd24f" },
     { href: "https://youtu.be/2FZ3mJfzuf0?si=Zpk4Jbf2mxt8pVf-", label: "Gork", color: "#7a5cff" },
-    { href: "https://youtu.be/pT5MtQJTCVA", label: "Scanlines.xyz", color: #b7ff5a },
+    { href: "https://youtu.be/pT5MtQJTCVA", label: "Scanlines.xyz", color: "#b7ff5a" },
   ];
-
-  const COLORS = ["#17a2b8", "#7fd3e0", "#b7ff5a", "#ff4fd8", "#ffd24f", "#7a5cff"];
 
   // “avoid” targets (only these)
   const AVOID_SELECTORS = [".carousel", ".about-meta"];
@@ -763,7 +761,7 @@ function populate() {
         a.target = "_blank";
         a.rel = "noreferrer";
         a.title = proj.label;
-        a.style.background = pick(COLORS);
+        a.style.background = proj.color || "#17a2b8";
         a.style.left = `${x}px`;
         a.style.top = `${y}px`;
 
