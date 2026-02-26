@@ -785,7 +785,6 @@ function populate() {
   }
 
   window.addEventListener("resize", scheduleSpawn, { passive: true });
-  window.addEventListener("scroll", scheduleSpawn, { passive: true });
 
   // Relocate periodically
   setInterval(spawnPixels, RELOCATE_MS);
