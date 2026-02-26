@@ -9,8 +9,10 @@
 </head>
 
 <body>
- <div id="pixelLinks"></div>
-      <div class="page">
+  <!-- Pixel link layer (fixed above everything) -->
+  <div id="pixelLinks" aria-hidden="true"></div>
+
+  <div class="page">
 
     <div class="top">
       <header class="site-header">
@@ -31,7 +33,7 @@
 
       <!-- PRACTICE -->
       <section id="practice" class="section">
-        <h2></h2> <!--this is where you can add text above carousel if you want -->
+        <h2></h2>
 
         <!-- Carousel -->
         <div class="work-item">
@@ -57,9 +59,9 @@
                   <img src="assets/glitchplay.png" data-title="Glitch Play (2025)" data-template=".tpl-glitchplay" alt="">
                   <img src="assets/gNg.png"        data-title="Glitch'N'Games (2024)" data-template=".tpl-gng" alt="">
                   <img src="assets/mfru.png"       data-title="MFRU (2023)" data-template=".tpl-mfru" alt="">
-                  <img src="assets/shadesOfPrecision.png"       data-title="Shades Of Precision (2023)" data-template=".tpl-shadesOfPrecision" alt="">
-                  <img src="assets/notGlitch.png"       data-title="/NOT.GLI.TCH/H (2023)" data-template=".tpl-notGlitch" alt="">
-                  <img src="assets/hereWeAre.png"       data-title="Here We Are (2022)" data-template=".tpl-hereWeAre" alt="">
+                  <img src="assets/shadesOfPrecision.png" data-title="Shades Of Precision (2023)" data-template=".tpl-shadesOfPrecision" alt="">
+                  <img src="assets/notGlitch.png"  data-title="/NOT.GLI.TCH/H (2023)" data-template=".tpl-notGlitch" alt="">
+                  <img src="assets/hereWeAre.png"  data-title="Here We Are (2022)" data-template=".tpl-hereWeAre" alt="">
                 </div>
 
                 <div class="work-overlay" aria-hidden="true" role="dialog" aria-modal="true">
@@ -124,7 +126,7 @@
               The exhibition reveals precision and chaos as collaborators. From Tomasz Sulej's meticulous GLIC codec to APIACOAB's pixel-perfect narratives, deliberate control amplifies disorder, transforming glitches into intentional expression. Every pixel, every distortion, an authentic creation in the digital realm.
             </p>
           </template>
-          
+
           <template class="tpl-notGlitch">
             <p>
               /NOT.GLI.TCH/H was held at the University of Chicago. I presented a talk about online community through the lens of my involvement with Glitch Artists Collective (GAC), likely the world’s largest Glitch Art community.
@@ -133,30 +135,28 @@
               GAC was established in 2013 on Facebook first (though is also on Instagram, Twitter, and Tumblr) and I initially became involved as an artist near the end of 2014, later becoming curator, which I still am, and occasionally an admin. My talk discussed the aesthetic evolutions of glitch within the community, what questions the community concerns/ed themselves with, the importance of earnest connection + IRL gatherings, and the protective trust based + open-source principles that sets GAC apart from other internet communities.
             </p>
           </template>
-          
-         <template class="tpl-hereWeAre">
+
+          <template class="tpl-hereWeAre">
             <p>
               This discussion was had during the third iteration of GlitchArtIsDead, first shown in Poland in 2015. I was one of the main organizers and curators for GAID III, which featured just over 100 artists from 13 countries, and received a grant from the Southwest Minnesota Arts Council. I moderated this roundtable discussion with Dr. Michael Betancourt, an artist curated into the show whom I asked to also lead this discussion, along with others, including Jamie Fenton, John Bumstead, Aleksandra Pieńkosz, Sabato Visconti, Kaspar Ravel, Sky Goodman and more. The conversation traced glitch art's evolution from 1980s-90s technical accidents to intentional symbolic works that challenge digital boundaries. Participants shared personal experiences with digital disruptions and explored how Glitch Art addresses themes of authenticity, community values, and resistance to commercial frameworks. We examined the physical materiality of digital art and discussed how the movement builds creative resilience within increasingly regulated digital landscapes.
             </p>
-           <p>
-             <a href="assets/HereWeAre_GAID3_2022.pdf" target="_blank" rel="noreferrer">Read the text script for "Here We Are"</a>
-           </p>
-           <p>
-             Photo taken by <a href="https://www.instagram.com/platinumjimjam/" target="_blank" rel="noreferrer">Jim Jam</a>
-           </p>
-       </template>
+            <p>
+              <a href="assets/HereWeAre_GAID3_2022.pdf" target="_blank" rel="noreferrer">Read the text script for "Here We Are"</a>
+            </p>
+            <p>
+              Photo taken by <a href="https://www.instagram.com/platinumjimjam/" target="_blank" rel="noreferrer">Jim Jam</a>
+            </p>
+          </template>
         </div>
 
         <!-- Reset button BELOW carousel -->
         <div class="practice-controls">
           <button id="practiceReset" class="practice-reset" type="button" aria-label="Reset practice windows" title="Reset">↺</button>
-            <span class="practice-label">Practice</span>
+          <span class="practice-label">Practice</span>
         </div>
 
         <!-- Starting area BELOW reset -->
-        <div id="practiceDesktop" class="practice-desktop" aria-label="Draggable practice windows">
-          <!-- windows injected by JS -->
-        </div>
+        <div id="practiceDesktop" class="practice-desktop" aria-label="Draggable practice windows"></div>
 
         <!-- Practice text templates -->
         <template id="tpl-colourorgan">
@@ -166,7 +166,7 @@
         <template id="tpl-discussiongame">
           <p>Discussion Game was a participatory conversation game that I developed and moderated for Glitch'N'Games’24. Featuring artists, theorists, and gamers including Jamie Fenton, Nick Briz, Sabato Visconti, Kaspar Ravel, and more, the conversation used prompt cards to guide an open-ended dialogue on glitch, control, and play. Topics ranged from quantum logic to surveillance culture, pedagogical theory to personal glitch histories. Rather than defining the glitch, the session treated it as a generative lens—where system instability became a site for shared interpretation, critique, and improvisation.</p>
           <p>
-             <a href="assets/gNg_DiscussionGame_BeeNix2024.pdf" target="_blank" rel="noreferrer">Read the text script for "Discussion Game"</a>
+            <a href="assets/gNg_DiscussionGame_BeeNix2024.pdf" target="_blank" rel="noreferrer">Read the text script for "Discussion Game"</a>
           </p>
           <p>Photo taken by <a href="http://nickbriz.com/" target="_blank" rel="noreferrer">Nick Briz</a></p>
         </template>
@@ -203,7 +203,6 @@
               Time-based and experiential works tend to be what I make the most.
             </p>
 
-            <!-- CV button -->
             <a class="cv-link" href="assets/BeeNix_CV_2026.pdf" target="_blank" rel="noreferrer">View CV</a>
           </div>
 
@@ -240,7 +239,7 @@
   </div>
 
   <script>
-    /* ---------- Carousel + Overlay (UNCHANGED from your original) ---------- */
+    /* ---------- Carousel + Overlay (UNCHANGED) ---------- */
     document.querySelectorAll(".work-item").forEach((workItem) => {
       const carousel = workItem.querySelector(".carousel");
 
@@ -250,7 +249,6 @@
       const overlayText = workItem.querySelector(".overlay-text");
 
       const closeBtn = workItem.querySelector(".overlay-close");
-
       const titleEl = workItem.querySelector(".project-title");
 
       const centerImg = carousel.querySelector(".carousel-center-img");
@@ -346,7 +344,7 @@
       }
 
       centerArea.onclick = openOverlay;
-      
+
       titleEl.style.cursor = "pointer";
       titleEl.onclick = openOverlay;
 
@@ -365,464 +363,415 @@
       renderStacks();
     });
 
-/* ---------- Practice Windows
-   Desktop: draggable windows + right-splayed randomized zig-zag spawn (like your screenshot)
-   Mobile: 2-col grid; close removes tile and grid reflows; reset repopulates.
----------- */
-(() => {
-  const desktop = document.getElementById("practiceDesktop");
-  const resetBtn = document.getElementById("practiceReset");
-  if (!desktop || !resetBtn) return;
+    /* ---------- Practice Windows (UNCHANGED) ---------- */
+    (() => {
+      const desktop = document.getElementById("practiceDesktop");
+      const resetBtn = document.getElementById("practiceReset");
+      if (!desktop || !resetBtn) return;
 
-  const PRACTICE = [
-    { id:"drawing",        src:"assets/Drawing_1.png",        title:"Animations & Drawings" },
-    { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication" },
-    { id:"lightsleeper",   src:"assets/LightSleeper_1.png",   title:"Light Sleeper, Heavy Dreamer (2020)" },
-    { id:"colourorgan",    src:"assets/ColourOrgan_1.png",    title:"Colour Organ (2021)" },
-    { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"An Uncanny Scene (2022)" },
-    { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game (2024)" },
-  ];
+      const PRACTICE = [
+        { id:"drawing",        src:"assets/Drawing_1.png",        title:"Animations & Drawings" },
+        { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication" },
+        { id:"lightsleeper",   src:"assets/LightSleeper_1.png",   title:"Light Sleeper, Heavy Dreamer (2020)" },
+        { id:"colourorgan",    src:"assets/ColourOrgan_1.png",    title:"Colour Organ (2021)" },
+        { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"An Uncanny Scene (2022)" },
+        { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game (2024)" },
+      ];
 
-  const mqMobile = window.matchMedia("(max-width: 760px)");
-  const isMobile = () => mqMobile.matches;
+      const mqMobile = window.matchMedia("(max-width: 760px)");
+      const isMobile = () => mqMobile.matches;
 
-  let zTop = 10;
+      let zTop = 10;
 
-  function getTemplateHTML(id) {
-    const tpl = document.getElementById(`tpl-${id}`);
-    return tpl ? tpl.innerHTML : `<p><strong>${id}</strong></p>`;
-  }
-
-  function bringToFront(win) {
-    win.style.zIndex = String(++zTop);
-  }
-
-  function randBetween(min, max) {
-    return min + Math.random() * (max - min);
-  }
-
-  function clamp(n, min, max) {
-    return Math.max(min, Math.min(max, n));
-  }
-
-  // Compute right-splayed zig-zag spawn positions for DESKTOP mode
-  function computeSplayPositions(count) {
-    // Use known default window dimensions on desktop (your CSS defaults)
-    const WIN_W = 300;
-    const BAR_H = 34;
-    const IMG_H = 250;
-    const WIN_H = BAR_H + IMG_H;
-
-    // Ensure desktop has a measurable rect (in case of first load)
-    const rect = desktop.getBoundingClientRect();
-    const deskW = Math.max(320, rect.width || 320);
-    const deskH = Math.max(520, rect.height || 520);
-
-    // You can tune these to taste
-    const startX  = 30;
-    const startY  = 24;
-    const stepX   = 140; // splay right
-    const stepY   = 10;  // gentle descent
-    const zigAmp  = 26;  // up/down swing
-    const jitterX = 14;  // slight hand-placed feel
-    const jitterY = 10;
-
-    // bounds: avoid starting in the void
-    const minX = 8;
-    const minY = 8;
-    const maxX = Math.max(minX, Math.floor(deskW - WIN_W - 8));
-    const maxY = Math.max(minY, Math.floor(deskH - WIN_H - 8));
-
-    const pos = [];
-
-    for (let i = 0; i < count; i++) {
-      const zig = (i % 2 === 0) ? -zigAmp : zigAmp;
-
-      let x = startX + i * stepX + randBetween(-jitterX, jitterX);
-      let y = startY + i * stepY + zig + randBetween(-jitterY, jitterY);
-
-      // clamp so they're visible initially
-      x = clamp(x, minX, maxX);
-      y = clamp(y, minY, maxY);
-
-      pos.push({ x, y });
-    }
-
-    return pos;
-  }
-
-  function applyDesktopPosition(win) {
-    const x = parseFloat(win.dataset.x || "0");
-    const y = parseFloat(win.dataset.y || "0");
-    win.style.left = x + "px";
-    win.style.top  = y + "px";
-  }
-
-  function applyMobilePosition(win) {
-    // Grid places it; remove absolute offsets
-    win.style.left = "";
-    win.style.top = "";
-  }
-
-  function syncModeClass() {
-    if (isMobile()) desktop.classList.add("is-mobile");
-    else desktop.classList.remove("is-mobile");
-
-    const wins = Array.from(desktop.querySelectorAll(".pwin"));
-    wins.forEach(win => {
-      if (isMobile()) applyMobilePosition(win);
-      else applyDesktopPosition(win);
-    });
-  }
-
-  function createWindow(item) {
-    const win = document.createElement("div");
-    win.className = "pwin";
-    win.dataset.id = item.id;
-    win.style.zIndex = String(++zTop);
-
-    // placement happens after creation (populate assigns x/y)
-    win.innerHTML = `
-      <div class="pwin-bar" role="toolbar">
-        <button class="pwin-close" type="button" aria-label="Close window">×</button>
-        <div class="pwin-title" title="${item.title}">${item.title}</div>
-      </div>
-
-      <div class="pwin-body" role="button" tabindex="0" aria-label="Open description">
-        <img src="${item.src}" alt="${item.title}">
-      </div>
-
-      <div class="pwin-overlay" aria-hidden="true">
-        <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
-        <div class="pwin-overlay-scroll">
-          <div class="pwin-overlay-text"></div>
-        </div>
-      </div>
-    `;
-
-    const bar = win.querySelector(".pwin-bar");
-    const close = win.querySelector(".pwin-close");
-    const body = win.querySelector(".pwin-body");
-
-    const overlay = win.querySelector(".pwin-overlay");
-    const minBtn = win.querySelector(".pwin-min");
-    const overlayScroll = win.querySelector(".pwin-overlay-scroll");
-    const overlayText = win.querySelector(".pwin-overlay-text");
-
-    function openOverlay(e) {
-      if (e) e.stopPropagation();
-      bringToFront(win);
-
-      overlayText.innerHTML = getTemplateHTML(item.id);
-      overlay.classList.add("active");
-      overlay.setAttribute("aria-hidden", "false");
-      overlayScroll.scrollTop = 0;
-
-      minBtn.focus({ preventScroll: true });
-    }
-
-    function closeOverlay(e) {
-      if (e) e.stopPropagation();
-      overlay.classList.remove("active");
-      overlay.setAttribute("aria-hidden", "true");
-    }
-
-    // Close window
-    close.addEventListener("click", (e) => {
-      e.stopPropagation();
-
-      // In mobile grid, do a little fade/shrink; grid reflows naturally
-      if (isMobile()) {
-        win.classList.add("removing");
-        setTimeout(() => win.remove(), 140);
-      } else {
-        win.remove();
-      }
-    });
-
-    win.addEventListener("pointerdown", () => bringToFront(win));
-
-    body.addEventListener("click", openOverlay);
-    body.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") openOverlay(e);
-    });
-
-    // minimize overlay
-    minBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
-    minBtn.addEventListener("click", closeOverlay);
-
-    // prevent overlay from triggering drag
-    overlay.addEventListener("pointerdown", (e) => e.stopPropagation());
-    overlay.addEventListener("click", (e) => e.stopPropagation());
-
-    // Esc closes only if that overlay is open
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
-    });
-
-    // Drag ONLY from titlebar (DESKTOP ONLY) — your existing behavior
-    bar.addEventListener("pointerdown", (e) => {
-      if (isMobile()) return; // mobile grid: no drag
-      if (e.target === close) return;
-      if (overlay.classList.contains("active")) return;
-
-      e.preventDefault();
-      bringToFront(win);
-
-      const rectDesk = desktop.getBoundingClientRect();
-      const rectWin = win.getBoundingClientRect();
-
-      const startX = e.clientX;
-      const startY = e.clientY;
-
-      const startLeft = rectWin.left - rectDesk.left;
-      const startTop  = rectWin.top  - rectDesk.top;
-
-      win.setPointerCapture(e.pointerId);
-
-      function onMove(ev) {
-        const dx = ev.clientX - startX;
-        const dy = ev.clientY - startY;
-
-        const nextLeft = startLeft + dx;
-        const nextTop  = startTop + dy;
-
-        // NO snapping. NO clamping. Pure gremlin freedom
-        win.style.left = nextLeft + "px";
-        win.style.top  = nextTop + "px";
-
-        // persist position (so if you resize then return to desktop mode)
-        win.dataset.x = String(nextLeft);
-        win.dataset.y = String(nextTop);
+      function getTemplateHTML(id) {
+        const tpl = document.getElementById(`tpl-${id}`);
+        return tpl ? tpl.innerHTML : `<p><strong>${id}</strong></p>`;
       }
 
-      function onUp() {
-        try { win.releasePointerCapture(e.pointerId); } catch (_) {}
-        win.removeEventListener("pointermove", onMove);
-        win.removeEventListener("pointerup", onUp);
-        win.removeEventListener("pointercancel", onUp);
+      function bringToFront(win) {
+        win.style.zIndex = String(++zTop);
       }
 
-      win.addEventListener("pointermove", onMove);
-      win.addEventListener("pointerup", onUp);
-      win.addEventListener("pointercancel", onUp);
-    });
+      function randBetween(min, max) {
+        return min + Math.random() * (max - min);
+      }
 
-    return win;
-  }
+      function clamp(n, min, max) {
+        return Math.max(min, Math.min(max, n));
+      }
 
-function populate() {
-  desktop.innerHTML = "";
+      function computeSplayPositions(count) {
+        const WIN_W = 300;
+        const BAR_H = 34;
+        const IMG_H = 250;
+        const WIN_H = BAR_H + IMG_H;
 
-  const wins = PRACTICE.map(item => {
-    const w = createWindow(item);
-    desktop.appendChild(w);
-    return w;
-  });
+        const rect = desktop.getBoundingClientRect();
+        const deskW = Math.max(320, rect.width || 320);
+        const deskH = Math.max(520, rect.height || 520);
 
-  // Let layout settle before we measure + place (prevents bad clamping / weird stacks)
-  const placeDesktop = () => {
-    if (isMobile()) {
-      syncModeClass();
-      return;
-    }
+        const startX  = 30;
+        const startY  = 24;
+        const stepX   = 140;
+        const stepY   = 10;
+        const zigAmp  = 26;
+        const jitterX = 14;
+        const jitterY = 10;
 
-    const positions = computeSplayPositions(wins.length);
-    wins.forEach((win, i) => {
-      win.dataset.x = String(positions[i].x);
-      win.dataset.y = String(positions[i].y);
-      applyDesktopPosition(win);
-    });
+        const minX = 8;
+        const minY = 8;
+        const maxX = Math.max(minX, Math.floor(deskW - WIN_W - 8));
+        const maxY = Math.max(minY, Math.floor(deskH - WIN_H - 8));
 
-    syncModeClass();
-  };
+        const pos = [];
+        for (let i = 0; i < count; i++) {
+          const zig = (i % 2 === 0) ? -zigAmp : zigAmp;
 
-  // 2 RAFs makes this resilient to late layout shifts (video/font)
-  requestAnimationFrame(() => requestAnimationFrame(placeDesktop));
-}
+          let x = startX + i * stepX + randBetween(-jitterX, jitterX);
+          let y = startY + i * stepY + zig + randBetween(-jitterY, jitterY);
 
-  resetBtn.addEventListener("click", populate);
-  populate();
+          x = clamp(x, minX, maxX);
+          y = clamp(y, minY, maxY);
 
-  // On resize/orientation: only switch mode; do not re-splay unless reset is pressed.
-  let resizeTimer = null;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(syncModeClass, 120);
-  });
+          pos.push({ x, y });
+        }
+        return pos;
+      }
 
-  // Some browsers support matchMedia change
-  mqMobile.addEventListener?.("change", syncModeClass);
-})();
+      function applyDesktopPosition(win) {
+        const x = parseFloat(win.dataset.x || "0");
+        const y = parseFloat(win.dataset.y || "0");
+        win.style.left = x + "px";
+        win.style.top  = y + "px";
+      }
 
-    
+      function applyMobilePosition(win) {
+        win.style.left = "";
+        win.style.top = "";
+      }
 
-/* ---------- Pixel Links ---------- */
-(() => {
-  const layer = document.getElementById("pixelLinks");
-  if (!layer) return;
+      function syncModeClass() {
+        if (isMobile()) desktop.classList.add("is-mobile");
+        else desktop.classList.remove("is-mobile");
 
-  // Add your extra projects here
-  const EXTRA = [
-    { href: "https://www.youtube.com/live/q7vPZkCKukQ", label: "Slowrun /fu:bar/ 2021", color: "#17a2b8" },
-    { href: "https://www.youtube.com/watch?v=tWp3CEuwzdE", label: "Totally not a Speedrun /’fubar/ 2o22", color: "#ff4fd8" },
-    { href: "https://www.youtube.com/watch?v=u7pGPptqkjs", label: "A.I. and Online Communities", color: "#ffd24f" },
-    { href: "https://youtu.be/2FZ3mJfzuf0?si=Zpk4Jbf2mxt8pVf-", label: "Gork", color: "#7a5cff" },
-    { href: "https://youtu.be/pT5MtQJTCVA", label: "Scanlines.xyz", color: "#b7ff5a" },
-  ];
+        const wins = Array.from(desktop.querySelectorAll(".pwin"));
+        wins.forEach(win => {
+          if (isMobile()) applyMobilePosition(win);
+          else applyDesktopPosition(win);
+        });
+      }
 
-  // “avoid” targets (only these)
-  const AVOID_SELECTORS = [".carousel", ".about-meta"];
+      function createWindow(item) {
+        const win = document.createElement("div");
+        win.className = "pwin";
+        win.dataset.id = item.id;
+        win.style.zIndex = String(++zTop);
 
-  // Tune these
-  const RELOCATE_MS = 60000;
-  const AVOID_PADDING = 18;      // extra breathing room around avoided areas
-  const PIXEL_SIZE = 10;
-  const COUNT_DESKTOP = 5;
-  const COUNT_MOBILE = 5;
+        win.innerHTML = `
+          <div class="pwin-bar" role="toolbar">
+            <button class="pwin-close" type="button" aria-label="Close window">×</button>
+            <div class="pwin-title" title="${item.title}">${item.title}</div>
+          </div>
 
-  const rand = (min, max) => min + Math.random() * (max - min);
+          <div class="pwin-body" role="button" tabindex="0" aria-label="Open description">
+            <img src="${item.src}" alt="${item.title}">
+          </div>
 
-  // coarse pointer ~= phone/tablet; also treat narrow screens as “mobile mode”
-  const isMobile = () =>
-    window.matchMedia("(pointer: coarse)").matches || window.innerWidth <= 760;
+          <div class="pwin-overlay" aria-hidden="true">
+            <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
+            <div class="pwin-overlay-scroll">
+              <div class="pwin-overlay-text"></div>
+            </div>
+          </div>
+        `;
 
-  function clearPixels() {
-    layer.innerHTML = "";
-  }
+        const bar = win.querySelector(".pwin-bar");
+        const close = win.querySelector(".pwin-close");
+        const body = win.querySelector(".pwin-body");
 
-  function getAvoidRects() {
-    const rects = [];
-    const vw = window.innerWidth, vh = window.innerHeight;
+        const overlay = win.querySelector(".pwin-overlay");
+        const minBtn = win.querySelector(".pwin-min");
+        const overlayScroll = win.querySelector(".pwin-overlay-scroll");
+        const overlayText = win.querySelector(".pwin-overlay-text");
 
-    AVOID_SELECTORS.forEach(sel => {
-      const el = document.querySelector(sel);
-      if (!el) return;
+        function openOverlay(e) {
+          if (e) e.stopPropagation();
+          bringToFront(win);
 
-      const r = el.getBoundingClientRect();
+          overlayText.innerHTML = getTemplateHTML(item.id);
+          overlay.classList.add("active");
+          overlay.setAttribute("aria-hidden", "false");
+          overlayScroll.scrollTop = 0;
 
-      // Skip if basically offscreen
-      const offscreen = r.bottom < 0 || r.top > vh || r.right < 0 || r.left > vw;
-      if (offscreen) return;
-
-      rects.push({
-        left: r.left - AVOID_PADDING,
-        top: r.top - AVOID_PADDING,
-        right: r.right + AVOID_PADDING,
-        bottom: r.bottom + AVOID_PADDING
-      });
-    });
-
-    return rects;
-  }
-
-  function pointInRect(x, y, r) {
-    return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
-  }
-
-  function safeSpot(x, y, avoidRects) {
-    const cx = x + PIXEL_SIZE / 2;
-    const cy = y + PIXEL_SIZE / 2;
-    for (const r of avoidRects) {
-      if (pointInRect(cx, cy, r)) return false;
-    }
-    return true;
-  }
-
-  function hideAllLabels() {
-    document.querySelectorAll(".pixel-link.show-label")
-      .forEach(el => el.classList.remove("show-label"));
-  }
-
-  // Tap/click anywhere else closes labels (mobile behavior)
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".pixel-link")) hideAllLabels();
-  }, { passive: true });
-
-  function spawnPixels() {
-    clearPixels();
-
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const avoidRects = getAvoidRects();
-
-    const count = (vw <= 760) ? COUNT_MOBILE : COUNT_DESKTOP;
-    if (!EXTRA.length) return;
-
-    // shuffle so which projects show changes each cycle
-    const shuffled = [...EXTRA].sort(() => Math.random() - 0.5);
-    const maxAttemptsPerPixel = 140;
-
-    for (let i = 0; i < count; i++) {
-      const proj = shuffled[i % shuffled.length];
-
-      let placed = false;
-
-      for (let attempt = 0; attempt < maxAttemptsPerPixel; attempt++) {
-        const x = rand(6, vw - (PIXEL_SIZE + 6));
-        const y = rand(6, vh - (PIXEL_SIZE + 6));
-        if (!safeSpot(x, y, avoidRects)) continue;
-
-        const a = document.createElement("a");
-        a.className = "pixel-link";
-        a.href = proj.href;
-        a.target = "_blank";
-        a.rel = "noreferrer";
-        a.style.left = `${x}px`;
-        a.style.top = `${y}px`;
-        a.style.width = `${PIXEL_SIZE}px`;
-        a.style.height = `${PIXEL_SIZE}px`;
-        a.style.background = proj.color || "#17a2b8";
-        a.classList.add("twinkle");
-        a.style.setProperty("--twinkle-delay", `${Math.random() * 2.2}s`);
-
-        // label (shown on mobile-first tap)
-        const label = document.createElement("span");
-        label.className = "pixel-label";
-        label.textContent = proj.label;
-        a.appendChild(label);
-
-        if (isMobile()) {
-          let armed = false;
-
-          a.addEventListener("click", (e) => {
-            if (!armed) {
-              e.preventDefault();
-              hideAllLabels();
-              a.classList.add("show-label");
-              armed = true;
-              return;
-            }
-            // second tap: allow navigation to proceed
-          });
-
-          // if label is open and we relocate/rebuild, it resets naturally.
+          minBtn.focus({ preventScroll: true });
         }
 
-        layer.appendChild(a);
-        placed = true;
-        break;
+        function closeOverlay(e) {
+          if (e) e.stopPropagation();
+          overlay.classList.remove("active");
+          overlay.setAttribute("aria-hidden", "true");
+        }
+
+        close.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (isMobile()) {
+            win.classList.add("removing");
+            setTimeout(() => win.remove(), 140);
+          } else {
+            win.remove();
+          }
+        });
+
+        win.addEventListener("pointerdown", () => bringToFront(win));
+
+        body.addEventListener("click", openOverlay);
+        body.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") openOverlay(e);
+        });
+
+        minBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
+        minBtn.addEventListener("click", closeOverlay);
+
+        overlay.addEventListener("pointerdown", (e) => e.stopPropagation());
+        overlay.addEventListener("click", (e) => e.stopPropagation());
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
+        });
+
+        bar.addEventListener("pointerdown", (e) => {
+          if (isMobile()) return;
+          if (e.target === close) return;
+          if (overlay.classList.contains("active")) return;
+
+          e.preventDefault();
+          bringToFront(win);
+
+          const rectDesk = desktop.getBoundingClientRect();
+          const rectWin = win.getBoundingClientRect();
+
+          const startX = e.clientX;
+          const startY = e.clientY;
+
+          const startLeft = rectWin.left - rectDesk.left;
+          const startTop  = rectWin.top  - rectDesk.top;
+
+          win.setPointerCapture(e.pointerId);
+
+          function onMove(ev) {
+            const dx = ev.clientX - startX;
+            const dy = ev.clientY - startY;
+
+            const nextLeft = startLeft + dx;
+            const nextTop  = startTop + dy;
+
+            win.style.left = nextLeft + "px";
+            win.style.top  = nextTop + "px";
+
+            win.dataset.x = String(nextLeft);
+            win.dataset.y = String(nextTop);
+          }
+
+          function onUp() {
+            try { win.releasePointerCapture(e.pointerId); } catch (_) {}
+            win.removeEventListener("pointermove", onMove);
+            win.removeEventListener("pointerup", onUp);
+            win.removeEventListener("pointercancel", onUp);
+          }
+
+          win.addEventListener("pointermove", onMove);
+          win.addEventListener("pointerup", onUp);
+          win.addEventListener("pointercancel", onUp);
+        });
+
+        return win;
       }
 
-      // If placement failed (tiny screen + big avoid zones), skip this pixel.
-      if (!placed) continue;
-    }
-  }
+      function populate() {
+        desktop.innerHTML = "";
 
-  // Respawn on resize (so avoid rects + viewport stay valid)
-  let t = null;
-  window.addEventListener("resize", () => {
-    clearTimeout(t);
-    t = setTimeout(spawnPixels, 120);
-  }, { passive: true });
+        const wins = PRACTICE.map(item => {
+          const w = createWindow(item);
+          desktop.appendChild(w);
+          return w;
+        });
 
-  // Relocate periodically
-  setInterval(spawnPixels, RELOCATE_MS);
+        const placeDesktop = () => {
+          if (isMobile()) {
+            syncModeClass();
+            return;
+          }
 
-  spawnPixels();
-})();
-    
+          const positions = computeSplayPositions(wins.length);
+          wins.forEach((win, i) => {
+            win.dataset.x = String(positions[i].x);
+            win.dataset.y = String(positions[i].y);
+            applyDesktopPosition(win);
+          });
+
+          syncModeClass();
+        };
+
+        requestAnimationFrame(() => requestAnimationFrame(placeDesktop));
+      }
+
+      resetBtn.addEventListener("click", populate);
+      populate();
+
+      let resizeTimer = null;
+      window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(syncModeClass, 120);
+      });
+
+      mqMobile.addEventListener?.("change", syncModeClass);
+    })();
+
+    /* ---------- Pixel Links (FIXED + MOBILE TWO-STEP) ---------- */
+    (() => {
+      const layer = document.getElementById("pixelLinks");
+      if (!layer) return;
+
+      const EXTRA = [
+        { href: "https://www.youtube.com/live/q7vPZkCKukQ", label: "Slowrun /fu:bar/ 2021", color: "#17a2b8" },
+        { href: "https://www.youtube.com/watch?v=tWp3CEuwzdE", label: "Totally not a Speedrun /’fubar/ 2o22", color: "#ff4fd8" },
+        { href: "https://www.youtube.com/watch?v=u7pGPptqkjs", label: "A.I. and Online Communities", color: "#ffd24f" },
+        { href: "https://youtu.be/2FZ3mJfzuf0?si=Zpk4Jbf2mxt8pVf-", label: "Gork", color: "#7a5cff" },
+        { href: "https://youtu.be/pT5MtQJTCVA", label: "Scanlines.xyz", color: "#b7ff5a" },
+      ];
+
+      const AVOID_SELECTORS = [".carousel", ".about-meta"];
+
+      const RELOCATE_MS = 60000;
+      const AVOID_PADDING = 18;
+      const PIXEL_SIZE = 10;
+      const COUNT_DESKTOP = 5;
+      const COUNT_MOBILE = 5;
+
+      const rand = (min, max) => min + Math.random() * (max - min);
+      const isMobile = () =>
+        window.matchMedia("(pointer: coarse)").matches || window.innerWidth <= 760;
+
+      function clearPixels() { layer.innerHTML = ""; }
+
+      function getAvoidRects() {
+        const rects = [];
+        const vw = window.innerWidth, vh = window.innerHeight;
+
+        AVOID_SELECTORS.forEach(sel => {
+          const el = document.querySelector(sel);
+          if (!el) return;
+
+          const r = el.getBoundingClientRect();
+          const offscreen = r.bottom < 0 || r.top > vh || r.right < 0 || r.left > vw;
+          if (offscreen) return;
+
+          rects.push({
+            left: r.left - AVOID_PADDING,
+            top: r.top - AVOID_PADDING,
+            right: r.right + AVOID_PADDING,
+            bottom: r.bottom + AVOID_PADDING
+          });
+        });
+
+        return rects;
+      }
+
+      function pointInRect(x, y, r) {
+        return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+      }
+
+      function safeSpot(x, y, avoidRects) {
+        const cx = x + PIXEL_SIZE / 2;
+        const cy = y + PIXEL_SIZE / 2;
+        for (const r of avoidRects) {
+          if (pointInRect(cx, cy, r)) return false;
+        }
+        return true;
+      }
+
+      function hideAllLabels() {
+        document.querySelectorAll(".pixel-link.show-label")
+          .forEach(el => el.classList.remove("show-label"));
+      }
+
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".pixel-link")) hideAllLabels();
+      }, { passive: true });
+
+      function spawnPixels() {
+        clearPixels();
+
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const avoidRects = getAvoidRects();
+
+        const count = (vw <= 760) ? COUNT_MOBILE : COUNT_DESKTOP;
+        if (!EXTRA.length) return;
+
+        const shuffled = [...EXTRA].sort(() => Math.random() - 0.5);
+        const maxAttemptsPerPixel = 140;
+
+        for (let i = 0; i < count; i++) {
+          const proj = shuffled[i % shuffled.length];
+
+          let placed = false;
+
+          for (let attempt = 0; attempt < maxAttemptsPerPixel; attempt++) {
+            const x = rand(6, vw - (PIXEL_SIZE + 6));
+            const y = rand(6, vh - (PIXEL_SIZE + 6));
+            if (!safeSpot(x, y, avoidRects)) continue;
+
+            const a = document.createElement("a");
+            a.className = "pixel-link twinkle";
+            a.href = proj.href;
+            a.target = "_blank";
+            a.rel = "noreferrer";
+
+            a.style.left = `${x}px`;
+            a.style.top = `${y}px`;
+            a.style.width = `${PIXEL_SIZE}px`;
+            a.style.height = `${PIXEL_SIZE}px`;
+            a.style.background = proj.color || "#17a2b8";
+            a.style.setProperty("--twinkle-delay", `${Math.random() * 2.2}s`);
+
+            const label = document.createElement("span");
+            label.className = "pixel-label";
+            label.textContent = proj.label;
+            a.appendChild(label);
+
+            if (isMobile()) {
+              let armed = false;
+
+              a.addEventListener("click", (e) => {
+                if (!armed) {
+                  e.preventDefault();
+                  hideAllLabels();
+                  a.classList.add("show-label");
+                  armed = true;
+                  return;
+                }
+              });
+            }
+
+            layer.appendChild(a);
+            placed = true;
+            break;
+          }
+
+          if (!placed) continue;
+        }
+      }
+
+      let t = null;
+      window.addEventListener("resize", () => {
+        clearTimeout(t);
+        t = setTimeout(spawnPixels, 120);
+      }, { passive: true });
+
+      setInterval(spawnPixels, RELOCATE_MS);
+      spawnPixels();
+    })();
   </script>
-
 </body>
 </html>
