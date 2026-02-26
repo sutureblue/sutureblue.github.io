@@ -91,26 +91,23 @@ body {
 #pixelLinks{
   position: fixed;
   inset: 0;
-  z-index: 2;            /* behind your content; adjust if needed */
-  pointer-events: none;  /* container ignores clicks */
+  z-index: 9999;        /* ABOVE everything */
+  pointer-events: none; /* container ignores clicks */
 }
 
-/* each pixel is a tiny <a> */
 .pixel-link{
   position: absolute;
   width: 6px;
   height: 6px;
   border-radius: 1px;
-  pointer-events: auto;      /* BUT the link itself can be clicked */
+  pointer-events: auto; /* link clickable */
   opacity: 0.85;
   box-shadow: 0 0 10px rgba(255,255,255,0.10);
-  transform: translateZ(0);
 }
 
 .pixel-link:hover{
   opacity: 1;
   transform: scale(1.6);
-  box-shadow: 0 0 18px rgba(255,255,255,0.18);
 }
 
 /* optional: subtle “twinkle” so they feel alive */
