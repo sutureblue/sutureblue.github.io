@@ -657,15 +657,15 @@ function populate() {
 
     
 
-    /* ---------- Pixel Links ---------- */
-  (() => {
+/* ---------- Pixel Links ---------- */
+(() => {
   const layer = document.getElementById("pixelLinks");
   if (!layer) return;
 
   // Add your extra projects here
   const EXTRA = [
     { href: "https://www.youtube.com/live/q7vPZkCKukQ", label: "Slowrun /fu:bar/ 2021", color: "#17a2b8" },
-    { href: "https://www.youtube.com/watch?v=tWp3CEuwzdE", label: "Totally not a Speedrun /’fubar/ 2o22", color: "#ff4fd8"},
+    { href: "https://www.youtube.com/watch?v=tWp3CEuwzdE", label: "Totally not a Speedrun /’fubar/ 2o22", color: "#ff4fd8" },
     { href: "https://www.youtube.com/watch?v=u7pGPptqkjs", label: "A.I. and Online Communities", color: "#ffd24f" },
     { href: "https://youtu.be/2FZ3mJfzuf0?si=Zpk4Jbf2mxt8pVf-", label: "Gork", color: "#7a5cff" },
     { href: "https://youtu.be/pT5MtQJTCVA", label: "Scanlines.xyz", color: "#b7ff5a" },
@@ -682,7 +682,10 @@ function populate() {
   const COUNT_MOBILE = 5;
 
   const rand = (min, max) => min + Math.random() * (max - min);
-  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+  // coarse pointer ~= phone/tablet; also treat narrow screens as “mobile mode”
+  const isMobile = () =>
+    window.matchMedia("(pointer: coarse)").matches || window.innerWidth <= 760;
 
   function clearPixels() {
     layer.innerHTML = "";
@@ -690,16 +693,16 @@ function populate() {
 
   function getAvoidRects() {
     const rects = [];
+    const vw = window.innerWidth, vh = window.innerHeight;
+
     AVOID_SELECTORS.forEach(sel => {
       const el = document.querySelector(sel);
       if (!el) return;
 
       const r = el.getBoundingClientRect();
 
-      // Skip if element is basically offscreen (helps avoid “ghost blocking”)
-      const vw = window.innerWidth, vh = window.innerHeight;
-      const offscreen =
-        r.bottom < 0 || r.top > vh || r.right < 0 || r.left > vw;
+      // Skip if basically offscreen
+      const offscreen = r.bottom < 0 || r.top > vh || r.right < 0 || r.left > vw;
       if (offscreen) return;
 
       rects.push({
@@ -709,6 +712,7 @@ function populate() {
         bottom: r.bottom + AVOID_PADDING
       });
     });
+
     return rects;
   }
 
@@ -717,7 +721,6 @@ function populate() {
   }
 
   function safeSpot(x, y, avoidRects) {
-    // check the pixel’s center point
     const cx = x + PIXEL_SIZE / 2;
     const cy = y + PIXEL_SIZE / 2;
     for (const r of avoidRects) {
@@ -726,23 +729,29 @@ function populate() {
     return true;
   }
 
+  function hideAllLabels() {
+    document.querySelectorAll(".pixel-link.show-label")
+      .forEach(el => el.classList.remove("show-label"));
+  }
+
+  // Tap/click anywhere else closes labels (mobile behavior)
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".pixel-link")) hideAllLabels();
+  }, { passive: true });
+
   function spawnPixels() {
     clearPixels();
 
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-
     const avoidRects = getAvoidRects();
 
     const count = (vw <= 760) ? COUNT_MOBILE : COUNT_DESKTOP;
-
-    // If there are no links, don’t create dead pixels (unless you want that vibe)
     if (!EXTRA.length) return;
 
-    // Shuffle so which projects appear changes each cycle
+    // shuffle so which projects show changes each cycle
     const shuffled = [...EXTRA].sort(() => Math.random() - 0.5);
-
-    const maxAttemptsPerPixel = 120;
+    const maxAttemptsPerPixel = 140;
 
     for (let i = 0; i < count; i++) {
       const proj = shuffled[i % shuffled.length];
@@ -752,7 +761,6 @@ function populate() {
       for (let attempt = 0; attempt < maxAttemptsPerPixel; attempt++) {
         const x = rand(6, vw - (PIXEL_SIZE + 6));
         const y = rand(6, vh - (PIXEL_SIZE + 6));
-
         if (!safeSpot(x, y, avoidRects)) continue;
 
         const a = document.createElement("a");
@@ -760,29 +768,51 @@ function populate() {
         a.href = proj.href;
         a.target = "_blank";
         a.rel = "noreferrer";
-        a.title = proj.label;
-        a.style.background = proj.color || "#17a2b8";
         a.style.left = `${x}px`;
         a.style.top = `${y}px`;
+        a.style.width = `${PIXEL_SIZE}px`;
+        a.style.height = `${PIXEL_SIZE}px`;
+        a.style.background = proj.color || "#17a2b8";
+
+        // label (shown on mobile-first tap)
+        const label = document.createElement("span");
+        label.className = "pixel-label";
+        label.textContent = proj.label;
+        a.appendChild(label);
+
+        if (isMobile()) {
+          let armed = false;
+
+          a.addEventListener("click", (e) => {
+            if (!armed) {
+              e.preventDefault();
+              hideAllLabels();
+              a.classList.add("show-label");
+              armed = true;
+              return;
+            }
+            // second tap: allow navigation to proceed
+          });
+
+          // if label is open and we relocate/rebuild, it resets naturally.
+        }
 
         layer.appendChild(a);
         placed = true;
         break;
       }
 
-      // If we failed to place (very small screens + big avoid zones), just skip that pixel.
+      // If placement failed (tiny screen + big avoid zones), skip this pixel.
       if (!placed) continue;
     }
   }
 
-  // Respawn on resize and on scroll (scroll matters because avoid rects move)
+  // Respawn on resize (so avoid rects + viewport stay valid)
   let t = null;
-  function scheduleSpawn() {
+  window.addEventListener("resize", () => {
     clearTimeout(t);
-    t = setTimeout(spawnPixels, 80);
-  }
-
-  window.addEventListener("resize", scheduleSpawn, { passive: true });
+    t = setTimeout(spawnPixels, 120);
+  }, { passive: true });
 
   // Relocate periodically
   setInterval(spawnPixels, RELOCATE_MS);
