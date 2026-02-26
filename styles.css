@@ -87,6 +87,41 @@ body {
   color: var(--muted);
 }
 
+/* Pixel link layer */
+#pixelLinks{
+  position: fixed;
+  inset: 0;
+  z-index: 2;            /* behind your content; adjust if needed */
+  pointer-events: none;  /* container ignores clicks */
+}
+
+/* each pixel is a tiny <a> */
+.pixel-link{
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  pointer-events: auto;      /* BUT the link itself can be clicked */
+  opacity: 0.85;
+  box-shadow: 0 0 10px rgba(255,255,255,0.10);
+  transform: translateZ(0);
+}
+
+.pixel-link:hover{
+  opacity: 1;
+  transform: scale(1.6);
+  box-shadow: 0 0 18px rgba(255,255,255,0.18);
+}
+
+/* optional: subtle “twinkle” so they feel alive */
+@keyframes pixelTwinkle{
+  0%, 100% { filter: brightness(1); }
+  50%      { filter: brightness(1.35); }
+}
+.pixel-link.twinkle{
+  animation: pixelTwinkle 2.2s ease-in-out infinite;
+}
+
 /* Sections */
 .section { padding: 8px 4px 32px; }
 .section h2 { font-size: 18px; margin: 0 0 16px; }
