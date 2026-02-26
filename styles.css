@@ -125,16 +125,19 @@ body {
 
 /* touch devices: don’t do hover scaling */
 @media (pointer: coarse){
-  .pixel-link:hover{
-    transform: none;
+  .pixel-link.twinkle{
+    animation: none;
   }
 }
 
 /* optional: subtle “twinkle” so they feel alive */
 @keyframes pixelTwinkle{
   0%, 100% { filter: brightness(1); }
-  50%      { filter: brightness(1.35); }
+  47% { filter: brightness(1); }
+  50% { filter: brightness(1.6); }
+  53% { filter: brightness(1); }
 }
+
 .pixel-link.twinkle{
   animation: pixelTwinkle 2.2s ease-in-out infinite;
   animation-delay: var(--twinkle-delay, 0s);
