@@ -728,6 +728,10 @@
             a.target = "_blank";
             a.rel = "noreferrer";
 
+// browser hover tooltip
+a.title = proj.label;
+a.setAttribute("aria-label", proj.label);
+            
             a.style.left = `${x}px`;
             a.style.top = `${y}px`;
             a.style.width = `${PIXEL_SIZE}px`;
