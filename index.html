@@ -691,6 +691,10 @@
         const title = pixel.dataset.title || "";
         const href = pixel.dataset.href || "#";
 
+        // grab the pixel color (inline background) and pass it to the pop
+        const color = getComputedStyle(pixel).backgroundColor;
+        pop.style.setProperty("--active-pixel-color", color);
+
         popTitle.textContent = title;
         popOpen.href = href;
 
