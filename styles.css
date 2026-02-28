@@ -87,82 +87,6 @@ body {
   color: var(--muted);
 }
 
-/* =========================
-   Pixel link layer (FIXED)
-   ========================= */
-#pixelLinks{
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none; /* container ignores clicks */
-}
-
-.pixel-link{
-  position: absolute;
-  display: block;
-  width: 10px;   /* JS overwrites, but harmless */
-  height: 10px;  /* JS overwrites, but harmless */
-  border-radius: 2px;
-  opacity: 0.85;
-
-  pointer-events: auto; /* CRITICAL: make pixels clickable */
-  transform: translateZ(0);
-  transition: transform 120ms ease, opacity 120ms ease;
-}
-
-.pixel-label{
-  position: absolute;
-  left: 14px;
-  top: -6px;
-
-  font-size: 12px;
-  color: #17a2b8;
-  background: rgba(0,0,0,0.85);
-
-  padding: 3px 6px;
-  border-radius: 6px;
-  white-space: nowrap;
-
-  border: 1px solid rgba(23,162,184,0.35);
-
-  opacity: 0;
-  transform: translateY(2px);
-  transition: opacity 120ms ease, transform 120ms ease;
-
-  pointer-events: none; /* only clickable when shown */
-}
-
-.pixel-link.show-label .pixel-label{
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-/* desktop hover */
-.pixel-link:hover{
-  opacity: 1;
-  transform: scale(1.6);
-}
-
-/* touch: no sticky hover; no twinkle (battery + chaos) */
-@media (pointer: coarse){
-  .pixel-link:hover{ transform: none; }
-  .pixel-link.twinkle{ animation: none; }
-}
-
-/* Twinkle */
-@keyframes pixelTwinkle{
-  0%, 100% { filter: brightness(1); }
-  47% { filter: brightness(1); }
-  50% { filter: brightness(1.6); }
-  53% { filter: brightness(1); }
-}
-
-.pixel-link.twinkle{
-  animation: pixelTwinkle 2.2s ease-in-out infinite;
-  animation-delay: var(--twinkle-delay, 0s);
-}
-
 /* Sections */
 .section { padding: 8px 4px 32px; }
 .section h2 { font-size: 18px; margin: 0 0 16px; }
@@ -395,7 +319,7 @@ body {
 }
 
 /* =========================
-   Window
+   Window (Desktop behavior unchanged)
    ========================= */
 
 .pwin {
@@ -407,10 +331,13 @@ body {
 .pwin-bar{
   height: var(--bar-h, 34px);
   background: rgba(0,0,0,0.92);
+
   display: flex;
   align-items: center;
+
   padding: 0 10px;
   gap: 8px;
+
   cursor: grab;
 }
 .pwin-bar:active { cursor: grabbing; }
@@ -430,11 +357,14 @@ body {
 
 .pwin-title{
   flex: 1 1 auto;
+
   color: #fff;
   font-size: var(--title-size, 14px);
   font-weight: 600;
   letter-spacing: 0.2px;
+
   text-align: left;
+
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
@@ -444,13 +374,16 @@ body {
 .pwin-body {
   width: 100%;
   height: var(--img-h, 250px);
+
   background: rgba(255,255,255,0.02);
   border: 1px solid rgba(255,255,255,0.08);
   border-top: none;
   overflow: hidden;
+
   box-shadow:
     0 10px 28px rgba(0,0,0,0.75),
     0 0 22px rgba(23,162,184,0.18);
+
   cursor: pointer;
 }
 
@@ -465,14 +398,18 @@ body {
   position: absolute;
   left: 0;
   top: var(--bar-h, 34px);
+
   width: 100%;
   height: var(--img-h, 250px);
+
   background: rgba(6, 6, 10, 0.94);
   border: 1px solid rgba(255,255,255,0.10);
   border-top: none;
+
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.18s ease;
+
   padding: 10px;
 }
 
@@ -485,6 +422,7 @@ body {
   position: absolute;
   top: 6px;
   right: 8px;
+
   background: rgba(0,0,0,0.55);
   border: 1px solid rgba(255,255,255,0.12);
   color: #fff;
@@ -501,6 +439,7 @@ body {
   height: 100%;
   overflow-y: auto;
   padding: 26px 6px 6px;
+
   scrollbar-width: thin;
   scrollbar-color: rgba(23,162,184,0.55) transparent;
 }
@@ -531,7 +470,96 @@ body {
   transition: opacity 140ms ease, transform 140ms ease;
 }
 
-/* About / Footer */
+/* =========================
+   NEW: Talking With Others
+   ========================= */
+
+#talking .section-title { margin-bottom: 10px; }
+
+.talking-row{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.18);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.32);
+  overflow: visible;
+  flex-wrap: wrap; /* keeps it usable on smaller screens */
+}
+
+.talk-pixel{
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 0;
+  box-shadow:
+    0 10px 22px rgba(0,0,0,0.45),
+    0 0 12px rgba(23,162,184,0.08);
+  opacity: 0.92;
+  transition: transform 120ms ease, opacity 120ms ease, box-shadow 120ms ease;
+}
+
+.talk-pixel:hover{
+  opacity: 1;
+  transform: scale(1.12);
+}
+
+.talk-pixel.is-active{
+  outline: 2px solid rgba(23,162,184,0.55);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+/* the textbox that appears to the right of clicked pixel */
+.talk-pop{
+  position: absolute;
+  transform: translateY(-50%);
+  display: none;
+  min-width: 220px;
+  max-width: min(420px, calc(100vw - 80px));
+  padding: 10px 12px;
+  border-radius: 12px;
+
+  background: rgba(0,0,0,0.88);
+  border: 1px solid rgba(23,162,184,0.35);
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.55),
+    0 0 18px rgba(23,162,184,0.10);
+
+  z-index: 10;
+}
+
+.talk-pop.active{
+  display: block;
+}
+
+.talk-pop-title{
+  font-size: 13px;
+  color: rgba(247,245,255,0.92);
+  margin: 0 0 6px;
+}
+
+.talk-pop-open{
+  font-size: 12px;
+  color: #17a2b8;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(23,162,184,0.35);
+}
+.talk-pop-open:hover{
+  color: #7fd3e0;
+  border-bottom-color: rgba(23,162,184,0.8);
+}
+
+/* =========================
+   About / Footer
+   ========================= */
+
 .about-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr); gap: 18px; }
 .about-layout p { font-size: 14px; }
 .about-meta { font-size: 13px; color: var(--muted); border-radius: var(--radius-md); border: 1px solid var(--border-soft); padding: 12px 14px; background: rgba(10, 10, 20, 0.9); }
@@ -541,6 +569,7 @@ body {
 .cc-icon { width: 14px; opacity: 0.8; }
 .footer-note { opacity: 0.8; }
 
+/* CV button/link */
 .cv-link {
   display: inline-block;
   margin-left: 10px;
@@ -551,7 +580,10 @@ body {
 }
 .cv-link:hover { color: var(--glow-blue); border-bottom-color: rgba(23,162,184,0.35); }
 
-/* Responsive */
+/* =========================
+   Responsive: Mobile grid mode for practice windows
+   ========================= */
+
 @media (max-width: 760px) {
   .top { grid-template-columns: 1fr; row-gap: 18px; }
   .hero { text-align: left; }
@@ -590,6 +622,8 @@ body {
   }
 
   @media (max-width: 360px) {
-    .practice-desktop.is-mobile { grid-template-columns: 1fr; }
+    .practice-desktop.is-mobile {
+      grid-template-columns: 1fr;
+    }
   }
 }
