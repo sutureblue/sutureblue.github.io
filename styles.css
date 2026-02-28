@@ -490,8 +490,8 @@ body {
 }
 
 .talk-pixel{
-  width: 50px;
-  height: 50px;
+  width: 20px;
+  height: 20px;
   border: 1px solid rgba(255,255,255,0.14);
   border-radius: 10px;
   cursor: pointer;
