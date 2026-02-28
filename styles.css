@@ -1,3 +1,4 @@
+/* styles.css */
 :root {
   --bg: #020203;
   --fg: #f7f5ff;
@@ -394,6 +395,7 @@ body {
   display: block;
 }
 
+/* Image overlay + BLUE scrollbars */
 .pwin-overlay {
   position: absolute;
   left: 0;
@@ -471,24 +473,21 @@ body {
 }
 
 /* =========================
-   NEW: Talking With Others
+   Talking with Others (NEW)
    ========================= */
 
-#talking .section-title { margin-bottom: 10px; }
+.talking-wrap{
+  max-width: 760px;
+  margin: 0 auto;
+}
 
 .talking-row{
-  position: relative;
   display: flex;
-  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-start;
   justify-content: flex-start;
-  gap: 10px;
-  padding: 12px 12px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.06);
-  background: rgba(0,0,0,0.18);
-  box-shadow: 0 14px 34px rgba(0,0,0,0.32);
-  overflow: visible;
-  flex-wrap: wrap; /* keeps it usable on smaller screens */
+  margin: 10px 0 12px;
 }
 
 .talk-pixel{
@@ -507,54 +506,50 @@ body {
 
 .talk-pixel:hover{
   opacity: 1;
-  transform: scale(1.12);
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 30px rgba(0,0,0,0.52),
+    0 0 22px rgba(23,162,184,0.14);
 }
 
 .talk-pixel.is-active{
-  outline: 2px solid rgba(23,162,184,0.55);
-  outline-offset: 2px;
   opacity: 1;
+  transform: translateY(-1px);
+  outline: 2px solid rgba(255,255,255,0.18);
+  outline-offset: 2px;
 }
 
-/* the textbox that appears to the right of clicked pixel */
-.talk-pop{
-  position: absolute;
-  transform: translateY(-50%);
-  display: none;
-  min-width: 220px;
-  max-width: min(420px, calc(100vw - 80px));
+.talking-info{
   padding: 10px 12px;
-  border-radius: 12px;
-
-  background: rgba(0,0,0,0.88);
-  border: 1px solid color-mix(in srgb, var(--active-pixel-color, #17a2b8) 45%, transparent);
-  box-shadow:
-    0 18px 40px rgba(0,0,0,0.55),
-    0 0 18px rgba(23,162,184,0.10);
-
-  z-index: 10;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.35);
 }
 
-.talk-pop.active{
-  display: block;
-}
-
-.talk-pop-title{
-  font-size: 13px;
+.talking-title{
+  font-size: 14px;
   color: rgba(247,245,255,0.92);
-  margin: 0 0 6px;
+  margin-bottom: 6px;
 }
 
-.talk-pop-open{
+.talking-open{
+  display: inline-block;
   font-size: 12px;
-  color: var(--active-pixel-color, #17a2b8);
+  color: var(--active-color, #17a2b8);
   text-decoration: none;
-  border-bottom: 1px solid color-mix(in srgb, var(--active-pixel-color, #17a2b8) 45%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--active-color, #17a2b8) 45%, transparent);
+  transition: color 140ms ease, border-color 140ms ease;
 }
 
-.talk-pop-open:hover{
-  color: color-mix(in srgb, var(--active-pixel-color, #17a2b8) 75%, white);
-  border-bottom-color: color-mix(in srgb, var(--active-pixel-color, #17a2b8) 75%, transparent);
+.talking-open:hover{
+  color: color-mix(in srgb, var(--active-color, #17a2b8) 75%, white);
+  border-bottom-color: color-mix(in srgb, var(--active-color, #17a2b8) 75%, transparent);
+}
+
+.talking-open[aria-disabled="true"]{
+  opacity: 0.5;
+  pointer-events: none;
+  border-bottom-color: transparent;
 }
 
 /* =========================
@@ -570,7 +565,6 @@ body {
 .cc-icon { width: 14px; opacity: 0.8; }
 .footer-note { opacity: 0.8; }
 
-/* CV button/link */
 .cv-link {
   display: inline-block;
   margin-left: 10px;
