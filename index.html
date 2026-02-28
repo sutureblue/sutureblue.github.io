@@ -9,9 +9,6 @@
 </head>
 
 <body>
-  <!-- Pixel link layer (fixed above everything) -->
-  <div id="pixelLinks" aria-hidden="true"></div>
-
   <div class="page">
 
     <div class="top">
@@ -60,8 +57,8 @@
                   <img src="assets/gNg.png"        data-title="Glitch'N'Games (2024)" data-template=".tpl-gng" alt="">
                   <img src="assets/mfru.png"       data-title="MFRU (2023)" data-template=".tpl-mfru" alt="">
                   <img src="assets/shadesOfPrecision.png" data-title="Shades Of Precision (2023)" data-template=".tpl-shadesOfPrecision" alt="">
-                  <img src="assets/notGlitch.png"  data-title="/NOT.GLI.TCH/H (2023)" data-template=".tpl-notGlitch" alt="">
-                  <img src="assets/hereWeAre.png"  data-title="Here We Are (2022)" data-template=".tpl-hereWeAre" alt="">
+                  <img src="assets/notGlitch.png" data-title="/NOT.GLI.TCH/H (2023)" data-template=".tpl-notGlitch" alt="">
+                  <img src="assets/hereWeAre.png" data-title="Here We Are (2022)" data-template=".tpl-hereWeAre" alt="">
                 </div>
 
                 <div class="work-overlay" aria-hidden="true" role="dialog" aria-modal="true">
@@ -156,7 +153,9 @@
         </div>
 
         <!-- Starting area BELOW reset -->
-        <div id="practiceDesktop" class="practice-desktop" aria-label="Draggable practice windows"></div>
+        <div id="practiceDesktop" class="practice-desktop" aria-label="Draggable practice windows">
+          <!-- windows injected by JS -->
+        </div>
 
         <!-- Practice text templates -->
         <template id="tpl-colourorgan">
@@ -190,6 +189,19 @@
 
       </section>
 
+      <!-- NEW: Talking with Others (under the photo spread windows) -->
+      <section id="talking" class="section">
+        <h2>Talking with Others</h2>
+
+        <div class="talking-row" id="talkingRow" aria-label="Talking with Others pixel links">
+          <!-- pixels injected by JS -->
+          <div class="talk-pop" id="talkPop" aria-hidden="true">
+            <div class="talk-pop-title" id="talkPopTitle"></div>
+            <a class="talk-pop-open" id="talkPopOpen" href="#" target="_blank" rel="noreferrer" aria-label="Open link in a new tab">Open ↗</a>
+          </div>
+        </div>
+      </section>
+
       <!-- About -->
       <section id="about" class="section">
         <h2>About</h2>
@@ -203,6 +215,7 @@
               Time-based and experiential works tend to be what I make the most.
             </p>
 
+            <!-- CV button -->
             <a class="cv-link" href="assets/BeeNix_CV_2026.pdf" target="_blank" rel="noreferrer">View CV</a>
           </div>
 
@@ -239,7 +252,7 @@
   </div>
 
   <script>
-    /* ---------- Carousel + Overlay (UNCHANGED) ---------- */
+    /* ---------- Carousel + Overlay ---------- */
     document.querySelectorAll(".work-item").forEach((workItem) => {
       const carousel = workItem.querySelector(".carousel");
 
@@ -249,6 +262,7 @@
       const overlayText = workItem.querySelector(".overlay-text");
 
       const closeBtn = workItem.querySelector(".overlay-close");
+
       const titleEl = workItem.querySelector(".project-title");
 
       const centerImg = carousel.querySelector(".carousel-center-img");
@@ -363,7 +377,7 @@
       renderStacks();
     });
 
-    /* ---------- Practice Windows (UNCHANGED) ---------- */
+    /* ---------- Practice Windows ---------- */
     (() => {
       const desktop = document.getElementById("practiceDesktop");
       const resetBtn = document.getElementById("practiceReset");
@@ -424,6 +438,7 @@
         const maxY = Math.max(minY, Math.floor(deskH - WIN_H - 8));
 
         const pos = [];
+
         for (let i = 0; i < count; i++) {
           const zig = (i % 2 === 0) ? -zigAmp : zigAmp;
 
@@ -435,6 +450,7 @@
 
           pos.push({ x, y });
         }
+
         return pos;
       }
 
@@ -627,158 +643,96 @@
       mqMobile.addEventListener?.("change", syncModeClass);
     })();
 
-    /* ---------- Pixel Links (FIXED + MOBILE TWO-STEP) ---------- */
+    /* ---------- Talking With Others: pixel row + popout label ---------- */
     (() => {
-      const layer = document.getElementById("pixelLinks");
-      if (!layer) return;
+      const row = document.getElementById("talkingRow");
+      const pop = document.getElementById("talkPop");
+      const popTitle = document.getElementById("talkPopTitle");
+      const popOpen = document.getElementById("talkPopOpen");
+      if (!row || !pop || !popTitle || !popOpen) return;
 
-      const EXTRA = [
-        { href: "https://www.youtube.com/live/q7vPZkCKukQ", label: "Slowrun /fu:bar/ 2021", color: "#17a2b8" },
-        { href: "https://www.youtube.com/watch?v=tWp3CEuwzdE", label: "Totally not a Speedrun /’fubar/ 2o22", color: "#ff4fd8" },
-        { href: "https://www.youtube.com/watch?v=u7pGPptqkjs", label: "A.I. and Online Communities", color: "#ffd24f" },
-        { href: "https://youtu.be/2FZ3mJfzuf0?si=Zpk4Jbf2mxt8pVf-", label: "Gork", color: "#7a5cff" },
-        { href: "https://youtu.be/pT5MtQJTCVA", label: "Scanlines.xyz", color: "#b7ff5a" },
+      // Add/edit pixels here:
+      const TALKING = [
+        { href: "https://www.youtube.com/live/q7vPZkCKukQ", title: "Slowrun /fu:bar/ 2021", color: "#17a2b8" },
+        { href: "https://www.youtube.com/watch?v=tWp3CEuwzdE", title: "Totally not a Speedrun /’fubar/ 2022", color: "#ff4fd8" },
+        { href: "https://www.youtube.com/watch?v=u7pGPptqkjs", title: "A.I. and Online Communities", color: "#ffd24f" },
+        { href: "https://youtu.be/2FZ3mJfzuf0", title: "Gork", color: "#7a5cff" },
+        { href: "https://youtu.be/pT5MtQJTCVA", title: "Scanlines.xyz", color: "#b7ff5a" },
       ];
 
-      const AVOID_SELECTORS = [".carousel", ".about-meta"];
+      // Create pixels (buttons, so we can control the behavior cleanly)
+      function build() {
+        // remove existing pixel buttons but keep pop
+        row.querySelectorAll(".talk-pixel").forEach(n => n.remove());
 
-      const RELOCATE_MS = 60000;
-      const AVOID_PADDING = 18;
-      const PIXEL_SIZE = 10;
-      const COUNT_DESKTOP = 5;
-      const COUNT_MOBILE = 5;
+        TALKING.forEach((item, idx) => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "talk-pixel";
+          b.style.background = item.color || "#17a2b8";
+          b.setAttribute("aria-label", item.title);
+          b.dataset.title = item.title;
+          b.dataset.href = item.href;
+          b.dataset.index = String(idx);
 
-      const rand = (min, max) => min + Math.random() * (max - min);
-      const isMobile = () =>
-        window.matchMedia("(pointer: coarse)").matches || window.innerWidth <= 760;
+          // desktop hover tooltip
+          b.title = item.title;
 
-      function clearPixels() { layer.innerHTML = ""; }
-
-      function getAvoidRects() {
-        const rects = [];
-        const vw = window.innerWidth, vh = window.innerHeight;
-
-        AVOID_SELECTORS.forEach(sel => {
-          const el = document.querySelector(sel);
-          if (!el) return;
-
-          const r = el.getBoundingClientRect();
-          const offscreen = r.bottom < 0 || r.top > vh || r.right < 0 || r.left > vw;
-          if (offscreen) return;
-
-          rects.push({
-            left: r.left - AVOID_PADDING,
-            top: r.top - AVOID_PADDING,
-            right: r.right + AVOID_PADDING,
-            bottom: r.bottom + AVOID_PADDING
+          b.addEventListener("click", (e) => {
+            e.stopPropagation();
+            showFor(b);
           });
+
+          row.insertBefore(b, pop); // keep pop last in the DOM
         });
-
-        return rects;
       }
 
-      function pointInRect(x, y, r) {
-        return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+      function showFor(pixel) {
+        const title = pixel.dataset.title || "";
+        const href = pixel.dataset.href || "#";
+
+        popTitle.textContent = title;
+        popOpen.href = href;
+
+        // position pop to the right of clicked pixel
+        const rowRect = row.getBoundingClientRect();
+        const pRect = pixel.getBoundingClientRect();
+
+        const left = (pRect.right - rowRect.left) + 10; // 10px gap
+        const top = (pRect.top - rowRect.top) + (pRect.height / 2);
+
+        pop.style.left = `${left}px`;
+        pop.style.top = `${top}px`;
+        pop.classList.add("active");
+        pop.setAttribute("aria-hidden", "false");
+
+        // tiny “selected” styling
+        row.querySelectorAll(".talk-pixel.is-active").forEach(el => el.classList.remove("is-active"));
+        pixel.classList.add("is-active");
       }
 
-      function safeSpot(x, y, avoidRects) {
-        const cx = x + PIXEL_SIZE / 2;
-        const cy = y + PIXEL_SIZE / 2;
-        for (const r of avoidRects) {
-          if (pointInRect(cx, cy, r)) return false;
-        }
-        return true;
+      function hide() {
+        pop.classList.remove("active");
+        pop.setAttribute("aria-hidden", "true");
+        row.querySelectorAll(".talk-pixel.is-active").forEach(el => el.classList.remove("is-active"));
       }
 
-      function hideAllLabels() {
-        document.querySelectorAll(".pixel-link.show-label")
-          .forEach(el => el.classList.remove("show-label"));
-      }
-
+      // Click outside closes
       document.addEventListener("click", (e) => {
-        if (!e.target.closest(".pixel-link")) hideAllLabels();
-      }, { passive: true });
+        if (!row.contains(e.target)) hide();
+      });
 
-      function spawnPixels() {
-        clearPixels();
+      // Esc closes
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") hide();
+      });
 
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        const avoidRects = getAvoidRects();
+      // If the viewport changes, hide (prevents pop drifting)
+      window.addEventListener("resize", hide, { passive: true });
 
-        const count = (vw <= 760) ? COUNT_MOBILE : COUNT_DESKTOP;
-        if (!EXTRA.length) return;
-
-        const shuffled = [...EXTRA].sort(() => Math.random() - 0.5);
-        const maxAttemptsPerPixel = 140;
-
-        for (let i = 0; i < count; i++) {
-          const proj = shuffled[i % shuffled.length];
-
-          let placed = false;
-
-          for (let attempt = 0; attempt < maxAttemptsPerPixel; attempt++) {
-            const x = rand(6, vw - (PIXEL_SIZE + 6));
-            const y = rand(6, vh - (PIXEL_SIZE + 6));
-            if (!safeSpot(x, y, avoidRects)) continue;
-
-            const a = document.createElement("a");
-            a.className = "pixel-link twinkle";
-            a.href = proj.href;
-            a.target = "_blank";
-            a.rel = "noreferrer";
-
-// browser hover tooltip
-a.title = proj.label;
-a.setAttribute("aria-label", proj.label);
-
-// remove tooltip on mobile (keep your tap-to-show label flow)
-if (isMobile()) a.removeAttribute("title");
-            
-            a.style.left = `${x}px`;
-            a.style.top = `${y}px`;
-            a.style.width = `${PIXEL_SIZE}px`;
-            a.style.height = `${PIXEL_SIZE}px`;
-            a.style.background = proj.color || "#17a2b8";
-            a.style.setProperty("--twinkle-delay", `${Math.random() * 2.2}s`);
-
-            const label = document.createElement("span");
-            label.className = "pixel-label";
-            label.textContent = proj.label;
-            a.appendChild(label);
-
-            if (isMobile()) {
-              let armed = false;
-
-              a.addEventListener("click", (e) => {
-                if (!armed) {
-                  e.preventDefault();
-                  hideAllLabels();
-                  a.classList.add("show-label");
-                  armed = true;
-                  return;
-                }
-              });
-            }
-
-            layer.appendChild(a);
-            placed = true;
-            break;
-          }
-
-          if (!placed) continue;
-        }
-      }
-
-      let t = null;
-      window.addEventListener("resize", () => {
-        clearTimeout(t);
-        t = setTimeout(spawnPixels, 120);
-      }, { passive: true });
-
-      setInterval(spawnPixels, RELOCATE_MS);
-      spawnPixels();
+      build();
     })();
   </script>
+
 </body>
 </html>
