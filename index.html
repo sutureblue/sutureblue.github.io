@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -189,15 +190,47 @@
 
       </section>
 
-      <!-- NEW: Talking with Others (under the photo spread windows) -->
+      <!-- Talking with Others (NEW) -->
       <section id="talking" class="section">
         <h2>Talking with Others</h2>
 
-        <div class="talking-row" id="talkingRow" aria-label="Talking with Others pixel links">
-          <!-- pixels injected by JS -->
-          <div class="talk-pop" id="talkPop" aria-hidden="true">
-            <div class="talk-pop-title" id="talkPopTitle"></div>
-            <a class="talk-pop-open" id="talkPopOpen" href="#" target="_blank" rel="noreferrer" aria-label="Open link in a new tab">Open ↗</a>
+        <div class="talking-wrap">
+          <div class="talking-row" id="talkingRow" aria-label="Pixel links">
+            <!-- Edit these -->
+            <button class="talk-pixel" type="button"
+              data-title="Slowrun /fu:bar/ 2021"
+              data-href="https://www.youtube.com/live/q7vPZkCKukQ"
+              style="background:#17a2b8"
+              aria-label="Slowrun /fu:bar/ 2021"></button>
+
+            <button class="talk-pixel" type="button"
+              data-title="Totally not a Speedrun /’fubar/ 2022"
+              data-href="https://www.youtube.com/watch?v=tWp3CEuwzdE"
+              style="background:#ff4fd8"
+              aria-label="Totally not a Speedrun /’fubar/ 2022"></button>
+
+            <button class="talk-pixel" type="button"
+              data-title="A.I. and Online Communities"
+              data-href="https://www.youtube.com/watch?v=u7pGPptqkjs"
+              style="background:#ffd24f"
+              aria-label="A.I. and Online Communities"></button>
+
+            <button class="talk-pixel" type="button"
+              data-title="Gork"
+              data-href="https://youtu.be/2FZ3mJfzuf0?si=Zpk4Jbf2mxt8pVf-"
+              style="background:#7a5cff"
+              aria-label="Gork"></button>
+
+            <button class="talk-pixel" type="button"
+              data-title="Scanlines.xyz"
+              data-href="https://youtu.be/pT5MtQJTCVA"
+              style="background:#b7ff5a"
+              aria-label="Scanlines.xyz"></button>
+          </div>
+
+          <div class="talking-info" id="talkingInfo" aria-live="polite">
+            <div class="talking-title" id="talkingTitle">Tap a pixel.</div>
+            <a class="talking-open" id="talkingOpen" href="#" target="_blank" rel="noreferrer" aria-disabled="true">Open ↗</a>
           </div>
         </div>
       </section>
@@ -215,7 +248,6 @@
               Time-based and experiential works tend to be what I make the most.
             </p>
 
-            <!-- CV button -->
             <a class="cv-link" href="assets/BeeNix_CV_2026.pdf" target="_blank" rel="noreferrer">View CV</a>
           </div>
 
@@ -262,7 +294,6 @@
       const overlayText = workItem.querySelector(".overlay-text");
 
       const closeBtn = workItem.querySelector(".overlay-close");
-
       const titleEl = workItem.querySelector(".project-title");
 
       const centerImg = carousel.querySelector(".carousel-center-img");
@@ -406,13 +437,8 @@
         win.style.zIndex = String(++zTop);
       }
 
-      function randBetween(min, max) {
-        return min + Math.random() * (max - min);
-      }
-
-      function clamp(n, min, max) {
-        return Math.max(min, Math.min(max, n));
-      }
+      function randBetween(min, max) { return min + Math.random() * (max - min); }
+      function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 
       function computeSplayPositions(count) {
         const WIN_W = 300;
@@ -438,7 +464,6 @@
         const maxY = Math.max(minY, Math.floor(deskH - WIN_H - 8));
 
         const pos = [];
-
         for (let i = 0; i < count; i++) {
           const zig = (i % 2 === 0) ? -zigAmp : zigAmp;
 
@@ -450,7 +475,6 @@
 
           pos.push({ x, y });
         }
-
         return pos;
       }
 
@@ -643,98 +667,40 @@
       mqMobile.addEventListener?.("change", syncModeClass);
     })();
 
-    /* ---------- Talking With Others: pixel row + popout label ---------- */
+    /* ---------- Talking with Others ---------- */
     (() => {
       const row = document.getElementById("talkingRow");
-      const pop = document.getElementById("talkPop");
-      const popTitle = document.getElementById("talkPopTitle");
-      const popOpen = document.getElementById("talkPopOpen");
-      if (!row || !pop || !popTitle || !popOpen) return;
+      const titleEl = document.getElementById("talkingTitle");
+      const openEl = document.getElementById("talkingOpen");
+      if (!row || !titleEl || !openEl) return;
 
-      // Add/edit pixels here:
-      const TALKING = [
-        { href: "https://www.youtube.com/live/q7vPZkCKukQ", title: "Slowrun /fu:bar/ 2021", color: "#17a2b8" },
-        { href: "https://www.youtube.com/watch?v=tWp3CEuwzdE", title: "Totally not a Speedrun /’fubar/ 2022", color: "#ff4fd8" },
-        { href: "https://www.youtube.com/watch?v=u7pGPptqkjs", title: "A.I. and Online Communities", color: "#ffd24f" },
-        { href: "https://youtu.be/2FZ3mJfzuf0", title: "Gork", color: "#7a5cff" },
-        { href: "https://youtu.be/pT5MtQJTCVA", title: "Scanlines.xyz", color: "#b7ff5a" },
-      ];
+      function setActive(btn) {
+        row.querySelectorAll(".talk-pixel.is-active")
+          .forEach(b => b.classList.remove("is-active"));
 
-      // Create pixels (buttons, so we can control the behavior cleanly)
-      function build() {
-        // remove existing pixel buttons but keep pop
-        row.querySelectorAll(".talk-pixel").forEach(n => n.remove());
+        btn.classList.add("is-active");
 
-        TALKING.forEach((item, idx) => {
-          const b = document.createElement("button");
-          b.type = "button";
-          b.className = "talk-pixel";
-          b.style.background = item.color || "#17a2b8";
-          b.setAttribute("aria-label", item.title);
-          b.dataset.title = item.title;
-          b.dataset.href = item.href;
-          b.dataset.index = String(idx);
+        const title = btn.dataset.title || "—";
+        const href = btn.dataset.href || "#";
+        const color = getComputedStyle(btn).backgroundColor;
 
-          // desktop hover tooltip
-          b.title = item.title;
+        titleEl.textContent = title;
 
-          b.addEventListener("click", (e) => {
-            e.stopPropagation();
-            showFor(b);
-          });
+        openEl.href = href;
+        openEl.setAttribute("aria-disabled", href === "#" ? "true" : "false");
 
-          row.insertBefore(b, pop); // keep pop last in the DOM
-        });
+        // Open link matches pixel
+        openEl.style.setProperty("--active-color", color);
       }
 
-      function showFor(pixel) {
-        const title = pixel.dataset.title || "";
-        const href = pixel.dataset.href || "#";
-
-        // grab the pixel color (inline background) and pass it to the pop
-        const color = getComputedStyle(pixel).backgroundColor;
-        pop.style.setProperty("--active-pixel-color", color);
-
-        popTitle.textContent = title;
-        popOpen.href = href;
-
-        // position pop to the right of clicked pixel
-        const rowRect = row.getBoundingClientRect();
-        const pRect = pixel.getBoundingClientRect();
-
-        const left = (pRect.right - rowRect.left) + 10; // 10px gap
-        const top = (pRect.top - rowRect.top) + (pRect.height / 2);
-
-        pop.style.left = `${left}px`;
-        pop.style.top = `${top}px`;
-        pop.classList.add("active");
-        pop.setAttribute("aria-hidden", "false");
-
-        // tiny “selected” styling
-        row.querySelectorAll(".talk-pixel.is-active").forEach(el => el.classList.remove("is-active"));
-        pixel.classList.add("is-active");
-      }
-
-      function hide() {
-        pop.classList.remove("active");
-        pop.setAttribute("aria-hidden", "true");
-        row.querySelectorAll(".talk-pixel.is-active").forEach(el => el.classList.remove("is-active"));
-      }
-
-      // Click outside closes
-      document.addEventListener("click", (e) => {
-        if (!row.contains(e.target)) hide();
+      row.addEventListener("click", (e) => {
+        const btn = e.target.closest(".talk-pixel");
+        if (!btn) return;
+        setActive(btn);
       });
 
-      // Esc closes
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") hide();
-      });
-
-      // If the viewport changes, hide (prevents pop drifting)
-      window.addEventListener("resize", hide, { passive: true });
-
-      build();
+      const first = row.querySelector(".talk-pixel");
+      if (first) setActive(first);
     })();
   </script>
 
