@@ -512,18 +512,18 @@ body {
     0 0 22px rgba(23,162,184,0.14);
 }
 
+.talking-pixels-wrap{
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 14px;
+  background: rgba(10,10,20,0.9);
+  padding: 12px 14px;
+}
+
 .talk-pixel.is-active{
   opacity: 1;
   transform: translateY(-1px);
   outline: 2px solid rgba(255,255,255,0.18);
   outline-offset: 2px;
-}
-
-.talking-info{
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(0,0,0,0.35);
 }
 
 .talking-title{
