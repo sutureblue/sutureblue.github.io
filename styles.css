@@ -477,15 +477,15 @@ body {
    ========================= */
 .talking-wrap{
   max-width: 760px;
-  margin: 0 auto;
+  margin: 0;   /* instead of 0 auto */
 }
 
 .talking-row{
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-  align-items: left;
-  justify-content: left;
+  align-items: flex-start;
+  justify-content: flex-start;
   margin: 10px 0 12px;
 }
 
