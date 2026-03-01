@@ -555,7 +555,9 @@ body {
 }
 
 .talking-description{
-  font-size: 10px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  opacity: 0.85;
   color: rgba(247,245,255,0.78);
   margin: 0 0 10px;
   max-width: 45ch;   /* try 45–60ch */
