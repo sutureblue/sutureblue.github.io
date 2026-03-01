@@ -199,19 +199,20 @@
           <div class="talking-row" id="talkingRow" aria-label="Pixel links">
             <!-- Edit these -->
             <button class="talk-pixel" type="button"
+              data-title="Totally not a Speedrun /’fubar/ 2022"
+              data-href="https://www.youtube.com/watch?v=tWp3CEuwzdE"
+              style="background:#ff4fd8"
+              aria-label="Totally not a Speedrun /’fubar/ 2022"></button>
+            
+            <button class="talk-pixel" type="button"
               data-title="Slowrun /fu:bar/ 2021"
               data-href="https://www.youtube.com/live/q7vPZkCKukQ"
               style="background:#17a2b8"
               aria-label="Slowrun /fu:bar/ 2021"></button>
 
             <button class="talk-pixel" type="button"
-              data-title="Totally not a Speedrun /’fubar/ 2022"
-              data-href="https://www.youtube.com/watch?v=tWp3CEuwzdE"
-              style="background:#ff4fd8"
-              aria-label="Totally not a Speedrun /’fubar/ 2022"></button>
-
-            <button class="talk-pixel" type="button"
-              data-title="A.I. and Online Communities"
+              data-title="A.I. and Online Communities: Art, Bodies, and Systems"
+              data-description="Live coded performance + discussion."
               data-href="https://www.youtube.com/watch?v=u7pGPptqkjs"
               style="background:#ffd24f"
               aria-label="A.I. and Online Communities"></button>
@@ -230,9 +231,10 @@
           </div>
           </div>
 
-          <div class="talking-info" id="talkingInfo" aria-live="polite">
+          <div class="talking-info">
             <div class="talking-title" id="talkingTitle">Tap a pixel.</div>
-            <a class="talking-open" id="talkingOpen" href="#" target="_blank" rel="noreferrer" aria-disabled="true">Open ↗</a>
+            <div class="talking-description" id="talkingDescription"></div>
+          <a class="talking-open" id="talkingOpen">Open ↗</a>
           </div>
         </div>
       </section>
@@ -683,6 +685,7 @@
         btn.classList.add("is-active");
 
         const title = btn.dataset.title || "—";
+        const descriptionEl = document.getElementById("talkingDescription");
         const href = btn.dataset.href || "#";
         const color = getComputedStyle(btn).backgroundColor;
 
