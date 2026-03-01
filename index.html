@@ -197,7 +197,7 @@
   <div class="talking-wrap">
     <div class="talking-pixels-wrap">
       <div class="talking-row" id="talkingRow" aria-label="Pixel links">
-            
+    
             <!-- Edit these -->
             <button class="talk-pixel" type="button"
               data-title="Totally not a Speedrun /’fubar/ 2022"
@@ -235,9 +235,6 @@
               aria-label="Scanlines.xyz"></button>
           </div>
           </div>
-
-      </div>
-    </div>
 
     <div class="talking-info">
       <div class="talking-title" id="talkingTitle">Tap a pixel.</div>
@@ -679,43 +676,57 @@
       mqMobile.addEventListener?.("change", syncModeClass);
     })();
 
-    /* ---------- Talking with Others ---------- */
-    (() => {
-      const row = document.getElementById("talkingRow");
-      const titleEl = document.getElementById("talkingTitle");
-      const openEl = document.getElementById("talkingOpen");
-      if (!row || !titleEl || !openEl) return;
+<script>
+/* ---------- Talking with Others ---------- */
+(() => {
+  const row = document.getElementById("talkingRow");
+  const titleEl = document.getElementById("talkingTitle");
+  const descEl = document.getElementById("talkingDescription");
+  const openEl = document.getElementById("talkingOpen");
+  if (!row || !titleEl || !descEl || !openEl) return;
 
-      function setActive(btn) {
-        row.querySelectorAll(".talk-pixel.is-active")
-          .forEach(b => b.classList.remove("is-active"));
+  function setActive(btn) {
+    row.querySelectorAll(".talk-pixel.is-active")
+      .forEach(b => b.classList.remove("is-active"));
 
-        btn.classList.add("is-active");
+    btn.classList.add("is-active");
 
-        const title = btn.dataset.title || "—";
-        const descriptionEl = document.getElementById("talkingDescription");
-        const href = btn.dataset.href || "#";
-        const color = getComputedStyle(btn).backgroundColor;
+    const title = btn.dataset.title || "—";
+    const description = btn.dataset.description || "";   // <-- YOU NEED THIS
+    const href = btn.dataset.href || "#";
 
-        titleEl.textContent = title;
+    // Prefer inline style color if you set it in HTML (your case)
+    const color = btn.style.background || getComputedStyle(btn).backgroundColor;
 
-        openEl.href = href;
-        openEl.setAttribute("aria-disabled", href === "#" ? "true" : "false");
+    titleEl.textContent = title;
+    descEl.textContent = description;                    // <-- AND THIS
 
-        // Open link matches pixel
-        openEl.style.setProperty("--active-color", color);
-      }
+    if (href && href !== "#") {
+      openEl.href = href;
+      openEl.setAttribute("aria-disabled", "false");
+      openEl.style.display = "inline-block";
+    } else {
+      openEl.href = "#";
+      openEl.setAttribute("aria-disabled", "true");
+      openEl.style.display = "none";
+    }
 
-      row.addEventListener("click", (e) => {
-        const btn = e.target.closest(".talk-pixel");
-        if (!btn) return;
-        setActive(btn);
-      });
+    // Make the Open link match the active pixel color
+    // Set it as a CSS variable on the link (your CSS uses --active-color)
+    openEl.style.setProperty("--active-color", color);
+  }
 
-      const first = row.querySelector(".talk-pixel");
-      if (first) setActive(first);
-    })();
-  </script>
+  row.addEventListener("click", (e) => {
+    const btn = e.target.closest(".talk-pixel");
+    if (!btn) return;
+    setActive(btn);
+  });
+
+  // Set default selection
+  const first = row.querySelector(".talk-pixel");
+  if (first) setActive(first);
+})();
+</script>
 
 </body>
 </html>
