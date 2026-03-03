@@ -312,7 +312,7 @@ body {
   opacity: 0;
   pointer-events: none;
   transition: opacity 180ms ease;
-  display: grid;
+  display: none;
   place-items: center;
   padding: 24px;
 }
