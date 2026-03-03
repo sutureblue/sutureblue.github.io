@@ -220,7 +220,25 @@ body {
 }
 .work-overlay.active { opacity: 1; pointer-events: auto; }
 
-.overlay-inner { position: relative; height: 100%; display: flex; flex-direction: column; }
+.overlay-inner { position: relative; height: 100%; display: flex; flex-direction: column; gap: 10px; }
+
+/* Close button area (TOP LEFT) */
+.overlay-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.overlay-close {
+  background: none;
+  border: none;
+  color: var(--fg);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 6px 8px;
+  line-height: 1;
+  border-radius: 10px;
+}
+.overlay-close:hover { color: var(--glow-blue); }
 
 .overlay-scroll {
   flex: 1;
@@ -238,19 +256,6 @@ body {
 .overlay-scroll::-webkit-scrollbar-thumb { background: rgba(23,162,184,0.55); border-radius: 4px; }
 .overlay-scroll::-webkit-scrollbar-thumb:hover { background: rgba(23,162,184,0.8); }
 
-.overlay-actions { position: sticky; bottom: 0; display: flex; justify-content: flex-start; padding-top: 10px; }
-.overlay-close {
-  background: none;
-  border: none;
-  color: var(--fg);
-  font-size: 18px;
-  cursor: pointer;
-  padding: 6px 8px;
-  line-height: 1;
-  border-radius: 10px;
-}
-.overlay-close:hover { color: var(--glow-blue); }
-
 .overlay-text { font-size: 14px; color: rgba(247, 245, 255, 0.92); }
 .overlay-text p { margin: 0 0 12px; }
 .overlay-text p:last-child { margin-bottom: 0; }
@@ -264,10 +269,200 @@ body {
 .overlay-text a:hover { color: #7fd3e0; border-bottom-color: rgba(23,162,184,0.8); }
 
 .work-meta { margin-top: 12px; text-align: left; }
-.work-meta h3 { margin: 0 0 4px; font-size: 15px; }
+.work-meta h3 { margin: 0 0 6px; font-size: 15px; }
 
 .project-title { cursor: pointer; }
 .project-title:hover { color: var(--glow-blue); }
+
+/* NEW: gallery open button */
+.gallery-open {
+  display: inline-block;
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: rgba(247,245,255,0.86);
+  padding: 8px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 12px;
+  letter-spacing: 0.2px;
+  box-shadow:
+    0 10px 24px rgba(0,0,0,0.55),
+    0 0 14px rgba(23,162,184,0.10);
+}
+.gallery-open:hover {
+  color: var(--glow-blue);
+  border-color: rgba(23,162,184,0.35);
+}
+
+/* =========================
+   NEW: Fullscreen Gallery Modal
+   ========================= */
+
+.gallery-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0,0,0,0.50); /* half-ish opacity */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.gallery-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gallery-shell {
+  position: relative;
+  width: min(980px, 96vw);
+  height: min(720px, 88vh);
+  background: rgba(6, 6, 10, 0.96);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 18px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.70);
+  padding: 14px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 10px;
+}
+
+/* TOP LEFT close */
+.gallery-close {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #fff;
+  width: 34px;
+  height: 30px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+.gallery-close:hover {
+  color: var(--glow-blue);
+  border-color: rgba(23,162,184,0.35);
+}
+
+/* 3x3 border grid: main center (cell 5), thumbs around it */
+.gallery-grid {
+  width: 100%;
+  height: 100%;
+  padding: 34px 10px 10px; /* leave space so the close doesn't overlap */
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1fr;
+  grid-template-rows: 1fr 1.4fr 1fr;
+  gap: 10px;
+}
+
+.gallery-cell {
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 12px 26px rgba(0,0,0,0.45);
+  display: grid;
+  place-items: stretch;
+}
+
+.gallery-main {
+  border: 1px solid rgba(23,162,184,0.30);
+  box-shadow:
+    0 18px 48px rgba(0,0,0,0.65),
+    0 0 22px rgba(23,162,184,0.16);
+}
+
+.gallery-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-thumb {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  display: block;
+}
+.gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0.92;
+  transform: scale(1);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+.gallery-thumb:hover img {
+  opacity: 1;
+  transform: scale(1.01);
+}
+.gallery-thumb.is-active {
+  outline: 2px solid rgba(23,162,184,0.70);
+  outline-offset: -2px;
+}
+
+.gallery-empty {
+  opacity: 0.1;
+}
+
+.gallery-caption {
+  font-size: 12px;
+  color: rgba(247,245,255,0.72);
+  padding: 0 6px 4px;
+  min-height: 18px;
+}
+
+/* Mobile fallback: big image + thumb strip */
+@media (max-width: 760px) {
+  .gallery-shell {
+    height: min(720px, 92vh);
+  }
+
+  .gallery-grid {
+    padding-top: 44px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    gap: 12px;
+  }
+
+  /* re-map: main + thumbs row */
+  .gallery-cell { display: none; }
+  .gallery-cell.gallery-main { display: grid; }
+
+  /* when stacked, we still have thumbs in DOM: show them as a row */
+  .gallery-grid {
+    align-content: start;
+  }
+
+  /* create a row of thumbs by showing all non-main cells */
+  .gallery-grid .gallery-cell:not(.gallery-main) {
+    display: grid;
+    height: 88px;
+  }
+
+  .gallery-grid {
+    grid-template-rows: 1fr;
+  }
+
+  /* turn the grid into a horizontal strip */
+  .gallery-grid {
+    display: grid;
+    grid-auto-flow: row;
+  }
+}
 
 /* =========================
    Reset + Starting area
@@ -477,7 +672,7 @@ body {
    ========================= */
 .talking-wrap{
   max-width: 760px;
-  margin: 0;   /* instead of 0 auto */
+  margin: 0;
 }
 
 .talking-row{
@@ -501,7 +696,7 @@ body {
     0 0 16px rgba(23,162,184,0.10);
   opacity: 0.92;
   transition: transform 140ms ease, opacity 140ms ease, box-shadow 140ms ease;
- background: transparent; /* will be overridden by inline style anyway */
+  background: transparent;
   appearance: none;
   -webkit-appearance: none;
 }
@@ -538,7 +733,6 @@ body {
   font-size: 12px;
   color: var(--active-color, #17a2b8);
   text-decoration: none;
-   border-bottom: 1px solid rgba(23,162,184,0.45);
   border-bottom: 1px solid color-mix(in srgb, var(--active-color, #17a2b8) 45%, transparent);
   transition: color 140ms ease, border-color 140ms ease;
 }
@@ -560,7 +754,7 @@ body {
   opacity: 0.85;
   color: rgba(247,245,255,0.78);
   margin: 0 0 10px;
-  max-width: 45ch;   /* try 45–60ch */
+  max-width: 45ch;
 }
 
 /* =========================
