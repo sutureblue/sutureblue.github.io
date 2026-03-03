@@ -62,14 +62,15 @@
                   <img src="assets/hereWeAre.png" data-title="Here We Are (2022)" data-template=".tpl-hereWeAre" alt="">
                 </div>
 
+                <!-- Existing text overlay (now closes ONLY via X + ESC) -->
                 <div class="work-overlay" aria-hidden="true" role="dialog" aria-modal="true">
                   <div class="overlay-inner">
-                    <div class="overlay-scroll">
-                      <div class="overlay-text"></div>
-                    </div>
-
                     <div class="overlay-actions">
                       <button class="overlay-close" type="button" aria-label="Close overlay">×</button>
+                    </div>
+
+                    <div class="overlay-scroll">
+                      <div class="overlay-text"></div>
                     </div>
                   </div>
                 </div>
@@ -81,6 +82,11 @@
 
           <div class="work-meta">
             <h3 class="project-title"></h3>
+
+            <!-- NEW: Gallery modal trigger -->
+            <button class="gallery-open" type="button">
+              click here to see more
+            </button>
           </div>
 
           <!-- Carousel templates -->
@@ -198,14 +204,13 @@
           <div class="talking-pixels-wrap">
             <div class="talking-row" id="talkingRow" aria-label="Pixel links">
 
-              <!-- Edit these -->
               <button class="talk-pixel" type="button"
                 data-title="Glitch Art practices and trends in Glitch Artists Collective, 2023"
                 data-description="Thomas Collet and myself discuss our experiences within the evolution of Glitch Art and GAC."
                 data-href="https://example.com"
                 style="background:#ff8800"
                 aria-label="Collet and GAC"></button>
-              
+
               <button class="talk-pixel" type="button"
                 data-title="A.I. and Online Communities: Art, Bodies, and Systems, 2025"
                 data-description="This conversation brings together artist-researcher J. Rosenbaum and theorist-artist Michael Betancourt for a wide-ranging discussion on how AI is reshaping identity, perception, power, and social life"
@@ -213,7 +218,7 @@
                 style="background:#ffd24f"
                 aria-label="A.I. and Online Communities"></button>
 
-             <button class="talk-pixel" type="button"
+              <button class="talk-pixel" type="button"
                 data-title="Gork, 2025"
                 data-description="A conversation between myself and Gork, an Oregon-based multimedia artist."
                 data-href="https://youtu.be/2FZ3mJfzuf0?si=Zpk4Jbf2mxt8pVf-"
@@ -226,7 +231,7 @@
                 data-href="https://youtu.be/pT5MtQJTCVA"
                 style="background:#b7ff5a"
                 aria-label="Scanlines.xyz"></button>
-              
+
               <button class="talk-pixel" type="button"
                 data-title="Totally not a Speedrun /’fubar/ 2022"
                 data-description="Me and Kaspar Ravel give an interactive talk within the 3D environment of /'fubar/ 2022 where we discuss techniques, history, and personal observations of the exhibition."
@@ -298,6 +303,20 @@
       <span class="footer-note">Designed by me · Scripted with AI · Hosted on GitHub Pages</span>
     </footer>
 
+  </div>
+
+  <!-- NEW: Fullscreen Gallery Modal (closes ONLY with X or ESC) -->
+  <div id="galleryModal" class="gallery-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="gallery-shell" role="document">
+      <button id="galleryClose" class="gallery-close" type="button" aria-label="Close gallery">×</button>
+
+      <div class="gallery-grid" id="galleryGrid" aria-label="Image gallery">
+        <!-- injected by JS -->
+      </div>
+
+      <!-- optional caption -->
+      <div class="gallery-caption" id="galleryCaption" aria-live="polite"></div>
+    </div>
   </div>
 
   <!-- ONE script tag only. No nesting. No chaos. -->
@@ -415,15 +434,120 @@
         if (e.key === "Enter" || e.key === " ") openOverlay(e);
       });
 
+      // IMPORTANT: close ONLY with X + ESC (no backdrop click)
       closeBtn.onclick = closeOverlay;
-      overlay.onclick = closeOverlay;
+      overlay.onclick = (e) => e.stopPropagation();
       overlayInner.onclick = (e) => e.stopPropagation();
 
       document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeOverlay(e);
+        if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
       });
 
       renderStacks();
+
+      /* ---------- NEW: Fullscreen Gallery Modal ---------- */
+      const galleryOpenBtn = workItem.querySelector(".gallery-open");
+      const galleryModal = document.getElementById("galleryModal");
+      const galleryCloseBtn = document.getElementById("galleryClose");
+      const galleryGrid = document.getElementById("galleryGrid");
+      const galleryCaption = document.getElementById("galleryCaption");
+
+      // Pick the images you want in the gallery:
+      // Here: use the same carousel sources (up to 9 for the border grid).
+      const galleryItems = projects.slice(0, 9);
+
+      let galleryActive = 0;
+      let galleryLastFocus = null;
+
+      function setGalleryActive(idx) {
+        galleryActive = idx;
+        const mainImg = galleryGrid.querySelector(".gallery-main img");
+        if (mainImg) mainImg.src = galleryItems[galleryActive].src;
+
+        galleryGrid.querySelectorAll(".gallery-thumb").forEach((b, i) => {
+          b.classList.toggle("is-active", i === galleryActive);
+          b.setAttribute("aria-current", i === galleryActive ? "true" : "false");
+        });
+
+        galleryCaption.textContent = galleryItems[galleryActive].title || "";
+      }
+
+      function buildGalleryGrid() {
+        galleryGrid.innerHTML = "";
+
+        // 3x3: center is the main image. Others are thumbs.
+        // If you have <9 items, it still works—empty cells are just not created.
+        const cells = 9;
+
+        for (let i = 0; i < cells; i++) {
+          const cell = document.createElement("div");
+          cell.className = "gallery-cell";
+
+          if (i === 4) {
+            cell.classList.add("gallery-main");
+            cell.innerHTML = `
+              <img src="${galleryItems[galleryActive]?.src || ""}" alt="">
+            `;
+          } else {
+            const thumbIndex = (i < 4) ? i : i - 1; // skip center slot
+            const item = galleryItems[thumbIndex];
+
+            if (!item) {
+              cell.classList.add("gallery-empty");
+            } else {
+              cell.innerHTML = `
+                <button class="gallery-thumb" type="button" aria-label="View ${item.title || "image"}">
+                  <img src="${item.src}" alt="">
+                </button>
+              `;
+              const btn = cell.querySelector("button");
+              btn.addEventListener("click", () => setGalleryActive(thumbIndex));
+            }
+          }
+
+          galleryGrid.appendChild(cell);
+        }
+
+        // after creation, mark active state
+        const thumbs = galleryGrid.querySelectorAll(".gallery-thumb");
+        thumbs.forEach((b, i) => {
+          b.classList.toggle("is-active", i === galleryActive);
+          b.setAttribute("aria-current", i === galleryActive ? "true" : "false");
+        });
+
+        galleryCaption.textContent = galleryItems[galleryActive]?.title || "";
+      }
+
+      function openGallery() {
+        galleryLastFocus = document.activeElement;
+
+        buildGalleryGrid();
+        galleryModal.classList.add("active");
+        galleryModal.setAttribute("aria-hidden", "false");
+        galleryCloseBtn.focus({ preventScroll: true });
+      }
+
+      function closeGallery() {
+        galleryModal.classList.remove("active");
+        galleryModal.setAttribute("aria-hidden", "true");
+        if (galleryLastFocus) galleryLastFocus.focus({ preventScroll: true });
+      }
+
+      if (galleryOpenBtn) {
+        galleryOpenBtn.addEventListener("click", openGallery);
+      }
+
+      // Close ONLY via X + ESC
+      galleryCloseBtn.addEventListener("click", closeGallery);
+
+      // Backdrop click does NOTHING (so we just stop propagation)
+      galleryModal.addEventListener("click", (e) => e.stopPropagation());
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && galleryModal.classList.contains("active")) {
+          closeGallery();
+        }
+      });
     });
 
     /* ---------- Practice Windows ---------- */
@@ -700,7 +824,6 @@
         const description = btn.dataset.description || "";
         const href = btn.dataset.href || "#";
 
-        // Prefer inline background you set on each button
         const color = btn.style.background || getComputedStyle(btn).backgroundColor;
 
         titleEl.textContent = title;
@@ -709,7 +832,6 @@
         openEl.href = href;
         openEl.setAttribute("aria-disabled", href === "#" ? "true" : "false");
 
-        // Make the Open link match the active pixel color
         openEl.style.setProperty("--active-color", color);
       }
 
