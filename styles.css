@@ -294,146 +294,200 @@ body {
   border-color: rgba(23,162,184,0.35);
 }
 
-/* =========================
-   NEW: Fullscreen Gallery Modal
-   ========================= */
 
-.gallery-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  background: rgba(0,0,0,0.50);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 180ms ease;
-  display: grid;
-  place-items: center;
-  padding: 24px;
+
+
+/* ---------- NEW: Fullscreen Gallery Modal (Snake ring) ---------- */
+const galleryOpenBtn = workItem.querySelector(".gallery-open");
+const galleryModal = document.getElementById("galleryModal");
+const galleryCloseBtn = document.getElementById("galleryClose");
+
+const galleryStage = document.getElementById("galleryStage");
+const galleryRing = document.getElementById("galleryRing");
+const galleryMainImg = document.getElementById("galleryMainImg");
+const galleryCaption = document.getElementById("galleryCaption");
+const galleryMainBox = galleryStage.querySelector(".gallery-main");
+
+// Use your carousel sources as the gallery items (you can change this list)
+const galleryItems = projects; // <-- all of them (adds/removes auto-scale)
+
+let galleryActive = 0;
+let galleryLastFocus = null;
+
+const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+function setGalleryActive(idx){
+  galleryActive = idx;
+  galleryMainImg.src = galleryItems[galleryActive]?.src || "";
+  galleryCaption.textContent = galleryItems[galleryActive]?.title || "";
+
+  galleryRing.querySelectorAll(".gallery-thumb").forEach((b) => {
+    const i = Number(b.dataset.index);
+    b.classList.toggle("is-active", i === galleryActive);
+    b.setAttribute("aria-current", i === galleryActive ? "true" : "false");
+  });
 }
 
-.gallery-modal.active {
-  opacity: 1;
-  pointer-events: auto;
+/**
+ * Snake loop path:
+ * starts at top-left -> top-right -> down -> bottom-left -> up -> back to start
+ * Thumb size shrinks as count grows:
+ * max 150, min 20
+ */
+function layoutSnakeThumbs(){
+  if (!galleryModal.classList.contains("active")) return;
+
+  const count = galleryItems.length;
+  galleryRing.innerHTML = "";
+
+  if (!count) {
+    galleryMainImg.src = "";
+    galleryCaption.textContent = "";
+    return;
+  }
+
+  const rect = galleryStage.getBoundingClientRect();
+  const W = rect.width;
+  const H = rect.height;
+
+  // Reserve a little safety area so the close button doesn't fight the first thumb
+  const SAFE_TOP = 54;
+  const SAFE_LEFT = 0;
+  const SAFE_RIGHT = 0;
+  const SAFE_BOTTOM = 0;
+
+  const usableW = W - SAFE_LEFT - SAFE_RIGHT;
+  const usableH = H - SAFE_TOP - SAFE_BOTTOM;
+
+  // A perimeter that thumbs can travel where they still fit:
+  // reduce by thumb size later, but we start with a rough guess and iterate once.
+  let thumb = 150;
+
+  // Estimate thumb size from perimeter / count and clamp it.
+  // The 0.65 factor = spacing slack so they don't collide.
+  const approxPerim = 2 * (usableW + usableH);
+  thumb = Math.floor((approxPerim / count) * 0.65);
+  thumb = clamp(thumb, 20, 150);
+
+  // Gap shrinks with thumbs, but never tiny
+  const gap = clamp(Math.floor(thumb * 0.16), 6, 18);
+
+  // Now define the travel box where the *top-left corner* of thumbs moves.
+  // This prevents overflow.
+  const x0 = SAFE_LEFT + gap;
+  const y0 = SAFE_TOP + gap;
+  const x1 = SAFE_LEFT + usableW - gap - thumb;
+  const y1 = SAFE_TOP + usableH - gap - thumb;
+
+  const segTop = Math.max(0, x1 - x0);
+  const segRight = Math.max(0, y1 - y0);
+  const segBottom = segTop;
+  const segLeft = segRight;
+
+  const loopLen = segTop + segRight + segBottom + segLeft || 1;
+  const step = loopLen / count;
+
+  // Set the center image inset so it never overlaps the ring.
+  const ringThickness = thumb + gap * 2;
+
+  const mainLeft = SAFE_LEFT + ringThickness;
+  const mainTop  = SAFE_TOP + ringThickness;
+  const mainW    = Math.max(120, usableW - ringThickness * 2);
+  const mainH    = Math.max(120, usableH - ringThickness * 2);
+
+  galleryMainBox.style.left = mainLeft + "px";
+  galleryMainBox.style.top = mainTop + "px";
+  galleryMainBox.style.width = mainW + "px";
+  galleryMainBox.style.height = mainH + "px";
+
+  // Draw thumbs along the snake loop
+  for (let i = 0; i < count; i++){
+    const item = galleryItems[i];
+    const dist = i * step;
+
+    let x = x0;
+    let y = y0;
+
+    if (dist <= segTop){
+      // top: left -> right
+      x = x0 + dist;
+      y = y0;
+    } else if (dist <= segTop + segRight){
+      // right: top -> bottom
+      x = x1;
+      y = y0 + (dist - segTop);
+    } else if (dist <= segTop + segRight + segBottom){
+      // bottom: right -> left
+      x = x1 - (dist - segTop - segRight);
+      y = y1;
+    } else {
+      // left: bottom -> top
+      x = x0;
+      y = y1 - (dist - segTop - segRight - segBottom);
+    }
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "gallery-thumb";
+    btn.dataset.index = String(i);
+    btn.style.width = thumb + "px";
+    btn.style.height = thumb + "px";
+    btn.style.left = Math.round(x) + "px";
+    btn.style.top = Math.round(y) + "px";
+    btn.setAttribute("aria-label", `View ${item.title || "image"}`);
+    btn.innerHTML = `<img src="${item.src}" alt="">`;
+
+    btn.addEventListener("click", () => setGalleryActive(i));
+
+    galleryRing.appendChild(btn);
+  }
+
+  // ensure active state stays synced
+  setGalleryActive(clamp(galleryActive, 0, count - 1));
 }
 
-.gallery-shell {
-  position: relative;
-  width: min(1100px, 96vw);
-  height: min(760px, 90vh);
+function openGallery(){
+  galleryLastFocus = document.activeElement;
 
-  background: rgba(6, 6, 10, 0.98);
-  border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 18px;
-  box-shadow: 0 30px 90px rgba(0,0,0,0.75);
+  galleryModal.classList.add("active");
+  galleryModal.setAttribute("aria-hidden", "false");
 
-  padding: 60px 40px 40px; /* top padding gives space for X */
-  overflow: hidden; /* ensures NOTHING spills outside */
+  galleryActive = clamp(galleryActive, 0, Math.max(0, galleryItems.length - 1));
+  setGalleryActive(galleryActive);
+
+  // wait a tick so layout measures correctly
+  requestAnimationFrame(() => {
+    layoutSnakeThumbs();
+    galleryCloseBtn.focus({ preventScroll: true });
+  });
 }
 
-/* TOP LEFT close */
-.gallery-close {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  z-index: 3;
-
-  background: rgba(0,0,0,0.55);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: #fff;
-  width: 36px;
-  height: 32px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 18px;
-  line-height: 1;
-}
-.gallery-close:hover {
-  color: var(--glow-blue);
-  border-color: rgba(23,162,184,0.35);
+function closeGallery(){
+  galleryModal.classList.remove("active");
+  galleryModal.setAttribute("aria-hidden", "true");
+  if (galleryLastFocus) galleryLastFocus.focus({ preventScroll: true });
 }
 
-/* ===== Grid Layout ===== */
+if (galleryOpenBtn) galleryOpenBtn.addEventListener("click", openGallery);
 
-.gallery-grid {
-  width: 100%;
-  height: 100%;
+// Close ONLY via X + ESC
+galleryCloseBtn.addEventListener("click", closeGallery);
 
-  display: grid;
-  grid-template-columns: 150px 1fr 150px;
-  grid-template-rows: 150px 1fr 150px;
-  gap: 20px;
+// Backdrop click does NOTHING
+galleryModal.addEventListener("click", (e) => e.stopPropagation());
 
-  align-items: center;
-  justify-items: center;
-}
+// Resize: re-layout thumbs while open
+window.addEventListener("resize", () => {
+  if (galleryModal.classList.contains("active")) layoutSnakeThumbs();
+});
 
-/* All cells stay contained */
-.gallery-cell {
-  width: 100%;
-  height: 100%;
-  display: grid;
-  place-items: center;
-}
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && galleryModal.classList.contains("active")){
+    closeGallery();
+  }
+});
 
-/* Center image */
-.gallery-main {
-  width: 100%;
-  height: 100%;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid rgba(23,162,184,0.30);
-  box-shadow:
-    0 18px 48px rgba(0,0,0,0.65),
-    0 0 22px rgba(23,162,184,0.16);
-}
-
-.gallery-main img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* keeps entire image visible */
-}
-
-/* ===== 150x150 Border Thumbnails ===== */
-
-.gallery-thumb {
-  width: 150px;
-  height: 150px;
-  padding: 0;
-  border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 14px;
-  overflow: hidden;
-  background: rgba(255,255,255,0.02);
-  cursor: pointer;
-  box-shadow: 0 12px 26px rgba(0,0,0,0.45);
-  transition: transform 140ms ease, border 140ms ease;
-}
-
-.gallery-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.gallery-thumb:hover {
-  transform: translateY(-3px);
-  border-color: rgba(23,162,184,0.55);
-}
-
-.gallery-thumb.is-active {
-  border: 2px solid rgba(23,162,184,0.85);
-}
-
-/* Caption */
-.gallery-caption {
-  position: absolute;
-  bottom: 14px;
-  left: 40px;
-  right: 40px;
-  text-align: center;
-  font-size: 13px;
-  color: rgba(247,245,255,0.75);
-}
+/* end of gallery modal
 
 /* Mobile fallback: big image + thumb strip */
 @media (max-width: 760px) {
