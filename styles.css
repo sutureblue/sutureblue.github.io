@@ -1,893 +1,883 @@
-/* styles.css */
-:root {
-  --bg: #020203;
-  --fg: #f7f5ff;
-  --muted: #a4a1c2;
-  --border-soft: rgba(255, 255, 255, 0.08);
-
-  --radius-lg: 20px;
-  --radius-md: 14px;
-
-  --glow-blue: #17a2b8;
-}
-
-/* Reset */
-*,
-*::before,
-*::after { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
-
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: var(--fg);
-  line-height: 1.5;
-
-  background:
-    radial-gradient(circle at 18% 12%, rgba(255,255,255,0.035), transparent 45%),
-    radial-gradient(circle at 82% 88%, rgba(255,255,255,0.02), transparent 55%),
-    #010102;
-
-  min-height: 100vh;
-}
-
-/* Page */
-.page {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 24px 16px 48px;
-}
-
-/* Top */
-.top {
-  display: grid;
-  grid-template-columns: 150px 1fr;
-  column-gap: 28px;
-  align-items: center;
-  margin-bottom: 32px;
-}
-
-.site-header {
-  position: sticky;
-  top: 16px;
-  z-index: 10;
-  width: 150px;
-  height: 150px;
-}
-
-.header-image {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 16px;
-  display: block;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65);
-}
-
-.hero {
-  padding: 0 4px 24px;
-  text-align: right;
-}
-
-.hero h1 {
-  font-size: clamp(32px, 4vw, 42px);
-  line-height: 1.1;
-  margin: 0 0 12px;
-  margin-left: auto;
-  max-width: 720px;
-}
-
-.hero p {
-  max-width: 520px;
-  margin: 0 0 0 auto;
-  font-size: 15px;
-  color: var(--muted);
-}
-
-/* Sections */
-.section { padding: 8px 4px 32px; }
-.section h2 { font-size: 18px; margin: 0 0 16px; }
-
-/* Practice header aligned with carousel width */
-#practice h2 {
-  width: 360px;
-  margin: 0 auto 18px;
-  text-align: left;
-}
-
-/* =========================
-   Carousel
-   ========================= */
-
-.work-item {
-  max-width: 360px;
-  margin: 24px auto 0;
-}
-
-.glow-card { position: relative; }
-.glow-card::before {
-  content: "";
-  position: absolute;
-  inset: -18px;
-  border-radius: 26px;
-  background:
-    radial-gradient(circle at 20% 0%, rgba(23, 162, 184, 0.9), transparent 55%),
-    radial-gradient(circle at 80% 100%, rgba(23, 162, 184, 0.5), transparent 55%);
-  filter: blur(6px);
-  z-index: 0;
-}
-
-.glow-card-inner {
-  position: relative;
-  z-index: 1;
-  border-radius: 22px;
-  overflow: visible;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
-}
-
-.carousel {
-  position: relative;
-  width: 360px;
-  height: 220px;
-  margin: 0 auto;
-  overflow: visible;
-  user-select: none;
-}
-
-.carousel * { user-select: none; }
-
-.carousel-stage { position: relative; width: 100%; height: 100%; }
-
-.carousel-center {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 22px;
-  overflow: hidden;
-  z-index: 20;
-  cursor: pointer;
-}
-
-.carousel-center img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-.carousel-stack {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.stack-card {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 22px;
-  overflow: hidden;
-  opacity: 0.2;
-}
-
-.stack-card img { width: 100%; height: 100%; object-fit: cover; }
-
-.carousel-stack.right .stack-card {
-  transform: translateX(50%) translateY(calc(var(--stack-i) * 3px)) scale(0.92);
-}
-.carousel-stack.left .stack-card {
-  transform: translateX(-50%) translateY(calc(var(--stack-i) * 3px)) scale(0.92);
-}
-
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 28px;
-  color: var(--fg);
-  cursor: pointer;
-  z-index: 40;
-}
-
-.carousel-btn.left { left: -32px; }
-.carousel-btn.right { right: -32px; }
-
-.carousel-btn:hover { color: var(--glow-blue); }
-.carousel-btn:disabled { opacity: 0.25; cursor: default; }
-
-/* Carousel overlay + BLUE scrollbars */
-.work-overlay {
-  position: absolute;
-  inset: 0;
-  border-radius: 22px;
-  background: rgba(6, 6, 10, 0.96);
-  border: 3px solid #000;
-  padding: 14px;
-
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-  z-index: 60;
-
-  display: flex;
-  flex-direction: column;
-}
-.work-overlay.active { opacity: 1; pointer-events: auto; }
-
-.overlay-inner { position: relative; height: 100%; display: flex; flex-direction: column; gap: 10px; }
-
-/* Close button area (TOP LEFT) */
-.overlay-actions {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.overlay-close {
-  background: none;
-  border: none;
-  color: var(--fg);
-  font-size: 18px;
-  cursor: pointer;
-  padding: 6px 8px;
-  line-height: 1;
-  border-radius: 10px;
-}
-.overlay-close:hover { color: var(--glow-blue); }
-
-.overlay-scroll {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 10px 10px 14px;
-  background: rgba(0, 0, 0, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 14px;
-
-  scrollbar-width: thin;
-  scrollbar-color: rgba(23,162,184,0.55) transparent;
-}
-.overlay-scroll::-webkit-scrollbar { width: 6px; }
-.overlay-scroll::-webkit-scrollbar-thumb { background: rgba(23,162,184,0.55); border-radius: 4px; }
-.overlay-scroll::-webkit-scrollbar-thumb:hover { background: rgba(23,162,184,0.8); }
-
-.overlay-text { font-size: 14px; color: rgba(247, 245, 255, 0.92); }
-.overlay-text p { margin: 0 0 12px; }
-.overlay-text p:last-child { margin-bottom: 0; }
-
-.overlay-text a {
-  color: #17a2b8;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(23,162,184,0.4);
-  transition: all 0.2s ease;
-}
-.overlay-text a:hover { color: #7fd3e0; border-bottom-color: rgba(23,162,184,0.8); }
-
-.work-meta { margin-top: 12px; text-align: left; }
-.work-meta h3 { margin: 0 0 6px; font-size: 15px; }
-
-.project-title { cursor: pointer; }
-.project-title:hover { color: var(--glow-blue); }
-
-/* NEW: gallery open button */
-.gallery-open {
-  display: inline-block;
-  background: rgba(0,0,0,0.55);
-  border: 1px solid rgba(255,255,255,0.10);
-  color: rgba(247,245,255,0.86);
-  padding: 8px 10px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 12px;
-  letter-spacing: 0.2px;
-  box-shadow:
-    0 10px 24px rgba(0,0,0,0.55),
-    0 0 14px rgba(23,162,184,0.10);
-}
-.gallery-open:hover {
-  color: var(--glow-blue);
-  border-color: rgba(23,162,184,0.35);
-}
-
-
-
-
-/* ---------- NEW: Fullscreen Gallery Modal (Snake ring) ---------- */
-const galleryOpenBtn = workItem.querySelector(".gallery-open");
-const galleryModal = document.getElementById("galleryModal");
-const galleryCloseBtn = document.getElementById("galleryClose");
-
-const galleryStage = document.getElementById("galleryStage");
-const galleryRing = document.getElementById("galleryRing");
-const galleryMainImg = document.getElementById("galleryMainImg");
-const galleryCaption = document.getElementById("galleryCaption");
-const galleryMainBox = galleryStage.querySelector(".gallery-main");
-
-// Use your carousel sources as the gallery items (you can change this list)
-const galleryItems = projects; // <-- all of them (adds/removes auto-scale)
-
-let galleryActive = 0;
-let galleryLastFocus = null;
-
-const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
-
-function setGalleryActive(idx){
-  galleryActive = idx;
-  galleryMainImg.src = galleryItems[galleryActive]?.src || "";
-  galleryCaption.textContent = galleryItems[galleryActive]?.title || "";
-
-  galleryRing.querySelectorAll(".gallery-thumb").forEach((b) => {
-    const i = Number(b.dataset.index);
-    b.classList.toggle("is-active", i === galleryActive);
-    b.setAttribute("aria-current", i === galleryActive ? "true" : "false");
-  });
-}
-
-/**
- * Snake loop path:
- * starts at top-left -> top-right -> down -> bottom-left -> up -> back to start
- * Thumb size shrinks as count grows:
- * max 150, min 20
- */
-function layoutSnakeThumbs(){
-  if (!galleryModal.classList.contains("active")) return;
-
-  const count = galleryItems.length;
-  galleryRing.innerHTML = "";
-
-  if (!count) {
-    galleryMainImg.src = "";
-    galleryCaption.textContent = "";
-    return;
-  }
-
-  const rect = galleryStage.getBoundingClientRect();
-  const W = rect.width;
-  const H = rect.height;
-
-  // Reserve a little safety area so the close button doesn't fight the first thumb
-  const SAFE_TOP = 54;
-  const SAFE_LEFT = 0;
-  const SAFE_RIGHT = 0;
-  const SAFE_BOTTOM = 0;
-
-  const usableW = W - SAFE_LEFT - SAFE_RIGHT;
-  const usableH = H - SAFE_TOP - SAFE_BOTTOM;
-
-  // A perimeter that thumbs can travel where they still fit:
-  // reduce by thumb size later, but we start with a rough guess and iterate once.
-  let thumb = 150;
-
-  // Estimate thumb size from perimeter / count and clamp it.
-  // The 0.65 factor = spacing slack so they don't collide.
-  const approxPerim = 2 * (usableW + usableH);
-  thumb = Math.floor((approxPerim / count) * 0.65);
-  thumb = clamp(thumb, 20, 150);
-
-  // Gap shrinks with thumbs, but never tiny
-  const gap = clamp(Math.floor(thumb * 0.16), 6, 18);
-
-  // Now define the travel box where the *top-left corner* of thumbs moves.
-  // This prevents overflow.
-  const x0 = SAFE_LEFT + gap;
-  const y0 = SAFE_TOP + gap;
-  const x1 = SAFE_LEFT + usableW - gap - thumb;
-  const y1 = SAFE_TOP + usableH - gap - thumb;
-
-  const segTop = Math.max(0, x1 - x0);
-  const segRight = Math.max(0, y1 - y0);
-  const segBottom = segTop;
-  const segLeft = segRight;
-
-  const loopLen = segTop + segRight + segBottom + segLeft || 1;
-  const step = loopLen / count;
-
-  // Set the center image inset so it never overlaps the ring.
-  const ringThickness = thumb + gap * 2;
-
-  const mainLeft = SAFE_LEFT + ringThickness;
-  const mainTop  = SAFE_TOP + ringThickness;
-  const mainW    = Math.max(120, usableW - ringThickness * 2);
-  const mainH    = Math.max(120, usableH - ringThickness * 2);
-
-  galleryMainBox.style.left = mainLeft + "px";
-  galleryMainBox.style.top = mainTop + "px";
-  galleryMainBox.style.width = mainW + "px";
-  galleryMainBox.style.height = mainH + "px";
-
-  // Draw thumbs along the snake loop
-  for (let i = 0; i < count; i++){
-    const item = galleryItems[i];
-    const dist = i * step;
-
-    let x = x0;
-    let y = y0;
-
-    if (dist <= segTop){
-      // top: left -> right
-      x = x0 + dist;
-      y = y0;
-    } else if (dist <= segTop + segRight){
-      // right: top -> bottom
-      x = x1;
-      y = y0 + (dist - segTop);
-    } else if (dist <= segTop + segRight + segBottom){
-      // bottom: right -> left
-      x = x1 - (dist - segTop - segRight);
-      y = y1;
-    } else {
-      // left: bottom -> top
-      x = x0;
-      y = y1 - (dist - segTop - segRight - segBottom);
-    }
-
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "gallery-thumb";
-    btn.dataset.index = String(i);
-    btn.style.width = thumb + "px";
-    btn.style.height = thumb + "px";
-    btn.style.left = Math.round(x) + "px";
-    btn.style.top = Math.round(y) + "px";
-    btn.setAttribute("aria-label", `View ${item.title || "image"}`);
-    btn.innerHTML = `<img src="${item.src}" alt="">`;
-
-    btn.addEventListener("click", () => setGalleryActive(i));
-
-    galleryRing.appendChild(btn);
-  }
-
-  // ensure active state stays synced
-  setGalleryActive(clamp(galleryActive, 0, count - 1));
-}
-
-function openGallery(){
-  galleryLastFocus = document.activeElement;
-
-  galleryModal.classList.add("active");
-  galleryModal.setAttribute("aria-hidden", "false");
-
-  galleryActive = clamp(galleryActive, 0, Math.max(0, galleryItems.length - 1));
-  setGalleryActive(galleryActive);
-
-  // wait a tick so layout measures correctly
-  requestAnimationFrame(() => {
-    layoutSnakeThumbs();
-    galleryCloseBtn.focus({ preventScroll: true });
-  });
-}
-
-function closeGallery(){
-  galleryModal.classList.remove("active");
-  galleryModal.setAttribute("aria-hidden", "true");
-  if (galleryLastFocus) galleryLastFocus.focus({ preventScroll: true });
-}
-
-if (galleryOpenBtn) galleryOpenBtn.addEventListener("click", openGallery);
-
-// Close ONLY via X + ESC
-galleryCloseBtn.addEventListener("click", closeGallery);
-
-// Backdrop click does NOTHING
-galleryModal.addEventListener("click", (e) => e.stopPropagation());
-
-// Resize: re-layout thumbs while open
-window.addEventListener("resize", () => {
-  if (galleryModal.classList.contains("active")) layoutSnakeThumbs();
-});
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && galleryModal.classList.contains("active")){
-    closeGallery();
-  }
-});
-
-/* end of gallery modal */
-
-/* Mobile fallback: big image + thumb strip */
-@media (max-width: 760px) {
-  .gallery-shell {
-    height: min(720px, 92vh);
-  }
-
-  .gallery-grid {
-    padding-top: 44px;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr auto;
-    gap: 12px;
-  }
-
-  /* re-map: main + thumbs row */
-  .gallery-cell { display: none; }
-  .gallery-cell.gallery-main { display: grid; }
-
-  /* when stacked, we still have thumbs in DOM: show them as a row */
-  .gallery-grid {
-    align-content: start;
-  }
-
-  /* create a row of thumbs by showing all non-main cells */
-  .gallery-grid .gallery-cell:not(.gallery-main) {
-    display: grid;
-    height: 88px;
-  }
-
-  .gallery-grid {
-    grid-template-rows: 1fr;
-  }
-
-  /* turn the grid into a horizontal strip */
-  .gallery-grid {
-    display: grid;
-    grid-auto-flow: row;
-  }
-}
-
-/* =========================
-   Reset + Starting area
-   ========================= */
-
-.practice-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 22px 0 10px;
-}
-
-.practice-reset {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(0,0,0,0.55);
-  color: rgb(23, 162, 184);
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  box-shadow:
-    0 10px 24px rgba(0,0,0,0.55),
-    0 0 14px rgba(23,162,184,0.14);
-}
-.practice-reset:hover { color: var(--glow-blue); border-color: rgba(23,162,184,0.35); }
-
-.practice-label {
-  font-size: 14px;
-  color: var(--glow-blue);
-  font-weight: 600;
-  letter-spacing: 0.2px;
-  text-shadow: 0 0 6px rgba(23,162,184,0.35);
-}
-
-.practice-desktop {
-  position: relative;
-  width: 100%;
-  min-height: 360px;
-  height: auto;
-  margin: 0;
-
-  border: none;
-  border-radius: 16px;
-  background: rgba(0,0,0,0.10);
-  box-shadow: 0 18px 46px rgba(0,0,0,0.28);
-
-  overflow: visible;
-}
-
-/* =========================
-   Window (Desktop behavior unchanged)
-   ========================= */
-
-.pwin {
-  position: absolute;
-  width: var(--win-w, 300px);
-  user-select: none;
-}
-
-.pwin-bar{
-  height: var(--bar-h, 34px);
-  background: rgba(0,0,0,0.92);
-
-  display: flex;
-  align-items: center;
-
-  padding: 0 10px;
-  gap: 8px;
-
-  cursor: grab;
-}
-.pwin-bar:active { cursor: grabbing; }
-
-.pwin-close{
-  flex: 0 0 auto;
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 18px;
-  line-height: 1;
-  padding: 0;
-  cursor: pointer;
-  opacity: 0.95;
-}
-.pwin-close:hover { color: var(--glow-blue); }
-
-.pwin-title{
-  flex: 1 1 auto;
-
-  color: #fff;
-  font-size: var(--title-size, 14px);
-  font-weight: 600;
-  letter-spacing: 0.2px;
-
-  text-align: left;
-
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.pwin-body {
-  width: 100%;
-  height: var(--img-h, 250px);
-
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-top: none;
-  overflow: hidden;
-
-  box-shadow:
-    0 10px 28px rgba(0,0,0,0.75),
-    0 0 22px rgba(23,162,184,0.18);
-
-  cursor: pointer;
-}
-
-.pwin-body img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Image overlay + BLUE scrollbars */
-.pwin-overlay {
-  position: absolute;
-  left: 0;
-  top: var(--bar-h, 34px);
-
-  width: 100%;
-  height: var(--img-h, 250px);
-
-  background: rgba(6, 6, 10, 0.94);
-  border: 1px solid rgba(255,255,255,0.10);
-  border-top: none;
-
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.18s ease;
-
-  padding: 10px;
-}
-
-.pwin-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.pwin-min {
-  position: absolute;
-  top: 6px;
-  right: 8px;
-
-  background: rgba(0,0,0,0.55);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: #fff;
-  width: 26px;
-  height: 22px;
-  border-radius: 8px;
-  cursor: pointer;
-  line-height: 1;
-  z-index: 3;
-}
-.pwin-min:hover { color: var(--glow-blue); border-color: rgba(23,162,184,0.35); }
-
-.pwin-overlay-scroll {
-  height: 100%;
-  overflow-y: auto;
-  padding: 26px 6px 6px;
-
-  scrollbar-width: thin;
-  scrollbar-color: rgba(23,162,184,0.55) transparent;
-}
-.pwin-overlay-scroll::-webkit-scrollbar { width: 6px; }
-.pwin-overlay-scroll::-webkit-scrollbar-thumb { background: rgba(23,162,184,0.55); border-radius: 4px; }
-.pwin-overlay-scroll::-webkit-scrollbar-thumb:hover { background: rgba(23,162,184,0.8); }
-
-.pwin-overlay-text {
-  font-size: 13px;
-  color: rgba(247,245,255,0.92);
-}
-.pwin-overlay-text p { margin: 0 0 10px; }
-.pwin-overlay-text p:last-child { margin-bottom: 0; }
-
-.pwin-overlay-text a {
-  color: #17a2b8;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(23,162,184,0.4);
-}
-.pwin-overlay-text a:hover {
-  color: #7fd3e0;
-  border-bottom-color: rgba(23,162,184,0.8);
-}
-
-.pwin.removing {
-  opacity: 0;
-  transform: scale(0.96);
-  transition: opacity 140ms ease, transform 140ms ease;
-}
-
-/* =========================
-      Talking with Others
-   ========================= */
-.talking-wrap{
-  max-width: 760px;
-  margin: 0;
-}
-
-.talking-row{
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: flex-start;
-  margin: 10px 0 12px;
-}
-
-.talk-pixel{
-  width: 20px;
-  height: 20px;
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 10px;
-  cursor: pointer;
-  padding: 0;
-  box-shadow:
-    0 12px 26px rgba(0,0,0,0.48),
-    0 0 16px rgba(23,162,184,0.10);
-  opacity: 0.92;
-  transition: transform 140ms ease, opacity 140ms ease, box-shadow 140ms ease;
-  background: transparent;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-.talk-pixel:hover{
-  opacity: 1;
-  transform: translateY(-1px);
-  box-shadow:
-    0 14px 30px rgba(0,0,0,0.52),
-    0 0 22px rgba(23,162,184,0.14);
-}
-
-.talking-pixels-wrap{
-  padding: 0;
-  border: none;
-  background: none;
-}
-
-.talk-pixel.is-active{
-  opacity: 1;
-  transform: translateY(-1px);
-  outline: 2px solid rgba(255,255,255,0.18);
-  outline-offset: 2px;
-}
-
-.talking-title{
-  font-size: 14px;
-  color: rgba(247,245,255,0.92);
-  margin-bottom: 6px;
-}
-
-.talking-open{
-  display: inline-block;
-  font-size: 12px;
-  color: var(--active-color, #17a2b8);
-  text-decoration: none;
-  border-bottom: 1px solid color-mix(in srgb, var(--active-color, #17a2b8) 45%, transparent);
-  transition: color 140ms ease, border-color 140ms ease;
-}
-
-.talking-open:hover{
-  color: color-mix(in srgb, var(--active-color, #17a2b8) 75%, white);
-  border-bottom-color: color-mix(in srgb, var(--active-color, #17a2b8) 75%, transparent);
-}
-
-.talking-open[aria-disabled="true"]{
-  opacity: 0.5;
-  pointer-events: none;
-  border-bottom-color: transparent;
-}
-
-.talking-description{
-  font-size: 0.85rem;
-  line-height: 1.4;
-  opacity: 0.85;
-  color: rgba(247,245,255,0.78);
-  margin: 0 0 10px;
-  max-width: 45ch;
-}
-
-/* =========================
-   About / Footer
-   ========================= */
-
-.about-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr); gap: 18px; }
-.about-layout p { font-size: 14px; }
-.about-meta { font-size: 13px; color: var(--muted); border-radius: var(--radius-md); border: 1px solid var(--border-soft); padding: 12px 14px; background: rgba(10, 10, 20, 0.9); }
-
-.site-footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.06); display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
-.license-footer { display: flex; align-items: center; gap: 4px; }
-.cc-icon { width: 14px; opacity: 0.8; }
-.footer-note { opacity: 0.8; }
-
-.cv-link {
-  display: inline-block;
-  margin-left: 10px;
-  margin-top: 10px;
-  color: var(--muted);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(255,255,255,0.15);
-}
-.cv-link:hover { color: var(--glow-blue); border-bottom-color: rgba(23,162,184,0.35); }
-
-/* =========================
-   Responsive: Mobile grid mode for practice windows
-   ========================= */
-
-@media (max-width: 760px) {
-  .top { grid-template-columns: 1fr; row-gap: 18px; }
-  .hero { text-align: left; }
-  .about-layout { grid-template-columns: 1fr; }
-
-  #practice h2 { width: 100%; }
-
-  .practice-desktop.is-mobile {
-    height: auto;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    padding: 12px;
-  }
-
-  .practice-desktop.is-mobile .pwin {
-    position: relative;
-    width: 100%;
-  }
-
-  .practice-desktop.is-mobile .pwin {
-    --bar-h: 34px;
-    --img-h: 140px;
-    --title-size: 12px;
-  }
-
-  .practice-desktop.is-mobile .pwin-body {
-    box-shadow:
-      0 10px 24px rgba(0,0,0,0.70),
-      0 0 18px rgba(23,162,184,0.14);
-  }
-
-  .practice-desktop.is-mobile .pwin-close {
-    font-size: 20px;
-    padding: 6px 8px;
-  }
-
-  @media (max-width: 360px) {
-    .practice-desktop.is-mobile {
-      grid-template-columns: 1fr;
-    }
-  }
-}
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>hello there.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="assets/favicon.png" type="image/png" />
+</head>
+
+<body>
+  <div class="page">
+
+    <div class="top">
+      <header class="site-header">
+        <video class="header-image" autoplay muted loop playsinline>
+          <source src="assets/icon.webm" type="video/webm">
+          <source src="assets/icon.mp4" type="video/mp4">
+        </video>
+      </header>
+
+      <section class="hero">
+        <h1>Bee Nix // Suture Blue</h1>
+        <p>Thinking. Creating. Playing.</p>
+        <p>Animations. Interactives. Games. Lectures.</p>
+      </section>
+    </div>
+
+    <main>
+
+      <!-- PRACTICE -->
+      <section id="practice" class="section">
+        <h2></h2>
+
+        <div class="work-item">
+          <div class="glow-card">
+            <div class="glow-card-inner">
+
+              <div class="carousel">
+                <button class="carousel-btn left" type="button" aria-label="Previous project">‹</button>
+
+                <div class="carousel-stage">
+                  <div class="carousel-stack left"></div>
+
+                  <div class="carousel-center" role="button" tabindex="0" aria-label="Open project details">
+                    <img class="carousel-center-img" src="assets/gNg.png" alt="">
+                  </div>
+
+                  <div class="carousel-stack right"></div>
+                </div>
+
+                <button class="carousel-btn right" type="button" aria-label="Next project">›</button>
+
+                <div class="carousel-sources" hidden>
+                  <img src="assets/glitchplay.png" data-title="Glitch Play (2025)" data-template=".tpl-glitchplay" alt="">
+                  <img src="assets/gNg.png" data-title="Glitch'N'Games (2024)" data-template=".tpl-gng" alt="">
+                  <img src="assets/mfru.png" data-title="MFRU (2023)" data-template=".tpl-mfru" alt="">
+                  <img src="assets/shadesOfPrecision.png" data-title="Shades Of Precision (2023)" data-template=".tpl-shadesOfPrecision" alt="">
+                  <img src="assets/notGlitch.png" data-title="/NOT.GLI.TCH/H (2023)" data-template=".tpl-notGlitch" alt="">
+                  <img src="assets/hereWeAre.png" data-title="Here We Are (2022)" data-template=".tpl-hereWeAre" alt="">
+                </div>
+
+                <!-- Carousel text overlay (close ONLY via X + ESC) -->
+                <div class="work-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+                  <div class="overlay-inner">
+                    <button class="overlay-close" type="button" aria-label="Close overlay">×</button>
+
+                    <div class="overlay-scroll">
+                      <div class="overlay-text"></div>
+                    </div>
+                  </div>
+                </div>
+
+              </div><!-- /.carousel -->
+
+            </div>
+          </div>
+
+          <div class="work-meta">
+            <h3 class="project-title"></h3>
+
+            <button class="gallery-open" type="button">
+              click here to see more
+            </button>
+          </div>
+
+          <!-- Carousel templates -->
+          <template class="tpl-glitchplay">
+            <p>
+              Glitch Play is my MFA thesis in Interactive Media and Game Development. It investigates engaging with glitches as a form of play that reveals and enables the ability to renegotiate with the structure of digital systems.
+              You can <a href="https://archive.org/details/glitch_play" target="_blank" rel="noreferrer">read it here.</a>
+            </p>
+          </template>
+
+          <template class="tpl-gng">
+            <p>This exhibition explored the intertwined histories of glitch art and video games, featuring 40+ artists from over 5 countries, across two Pittsburgh venues.</p>
+            <p>As producer, curator, and organizer alongside John Bumstead and Nick Liberatore, I developed the show's conceptual framework and programmed workshops, discussions, and live demonstrations.</p>
+            <p>I created and moderated the Discussion Game, a participatory conversation format that gathered artists, theorists, and gamers to explore themes of play, control, and system disruption.</p>
+          </template>
+
+          <template class="tpl-mfru">
+            <p>
+              This panel of digital artists was brought together in Maribor, Slovenia to discuss digital archiving for community by community for
+              <a href="https://www.mfru.org/events/panel-sustainability-and-autonomy-of-digital-art" target="_blank" rel="noreferrer">MFRU 2023.</a>
+            </p>
+            <p>
+              My IRL contributions to the discussion were not so much about my experience as an artist, but rather as a Do-It-Together (DIT) media archivist who is currently organizing, with a couple others— a free, downloadable, public access digital archive for the Glitch Art community.
+            </p>
+            <p>
+              Those of us working on this project believe that the more you rely on open software, the more accessible an archive becomes. That community projects can operate with more integrity when they remain unaffiliated with any institution(s). And most of all, we actively go against writing any “defining narrative(s),” but rather aim to offer an index of searchable artists and artists’ works, as well as any affiliated history, to enable many narratives to overlap, web and be formed by people of the community.
+            </p>
+          </template>
+
+          <template class="tpl-shadesOfPrecision">
+            <p>
+              I was asked to review a self-curated selection from the <a href="https://fubar.space/2023/shades-of-precision/" target="_blank" rel="noreferrer">2023 /'FU:BAR/ EXPO.</a>
+              To challenge my own biases, I read only each artist's description before viewing their work, hoping connections would emerge organically.
+            </p>
+            <p>
+              The exhibition reveals precision and chaos as collaborators. From Tomasz Sulej's meticulous GLIC codec to APIACOAB's pixel-perfect narratives, deliberate control amplifies disorder, transforming glitches into intentional expression.
+            </p>
+          </template>
+
+          <template class="tpl-notGlitch">
+            <p>
+              /NOT.GLI.TCH/H was held at the University of Chicago. I presented a talk about online community through the lens of my involvement with Glitch Artists Collective (GAC), likely the world’s largest Glitch Art community.
+            </p>
+            <p>
+              GAC was established in 2013 on Facebook first (though is also on Instagram, Twitter, and Tumblr) and I initially became involved as an artist near the end of 2014, later becoming curator (still am).
+            </p>
+          </template>
+
+          <template class="tpl-hereWeAre">
+            <p>
+              This discussion was had during the third iteration of GlitchArtIsDead, first shown in Poland in 2015. I moderated this roundtable discussion with Dr. Michael Betancourt and others.
+            </p>
+            <p>
+              <a href="assets/HereWeAre_GAID3_2022.pdf" target="_blank" rel="noreferrer">Read the text script for "Here We Are"</a>
+            </p>
+            <p>
+              Photo taken by <a href="https://www.instagram.com/platinumjimjam/" target="_blank" rel="noreferrer">Jim Jam</a>
+            </p>
+          </template>
+        </div>
+
+        <!-- Reset button BELOW carousel -->
+        <div class="practice-controls">
+          <button id="practiceReset" class="practice-reset" type="button" aria-label="Reset practice windows" title="Reset">↺</button>
+          <span class="practice-label">Practice</span>
+        </div>
+
+        <!-- Starting area BELOW reset -->
+        <div id="practiceDesktop" class="practice-desktop" aria-label="Draggable practice windows"></div>
+
+        <!-- Practice text templates -->
+        <template id="tpl-colourorgan">
+          <p>Colour Organ is a digital implementation of Alexander Wallace Rimington's color-music theory...</p>
+        </template>
+
+        <template id="tpl-discussiongame">
+          <p>Discussion Game was a participatory conversation game that I developed and moderated for Glitch'N'Games’24...</p>
+          <p><a href="assets/gNg_DiscussionGame_BeeNix2024.pdf" target="_blank" rel="noreferrer">Read the text script for "Discussion Game"</a></p>
+          <p>Photo taken by <a href="http://nickbriz.com/" target="_blank" rel="noreferrer">Nick Briz</a></p>
+        </template>
+
+        <template id="tpl-uncanny"><p>An Uncanny Scene is a virtual environment exploring the aesthetic of curious discomfort...</p></template>
+        <template id="tpl-drawing"><p>Since 2014, I’ve created looping rotoscoped animations...</p></template>
+        <template id="tpl-fabrication"><p>Most people know me for my digital/analog works, though since 2016, my fabrication practice has been my primary job...</p></template>
+        <template id="tpl-lightsleeper"><p><a href="https://www.youtube.com/watch?v=R0VyONd6Eko" target="_blank" rel="noreferrer">Light Sleeper, Heavy Dreamer</a> was a collaborative live performance...</p></template>
+
+      </section>
+
+      <!-- Talking with Others -->
+      <section id="talking" class="section">
+        <h2>Talking with Others</h2>
+
+        <div class="talking-wrap">
+          <div class="talking-pixels-wrap">
+            <div class="talking-row" id="talkingRow" aria-label="Pixel links">
+              <button class="talk-pixel" type="button"
+                data-title="Glitch Art practices and trends in Glitch Artists Collective, 2023"
+                data-description="Thomas Collet and myself discuss our experiences within the evolution of Glitch Art and GAC."
+                data-href="https://example.com"
+                style="background:#ff8800"
+                aria-label="Collet and GAC"></button>
+
+              <button class="talk-pixel" type="button"
+                data-title="A.I. and Online Communities: Art, Bodies, and Systems, 2025"
+                data-description="This conversation brings together artist-researcher J. Rosenbaum and theorist-artist Michael Betancourt..."
+                data-href="https://www.youtube.com/watch?v=u7pGPptqkjs"
+                style="background:#ffd24f"
+                aria-label="A.I. and Online Communities"></button>
+
+              <button class="talk-pixel" type="button"
+                data-title="Gork, 2025"
+                data-description="A conversation between myself and Gork, an Oregon-based multimedia artist."
+                data-href="https://youtu.be/2FZ3mJbf2mxt8pVf-"
+                style="background:#7a5cff"
+                aria-label="Gork"></button>
+
+              <button class="talk-pixel" type="button"
+                data-title="Scanlines.xyz: maintaining an online forum for the analog video community, 2025"
+                data-description="Conversation with the creators of Scanlines about their community forum..."
+                data-href="https://youtu.be/pT5MtQJTCVA"
+                style="background:#b7ff5a"
+                aria-label="Scanlines.xyz"></button>
+
+              <button class="talk-pixel" type="button"
+                data-title="Totally not a Speedrun /’fubar/ 2022"
+                data-description="Me and Kaspar Ravel give an interactive talk within the 3D environment..."
+                data-href="https://www.youtube.com/watch?v=tWp3CEuwzdE"
+                style="background:#ff4fd8"
+                aria-label="Totally not a Speedrun /’fubar/ 2022"></button>
+
+              <button class="talk-pixel" type="button"
+                data-title="Slowrun /fu:bar/ 2021"
+                data-description="Discussing /'fubar/ past and present..."
+                data-href="https://www.youtube.com/live/q7vPZkCKukQ"
+                style="background:#17a2b8"
+                aria-label="Slowrun /fu:bar/ 2021"></button>
+            </div>
+          </div>
+
+          <div class="talking-info">
+            <div class="talking-title" id="talkingTitle">Tap a pixel.</div>
+            <div class="talking-description" id="talkingDescription"></div>
+            <a class="talking-open" id="talkingOpen" href="#" target="_blank" rel="noreferrer">Open ↗</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- About -->
+      <section id="about" class="section">
+        <h2>About</h2>
+
+        <div class="about-layout">
+          <div>
+            <p>I’m Bee Nix, aka Suture Blue.</p>
+            <p>
+              As a system amongst systems, I trace how internal states entangle with
+              the larger technosocial worlds by interweaving play, technology, and social structures.
+              Time-based and experiential works tend to be what I make the most.
+            </p>
+
+            <a class="cv-link" href="assets/BeeNix_CV_2026.pdf" target="_blank" rel="noreferrer">View CV</a>
+          </div>
+
+          <div class="about-meta">
+            <p>
+              <strong>Currently</strong><br>
+              Residing in Pittsburgh, PA;
+              Working in the exhibits department at the Children's Museum as a designer/builder;
+              Slowly making this website; Practicing maintaining center; Trying to get Glitch'N'Games 2 going;
+              Creating art, curating things, talking to others.
+            </p>
+
+            <p>
+              <strong>Contact</strong><br>
+              sutureblue@protonmail.com
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="license-footer">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">
+          <img src="assets/cc.png" alt="Creative Commons" class="cc-icon" />
+        </a>
+        <span>2025</span>
+      </div>
+
+      <span class="footer-note">Designed by me · Scripted with AI · Hosted on GitHub Pages</span>
+    </footer>
+
+  </div>
+
+  <!-- Fullscreen Gallery Modal (Snake ring) -->
+  <div id="galleryModal" class="gallery-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="gallery-shell" role="document">
+      <button id="galleryClose" class="gallery-close" type="button" aria-label="Close gallery">×</button>
+
+      <div class="gallery-stage" id="galleryStage" aria-label="Image gallery">
+        <div class="gallery-main">
+          <img id="galleryMainImg" src="" alt="">
+        </div>
+        <div class="gallery-ring" id="galleryRing" aria-label="Gallery thumbnails"></div>
+      </div>
+
+      <div class="gallery-caption" id="galleryCaption" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ---------- Gallery Modal (Snake ring) - GLOBAL (one instance) ---------- */
+    (() => {
+      const modal = document.getElementById("galleryModal");
+      const closeBtn = document.getElementById("galleryClose");
+      const stage = document.getElementById("galleryStage");
+      const ring = document.getElementById("galleryRing");
+      const mainImg = document.getElementById("galleryMainImg");
+      const caption = document.getElementById("galleryCaption");
+      const mainBox = stage.querySelector(".gallery-main");
+
+      let items = [];
+      let active = 0;
+      let lastFocus = null;
+
+      const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+      function setActive(idx){
+        active = idx;
+        mainImg.src = items[active]?.src || "";
+        caption.textContent = items[active]?.title || "";
+
+        ring.querySelectorAll(".gallery-thumb").forEach((b) => {
+          const i = Number(b.dataset.index);
+          b.classList.toggle("is-active", i === active);
+          b.setAttribute("aria-current", i === active ? "true" : "false");
+        });
+      }
+
+      function layoutSnakeThumbs(){
+        if (!modal.classList.contains("active")) return;
+
+        const count = items.length;
+        ring.innerHTML = "";
+
+        if (!count) {
+          mainImg.src = "";
+          caption.textContent = "";
+          return;
+        }
+
+        const rect = stage.getBoundingClientRect();
+        const W = rect.width;
+        const H = rect.height;
+
+        // keep thumbs away from the close button area
+        const SAFE_TOP = 54;
+        const SAFE_LEFT = 0;
+        const SAFE_RIGHT = 0;
+        const SAFE_BOTTOM = 0;
+
+        const usableW = W - SAFE_LEFT - SAFE_RIGHT;
+        const usableH = H - SAFE_TOP - SAFE_BOTTOM;
+
+        // thumb size scales with perimeter / count (clamped 20..150)
+        const approxPerim = 2 * (usableW + usableH);
+        let thumb = Math.floor((approxPerim / count) * 0.65);
+        thumb = clamp(thumb, 20, 150);
+
+        const gap = clamp(Math.floor(thumb * 0.16), 6, 18);
+
+        const x0 = SAFE_LEFT + gap;
+        const y0 = SAFE_TOP + gap;
+        const x1 = SAFE_LEFT + usableW - gap - thumb;
+        const y1 = SAFE_TOP + usableH - gap - thumb;
+
+        const segTop = Math.max(0, x1 - x0);
+        const segRight = Math.max(0, y1 - y0);
+        const segBottom = segTop;
+        const segLeft = segRight;
+
+        const loopLen = segTop + segRight + segBottom + segLeft || 1;
+        const step = loopLen / count;
+
+        // center image inset so it never overlaps the ring
+        const ringThickness = thumb + gap * 2;
+        const mainLeft = SAFE_LEFT + ringThickness;
+        const mainTop  = SAFE_TOP + ringThickness;
+        const mainW    = Math.max(120, usableW - ringThickness * 2);
+        const mainH    = Math.max(120, usableH - ringThickness * 2);
+
+        mainBox.style.left = mainLeft + "px";
+        mainBox.style.top = mainTop + "px";
+        mainBox.style.width = mainW + "px";
+        mainBox.style.height = mainH + "px";
+
+        for (let i = 0; i < count; i++){
+          const item = items[i];
+          const dist = i * step;
+
+          let x = x0, y = y0;
+
+          if (dist <= segTop){
+            x = x0 + dist; y = y0;
+          } else if (dist <= segTop + segRight){
+            x = x1; y = y0 + (dist - segTop);
+          } else if (dist <= segTop + segRight + segBottom){
+            x = x1 - (dist - segTop - segRight); y = y1;
+          } else {
+            x = x0; y = y1 - (dist - segTop - segRight - segBottom);
+          }
+
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "gallery-thumb";
+          btn.dataset.index = String(i);
+          btn.style.width = thumb + "px";
+          btn.style.height = thumb + "px";
+          btn.style.left = Math.round(x) + "px";
+          btn.style.top = Math.round(y) + "px";
+          btn.setAttribute("aria-label", `View ${item.title || "image"}`);
+          btn.innerHTML = `<img src="${item.src}" alt="">`;
+
+          btn.addEventListener("click", () => setActive(i));
+          ring.appendChild(btn);
+        }
+
+        setActive(clamp(active, 0, count - 1));
+      }
+
+      function openGallery(newItems, startIndex = 0){
+        items = Array.isArray(newItems) ? newItems : [];
+        active = clamp(startIndex, 0, Math.max(0, items.length - 1));
+        lastFocus = document.activeElement;
+
+        modal.classList.add("active");
+        modal.setAttribute("aria-hidden", "false");
+
+        setActive(active);
+        requestAnimationFrame(() => {
+          layoutSnakeThumbs();
+          closeBtn.focus({ preventScroll: true });
+        });
+      }
+
+      function closeGallery(){
+        modal.classList.remove("active");
+        modal.setAttribute("aria-hidden", "true");
+        if (lastFocus) lastFocus.focus({ preventScroll: true });
+      }
+
+      // close ONLY via X + ESC
+      closeBtn.addEventListener("click", closeGallery);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal.classList.contains("active")) closeGallery();
+      });
+
+      // backdrop click does nothing
+      modal.addEventListener("click", (e) => e.stopPropagation());
+
+      // relayout on resize while open
+      window.addEventListener("resize", () => {
+        if (modal.classList.contains("active")) layoutSnakeThumbs();
+      });
+
+      // expose a tiny API for the carousel section below
+      window.__openSnakeGallery = openGallery;
+    })();
+
+    /* ---------- Carousel + Overlay ---------- */
+    document.querySelectorAll(".work-item").forEach((workItem) => {
+      const carousel = workItem.querySelector(".carousel");
+
+      const overlay = workItem.querySelector(".work-overlay");
+      const overlayScroll = workItem.querySelector(".overlay-scroll");
+      const overlayText = workItem.querySelector(".overlay-text");
+      const closeBtn = workItem.querySelector(".overlay-close");
+      const titleEl = workItem.querySelector(".project-title");
+
+      const centerImg = carousel.querySelector(".carousel-center-img");
+      const centerArea = carousel.querySelector(".carousel-center");
+
+      const leftStackEl = carousel.querySelector(".carousel-stack.left");
+      const rightStackEl = carousel.querySelector(".carousel-stack.right");
+
+      const btnLeft = carousel.querySelector(".carousel-btn.left");
+      const btnRight = carousel.querySelector(".carousel-btn.right");
+
+      const galleryOpenBtn = workItem.querySelector(".gallery-open");
+
+      let lastFocusEl = null;
+
+      const projects = Array.from(
+        carousel.querySelectorAll(".carousel-sources img")
+      ).map(img => ({
+        src: img.getAttribute("src"),
+        title: img.dataset.title || "Untitled",
+        template: img.dataset.template || ""
+      }));
+
+      let center = 0;
+      let leftStack = [];
+      let rightStack = projects.map((_, i) => i).slice(1);
+
+      function updateMeta(index) {
+        titleEl.textContent = projects[index].title;
+        const sel = projects[index].template;
+        const tpl = sel ? workItem.querySelector(sel) : null;
+        overlayText.innerHTML = tpl ? tpl.innerHTML : "";
+      }
+
+      function renderStacks() {
+        leftStackEl.innerHTML = "";
+        rightStackEl.innerHTML = "";
+
+        leftStack.forEach((idx, i) => {
+          const card = document.createElement("div");
+          card.className = "stack-card";
+          card.style.setProperty("--stack-i", i);
+          card.innerHTML = `<img src="${projects[idx].src}" alt="">`;
+          leftStackEl.appendChild(card);
+        });
+
+        rightStack.forEach((idx, i) => {
+          const card = document.createElement("div");
+          card.className = "stack-card";
+          card.style.setProperty("--stack-i", i);
+          card.innerHTML = `<img src="${projects[idx].src}" alt="">`;
+          rightStackEl.appendChild(card);
+        });
+
+        centerImg.src = projects[center].src;
+        updateMeta(center);
+
+        btnLeft.disabled = leftStack.length === 0;
+        btnRight.disabled = rightStack.length === 0;
+      }
+
+      function goNext() {
+        if (!rightStack.length) return;
+        leftStack.unshift(center);
+        center = rightStack.shift();
+        renderStacks();
+      }
+
+      function goPrev() {
+        if (!leftStack.length) return;
+        rightStack.unshift(center);
+        center = leftStack.shift();
+        renderStacks();
+      }
+
+      btnLeft.onclick = goPrev;
+      btnRight.onclick = goNext;
+
+      function openOverlay(e) {
+        if (e) e.stopPropagation();
+        lastFocusEl = document.activeElement;
+
+        overlay.classList.add("active");
+        overlay.setAttribute("aria-hidden", "false");
+        overlayScroll.scrollTop = 0;
+
+        closeBtn.focus({ preventScroll: true });
+      }
+
+      function closeOverlay(e) {
+        if (e) e.stopPropagation();
+        overlay.classList.remove("active");
+        overlay.setAttribute("aria-hidden", "true");
+        if (lastFocusEl) lastFocusEl.focus({ preventScroll: true });
+      }
+
+      centerArea.onclick = openOverlay;
+      titleEl.style.cursor = "pointer";
+      titleEl.onclick = openOverlay;
+
+      centerArea.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") openOverlay(e);
+      });
+
+      // close ONLY via X + ESC (no backdrop click)
+      closeBtn.onclick = closeOverlay;
+      overlay.addEventListener("click", (e) => e.stopPropagation());
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
+      });
+
+      // open snake gallery from button
+      if (galleryOpenBtn) {
+        galleryOpenBtn.addEventListener("click", () => {
+          // open with all carousel sources
+          window.__openSnakeGallery(projects, center);
+        });
+      }
+
+      renderStacks();
+    });
+
+    /* ---------- Practice Windows ---------- */
+    (() => {
+      const desktop = document.getElementById("practiceDesktop");
+      const resetBtn = document.getElementById("practiceReset");
+      if (!desktop || !resetBtn) return;
+
+      const PRACTICE = [
+        { id:"drawing",        src:"assets/Drawing_1.png",        title:"Animations & Drawings" },
+        { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication" },
+        { id:"lightsleeper",   src:"assets/LightSleeper_1.png",   title:"Light Sleeper, Heavy Dreamer (2020)" },
+        { id:"colourorgan",    src:"assets/ColourOrgan_1.png",    title:"Colour Organ (2021)" },
+        { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"An Uncanny Scene (2022)" },
+        { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game (2024)" },
+      ];
+
+      const mqMobile = window.matchMedia("(max-width: 760px)");
+      const isMobile = () => mqMobile.matches;
+
+      let zTop = 10;
+
+      function getTemplateHTML(id) {
+        const tpl = document.getElementById(`tpl-${id}`);
+        return tpl ? tpl.innerHTML : `<p><strong>${id}</strong></p>`;
+      }
+
+      function bringToFront(win) { win.style.zIndex = String(++zTop); }
+      function randBetween(min, max) { return min + Math.random() * (max - min); }
+      function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+
+      function computeSplayPositions(count) {
+        const WIN_W = 300;
+        const BAR_H = 34;
+        const IMG_H = 250;
+        const WIN_H = BAR_H + IMG_H;
+
+        const rect = desktop.getBoundingClientRect();
+        const deskW = Math.max(320, rect.width || 320);
+        const deskH = Math.max(520, rect.height || 520);
+
+        const startX  = 30;
+        const startY  = 24;
+        const stepX   = 140;
+        const stepY   = 10;
+        const zigAmp  = 26;
+        const jitterX = 14;
+        const jitterY = 10;
+
+        const minX = 8;
+        const minY = 8;
+        const maxX = Math.max(minX, Math.floor(deskW - WIN_W - 8));
+        const maxY = Math.max(minY, Math.floor(deskH - WIN_H - 8));
+
+        const pos = [];
+        for (let i = 0; i < count; i++) {
+          const zig = (i % 2 === 0) ? -zigAmp : zigAmp;
+
+          let x = startX + i * stepX + randBetween(-jitterX, jitterX);
+          let y = startY + i * stepY + zig + randBetween(-jitterY, jitterY);
+
+          x = clamp(x, minX, maxX);
+          y = clamp(y, minY, maxY);
+
+          pos.push({ x, y });
+        }
+        return pos;
+      }
+
+      function applyDesktopPosition(win) {
+        const x = parseFloat(win.dataset.x || "0");
+        const y = parseFloat(win.dataset.y || "0");
+        win.style.left = x + "px";
+        win.style.top  = y + "px";
+      }
+
+      function applyMobilePosition(win) {
+        win.style.left = "";
+        win.style.top = "";
+      }
+
+      function syncModeClass() {
+        if (isMobile()) desktop.classList.add("is-mobile");
+        else desktop.classList.remove("is-mobile");
+
+        const wins = Array.from(desktop.querySelectorAll(".pwin"));
+        wins.forEach(win => {
+          if (isMobile()) applyMobilePosition(win);
+          else applyDesktopPosition(win);
+        });
+      }
+
+      function createWindow(item) {
+        const win = document.createElement("div");
+        win.className = "pwin";
+        win.dataset.id = item.id;
+        win.style.zIndex = String(++zTop);
+
+        win.innerHTML = `
+          <div class="pwin-bar" role="toolbar">
+            <button class="pwin-close" type="button" aria-label="Close window">×</button>
+            <div class="pwin-title" title="${item.title}">${item.title}</div>
+          </div>
+
+          <div class="pwin-body" role="button" tabindex="0" aria-label="Open description">
+            <img src="${item.src}" alt="${item.title}">
+          </div>
+
+          <div class="pwin-overlay" aria-hidden="true">
+            <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
+            <div class="pwin-overlay-scroll">
+              <div class="pwin-overlay-text"></div>
+            </div>
+          </div>
+        `;
+
+        const bar = win.querySelector(".pwin-bar");
+        const close = win.querySelector(".pwin-close");
+        const body = win.querySelector(".pwin-body");
+
+        const overlay = win.querySelector(".pwin-overlay");
+        const minBtn = win.querySelector(".pwin-min");
+        const overlayScroll = win.querySelector(".pwin-overlay-scroll");
+        const overlayText = win.querySelector(".pwin-overlay-text");
+
+        function openOverlay(e) {
+          if (e) e.stopPropagation();
+          bringToFront(win);
+
+          overlayText.innerHTML = getTemplateHTML(item.id);
+          overlay.classList.add("active");
+          overlay.setAttribute("aria-hidden", "false");
+          overlayScroll.scrollTop = 0;
+
+          minBtn.focus({ preventScroll: true });
+        }
+
+        function closeOverlay(e) {
+          if (e) e.stopPropagation();
+          overlay.classList.remove("active");
+          overlay.setAttribute("aria-hidden", "true");
+        }
+
+        close.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (isMobile()) {
+            win.classList.add("removing");
+            setTimeout(() => win.remove(), 140);
+          } else {
+            win.remove();
+          }
+        });
+
+        win.addEventListener("pointerdown", () => bringToFront(win));
+
+        body.addEventListener("click", openOverlay);
+        body.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") openOverlay(e);
+        });
+
+        minBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
+        minBtn.addEventListener("click", closeOverlay);
+
+        overlay.addEventListener("pointerdown", (e) => e.stopPropagation());
+        overlay.addEventListener("click", (e) => e.stopPropagation());
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
+        });
+
+        bar.addEventListener("pointerdown", (e) => {
+          if (isMobile()) return;
+          if (e.target === close) return;
+          if (overlay.classList.contains("active")) return;
+
+          e.preventDefault();
+          bringToFront(win);
+
+          const rectDesk = desktop.getBoundingClientRect();
+          const rectWin = win.getBoundingClientRect();
+
+          const startX = e.clientX;
+          const startY = e.clientY;
+
+          const startLeft = rectWin.left - rectDesk.left;
+          const startTop  = rectWin.top  - rectDesk.top;
+
+          win.setPointerCapture(e.pointerId);
+
+          function onMove(ev) {
+            const dx = ev.clientX - startX;
+            const dy = ev.clientY - startY;
+
+            const nextLeft = startLeft + dx;
+            const nextTop  = startTop + dy;
+
+            win.style.left = nextLeft + "px";
+            win.style.top  = nextTop + "px";
+
+            win.dataset.x = String(nextLeft);
+            win.dataset.y = String(nextTop);
+          }
+
+          function onUp() {
+            try { win.releasePointerCapture(e.pointerId); } catch (_) {}
+            win.removeEventListener("pointermove", onMove);
+            win.removeEventListener("pointerup", onUp);
+            win.removeEventListener("pointercancel", onUp);
+          }
+
+          win.addEventListener("pointermove", onMove);
+          win.addEventListener("pointerup", onUp);
+          win.addEventListener("pointercancel", onUp);
+        });
+
+        return win;
+      }
+
+      function populate() {
+        desktop.innerHTML = "";
+
+        const wins = PRACTICE.map(item => {
+          const w = createWindow(item);
+          desktop.appendChild(w);
+          return w;
+        });
+
+        const placeDesktop = () => {
+          if (isMobile()) {
+            syncModeClass();
+            return;
+          }
+
+          const positions = computeSplayPositions(wins.length);
+          wins.forEach((win, i) => {
+            win.dataset.x = String(positions[i].x);
+            win.dataset.y = String(positions[i].y);
+            applyDesktopPosition(win);
+          });
+
+          syncModeClass();
+        };
+
+        requestAnimationFrame(() => requestAnimationFrame(placeDesktop));
+      }
+
+      resetBtn.addEventListener("click", populate);
+      populate();
+
+      let resizeTimer = null;
+      window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(syncModeClass, 120);
+      });
+
+      mqMobile.addEventListener?.("change", syncModeClass);
+    })();
+
+    /* ---------- Talking with Others ---------- */
+    (() => {
+      const row = document.getElementById("talkingRow");
+      const titleEl = document.getElementById("talkingTitle");
+      const descEl = document.getElementById("talkingDescription");
+      const openEl = document.getElementById("talkingOpen");
+      if (!row || !titleEl || !descEl || !openEl) return;
+
+      function setActive(btn) {
+        row.querySelectorAll(".talk-pixel.is-active")
+          .forEach(b => b.classList.remove("is-active"));
+
+        btn.classList.add("is-active");
+
+        const title = btn.dataset.title || "—";
+        const description = btn.dataset.description || "";
+        const href = btn.dataset.href || "#";
+
+        const color = btn.style.background || getComputedStyle(btn).backgroundColor;
+
+        titleEl.textContent = title;
+        descEl.textContent = description;
+
+        openEl.href = href;
+        openEl.setAttribute("aria-disabled", href === "#" ? "true" : "false");
+        openEl.style.setProperty("--active-color", color);
+      }
+
+      row.addEventListener("click", (e) => {
+        const btn = e.target.closest(".talk-pixel");
+        if (!btn) return;
+        setActive(btn);
+      });
+
+      const first = row.querySelector(".talk-pixel");
+      if (first) setActive(first);
+    })();
+  </script>
+
+</body>
+</html>
