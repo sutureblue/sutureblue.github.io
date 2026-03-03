@@ -310,11 +310,14 @@
     <div class="gallery-shell" role="document">
       <button id="galleryClose" class="gallery-close" type="button" aria-label="Close gallery">×</button>
 
-      <div class="gallery-grid" id="galleryGrid" aria-label="Image gallery">
-        <!-- injected by JS -->
+      <div class="gallery-stage" id="galleryStage" aria-label="Image gallery">
+        <div class="gallery-main">
+          <img id="galleryMainImg" src="" alt="">
+        </div>
+
+        <div class="gallery-ring" id="galleryRing" aria-label="Gallery thumbnails"></div>
       </div>
 
-      <!-- optional caption -->
       <div class="gallery-caption" id="galleryCaption" aria-live="polite"></div>
     </div>
   </div>
