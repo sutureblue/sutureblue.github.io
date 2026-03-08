@@ -728,19 +728,21 @@ function createWindow(item) {
     <div class="pwin-overlay" aria-hidden="true">
       <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
 
-${item.hasGallery !== false ? `
-  <div class="pwin-overlay-top">
-    <button class="popup-link pwin-gallery-link" type="button">open gallery ↗</button>
-  </div>
-` : `
-  <div class="pwin-overlay-top no-gallery"></div>
-`}
+<div class="pwin-overlay" aria-hidden="true">
 
-      <div class="pwin-overlay-scroll">
-        <div class="pwin-overlay-text"></div>
-      </div>
-    </div>
-  `;
+  <div class="pwin-overlay-bar">
+    <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
+
+    ${item.hasGallery !== false ? `
+      <button class="popup-link pwin-gallery-link" type="button">open gallery ↗</button>
+    ` : ``}
+  </div>
+
+  <div class="pwin-overlay-scroll">
+    <div class="pwin-overlay-text"></div>
+  </div>
+
+</div>
 
   const bar = win.querySelector(".pwin-bar");
   const close = win.querySelector(".pwin-close");
