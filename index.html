@@ -728,9 +728,11 @@
           <div class="pwin-overlay" aria-hidden="true">
             <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
 
-            <div class="pwin-overlay-top">
-              <button class="popup-link pwin-gallery-link" type="button">open gallery ↗</button>
-            </div>
+${item.id !== "fabrication" ? `
+  <div class="pwin-overlay-top">
+    <button class="popup-link pwin-gallery-link" type="button">open gallery ↗</button>
+  </div>
+` : ""}
 
             <div class="pwin-overlay-scroll">
               <div class="pwin-overlay-text"></div>
