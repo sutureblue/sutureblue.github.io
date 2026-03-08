@@ -60,7 +60,6 @@
                   <img src="assets/hereWeAre.png" data-title="Here We Are (2022)" data-template=".tpl-hereWeAre" alt="">
                 </div>
               </div>
-
             </div>
           </div>
 
@@ -70,7 +69,6 @@
 
           <!-- Carousel templates -->
           <template class="tpl-glitchplay">
-            <h4>Glitch Play (2025)</h4>
             <p>
               Glitch Play is my MFA thesis in Interactive Media and Game Development. It investigates engaging with glitches as a form of play that reveals and enables the ability to renegotiate with the structure of digital systems.
               You can <a href="https://archive.org/details/glitch_play" target="_blank" rel="noreferrer">read it here.</a>
@@ -78,7 +76,6 @@
           </template>
 
           <template class="tpl-gng">
-            <h4>Glitch'N'Games (2024)</h4>
             <p>
               This exhibition explored the intertwined histories of glitch art and video games, featuring 40+ artists from over 5 countries, across two Pittsburgh venues.
             </p>
@@ -91,7 +88,6 @@
           </template>
 
           <template class="tpl-mfru">
-            <h4>MFRU (2023)</h4>
             <p>
               This panel of digital artists was brought together in Maribor, Slovenia to discuss digital archiving for community by community for
               <a href="https://www.mfru.org/events/panel-sustainability-and-autonomy-of-digital-art" target="_blank" rel="noreferrer">MFRU 2023.</a>
@@ -105,7 +101,6 @@
           </template>
 
           <template class="tpl-shadesOfPrecision">
-            <h4>Shades Of Precision (2023)</h4>
             <p>
               I was asked to review a self-curated selection from the <a href="https://fubar.space/2023/shades-of-precision/" target="_blank" rel="noreferrer">2023 /'FU:BAR/ EXPO.</a> To challenge my own biases, I read only each artist's description before viewing their work, hoping connections would emerge organically. Several pieces focused on control and deliberacy, a theme that felt especially compelling in the context of glitches. It was rewarding to discover that many of my selections came from artists I already admire.
             </p>
@@ -115,7 +110,6 @@
           </template>
 
           <template class="tpl-notGlitch">
-            <h4>/NOT.GLI.TCH/H (2023)</h4>
             <p>
               /NOT.GLI.TCH/H was held at the University of Chicago. I presented a talk about online community through the lens of my involvement with Glitch Artists Collective (GAC), likely the world’s largest Glitch Art community.
             </p>
@@ -125,7 +119,6 @@
           </template>
 
           <template class="tpl-hereWeAre">
-            <h4>Here We Are (2022)</h4>
             <p>
               This discussion was had during the third iteration of GlitchArtIsDead, first shown in Poland in 2015. I was one of the main organizers and curators for GAID III, which featured just over 100 artists from 13 countries, and received a grant from the Southwest Minnesota Arts Council. I moderated this roundtable discussion with Dr. Michael Betancourt, an artist curated into the show whom I asked to also lead this discussion, along with others, including Jamie Fenton, John Bumstead, Aleksandra Pieńkosz, Sabato Visconti, Kaspar Ravel, Sky Goodman and more. The conversation traced glitch art's evolution from 1980s-90s technical accidents to intentional symbolic works that challenge digital boundaries. Participants shared personal experiences with digital disruptions and explored how Glitch Art addresses themes of authenticity, community values, and resistance to commercial frameworks. We examined the physical materiality of digital art and discussed how the movement builds creative resilience within increasingly regulated digital landscapes.
             </p>
@@ -145,7 +138,7 @@
 
         <div id="practiceDesktop" class="practice-desktop" aria-label="Draggable practice windows"></div>
 
-        <!-- Practice text templates -->
+        <!-- Practice templates -->
         <template id="tpl-colourorgan">
           <h4>Colour Organ (2021)</h4>
           <p>Colour Organ is a digital implementation of Alexander Wallace Rimington's color-music theory, where audio frequencies trigger corresponding colored lights arranged in a 5x7 grid representing octaves and scales. The installation backlit a semi-translucent screen with 35 individual point lights programmed to respond to specific frequency ranges, creating a visual orchestration of the ROYGBIV spectrum synchronized to sound.</p>
@@ -166,7 +159,7 @@
         </template>
 
         <template id="tpl-drawing">
-          <h4>Animations &amp; Drawings</h4>
+          <h4>Animations & Drawings</h4>
           <p>Since 2014, I’ve created looping rotoscoped animations intended to hold a viewer in an evocative moment of intra/interpersonal reflections. These animations are often combined with analog &amp; digital glitch techniques as methodological expressions of engaging as an interpretive system within systems. Positioning myself (and by extension a viewer) as an interpreter embedded within larger systemic boundaries and ruptures.</p>
           <p>Naturally, I also draw still images from time to time too.</p>
         </template>
@@ -295,35 +288,28 @@
   <!-- GLOBAL TEXT POPUP -->
   <div id="contentModal" class="content-modal" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="content-shell" role="document">
-      <div class="content-bar">
+      <div class="content-toolbar">
         <button id="contentClose" class="content-close" type="button" aria-label="Close popup">×</button>
         <div id="contentTitle" class="content-title"></div>
       </div>
+
       <div id="contentBody" class="content-body"></div>
     </div>
   </div>
 
-  <!-- GALLERY GRID POPUP -->
+  <!-- GLOBAL GALLERY MODAL -->
   <div id="galleryModal" class="gallery-modal" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="gallery-shell" role="document">
-      <div class="gallery-bar">
-        <button id="galleryClose" class="gallery-close" type="button" aria-label="Close gallery">×</button>
-        <div id="galleryTitle" class="gallery-title"></div>
-      </div>
-      <div id="galleryGrid" class="gallery-grid" aria-label="Image gallery grid"></div>
-    </div>
-  </div>
+      <button id="galleryClose" class="gallery-close" type="button" aria-label="Close gallery">×</button>
 
-  <!-- SINGLE IMAGE VIEWER -->
-  <div id="imageViewerModal" class="image-viewer-modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="image-viewer-shell" role="document">
-      <div class="image-viewer-bar">
-        <button id="imageViewerClose" class="image-viewer-close" type="button" aria-label="Close image viewer">×</button>
-        <div id="imageViewerTitle" class="image-viewer-title"></div>
+      <div class="gallery-stage" id="galleryStage" aria-label="Image gallery">
+        <div class="gallery-main">
+          <img id="galleryMainImg" src="" alt="">
+        </div>
+        <div class="gallery-ring" id="galleryRing" aria-label="Gallery thumbnails"></div>
       </div>
-      <div class="image-viewer-stage">
-        <img id="imageViewerImg" src="" alt="">
-      </div>
+
+      <div class="gallery-caption" id="galleryCaption" aria-live="polite"></div>
     </div>
   </div>
 
@@ -336,31 +322,39 @@
       const body = document.getElementById("contentBody");
       let lastFocus = null;
 
-      function openContentBySelector(selector, fallbackTitle = "") {
-        if (!selector) return;
-        const tpl = document.querySelector(selector);
-        if (!tpl) return;
-
-        const heading = tpl.content
-          ? tpl.content.querySelector("h4")
-          : tpl.querySelector?.("h4");
-
-        titleEl.textContent = heading?.textContent?.trim() || fallbackTitle || "";
-
+      function openContent(title, html) {
         lastFocus = document.activeElement;
-        body.innerHTML = tpl.innerHTML;
+        titleEl.textContent = title || "";
+        body.innerHTML = html || "";
         modal.classList.add("active");
         modal.setAttribute("aria-hidden", "false");
         closeBtn.focus({ preventScroll: true });
       }
 
+      function openContentBySelector(selector, title = "") {
+        if (!selector) return;
+        const tpl = document.querySelector(selector);
+        if (!tpl) return;
+        openContent(title, tpl.innerHTML);
+      }
+
       function closeContent() {
         modal.classList.remove("active");
         modal.setAttribute("aria-hidden", "true");
-        body.innerHTML = "";
         titleEl.textContent = "";
+        body.innerHTML = "";
         if (lastFocus) lastFocus.focus({ preventScroll: true });
       }
+
+      document.addEventListener("click", (e) => {
+        const trigger = e.target.closest(".popup-link[data-popup-target]");
+        if (!trigger) return;
+        e.preventDefault();
+        openContentBySelector(
+          trigger.dataset.popupTarget,
+          trigger.dataset.popupTitle || ""
+        );
+      });
 
       closeBtn.addEventListener("click", closeContent);
 
@@ -370,100 +364,154 @@
         }
       });
 
+      window.__openContent = openContent;
       window.__openContentBySelector = openContentBySelector;
     })();
 
-    /* ---------- Single image viewer ---------- */
-    (() => {
-      const modal = document.getElementById("imageViewerModal");
-      const closeBtn = document.getElementById("imageViewerClose");
-      const titleEl = document.getElementById("imageViewerTitle");
-      const imgEl = document.getElementById("imageViewerImg");
-      let lastFocus = null;
-
-      function openImageViewer(item) {
-        if (!item?.src) return;
-        lastFocus = document.activeElement;
-        imgEl.src = item.src;
-        imgEl.alt = item.title || "";
-        titleEl.textContent = item.title || "";
-        modal.classList.add("active");
-        modal.setAttribute("aria-hidden", "false");
-        closeBtn.focus({ preventScroll: true });
-      }
-
-      function closeImageViewer() {
-        modal.classList.remove("active");
-        modal.setAttribute("aria-hidden", "true");
-        imgEl.src = "";
-        imgEl.alt = "";
-        titleEl.textContent = "";
-        if (lastFocus) lastFocus.focus({ preventScroll: true });
-      }
-
-      closeBtn.addEventListener("click", closeImageViewer);
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal.classList.contains("active")) {
-          closeImageViewer();
-        }
-      });
-
-      window.__openImageViewer = openImageViewer;
-    })();
-
-    /* ---------- Gallery grid popup ---------- */
+    /* ---------- Gallery Modal ---------- */
     (() => {
       const modal = document.getElementById("galleryModal");
       const closeBtn = document.getElementById("galleryClose");
-      const titleEl = document.getElementById("galleryTitle");
-      const gridEl = document.getElementById("galleryGrid");
+      const stage = document.getElementById("galleryStage");
+      const ring = document.getElementById("galleryRing");
+      const mainImg = document.getElementById("galleryMainImg");
+      const caption = document.getElementById("galleryCaption");
+      const mainBox = stage.querySelector(".gallery-main");
+
       let items = [];
+      let active = 0;
       let lastFocus = null;
 
-      function renderGrid() {
-        gridEl.innerHTML = "";
+      const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
-        items.forEach((item, index) => {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "gallery-grid-item";
-          btn.dataset.index = String(index);
-          btn.setAttribute("aria-label", `Open ${item.title || "image"}`);
+      function setActive(idx) {
+        active = idx;
+        mainImg.src = items[active]?.src || "";
+        mainImg.alt = items[active]?.title || "";
+        caption.textContent = items[active]?.title || "";
 
-          const img = document.createElement("img");
-          img.src = item.src;
-          img.alt = item.title || "";
-
-          btn.appendChild(img);
-          btn.addEventListener("click", () => {
-            window.__openImageViewer(item);
-          });
-
-          gridEl.appendChild(btn);
+        ring.querySelectorAll(".gallery-thumb").forEach((b) => {
+          const i = Number(b.dataset.index);
+          b.classList.toggle("is-active", i === active);
+          b.setAttribute("aria-current", i === active ? "true" : "false");
         });
       }
 
-      function openGallery(itemsInput = [], title = "Gallery") {
-        items = Array.isArray(itemsInput) ? itemsInput : [];
+      function layoutSnakeThumbs() {
+        if (!modal.classList.contains("active")) return;
+
+        const count = items.length;
+        ring.innerHTML = "";
+
+        if (!count) {
+          mainImg.src = "";
+          caption.textContent = "";
+          return;
+        }
+
+        const rect = stage.getBoundingClientRect();
+        const W = rect.width;
+        const H = rect.height;
+
+        const SAFE_TOP = 54;
+        const SAFE_LEFT = 0;
+        const SAFE_RIGHT = 0;
+        const SAFE_BOTTOM = 0;
+
+        const usableW = W - SAFE_LEFT - SAFE_RIGHT;
+        const usableH = H - SAFE_TOP - SAFE_BOTTOM;
+
+        const approxPerim = 2 * (usableW + usableH);
+        let thumb = Math.floor((approxPerim / count) * 0.65);
+        thumb = clamp(thumb, 20, 150);
+
+        const gap = clamp(Math.floor(thumb * 0.16), 6, 18);
+
+        const x0 = SAFE_LEFT + gap;
+        const y0 = SAFE_TOP + gap;
+        const x1 = SAFE_LEFT + usableW - gap - thumb;
+        const y1 = SAFE_TOP + usableH - gap - thumb;
+
+        const segTop = Math.max(0, x1 - x0);
+        const segRight = Math.max(0, y1 - y0);
+        const segBottom = segTop;
+        const segLeft = segRight;
+
+        const loopLen = segTop + segRight + segBottom + segLeft || 1;
+        const step = loopLen / count;
+
+        const ringThickness = thumb + gap * 2;
+        const mainLeft = SAFE_LEFT + ringThickness;
+        const mainTop = SAFE_TOP + ringThickness;
+        const mainW = Math.max(120, usableW - ringThickness * 2);
+        const mainH = Math.max(120, usableH - ringThickness * 2);
+
+        mainBox.style.left = mainLeft + "px";
+        mainBox.style.top = mainTop + "px";
+        mainBox.style.width = mainW + "px";
+        mainBox.style.height = mainH + "px";
+
+        for (let i = 0; i < count; i++) {
+          const item = items[i];
+          const dist = i * step;
+
+          let x = x0, y = y0;
+
+          if (dist <= segTop) {
+            x = x0 + dist;
+            y = y0;
+          } else if (dist <= segTop + segRight) {
+            x = x1;
+            y = y0 + (dist - segTop);
+          } else if (dist <= segTop + segRight + segBottom) {
+            x = x1 - (dist - segTop - segRight);
+            y = y1;
+          } else {
+            x = x0;
+            y = y1 - (dist - segTop - segRight - segBottom);
+          }
+
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "gallery-thumb";
+          btn.dataset.index = String(i);
+          btn.style.width = thumb + "px";
+          btn.style.height = thumb + "px";
+          btn.style.left = Math.round(x) + "px";
+          btn.style.top = Math.round(y) + "px";
+          btn.setAttribute("aria-label", `View ${item.title || "image"}`);
+          btn.innerHTML = `<img src="${item.src}" alt="">`;
+
+          btn.addEventListener("click", () => setActive(i));
+          ring.appendChild(btn);
+        }
+
+        setActive(clamp(active, 0, count - 1));
+      }
+
+      function openGallery(newItems, startIndex = 0) {
+        items = Array.isArray(newItems) ? newItems : [];
+        active = clamp(startIndex, 0, Math.max(0, items.length - 1));
         lastFocus = document.activeElement;
-        titleEl.textContent = title || "Gallery";
-        renderGrid();
 
         modal.classList.add("active");
         modal.setAttribute("aria-hidden", "false");
-        closeBtn.focus({ preventScroll: true });
+
+        setActive(active);
+        requestAnimationFrame(() => {
+          layoutSnakeThumbs();
+          closeBtn.focus({ preventScroll: true });
+        });
       }
 
       function closeGallery() {
         modal.classList.remove("active");
         modal.setAttribute("aria-hidden", "true");
-        gridEl.innerHTML = "";
-        titleEl.textContent = "";
         if (lastFocus) lastFocus.focus({ preventScroll: true });
       }
 
       closeBtn.addEventListener("click", closeGallery);
+      mainImg.addEventListener("click", closeGallery);
 
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && modal.classList.contains("active")) {
@@ -471,7 +519,11 @@
         }
       });
 
-      window.__openGalleryGrid = openGallery;
+      window.addEventListener("resize", () => {
+        if (modal.classList.contains("active")) layoutSnakeThumbs();
+      });
+
+      window.__openSnakeGallery = openGallery;
     })();
 
     /* ---------- Carousel ---------- */
@@ -547,13 +599,14 @@
       }
 
       function openPopup() {
-        const sel = projects[center].template;
-        const title = projects[center].title;
-        if (sel) window.__openContentBySelector(sel, title);
+        const current = projects[center];
+        if (current.template) {
+          window.__openContentBySelector(current.template, current.title);
+        }
       }
 
-      btnLeft.addEventListener("click", goPrev);
-      btnRight.addEventListener("click", goNext);
+      btnLeft.onclick = goPrev;
+      btnRight.onclick = goNext;
 
       centerArea.addEventListener("click", openPopup);
       centerArea.addEventListener("keydown", (e) => {
@@ -563,6 +616,7 @@
         }
       });
 
+      titleEl.style.cursor = "pointer";
       titleEl.addEventListener("click", openPopup);
 
       renderStacks();
@@ -595,23 +649,18 @@
 
       function buildWindowGalleryItems(item) {
         return [
-          { src: item.src, title: item.title },
-          { src: item.src, title: item.title },
-          { src: item.src, title: item.title }
+          { src: item.src, title: `${item.title} — View 1` },
+          { src: item.src, title: `${item.title} — View 2` },
+          { src: item.src, title: `${item.title} — View 3` },
+          { src: item.src, title: `${item.title} — View 4` },
+          { src: item.src, title: `${item.title} — View 5` },
+          { src: item.src, title: `${item.title} — View 6` }
         ];
       }
 
-      function bringToFront(win) {
-        win.style.zIndex = String(++zTop);
-      }
-
-      function randBetween(min, max) {
-        return min + Math.random() * (max - min);
-      }
-
-      function clamp(n, min, max) {
-        return Math.max(min, Math.min(max, n));
-      }
+      function bringToFront(win) { win.style.zIndex = String(++zTop); }
+      function randBetween(min, max) { return min + Math.random() * (max - min); }
+      function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 
       function computeSplayPositions(count) {
         const WIN_W = 300;
@@ -623,11 +672,11 @@
         const deskW = Math.max(320, rect.width || 320);
         const deskH = Math.max(520, rect.height || 520);
 
-        const startX = 30;
-        const startY = 24;
-        const stepX = 140;
-        const stepY = 10;
-        const zigAmp = 26;
+        const startX  = 30;
+        const startY  = 24;
+        const stepX   = 140;
+        const stepY   = 10;
+        const zigAmp  = 26;
         const jitterX = 14;
         const jitterY = 10;
 
@@ -691,8 +740,10 @@
           </div>
 
           <div class="pwin-overlay" aria-hidden="true">
+
             <div class="pwin-overlay-bar">
               <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
+
               ${item.hasGallery !== false ? `
                 <button class="popup-link pwin-gallery-link" type="button">open gallery ↗</button>
               ` : ``}
@@ -701,6 +752,7 @@
             <div class="pwin-overlay-scroll">
               <div class="pwin-overlay-text"></div>
             </div>
+
           </div>
         `;
 
@@ -746,10 +798,7 @@
 
         body.addEventListener("click", openOverlay);
         body.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            openOverlay(e);
-          }
+          if (e.key === "Enter" || e.key === " ") openOverlay(e);
         });
 
         minBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
@@ -759,7 +808,7 @@
           galleryLink.addEventListener("pointerdown", (e) => e.stopPropagation());
           galleryLink.addEventListener("click", (e) => {
             e.stopPropagation();
-            window.__openGalleryGrid(buildWindowGalleryItems(item), item.title);
+            window.__openSnakeGallery(buildWindowGalleryItems(item), 0);
           });
         }
 
@@ -781,7 +830,7 @@
           const startY = e.clientY;
 
           const startLeft = rectWin.left - rectDesk.left;
-          const startTop = rectWin.top - rectDesk.top;
+          const startTop  = rectWin.top - rectDesk.top;
 
           win.setPointerCapture(e.pointerId);
 
@@ -790,10 +839,10 @@
             const dy = ev.clientY - startY;
 
             const nextLeft = startLeft + dx;
-            const nextTop = startTop + dy;
+            const nextTop  = startTop + dy;
 
             win.style.left = nextLeft + "px";
-            win.style.top = nextTop + "px";
+            win.style.top  = nextTop + "px";
 
             win.dataset.x = String(nextLeft);
             win.dataset.y = String(nextTop);
