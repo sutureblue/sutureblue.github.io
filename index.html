@@ -59,29 +59,12 @@
                   <img src="assets/notGlitch.png" data-title="/NOT.GLI.TCH/H (2023)" data-template=".tpl-notGlitch" alt="">
                   <img src="assets/hereWeAre.png" data-title="Here We Are (2022)" data-template=".tpl-hereWeAre" alt="">
                 </div>
-
-                <!-- Carousel text overlay -->
-                <div class="work-overlay" aria-hidden="true" role="dialog" aria-modal="true">
-                  <div class="overlay-inner">
-                    <button class="overlay-close" type="button" aria-label="Close overlay">×</button>
-
-                    <div class="overlay-scroll">
-                      <div class="overlay-text"></div>
-                    </div>
-                  </div>
-                </div>
-
               </div>
             </div>
           </div>
 
           <div class="work-meta">
             <h3 class="project-title"></h3>
-
-            <div class="work-links">
-              <button class="popup-link gallery-open" type="button">open gallery ↗</button>
-              <button class="popup-link project-popup-link" type="button">see more ↗</button>
-            </div>
           </div>
 
           <!-- Carousel templates -->
@@ -196,6 +179,7 @@
           <h4>Light Sleeper, Heavy Dreamer (2020)</h4>
           <p><a href="https://www.youtube.com/watch?v=R0VyONd6Eko" target="_blank" rel="noreferrer">Light Sleeper, Heavy Dreamer</a> was a collaborative live performance with <a href="https://royb0t.bandcamp.com/" target="_blank" rel="noreferrer">royb0t</a> exploring memory through glitched digital landscapes and otherworldly music. The interactive piece guided audiences through dream-like environments, combining visual breaks with atmospheric sound.</p>
         </template>
+
       </section>
 
       <!-- Talking with Others -->
@@ -315,7 +299,7 @@
     </div>
   </div>
 
-  <!-- Fullscreen Gallery Modal -->
+  <!-- GLOBAL GALLERY MODAL -->
   <div id="galleryModal" class="gallery-modal" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="gallery-shell" role="document">
       <button id="galleryClose" class="gallery-close" type="button" aria-label="Close gallery">×</button>
@@ -533,16 +517,11 @@
       window.__openSnakeGallery = openGallery;
     })();
 
-    /* ---------- Carousel + Overlay ---------- */
+    /* ---------- Carousel ---------- */
     document.querySelectorAll(".work-item").forEach((workItem) => {
       const carousel = workItem.querySelector(".carousel");
 
-      const overlay = workItem.querySelector(".work-overlay");
-      const overlayScroll = workItem.querySelector(".overlay-scroll");
-      const overlayText = workItem.querySelector(".overlay-text");
-      const closeBtn = workItem.querySelector(".overlay-close");
       const titleEl = workItem.querySelector(".project-title");
-
       const centerImg = carousel.querySelector(".carousel-center-img");
       const centerArea = carousel.querySelector(".carousel-center");
 
@@ -551,11 +530,6 @@
 
       const btnLeft = carousel.querySelector(".carousel-btn.left");
       const btnRight = carousel.querySelector(".carousel-btn.right");
-
-      const galleryOpenBtn = workItem.querySelector(".gallery-open");
-      const projectPopupLink = workItem.querySelector(".project-popup-link");
-
-      let lastFocusEl = null;
 
       const projects = Array.from(
         carousel.querySelectorAll(".carousel-sources img")
@@ -571,13 +545,6 @@
 
       function updateMeta(index) {
         titleEl.textContent = projects[index].title;
-        const sel = projects[index].template;
-        const tpl = sel ? workItem.querySelector(sel) : null;
-        overlayText.innerHTML = tpl ? tpl.innerHTML : "";
-
-        if (projectPopupLink) {
-          projectPopupLink.dataset.popupTarget = sel || "";
-        }
       }
 
       function renderStacks() {
@@ -622,47 +589,24 @@
         renderStacks();
       }
 
+      function openPopup() {
+        const sel = projects[center].template;
+        if (sel) window.__openContentBySelector(sel);
+      }
+
       btnLeft.onclick = goPrev;
       btnRight.onclick = goNext;
 
-      function openOverlay(e) {
-        if (e) e.stopPropagation();
-        lastFocusEl = document.activeElement;
-
-        overlay.classList.add("active");
-        overlay.setAttribute("aria-hidden", "false");
-        overlayScroll.scrollTop = 0;
-
-        closeBtn.focus({ preventScroll: true });
-      }
-
-      function closeOverlay(e) {
-        if (e) e.stopPropagation();
-        overlay.classList.remove("active");
-        overlay.setAttribute("aria-hidden", "true");
-        if (lastFocusEl) lastFocusEl.focus({ preventScroll: true });
-      }
-
-      centerArea.onclick = openOverlay;
+      centerArea.addEventListener("click", openPopup);
+      centerArea.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openPopup();
+        }
+      });
 
       titleEl.style.cursor = "pointer";
-      titleEl.onclick = openOverlay;
-
-      centerArea.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") openOverlay(e);
-      });
-
-      closeBtn.onclick = closeOverlay;
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
-      });
-
-      if (galleryOpenBtn) {
-        galleryOpenBtn.addEventListener("click", () => {
-          window.__openSnakeGallery(projects, center);
-        });
-      }
+      titleEl.addEventListener("click", openPopup);
 
       renderStacks();
     });
@@ -690,6 +634,14 @@
       function getTemplateHTML(id) {
         const tpl = document.getElementById(`tpl-${id}`);
         return tpl ? tpl.innerHTML : `<p><strong>${id}</strong></p>`;
+      }
+
+      function buildWindowGalleryItems(item) {
+        return [
+          { src: item.src, title: item.title },
+          { src: item.src, title: item.title },
+          { src: item.src, title: item.title }
+        ];
       }
 
       function bringToFront(win) { win.style.zIndex = String(++zTop); }
@@ -775,6 +727,11 @@
 
           <div class="pwin-overlay" aria-hidden="true">
             <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
+
+            <div class="pwin-overlay-top">
+              <button class="popup-link pwin-gallery-link" type="button">open gallery ↗</button>
+            </div>
+
             <div class="pwin-overlay-scroll">
               <div class="pwin-overlay-text"></div>
             </div>
@@ -789,6 +746,7 @@
         const minBtn = win.querySelector(".pwin-min");
         const overlayScroll = win.querySelector(".pwin-overlay-scroll");
         const overlayText = win.querySelector(".pwin-overlay-text");
+        const galleryLink = win.querySelector(".pwin-gallery-link");
 
         function openOverlay(e) {
           if (e) e.stopPropagation();
@@ -828,14 +786,19 @@
         minBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
         minBtn.addEventListener("click", closeOverlay);
 
+        galleryLink.addEventListener("pointerdown", (e) => e.stopPropagation());
+        galleryLink.addEventListener("click", (e) => {
+          e.stopPropagation();
+          window.__openSnakeGallery(buildWindowGalleryItems(item), 0);
+        });
+
         document.addEventListener("keydown", (e) => {
           if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
         });
 
         bar.addEventListener("pointerdown", (e) => {
           if (isMobile()) return;
-          if (e.target === close) return;
-          if (overlay.classList.contains("active")) return;
+          if (e.target.closest(".pwin-close")) return;
 
           e.preventDefault();
           bringToFront(win);
