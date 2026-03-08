@@ -603,6 +603,11 @@ select {
   z-index: 2;
 }
 
+.pwin-overlay-top.no-gallery {
+  min-height: 0;
+  padding: 0;
+}
+
 .pwin-overlay.active {
   opacity: 1;
   pointer-events: auto;
