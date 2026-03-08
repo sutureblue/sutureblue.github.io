@@ -60,6 +60,7 @@
                   <img src="assets/hereWeAre.png" data-title="Here We Are (2022)" data-template=".tpl-hereWeAre" alt="">
                 </div>
               </div>
+
             </div>
           </div>
 
@@ -144,7 +145,7 @@
 
         <div id="practiceDesktop" class="practice-desktop" aria-label="Draggable practice windows"></div>
 
-        <!-- Practice templates -->
+        <!-- Practice text templates -->
         <template id="tpl-colourorgan">
           <h4>Colour Organ (2021)</h4>
           <p>Colour Organ is a digital implementation of Alexander Wallace Rimington's color-music theory, where audio frequencies trigger corresponding colored lights arranged in a 5x7 grid representing octaves and scales. The installation backlit a semi-translucent screen with 35 individual point lights programmed to respond to specific frequency ranges, creating a visual orchestration of the ROYGBIV spectrum synchronized to sound.</p>
@@ -165,7 +166,7 @@
         </template>
 
         <template id="tpl-drawing">
-          <h4>Animations & Drawings</h4>
+          <h4>Animations &amp; Drawings</h4>
           <p>Since 2014, I’ve created looping rotoscoped animations intended to hold a viewer in an evocative moment of intra/interpersonal reflections. These animations are often combined with analog &amp; digital glitch techniques as methodological expressions of engaging as an interpretive system within systems. Positioning myself (and by extension a viewer) as an interpreter embedded within larger systemic boundaries and ruptures.</p>
           <p>Naturally, I also draw still images from time to time too.</p>
         </template>
@@ -294,7 +295,10 @@
   <!-- GLOBAL TEXT POPUP -->
   <div id="contentModal" class="content-modal" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="content-shell" role="document">
-      <button id="contentClose" class="content-close" type="button" aria-label="Close popup">×</button>
+      <div class="content-bar">
+        <button id="contentClose" class="content-close" type="button" aria-label="Close popup">×</button>
+        <div id="contentTitle" class="content-title"></div>
+      </div>
       <div id="contentBody" class="content-body"></div>
     </div>
   </div>
@@ -320,13 +324,20 @@
     (() => {
       const modal = document.getElementById("contentModal");
       const closeBtn = document.getElementById("contentClose");
+      const titleEl = document.getElementById("contentTitle");
       const body = document.getElementById("contentBody");
       let lastFocus = null;
 
-      function openContentBySelector(selector) {
+      function openContentBySelector(selector, fallbackTitle = "") {
         if (!selector) return;
         const tpl = document.querySelector(selector);
         if (!tpl) return;
+
+        const heading = tpl.content
+          ? tpl.content.querySelector("h4")
+          : tpl.querySelector?.("h4");
+
+        titleEl.textContent = heading?.textContent?.trim() || fallbackTitle || "";
 
         lastFocus = document.activeElement;
         body.innerHTML = tpl.innerHTML;
@@ -339,15 +350,9 @@
         modal.classList.remove("active");
         modal.setAttribute("aria-hidden", "true");
         body.innerHTML = "";
+        titleEl.textContent = "";
         if (lastFocus) lastFocus.focus({ preventScroll: true });
       }
-
-      document.addEventListener("click", (e) => {
-        const trigger = e.target.closest(".popup-link[data-popup-target]");
-        if (!trigger) return;
-        e.preventDefault();
-        openContentBySelector(trigger.dataset.popupTarget);
-      });
 
       closeBtn.addEventListener("click", closeContent);
 
@@ -591,11 +596,12 @@
 
       function openPopup() {
         const sel = projects[center].template;
-        if (sel) window.__openContentBySelector(sel);
+        const title = projects[center].title;
+        if (sel) window.__openContentBySelector(sel, title);
       }
 
-      btnLeft.onclick = goPrev;
-      btnRight.onclick = goNext;
+      btnLeft.addEventListener("click", goPrev);
+      btnRight.addEventListener("click", goNext);
 
       centerArea.addEventListener("click", openPopup);
       centerArea.addEventListener("keydown", (e) => {
@@ -605,7 +611,6 @@
         }
       });
 
-      titleEl.style.cursor = "pointer";
       titleEl.addEventListener("click", openPopup);
 
       renderStacks();
@@ -617,14 +622,14 @@
       const resetBtn = document.getElementById("practiceReset");
       if (!desktop || !resetBtn) return;
 
-const PRACTICE = [
-  { id:"drawing",        src:"assets/Drawing_1.png",        title:"Animations & Drawings", hasGallery: true },
-  { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication", hasGallery: true },
-  { id:"lightsleeper",   src:"assets/LightSleeper_1.png",   title:"Light Sleeper, Heavy Dreamer (2020)", hasGallery: true },
-  { id:"colourorgan",    src:"assets/ColourOrgan_1.png",    title:"Colour Organ (2021)", hasGallery: true },
-  { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"An Uncanny Scene (2022)", hasGallery: true },
-  { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game (2024)", hasGallery: false },
-];
+      const PRACTICE = [
+        { id:"drawing",        src:"assets/Drawing_1.png",        title:"Animations & Drawings", hasGallery: true },
+        { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication", hasGallery: false },
+        { id:"lightsleeper",   src:"assets/LightSleeper_1.png",   title:"Light Sleeper, Heavy Dreamer (2020)", hasGallery: true },
+        { id:"colourorgan",    src:"assets/ColourOrgan_1.png",    title:"Colour Organ (2021)", hasGallery: true },
+        { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"An Uncanny Scene (2022)", hasGallery: true },
+        { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game (2024)", hasGallery: true },
+      ];
 
       const mqMobile = window.matchMedia("(max-width: 760px)");
       const isMobile = () => mqMobile.matches;
@@ -644,9 +649,17 @@ const PRACTICE = [
         ];
       }
 
-      function bringToFront(win) { win.style.zIndex = String(++zTop); }
-      function randBetween(min, max) { return min + Math.random() * (max - min); }
-      function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+      function bringToFront(win) {
+        win.style.zIndex = String(++zTop);
+      }
+
+      function randBetween(min, max) {
+        return min + Math.random() * (max - min);
+      }
+
+      function clamp(n, min, max) {
+        return Math.max(min, Math.min(max, n));
+      }
 
       function computeSplayPositions(count) {
         const WIN_W = 300;
@@ -658,11 +671,11 @@ const PRACTICE = [
         const deskW = Math.max(320, rect.width || 320);
         const deskH = Math.max(520, rect.height || 520);
 
-        const startX  = 30;
-        const startY  = 24;
-        const stepX   = 140;
-        const stepY   = 10;
-        const zigAmp  = 26;
+        const startX = 30;
+        const startY = 24;
+        const stepX = 140;
+        const stepY = 10;
+        const zigAmp = 26;
         const jitterX = 14;
         const jitterY = 10;
 
@@ -709,147 +722,147 @@ const PRACTICE = [
         });
       }
 
-function createWindow(item) {
-  const win = document.createElement("div");
-  win.className = "pwin";
-  win.dataset.id = item.id;
-  win.style.zIndex = String(++zTop);
+      function createWindow(item) {
+        const win = document.createElement("div");
+        win.className = "pwin";
+        win.dataset.id = item.id;
+        win.style.zIndex = String(++zTop);
 
-  win.innerHTML = `
-    <div class="pwin-bar" role="toolbar">
-      <button class="pwin-close" type="button" aria-label="Close window">×</button>
-      <div class="pwin-title" title="${item.title}">${item.title}</div>
-    </div>
+        win.innerHTML = `
+          <div class="pwin-bar" role="toolbar">
+            <button class="pwin-close" type="button" aria-label="Close window">×</button>
+            <div class="pwin-title" title="${item.title}">${item.title}</div>
+          </div>
 
-    <div class="pwin-body" role="button" tabindex="0" aria-label="Open description">
-      <img src="${item.src}" alt="${item.title}">
-    </div>
+          <div class="pwin-body" role="button" tabindex="0" aria-label="Open description">
+            <img src="${item.src}" alt="${item.title}">
+          </div>
 
-    <div class="pwin-overlay" aria-hidden="true">
-      <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
+          <div class="pwin-overlay" aria-hidden="true">
 
-<div class="pwin-overlay" aria-hidden="true">
+            <div class="pwin-overlay-bar">
+              <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
+              ${item.hasGallery !== false ? `
+                <button class="popup-link pwin-gallery-link" type="button">open gallery ↗</button>
+              ` : ``}
+            </div>
 
-  <div class="pwin-overlay-bar">
-    <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
+            <div class="pwin-overlay-scroll">
+              <div class="pwin-overlay-text"></div>
+            </div>
 
-    ${item.hasGallery !== false ? `
-      <button class="popup-link pwin-gallery-link" type="button">open gallery ↗</button>
-    ` : ``}
-  </div>
+          </div>
+        `;
 
-  <div class="pwin-overlay-scroll">
-    <div class="pwin-overlay-text"></div>
-  </div>
+        const bar = win.querySelector(".pwin-bar");
+        const close = win.querySelector(".pwin-close");
+        const body = win.querySelector(".pwin-body");
 
-</div>
+        const overlay = win.querySelector(".pwin-overlay");
+        const minBtn = win.querySelector(".pwin-min");
+        const overlayScroll = win.querySelector(".pwin-overlay-scroll");
+        const overlayText = win.querySelector(".pwin-overlay-text");
+        const galleryLink = win.querySelector(".pwin-gallery-link");
 
-  const bar = win.querySelector(".pwin-bar");
-  const close = win.querySelector(".pwin-close");
-  const body = win.querySelector(".pwin-body");
+        function openOverlay(e) {
+          if (e) e.stopPropagation();
+          bringToFront(win);
 
-  const overlay = win.querySelector(".pwin-overlay");
-  const minBtn = win.querySelector(".pwin-min");
-  const overlayScroll = win.querySelector(".pwin-overlay-scroll");
-  const overlayText = win.querySelector(".pwin-overlay-text");
-  const galleryLink = win.querySelector(".pwin-gallery-link");
+          overlayText.innerHTML = getTemplateHTML(item.id);
+          overlay.classList.add("active");
+          overlay.setAttribute("aria-hidden", "false");
+          overlayScroll.scrollTop = 0;
 
-  function openOverlay(e) {
-    if (e) e.stopPropagation();
-    bringToFront(win);
+          minBtn.focus({ preventScroll: true });
+        }
 
-    overlayText.innerHTML = getTemplateHTML(item.id);
-    overlay.classList.add("active");
-    overlay.setAttribute("aria-hidden", "false");
-    overlayScroll.scrollTop = 0;
+        function closeOverlay(e) {
+          if (e) e.stopPropagation();
+          overlay.classList.remove("active");
+          overlay.setAttribute("aria-hidden", "true");
+        }
 
-    minBtn.focus({ preventScroll: true });
-  }
+        close.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (isMobile()) {
+            win.classList.add("removing");
+            setTimeout(() => win.remove(), 140);
+          } else {
+            win.remove();
+          }
+        });
 
-  function closeOverlay(e) {
-    if (e) e.stopPropagation();
-    overlay.classList.remove("active");
-    overlay.setAttribute("aria-hidden", "true");
-  }
+        win.addEventListener("pointerdown", () => bringToFront(win));
 
-  close.addEventListener("click", (e) => {
-    e.stopPropagation();
-    if (isMobile()) {
-      win.classList.add("removing");
-      setTimeout(() => win.remove(), 140);
-    } else {
-      win.remove();
-    }
-  });
+        body.addEventListener("click", openOverlay);
+        body.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            openOverlay(e);
+          }
+        });
 
-  win.addEventListener("pointerdown", () => bringToFront(win));
+        minBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
+        minBtn.addEventListener("click", closeOverlay);
 
-  body.addEventListener("click", openOverlay);
-  body.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") openOverlay(e);
-  });
+        if (galleryLink) {
+          galleryLink.addEventListener("pointerdown", (e) => e.stopPropagation());
+          galleryLink.addEventListener("click", (e) => {
+            e.stopPropagation();
+            window.__openSnakeGallery(buildWindowGalleryItems(item), 0);
+          });
+        }
 
-  minBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
-  minBtn.addEventListener("click", closeOverlay);
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
+        });
 
-  if (galleryLink) {
-    galleryLink.addEventListener("pointerdown", (e) => e.stopPropagation());
-    galleryLink.addEventListener("click", (e) => {
-      e.stopPropagation();
-      window.__openSnakeGallery(buildWindowGalleryItems(item), 0);
-    });
-  }
+        bar.addEventListener("pointerdown", (e) => {
+          if (isMobile()) return;
+          if (e.target.closest(".pwin-close")) return;
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
-  });
+          e.preventDefault();
+          bringToFront(win);
 
-  bar.addEventListener("pointerdown", (e) => {
-    if (isMobile()) return;
-    if (e.target.closest(".pwin-close")) return;
+          const rectDesk = desktop.getBoundingClientRect();
+          const rectWin = win.getBoundingClientRect();
 
-    e.preventDefault();
-    bringToFront(win);
+          const startX = e.clientX;
+          const startY = e.clientY;
 
-    const rectDesk = desktop.getBoundingClientRect();
-    const rectWin = win.getBoundingClientRect();
+          const startLeft = rectWin.left - rectDesk.left;
+          const startTop = rectWin.top - rectDesk.top;
 
-    const startX = e.clientX;
-    const startY = e.clientY;
+          win.setPointerCapture(e.pointerId);
 
-    const startLeft = rectWin.left - rectDesk.left;
-    const startTop  = rectWin.top - rectDesk.top;
+          function onMove(ev) {
+            const dx = ev.clientX - startX;
+            const dy = ev.clientY - startY;
 
-    win.setPointerCapture(e.pointerId);
+            const nextLeft = startLeft + dx;
+            const nextTop = startTop + dy;
 
-    function onMove(ev) {
-      const dx = ev.clientX - startX;
-      const dy = ev.clientY - startY;
+            win.style.left = nextLeft + "px";
+            win.style.top = nextTop + "px";
 
-      const nextLeft = startLeft + dx;
-      const nextTop  = startTop + dy;
+            win.dataset.x = String(nextLeft);
+            win.dataset.y = String(nextTop);
+          }
 
-      win.style.left = nextLeft + "px";
-      win.style.top  = nextTop + "px";
+          function onUp() {
+            try { win.releasePointerCapture(e.pointerId); } catch (_) {}
+            win.removeEventListener("pointermove", onMove);
+            win.removeEventListener("pointerup", onUp);
+            win.removeEventListener("pointercancel", onUp);
+          }
 
-      win.dataset.x = String(nextLeft);
-      win.dataset.y = String(nextTop);
-    }
+          win.addEventListener("pointermove", onMove);
+          win.addEventListener("pointerup", onUp);
+          win.addEventListener("pointercancel", onUp);
+        });
 
-    function onUp() {
-      try { win.releasePointerCapture(e.pointerId); } catch (_) {}
-      win.removeEventListener("pointermove", onMove);
-      win.removeEventListener("pointerup", onUp);
-      win.removeEventListener("pointercancel", onUp);
-    }
-
-    win.addEventListener("pointermove", onMove);
-    win.addEventListener("pointerup", onUp);
-    win.addEventListener("pointercancel", onUp);
-  });
-
-  return win;
-}
+        return win;
+      }
 
       function populate() {
         desktop.innerHTML = "";
