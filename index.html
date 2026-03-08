@@ -619,11 +619,11 @@
 
 const PRACTICE = [
   { id:"drawing",        src:"assets/Drawing_1.png",        title:"Animations & Drawings", hasGallery: true },
-  { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication", hasGallery: false },
+  { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication", hasGallery: true },
   { id:"lightsleeper",   src:"assets/LightSleeper_1.png",   title:"Light Sleeper, Heavy Dreamer (2020)", hasGallery: true },
   { id:"colourorgan",    src:"assets/ColourOrgan_1.png",    title:"Colour Organ (2021)", hasGallery: true },
   { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"An Uncanny Scene (2022)", hasGallery: true },
-  { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game (2024)", hasGallery: true },
+  { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game (2024)", hasGallery: false },
 ];
 
       const mqMobile = window.matchMedia("(max-width: 760px)");
@@ -728,13 +728,13 @@ function createWindow(item) {
     <div class="pwin-overlay" aria-hidden="true">
       <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
 
-      ${item.hasGallery !== false ? `
-        <div class="pwin-overlay-top">
-          <button class="popup-link pwin-gallery-link" type="button">open gallery ↗</button>
-        </div>
-      ` : `
-        <div class="pwin-overlay-top"></div>
-      `}
+${item.hasGallery !== false ? `
+  <div class="pwin-overlay-top">
+    <button class="popup-link pwin-gallery-link" type="button">open gallery ↗</button>
+  </div>
+` : `
+  <div class="pwin-overlay-top no-gallery"></div>
+`}
 
       <div class="pwin-overlay-scroll">
         <div class="pwin-overlay-text"></div>
