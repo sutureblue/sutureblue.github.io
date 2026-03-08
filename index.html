@@ -302,19 +302,22 @@
   <!-- GLOBAL GALLERY MODAL -->
   <div id="galleryModal" class="gallery-modal" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="gallery-shell" role="document">
-      <button id="galleryClose" class="gallery-close" type="button" aria-label="Close gallery">×</button>
+      <div class="gallery-toolbar">
+        <button id="galleryClose" class="gallery-close" type="button" aria-label="Close gallery">×</button>
+        <div id="galleryTitle" class="gallery-title"></div>
+      </div>
 
       <div class="gallery-stage gallery-stage-grid" id="galleryStage" aria-label="Image gallery"></div>
-
-      <div class="gallery-caption" id="galleryCaption" aria-live="polite"></div>
     </div>
   </div>
 
   <!-- IMAGE LIGHTBOX -->
   <div id="imageLightbox" class="image-lightbox" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="image-lightbox-shell" role="document">
-      <button id="imageLightboxClose" class="image-lightbox-close" type="button" aria-label="Close image">×</button>
-      <img id="imageLightboxImg" src="" alt="">
+      <div class="image-lightbox-frame">
+        <img id="imageLightboxImg" src="" alt="">
+        <div id="imageLightboxCaption" class="image-lightbox-caption"></div>
+      </div>
     </div>
   </div>
 
@@ -331,6 +334,7 @@
       let lastFocus = null;
       let navItems = null;
       let navIndex = -1;
+      let navController = null;
 
       function renderCurrentNavItem() {
         if (!Array.isArray(navItems) || navIndex < 0 || navIndex >= navItems.length) return;
@@ -345,6 +349,7 @@
         lastFocus = document.activeElement;
         navItems = Array.isArray(options.items) ? options.items : null;
         navIndex = typeof options.index === "number" ? options.index : -1;
+        navController = typeof options.onNavigate === "function" ? options.onNavigate : null;
 
         if (navItems && navItems.length) {
           renderCurrentNavItem();
@@ -374,18 +379,27 @@
         body.innerHTML = "";
         navItems = null;
         navIndex = -1;
+        navController = null;
         if (lastFocus) lastFocus.focus({ preventScroll: true });
       }
 
       function goPrev() {
-        if (!navItems || navItems.length <= 1) return;
-        navIndex = (navIndex - 1 + navItems.length) % navItems.length;
+        if (navController) {
+          const nextIndex = navController("prev");
+          if (typeof nextIndex === "number") navIndex = nextIndex;
+        } else if (navItems && navItems.length > 1) {
+          navIndex = (navIndex - 1 + navItems.length) % navItems.length;
+        }
         renderCurrentNavItem();
       }
 
       function goNext() {
-        if (!navItems || navItems.length <= 1) return;
-        navIndex = (navIndex + 1) % navItems.length;
+        if (navController) {
+          const nextIndex = navController("next");
+          if (typeof nextIndex === "number") navIndex = nextIndex;
+        } else if (navItems && navItems.length > 1) {
+          navIndex = (navIndex + 1) % navItems.length;
+        }
         renderCurrentNavItem();
       }
 
@@ -422,18 +436,18 @@
     /* ---------- Image Lightbox ---------- */
     (() => {
       const modal = document.getElementById("imageLightbox");
-      const closeBtn = document.getElementById("imageLightboxClose");
       const img = document.getElementById("imageLightboxImg");
+      const caption = document.getElementById("imageLightboxCaption");
 
       let lastFocus = null;
 
-      function openLightbox(src, alt = "") {
+      function openLightbox(src, alt = "", title = "") {
         lastFocus = document.activeElement;
         img.src = src || "";
         img.alt = alt || "";
+        caption.textContent = title || alt || "";
         modal.classList.add("active");
         modal.setAttribute("aria-hidden", "false");
-        closeBtn.focus({ preventScroll: true });
       }
 
       function closeLightbox() {
@@ -441,11 +455,12 @@
         modal.setAttribute("aria-hidden", "true");
         img.src = "";
         img.alt = "";
+        caption.textContent = "";
         if (lastFocus) lastFocus.focus({ preventScroll: true });
       }
 
-      closeBtn.addEventListener("click", closeLightbox);
       img.addEventListener("click", closeLightbox);
+
       modal.addEventListener("click", (e) => {
         if (e.target === modal) closeLightbox();
       });
@@ -465,20 +480,18 @@
       const modal = document.getElementById("galleryModal");
       const closeBtn = document.getElementById("galleryClose");
       const stage = document.getElementById("galleryStage");
-      const caption = document.getElementById("galleryCaption");
+      const titleEl = document.getElementById("galleryTitle");
 
       let items = [];
       let lastFocus = null;
+      let windowTitle = "";
 
       function renderGallery() {
         stage.innerHTML = "";
 
-        if (!items.length) {
-          caption.textContent = "";
-          return;
-        }
+        if (!items.length) return;
 
-        items.forEach((item, i) => {
+        items.forEach((item) => {
           const btn = document.createElement("button");
           btn.type = "button";
           btn.className = "gallery-grid-item";
@@ -486,21 +499,19 @@
           btn.innerHTML = `<img src="${item.src}" alt="${item.title || ""}">`;
 
           btn.addEventListener("click", () => {
-            caption.textContent = item.title || "";
-            window.__openImageLightbox(item.src, item.title || "");
+            window.__openImageLightbox(item.src, item.title || "", item.title || "");
           });
 
           stage.appendChild(btn);
-
-          if (i === 0) {
-            caption.textContent = item.title || "";
-          }
         });
       }
 
-      function openGallery(newItems) {
+      function openGallery(newItems, title = "") {
         items = Array.isArray(newItems) ? newItems.slice(0, 3) : [];
+        windowTitle = title || "";
         lastFocus = document.activeElement;
+
+        titleEl.textContent = windowTitle;
 
         modal.classList.add("active");
         modal.setAttribute("aria-hidden", "false");
@@ -513,7 +524,7 @@
         modal.classList.remove("active");
         modal.setAttribute("aria-hidden", "true");
         stage.innerHTML = "";
-        caption.textContent = "";
+        titleEl.textContent = "";
         if (lastFocus) lastFocus.focus({ preventScroll: true });
       }
 
@@ -600,17 +611,19 @@
       }
 
       function goNext() {
-        if (!rightStack.length) return;
+        if (!rightStack.length) return center;
         leftStack.unshift(center);
         center = rightStack.shift();
         renderStacks();
+        return center;
       }
 
       function goPrev() {
-        if (!leftStack.length) return;
+        if (!leftStack.length) return center;
         rightStack.unshift(center);
         center = leftStack.shift();
         renderStacks();
+        return center;
       }
 
       function openPopup() {
@@ -618,9 +631,15 @@
         if (!current.template) return;
 
         const popupItems = buildPopupItems();
+
         window.__openContent(current.title, popupItems[center].html, {
           items: popupItems,
-          index: center
+          index: center,
+          onNavigate: (direction) => {
+            if (direction === "prev") return goPrev();
+            if (direction === "next") return goNext();
+            return center;
+          }
         });
       }
 
@@ -824,7 +843,7 @@
           galleryLink.addEventListener("pointerdown", (e) => e.stopPropagation());
           galleryLink.addEventListener("click", (e) => {
             e.stopPropagation();
-            window.__openSnakeGallery(buildWindowGalleryItems(item));
+            window.__openSnakeGallery(buildWindowGalleryItems(item), item.title);
           });
         }
 
