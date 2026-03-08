@@ -276,7 +276,8 @@ select {
 }
 
 .content-toolbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
   align-items: center;
   gap: 10px;
   min-height: 46px;
@@ -285,20 +286,35 @@ select {
   background: rgba(0,0,0,0.78);
 }
 
+.content-nav-btn,
 .content-close {
   flex: 0 0 auto;
   background: none;
   border: none;
   color: #fff;
-  font-size: 18px;
   line-height: 1;
-  padding: 0;
   cursor: pointer;
   opacity: 0.95;
 }
 
+.content-nav-btn {
+  font-size: 22px;
+  padding: 0 4px;
+}
+
+.content-close {
+  font-size: 18px;
+  padding: 0;
+}
+
+.content-nav-btn:hover,
 .content-close:hover {
   color: var(--glow-blue);
+}
+
+.content-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
 }
 
 .content-title {
@@ -375,13 +391,13 @@ select {
 
 .gallery-shell {
   position: relative;
-  width: min(1100px, 96vw);
-  height: min(760px, 90vh);
+  width: min(900px, 94vw);
+  min-height: 320px;
   background: rgba(6, 6, 10, 0.98);
   border: 1px solid rgba(255,255,255,0.10);
   border-radius: 18px;
   box-shadow: 0 30px 90px rgba(0,0,0,0.75);
-  padding: 18px;
+  padding: 56px 18px 48px;
   overflow: hidden;
 }
 
@@ -409,45 +425,20 @@ select {
 .gallery-stage {
   position: relative;
   width: 100%;
-  height: calc(100% - 34px);
   border-radius: 16px;
-  overflow: hidden;
+  overflow: visible;
 }
 
-.gallery-main {
-  position: absolute;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid rgba(23,162,184,0.30);
-  box-shadow:
-    0 18px 48px rgba(0,0,0,0.65),
-    0 0 22px rgba(23,162,184,0.16);
-  background: rgba(255,255,255,0.02);
+.gallery-stage-grid {
   display: grid;
-  place-items: center;
-  padding: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
 }
 
-.gallery-main img {
-  display: block;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
-  cursor: pointer;
-}
-
-.gallery-ring {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  pointer-events: auto;
-}
-
-.gallery-thumb {
-  position: absolute;
+.gallery-grid-item {
   padding: 0;
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
   background: rgba(255,255,255,0.02);
@@ -456,23 +447,16 @@ select {
   transition: transform 140ms ease, border-color 140ms ease, opacity 140ms ease;
 }
 
-.gallery-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  opacity: 0.92;
-}
-
-.gallery-thumb:hover {
+.gallery-grid-item:hover {
   transform: translateY(-3px);
   border-color: rgba(23,162,184,0.55);
 }
 
-.gallery-thumb:hover img { opacity: 1; }
-
-.gallery-thumb.is-active {
-  border: 2px solid rgba(23,162,184,0.85);
+.gallery-grid-item img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  display: block;
 }
 
 .gallery-caption {
@@ -485,6 +469,61 @@ select {
   color: rgba(247,245,255,0.75);
   z-index: 8;
   pointer-events: none;
+}
+
+/* Image lightbox */
+.image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(0,0,0,0.72);
+  display: none;
+  place-items: center;
+  padding: 24px;
+}
+
+.image-lightbox.active {
+  display: grid;
+}
+
+.image-lightbox-shell {
+  position: relative;
+  max-width: min(1100px, 94vw);
+  max-height: min(90vh, 900px);
+  display: grid;
+  place-items: center;
+}
+
+.image-lightbox-close {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  z-index: 5;
+  background: rgba(0,0,0,0.72);
+  border: 1px solid rgba(255,255,255,0.16);
+  color: #fff;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.image-lightbox-close:hover {
+  color: var(--glow-blue);
+  border-color: rgba(23,162,184,0.45);
+}
+
+.image-lightbox img {
+  display: block;
+  max-width: 100%;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 30px 90px rgba(0,0,0,0.75);
+  cursor: pointer;
 }
 
 /* Practice controls */
@@ -852,12 +891,19 @@ select {
 
   .gallery-shell {
     width: 96vw;
-    height: 88vh;
-    padding: 14px;
+    padding: 54px 14px 42px;
+  }
+
+  .gallery-stage-grid {
+    grid-template-columns: 1fr;
   }
 
   .content-shell {
     width: 94vw;
+  }
+
+  .content-toolbar {
+    grid-template-columns: auto auto 1fr auto;
   }
 
   .practice-desktop.is-mobile {
