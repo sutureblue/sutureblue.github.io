@@ -289,8 +289,10 @@
   <div id="contentModal" class="content-modal" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="content-shell" role="document">
       <div class="content-toolbar">
+        <button id="contentNavPrev" class="content-nav-btn" type="button" aria-label="Previous item">‹</button>
         <button id="contentClose" class="content-close" type="button" aria-label="Close popup">×</button>
         <div id="contentTitle" class="content-title"></div>
+        <button id="contentNavNext" class="content-nav-btn" type="button" aria-label="Next item">›</button>
       </div>
 
       <div id="contentBody" class="content-body"></div>
@@ -302,14 +304,17 @@
     <div class="gallery-shell" role="document">
       <button id="galleryClose" class="gallery-close" type="button" aria-label="Close gallery">×</button>
 
-      <div class="gallery-stage" id="galleryStage" aria-label="Image gallery">
-        <div class="gallery-main">
-          <img id="galleryMainImg" src="" alt="">
-        </div>
-        <div class="gallery-ring" id="galleryRing" aria-label="Gallery thumbnails"></div>
-      </div>
+      <div class="gallery-stage gallery-stage-grid" id="galleryStage" aria-label="Image gallery"></div>
 
       <div class="gallery-caption" id="galleryCaption" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <!-- IMAGE LIGHTBOX -->
+  <div id="imageLightbox" class="image-lightbox" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="image-lightbox-shell" role="document">
+      <button id="imageLightboxClose" class="image-lightbox-close" type="button" aria-label="Close image">×</button>
+      <img id="imageLightboxImg" src="" alt="">
     </div>
   </div>
 
@@ -318,24 +323,48 @@
     (() => {
       const modal = document.getElementById("contentModal");
       const closeBtn = document.getElementById("contentClose");
+      const prevBtn = document.getElementById("contentNavPrev");
+      const nextBtn = document.getElementById("contentNavNext");
       const titleEl = document.getElementById("contentTitle");
       const body = document.getElementById("contentBody");
-      let lastFocus = null;
 
-      function openContent(title, html) {
+      let lastFocus = null;
+      let navItems = null;
+      let navIndex = -1;
+
+      function renderCurrentNavItem() {
+        if (!Array.isArray(navItems) || navIndex < 0 || navIndex >= navItems.length) return;
+        const item = navItems[navIndex];
+        titleEl.textContent = item.title || "";
+        body.innerHTML = item.html || "";
+        prevBtn.disabled = navItems.length <= 1;
+        nextBtn.disabled = navItems.length <= 1;
+      }
+
+      function openContent(title, html, options = {}) {
         lastFocus = document.activeElement;
-        titleEl.textContent = title || "";
-        body.innerHTML = html || "";
+        navItems = Array.isArray(options.items) ? options.items : null;
+        navIndex = typeof options.index === "number" ? options.index : -1;
+
+        if (navItems && navItems.length) {
+          renderCurrentNavItem();
+        } else {
+          titleEl.textContent = title || "";
+          body.innerHTML = html || "";
+          prevBtn.disabled = true;
+          nextBtn.disabled = true;
+        }
+
         modal.classList.add("active");
         modal.setAttribute("aria-hidden", "false");
         closeBtn.focus({ preventScroll: true });
       }
 
-      function openContentBySelector(selector, title = "") {
+      function openContentBySelector(selector, title = "", options = {}) {
         if (!selector) return;
         const tpl = document.querySelector(selector);
         if (!tpl) return;
-        openContent(title, tpl.innerHTML);
+        openContent(title, tpl.innerHTML, options);
       }
 
       function closeContent() {
@@ -343,7 +372,21 @@
         modal.setAttribute("aria-hidden", "true");
         titleEl.textContent = "";
         body.innerHTML = "";
+        navItems = null;
+        navIndex = -1;
         if (lastFocus) lastFocus.focus({ preventScroll: true });
+      }
+
+      function goPrev() {
+        if (!navItems || navItems.length <= 1) return;
+        navIndex = (navIndex - 1 + navItems.length) % navItems.length;
+        renderCurrentNavItem();
+      }
+
+      function goNext() {
+        if (!navItems || navItems.length <= 1) return;
+        navIndex = (navIndex + 1) % navItems.length;
+        renderCurrentNavItem();
       }
 
       document.addEventListener("click", (e) => {
@@ -357,10 +400,18 @@
       });
 
       closeBtn.addEventListener("click", closeContent);
+      prevBtn.addEventListener("click", goPrev);
+      nextBtn.addEventListener("click", goNext);
 
       document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal.classList.contains("active")) {
+        if (!modal.classList.contains("active")) return;
+
+        if (e.key === "Escape") {
           closeContent();
+        } else if (e.key === "ArrowLeft") {
+          goPrev();
+        } else if (e.key === "ArrowRight") {
+          goNext();
         }
       });
 
@@ -368,159 +419,114 @@
       window.__openContentBySelector = openContentBySelector;
     })();
 
+    /* ---------- Image Lightbox ---------- */
+    (() => {
+      const modal = document.getElementById("imageLightbox");
+      const closeBtn = document.getElementById("imageLightboxClose");
+      const img = document.getElementById("imageLightboxImg");
+
+      let lastFocus = null;
+
+      function openLightbox(src, alt = "") {
+        lastFocus = document.activeElement;
+        img.src = src || "";
+        img.alt = alt || "";
+        modal.classList.add("active");
+        modal.setAttribute("aria-hidden", "false");
+        closeBtn.focus({ preventScroll: true });
+      }
+
+      function closeLightbox() {
+        modal.classList.remove("active");
+        modal.setAttribute("aria-hidden", "true");
+        img.src = "";
+        img.alt = "";
+        if (lastFocus) lastFocus.focus({ preventScroll: true });
+      }
+
+      closeBtn.addEventListener("click", closeLightbox);
+      img.addEventListener("click", closeLightbox);
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeLightbox();
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modal.classList.contains("active")) {
+          closeLightbox();
+        }
+      });
+
+      window.__openImageLightbox = openLightbox;
+      window.__closeImageLightbox = closeLightbox;
+    })();
+
     /* ---------- Gallery Modal ---------- */
     (() => {
       const modal = document.getElementById("galleryModal");
       const closeBtn = document.getElementById("galleryClose");
       const stage = document.getElementById("galleryStage");
-      const ring = document.getElementById("galleryRing");
-      const mainImg = document.getElementById("galleryMainImg");
       const caption = document.getElementById("galleryCaption");
-      const mainBox = stage.querySelector(".gallery-main");
 
       let items = [];
-      let active = 0;
       let lastFocus = null;
 
-      const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+      function renderGallery() {
+        stage.innerHTML = "";
 
-      function setActive(idx) {
-        active = idx;
-        mainImg.src = items[active]?.src || "";
-        mainImg.alt = items[active]?.title || "";
-        caption.textContent = items[active]?.title || "";
-
-        ring.querySelectorAll(".gallery-thumb").forEach((b) => {
-          const i = Number(b.dataset.index);
-          b.classList.toggle("is-active", i === active);
-          b.setAttribute("aria-current", i === active ? "true" : "false");
-        });
-      }
-
-      function layoutSnakeThumbs() {
-        if (!modal.classList.contains("active")) return;
-
-        const count = items.length;
-        ring.innerHTML = "";
-
-        if (!count) {
-          mainImg.src = "";
+        if (!items.length) {
           caption.textContent = "";
           return;
         }
 
-        const rect = stage.getBoundingClientRect();
-        const W = rect.width;
-        const H = rect.height;
-
-        const SAFE_TOP = 54;
-        const SAFE_LEFT = 0;
-        const SAFE_RIGHT = 0;
-        const SAFE_BOTTOM = 0;
-
-        const usableW = W - SAFE_LEFT - SAFE_RIGHT;
-        const usableH = H - SAFE_TOP - SAFE_BOTTOM;
-
-        const approxPerim = 2 * (usableW + usableH);
-        let thumb = Math.floor((approxPerim / count) * 0.65);
-        thumb = clamp(thumb, 20, 150);
-
-        const gap = clamp(Math.floor(thumb * 0.16), 6, 18);
-
-        const x0 = SAFE_LEFT + gap;
-        const y0 = SAFE_TOP + gap;
-        const x1 = SAFE_LEFT + usableW - gap - thumb;
-        const y1 = SAFE_TOP + usableH - gap - thumb;
-
-        const segTop = Math.max(0, x1 - x0);
-        const segRight = Math.max(0, y1 - y0);
-        const segBottom = segTop;
-        const segLeft = segRight;
-
-        const loopLen = segTop + segRight + segBottom + segLeft || 1;
-        const step = loopLen / count;
-
-        const ringThickness = thumb + gap * 2;
-        const mainLeft = SAFE_LEFT + ringThickness;
-        const mainTop = SAFE_TOP + ringThickness;
-        const mainW = Math.max(120, usableW - ringThickness * 2);
-        const mainH = Math.max(120, usableH - ringThickness * 2);
-
-        mainBox.style.left = mainLeft + "px";
-        mainBox.style.top = mainTop + "px";
-        mainBox.style.width = mainW + "px";
-        mainBox.style.height = mainH + "px";
-
-        for (let i = 0; i < count; i++) {
-          const item = items[i];
-          const dist = i * step;
-
-          let x = x0, y = y0;
-
-          if (dist <= segTop) {
-            x = x0 + dist;
-            y = y0;
-          } else if (dist <= segTop + segRight) {
-            x = x1;
-            y = y0 + (dist - segTop);
-          } else if (dist <= segTop + segRight + segBottom) {
-            x = x1 - (dist - segTop - segRight);
-            y = y1;
-          } else {
-            x = x0;
-            y = y1 - (dist - segTop - segRight - segBottom);
-          }
-
+        items.forEach((item, i) => {
           const btn = document.createElement("button");
           btn.type = "button";
-          btn.className = "gallery-thumb";
-          btn.dataset.index = String(i);
-          btn.style.width = thumb + "px";
-          btn.style.height = thumb + "px";
-          btn.style.left = Math.round(x) + "px";
-          btn.style.top = Math.round(y) + "px";
-          btn.setAttribute("aria-label", `View ${item.title || "image"}`);
-          btn.innerHTML = `<img src="${item.src}" alt="">`;
+          btn.className = "gallery-grid-item";
+          btn.setAttribute("aria-label", `Open ${item.title || "image"}`);
+          btn.innerHTML = `<img src="${item.src}" alt="${item.title || ""}">`;
 
-          btn.addEventListener("click", () => setActive(i));
-          ring.appendChild(btn);
-        }
+          btn.addEventListener("click", () => {
+            caption.textContent = item.title || "";
+            window.__openImageLightbox(item.src, item.title || "");
+          });
 
-        setActive(clamp(active, 0, count - 1));
+          stage.appendChild(btn);
+
+          if (i === 0) {
+            caption.textContent = item.title || "";
+          }
+        });
       }
 
-      function openGallery(newItems, startIndex = 0) {
-        items = Array.isArray(newItems) ? newItems : [];
-        active = clamp(startIndex, 0, Math.max(0, items.length - 1));
+      function openGallery(newItems) {
+        items = Array.isArray(newItems) ? newItems.slice(0, 3) : [];
         lastFocus = document.activeElement;
 
         modal.classList.add("active");
         modal.setAttribute("aria-hidden", "false");
 
-        setActive(active);
-        requestAnimationFrame(() => {
-          layoutSnakeThumbs();
-          closeBtn.focus({ preventScroll: true });
-        });
+        renderGallery();
+        closeBtn.focus({ preventScroll: true });
       }
 
       function closeGallery() {
         modal.classList.remove("active");
         modal.setAttribute("aria-hidden", "true");
+        stage.innerHTML = "";
+        caption.textContent = "";
         if (lastFocus) lastFocus.focus({ preventScroll: true });
       }
 
       closeBtn.addEventListener("click", closeGallery);
-      mainImg.addEventListener("click", closeGallery);
+
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeGallery();
+      });
 
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && modal.classList.contains("active")) {
           closeGallery();
         }
-      });
-
-      window.addEventListener("resize", () => {
-        if (modal.classList.contains("active")) layoutSnakeThumbs();
       });
 
       window.__openSnakeGallery = openGallery;
@@ -540,9 +546,8 @@
       const btnLeft = carousel.querySelector(".carousel-btn.left");
       const btnRight = carousel.querySelector(".carousel-btn.right");
 
-      const projects = Array.from(
-        carousel.querySelectorAll(".carousel-sources img")
-      ).map(img => ({
+      const sourceImgs = Array.from(carousel.querySelectorAll(".carousel-sources img"));
+      const projects = sourceImgs.map(img => ({
         src: img.getAttribute("src"),
         title: img.dataset.title || "Untitled",
         template: img.dataset.template || ""
@@ -551,6 +556,16 @@
       let center = 0;
       let leftStack = [];
       let rightStack = projects.map((_, i) => i).slice(1);
+
+      function buildPopupItems() {
+        return projects.map((project) => {
+          const tpl = document.querySelector(project.template);
+          return {
+            title: project.title,
+            html: tpl ? tpl.innerHTML : ""
+          };
+        });
+      }
 
       function updateMeta(index) {
         titleEl.textContent = projects[index].title;
@@ -600,9 +615,13 @@
 
       function openPopup() {
         const current = projects[center];
-        if (current.template) {
-          window.__openContentBySelector(current.template, current.title);
-        }
+        if (!current.template) return;
+
+        const popupItems = buildPopupItems();
+        window.__openContent(current.title, popupItems[center].html, {
+          items: popupItems,
+          index: center
+        });
       }
 
       btnLeft.onclick = goPrev;
@@ -651,10 +670,7 @@
         return [
           { src: item.src, title: `${item.title} — View 1` },
           { src: item.src, title: `${item.title} — View 2` },
-          { src: item.src, title: `${item.title} — View 3` },
-          { src: item.src, title: `${item.title} — View 4` },
-          { src: item.src, title: `${item.title} — View 5` },
-          { src: item.src, title: `${item.title} — View 6` }
+          { src: item.src, title: `${item.title} — View 3` }
         ];
       }
 
@@ -808,7 +824,7 @@
           galleryLink.addEventListener("pointerdown", (e) => e.stopPropagation());
           galleryLink.addEventListener("click", (e) => {
             e.stopPropagation();
-            window.__openSnakeGallery(buildWindowGalleryItems(item), 0);
+            window.__openSnakeGallery(buildWindowGalleryItems(item));
           });
         }
 
