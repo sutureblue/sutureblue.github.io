@@ -307,7 +307,7 @@
         <div id="galleryTitle" class="gallery-title"></div>
       </div>
 
-      <div class="gallery-stage gallery-stage-grid" id="galleryStage" aria-label="Image gallery"></div>
+      <div class="gallery-stage" id="galleryStage" aria-label="Gallery content"></div>
     </div>
   </div>
 
@@ -491,6 +491,38 @@
 
         if (!items.length) return;
 
+        const hasVideo = items.some((item) => item.type === "video");
+
+        if (hasVideo) {
+          stage.className = "gallery-stage gallery-stage-video";
+
+          items.forEach((item) => {
+            if (item.type === "video") {
+              const wrap = document.createElement("div");
+              wrap.className = "gallery-video-wrap";
+              wrap.innerHTML = `
+                <div class="gallery-video-frame">
+                  <iframe
+                    src="${item.src}"
+                    title="${item.title || "Embedded video"}"
+                    loading="lazy"
+                    frameborder="0"
+                    allowfullscreen
+                    webkitallowfullscreen="true"
+                    mozallowfullscreen="true">
+                  </iframe>
+                </div>
+                ${item.caption ? `<div class="gallery-video-caption">${item.caption}</div>` : ``}
+              `;
+              stage.appendChild(wrap);
+            }
+          });
+
+          return;
+        }
+
+        stage.className = "gallery-stage gallery-stage-grid";
+
         items.forEach((item) => {
           const btn = document.createElement("button");
           btn.type = "button";
@@ -507,7 +539,7 @@
       }
 
       function openGallery(newItems, title = "") {
-        items = Array.isArray(newItems) ? newItems.slice(0, 3) : [];
+        items = Array.isArray(newItems) ? newItems : [];
         windowTitle = title || "";
         lastFocus = document.activeElement;
 
@@ -524,6 +556,7 @@
         modal.classList.remove("active");
         modal.setAttribute("aria-hidden", "true");
         stage.innerHTML = "";
+        stage.className = "gallery-stage";
         titleEl.textContent = "";
         if (lastFocus) lastFocus.focus({ preventScroll: true });
       }
@@ -686,10 +719,21 @@
       }
 
       function buildWindowGalleryItems(item) {
+        if (item.id === "uncanny") {
+          return [
+            {
+              type: "video",
+              src: "https://archive.org/embed/bee-nix-an-uncanny-scene",
+              title: "An Uncanny Scene (2022)",
+              caption: "Embedded from Internet Archive."
+            }
+          ];
+        }
+
         return [
-          { src: item.src, title: `${item.title} — View 1` },
-          { src: item.src, title: `${item.title} — View 2` },
-          { src: item.src, title: `${item.title} — View 3` }
+          { type: "image", src: item.src, title: `${item.title} — View 1` },
+          { type: "image", src: item.src, title: `${item.title} — View 2` },
+          { type: "image", src: item.src, title: `${item.title} — View 3` }
         ];
       }
 
@@ -775,10 +819,8 @@
           </div>
 
           <div class="pwin-overlay" aria-hidden="true">
-
             <div class="pwin-overlay-bar">
               <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
-
               ${item.hasGallery !== false ? `
                 <button class="popup-link pwin-gallery-link" type="button">open gallery ↗</button>
               ` : ``}
@@ -787,7 +829,6 @@
             <div class="pwin-overlay-scroll">
               <div class="pwin-overlay-text"></div>
             </div>
-
           </div>
         `;
 
