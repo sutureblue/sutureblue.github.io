@@ -142,7 +142,7 @@
         <!-- Practice templates -->
         <template id="tpl-colourorgan">
           <h4>Colour Organ (2021)</h4>
-          <p>Colour Organ is a digital implementation I based off Alexander Wallace Rimington's color-music theory, where audio frequencies trigger corresponding colored lights arranged in a 5x7 grid representing octaves and scales. This Unreal Engine instrument, which utilizes a midi-keyboard, is a backlit semi-translucent plane with 35 individual point lights programmed to respond to specific frequency ranges, creating a visual orchestration of the ROYGBIV spectrum synchronized to sound.</p>
+          <p>Colour Organ is a digital implementation of Alexander Wallace Rimington's color-music theory, where audio frequencies trigger corresponding colored lights arranged in a 5x7 grid representing octaves and scales. The installation backlit a semi-translucent screen with 35 individual point lights programmed to respond to specific frequency ranges, creating a visual orchestration of the ROYGBIV spectrum synchronized to sound.</p>
         </template>
 
         <template id="tpl-discussiongame">
@@ -308,7 +308,10 @@
         <div id="galleryTitle" class="gallery-title"></div>
       </div>
 
-      <div class="gallery-stage" id="galleryStage" aria-label="Gallery content"></div>
+      <div class="gallery-stage" id="galleryStage" aria-label="Gallery content">
+        <div id="galleryViewer" class="gallery-viewer"></div>
+        <div id="galleryThumbs" class="gallery-thumbs" aria-label="Gallery thumbnails"></div>
+      </div>
     </div>
   </div>
 
@@ -480,85 +483,125 @@
     (() => {
       const modal = document.getElementById("galleryModal");
       const closeBtn = document.getElementById("galleryClose");
-      const stage = document.getElementById("galleryStage");
       const titleEl = document.getElementById("galleryTitle");
+      const viewer = document.getElementById("galleryViewer");
+      const thumbs = document.getElementById("galleryThumbs");
 
       let items = [];
+      let activeIndex = 0;
       let lastFocus = null;
-      let windowTitle = "";
 
-      function renderGallery() {
-        stage.innerHTML = "";
+      function getThumbLabel(item, index) {
+        if (item.type === "video") return item.thumbLabel || `Video ${index + 1}`;
+        return item.title || `Image ${index + 1}`;
+      }
 
-        if (!items.length) return;
+      function renderViewer() {
+        viewer.innerHTML = "";
 
-        const hasVideo = items.some((item) => item.type === "video");
+        if (!items.length || activeIndex < 0 || activeIndex >= items.length) return;
 
-        if (hasVideo) {
-          stage.className = "gallery-stage gallery-stage-video";
+        const item = items[activeIndex];
+        const shell = document.createElement("div");
+        shell.className = "gallery-feature";
 
-          items.forEach((item) => {
-            if (item.type === "video") {
-              const wrap = document.createElement("div");
-              wrap.className = "gallery-video-wrap";
-              wrap.innerHTML = `
-                <div class="gallery-video-frame">
-                  <iframe
-                    src="${item.src}"
-                    title="${item.title || "Embedded video"}"
-                    loading="lazy"
-                    frameborder="0"
-                    allowfullscreen
-                    webkitallowfullscreen="true"
-                    mozallowfullscreen="true">
-                  </iframe>
-                </div>
-                ${item.caption ? `<div class="gallery-video-caption">${item.caption}</div>` : ``}
-              `;
-              stage.appendChild(wrap);
-            }
-          });
+        if (item.type === "video") {
+          shell.innerHTML = `
+            <div class="gallery-video-frame">
+              <iframe
+                src="${item.src}"
+                title="${item.title || "Embedded video"}"
+                loading="lazy"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+                webkitallowfullscreen="true"
+                mozallowfullscreen="true">
+              </iframe>
+            </div>
+            ${item.caption ? `<div class="gallery-feature-caption">${item.caption}</div>` : ``}
+          `;
+        } else {
+          shell.innerHTML = `
+            <button class="gallery-feature-image-wrap" type="button" aria-label="Open image larger">
+              <img class="gallery-feature-image" src="${item.src}" alt="${item.title || ""}">
+              ${item.title ? `<div class="gallery-feature-caption">${item.title}</div>` : ``}
+            </button>
+          `;
 
-          return;
-        }
-
-        stage.className = "gallery-stage gallery-stage-grid";
-
-        items.forEach((item) => {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "gallery-grid-item";
-          btn.setAttribute("aria-label", `Open ${item.title || "image"}`);
-          btn.innerHTML = `<img src="${item.src}" alt="${item.title || ""}">`;
-
+          const btn = shell.querySelector(".gallery-feature-image-wrap");
           btn.addEventListener("click", () => {
             window.__openImageLightbox(item.src, item.title || "", item.title || "");
           });
+        }
 
-          stage.appendChild(btn);
+        viewer.appendChild(shell);
+      }
+
+      function renderThumbs() {
+        thumbs.innerHTML = "";
+
+        if (!items.length) return;
+
+        thumbs.classList.toggle("is-hidden", items.length <= 1);
+
+        items.forEach((item, index) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "gallery-thumb";
+          if (index === activeIndex) btn.classList.add("is-active");
+          btn.setAttribute("aria-label", `Show ${getThumbLabel(item, index)}`);
+
+          if (item.type === "video") {
+            btn.innerHTML = `
+              <div class="gallery-thumb-video">
+                <span class="gallery-thumb-play">▶</span>
+                <span class="gallery-thumb-label">${getThumbLabel(item, index)}</span>
+              </div>
+            `;
+          } else {
+            btn.innerHTML = `
+              <img src="${item.src}" alt="${item.title || ""}">
+            `;
+          }
+
+          btn.addEventListener("click", () => {
+            activeIndex = index;
+            renderViewer();
+            renderThumbs();
+          });
+
+          thumbs.appendChild(btn);
         });
       }
 
-      function openGallery(newItems, title = "") {
+      function openGallery(newItems, title = "", startIndex = 0) {
         items = Array.isArray(newItems) ? newItems : [];
-        windowTitle = title || "";
+        activeIndex = Math.max(0, Math.min(startIndex, items.length - 1));
         lastFocus = document.activeElement;
 
-        titleEl.textContent = windowTitle;
+        titleEl.textContent = title || "";
 
         modal.classList.add("active");
         modal.setAttribute("aria-hidden", "false");
 
-        renderGallery();
+        renderViewer();
+        renderThumbs();
+
         closeBtn.focus({ preventScroll: true });
       }
 
       function closeGallery() {
         modal.classList.remove("active");
         modal.setAttribute("aria-hidden", "true");
-        stage.innerHTML = "";
-        stage.className = "gallery-stage";
+        viewer.innerHTML = "";
+        thumbs.innerHTML = "";
+        thumbs.classList.remove("is-hidden");
         titleEl.textContent = "";
+        items = [];
+        activeIndex = 0;
+
         if (lastFocus) lastFocus.focus({ preventScroll: true });
       }
 
@@ -569,8 +612,18 @@
       });
 
       document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal.classList.contains("active")) {
+        if (!modal.classList.contains("active")) return;
+
+        if (e.key === "Escape") {
           closeGallery();
+        } else if (e.key === "ArrowRight" && items.length > 1) {
+          activeIndex = (activeIndex + 1) % items.length;
+          renderViewer();
+          renderThumbs();
+        } else if (e.key === "ArrowLeft" && items.length > 1) {
+          activeIndex = (activeIndex - 1 + items.length) % items.length;
+          renderViewer();
+          renderThumbs();
         }
       });
 
@@ -702,7 +755,7 @@
 
       const PRACTICE = [
         { id:"drawing",        src:"assets/Drawing_1.png",        title:"Animations & Drawings", hasGallery: true },
-        { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication", hasGallery: false },
+        { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication", hasGallery: true },
         { id:"lightsleeper",   src:"assets/LightSleeper_1.png",   title:"Light Sleeper, Heavy Dreamer (2020)", hasGallery: true },
         { id:"colourorgan",    src:"assets/ColourOrgan_1.png",    title:"Colour Organ (2021)", hasGallery: true },
         { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"An Uncanny Scene (2022)", hasGallery: true },
@@ -720,21 +773,95 @@
       }
 
       function buildWindowGalleryItems(item) {
+        if (item.id === "colourorgan") {
+          return [
+            {
+              type: "video",
+              src: "https://archive.org/embed/bee-nix-colour-organ",
+              title: "Colour Organ (2021)",
+              caption: "Colour Organ — embedded from Internet Archive.",
+              thumbLabel: "Video"
+            },
+            {
+              type: "image",
+              src: "assets/ColourOrgan_1.png",
+              title: "Colour Organ — Photo 1"
+            },
+            {
+              type: "image",
+              src: "assets/ColourOrgan_2.png",
+              title: "Colour Organ — Photo 2"
+            },
+            {
+              type: "image",
+              src: "assets/ColourOrgan_3.png",
+              title: "Colour Organ — Photo 3"
+            }
+          ];
+        }
+
+        if (item.id === "lightsleeper") {
+          return [
+            {
+              type: "video",
+              src: "https://www.youtube.com/embed/R0VyONd6Eko",
+              title: "Light Sleeper, Heavy Dreamer (2020)",
+              caption: "Light Sleeper, Heavy Dreamer — YouTube embed.",
+              thumbLabel: "Video"
+            }
+          ];
+        }
+
         if (item.id === "uncanny") {
           return [
             {
               type: "video",
               src: "https://archive.org/embed/bee-nix-an-uncanny-scene",
               title: "An Uncanny Scene (2022)",
-              caption: "Embedded from Internet Archive."
+              caption: "An Uncanny Scene — embedded from Internet Archive.",
+              thumbLabel: "Video"
             }
           ];
         }
 
+        if (item.id === "fabrication") {
+          return [
+            {
+              type: "image",
+              src: "assets/Fabrication_1.png",
+              title: "Fabrication — Photo 1"
+            },
+            {
+              type: "image",
+              src: "assets/Fabrication_2.png",
+              title: "Fabrication — Photo 2"
+            },
+            {
+              type: "image",
+              src: "assets/Fabrication_3.png",
+              title: "Fabrication — Photo 3"
+            }
+          ];
+        }
+
+        if (item.id === "drawing") {
+          return [
+            { type: "image", src: item.src, title: `${item.title} — View 1` },
+            { type: "image", src: item.src, title: `${item.title} — View 2` },
+            { type: "image", src: item.src, title: `${item.title} — View 3` }
+          ];
+        }
+
+        if (item.id === "discussiongame") {
+          return [
+            { type: "image", src: item.src, title: `${item.title} — View 1` },
+            { type: "image", src: item.src, title: `${item.title} — View 2` },
+            { type: "image", src: item.src, title: `${item.title} — View 3` }
+          ];
+        }
+
         return [
-          { type: "image", src: item.src, title: `${item.title} — View 1` },
-          { type: "image", src: item.src, title: `${item.title} — View 2` },
-          { type: "image", src: item.src, title: `${item.title} — View 3` }
+          { type: "image", src: item.src, title: `${item.title} — View 1` }
         ];
       }
 
@@ -885,7 +1012,7 @@
           galleryLink.addEventListener("pointerdown", (e) => e.stopPropagation());
           galleryLink.addEventListener("click", (e) => {
             e.stopPropagation();
-            window.__openSnakeGallery(buildWindowGalleryItems(item), item.title);
+            window.__openSnakeGallery(buildWindowGalleryItems(item), item.title, 0);
           });
         }
 
