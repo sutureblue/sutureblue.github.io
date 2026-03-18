@@ -561,9 +561,7 @@
               </div>
             `;
           } else {
-            btn.innerHTML = `
-              <img src="${item.src}" alt="${item.title || ""}">
-            `;
+            btn.innerHTML = `<img src="${item.src}" alt="${item.title || ""}">`;
           }
 
           btn.addEventListener("click", () => {
@@ -762,6 +760,107 @@
         { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game (2024)", hasGallery: true },
       ];
 
+      const GALLERY_DATA = {
+        colourorgan: [
+          {
+            type: "video",
+            src: "https://archive.org/embed/bee-nix-colour-organ",
+            title: "Colour Organ (2021)",
+            caption: "Colour Organ — embedded from Internet Archive.",
+            thumbLabel: "Video"
+          },
+          {
+            type: "image",
+            src: "assets/ColourOrgan_1.png",
+            title: "Colour Organ — Photo 1"
+          },
+          {
+            type: "image",
+            src: "assets/ColourOrgan_2.png",
+            title: "Colour Organ — Photo 2"
+          },
+          {
+            type: "image",
+            src: "assets/ColourOrgan_3.png",
+            title: "Colour Organ — Photo 3"
+          }
+        ],
+
+        lightsleeper: [
+          {
+            type: "video",
+            src: "https://www.youtube.com/embed/R0VyONd6Eko",
+            title: "Light Sleeper, Heavy Dreamer (2020)",
+            caption: "Light Sleeper, Heavy Dreamer — YouTube embed.",
+            thumbLabel: "Video"
+          }
+        ],
+
+        uncanny: [
+          {
+            type: "video",
+            src: "https://archive.org/embed/bee-nix-an-uncanny-scene",
+            title: "An Uncanny Scene (2022)",
+            caption: "An Uncanny Scene — embedded from Internet Archive.",
+            thumbLabel: "Video"
+          }
+        ],
+
+        fabrication: [
+          {
+            type: "image",
+            src: "assets/Fabrication_1.png",
+            title: "Fabrication — Photo 1"
+          },
+          {
+            type: "image",
+            src: "assets/Fabrication_2.png",
+            title: "Fabrication — Photo 2"
+          },
+          {
+            type: "image",
+            src: "assets/Fabrication_3.png",
+            title: "Fabrication — Photo 3"
+          }
+        ],
+
+        drawing: [
+          {
+            type: "image",
+            src: "assets/Drawing_1.png",
+            title: "Animations & Drawings — View 1"
+          },
+          {
+            type: "image",
+            src: "assets/Drawing_2.png",
+            title: "Animations & Drawings — View 2"
+          },
+          {
+            type: "image",
+            src: "assets/Drawing_3.png",
+            title: "Animations & Drawings — View 3"
+          }
+        ],
+
+        discussiongame: [
+          {
+            type: "image",
+            src: "assets/DiscussionGame_1.png",
+            title: "Discussion Game — View 1"
+          },
+          {
+            type: "image",
+            src: "assets/DiscussionGame_2.png",
+            title: "Discussion Game — View 2"
+          },
+          {
+            type: "image",
+            src: "assets/DiscussionGame_3.png",
+            title: "Discussion Game — View 3"
+          }
+        ]
+      };
+
       const mqMobile = window.matchMedia("(max-width: 760px)");
       const isMobile = () => mqMobile.matches;
 
@@ -773,95 +872,8 @@
       }
 
       function buildWindowGalleryItems(item) {
-        if (item.id === "colourorgan") {
-          return [
-            {
-              type: "video",
-              src: "https://archive.org/embed/bee-nix-colour-organ",
-              title: "Colour Organ (2021)",
-              caption: "Colour Organ — embedded from Internet Archive.",
-              thumbLabel: "Video"
-            },
-            {
-              type: "image",
-              src: "assets/ColourOrgan_1.png",
-              title: "Colour Organ — Photo 1"
-            },
-            {
-              type: "image",
-              src: "assets/ColourOrgan_2.png",
-              title: "Colour Organ — Photo 2"
-            },
-            {
-              type: "image",
-              src: "assets/ColourOrgan_3.png",
-              title: "Colour Organ — Photo 3"
-            }
-          ];
-        }
-
-        if (item.id === "lightsleeper") {
-          return [
-            {
-              type: "video",
-              src: "https://www.youtube.com/embed/R0VyONd6Eko",
-              title: "Light Sleeper, Heavy Dreamer (2020)",
-              caption: "Light Sleeper, Heavy Dreamer — YouTube embed.",
-              thumbLabel: "Video"
-            }
-          ];
-        }
-
-        if (item.id === "uncanny") {
-          return [
-            {
-              type: "video",
-              src: "https://archive.org/embed/bee-nix-an-uncanny-scene",
-              title: "An Uncanny Scene (2022)",
-              caption: "An Uncanny Scene — embedded from Internet Archive.",
-              thumbLabel: "Video"
-            }
-          ];
-        }
-
-        if (item.id === "fabrication") {
-          return [
-            {
-              type: "image",
-              src: "assets/Fabrication_1.png",
-              title: "Fabrication — Photo 1"
-            },
-            {
-              type: "image",
-              src: "assets/Fabrication_2.png",
-              title: "Fabrication — Photo 2"
-            },
-            {
-              type: "image",
-              src: "assets/Fabrication_3.png",
-              title: "Fabrication — Photo 3"
-            }
-          ];
-        }
-
-        if (item.id === "drawing") {
-          return [
-            { type: "image", src: item.src, title: `${item.title} — View 1` },
-            { type: "image", src: item.src, title: `${item.title} — View 2` },
-            { type: "image", src: item.src, title: `${item.title} — View 3` }
-          ];
-        }
-
-        if (item.id === "discussiongame") {
-          return [
-            { type: "image", src: item.src, title: `${item.title} — View 1` },
-            { type: "image", src: item.src, title: `${item.title} — View 2` },
-            { type: "image", src: item.src, title: `${item.title} — View 3` }
-          ];
-        }
-
-        return [
-          { type: "image", src: item.src, title: `${item.title} — View 1` }
+        return GALLERY_DATA[item.id] || [
+          { type: "image", src: item.src, title: item.title }
         ];
       }
 
