@@ -23,16 +23,6 @@
         <h1>Bee Nix // Suture Blue</h1>
         <p>Thinking. Creating. Playing.</p>
         <p>Animations. Interactives. Games. Lectures.</p>
-        <p>This is under construction, mind the filler...and the gaps...</p>
-                <div class="social-icons">
-    <a href="https://www.instagram.com/suture.blue" target="_blank" rel="noopener noreferrer">
-        <img src="assets/instagram.png">
-    </a>
-
-    <a href="https://www.linkedin.com/in/bee-nix/" target="_blank" rel="noopener noreferrer">
-        <img src="assets/linkedin.png">
-    </a>
-</div>
       </section>
     </div>
 
@@ -47,27 +37,35 @@
             <div class="glow-card-inner">
 
               <div class="carousel">
-                <button class="carousel-btn left" type="button" aria-label="Previous project">‹</button>
+                <button class="carousel-btn left" type="button">‹</button>
 
                 <div class="carousel-stage">
                   <div class="carousel-stack left"></div>
 
-                  <div class="carousel-center" role="button" tabindex="0" aria-label="Open project details">
+                  <div class="carousel-center" role="button" tabindex="0">
                     <img class="carousel-center-img" src="assets/gNg.png" alt="">
                   </div>
 
                   <div class="carousel-stack right"></div>
                 </div>
 
-                <button class="carousel-btn right" type="button" aria-label="Next project">›</button>
+                <button class="carousel-btn right" type="button">›</button>
+
+                <!-- INLINE OVERLAY -->
+                <div class="carousel-overlay" aria-hidden="true">
+                  <div class="carousel-overlay-bar">
+                    <button class="carousel-min">–</button>
+                    <div class="carousel-overlay-title"></div>
+                  </div>
+                  <div class="carousel-overlay-scroll">
+                    <div class="carousel-overlay-text"></div>
+                  </div>
+                </div>
 
                 <div class="carousel-sources" hidden>
-                  <img src="assets/glitchplay.png" data-title="Glitch Play (2025)" data-template=".tpl-glitchplay" alt="">
-                  <img src="assets/gNg.png" data-title="Glitch'N'Games (2024)" data-template=".tpl-gng" alt="">
-                  <img src="assets/mfru.png" data-title="MFRU (2023)" data-template=".tpl-mfru" alt="">
-                  <img src="assets/shadesOfPrecision.png" data-title="Shades Of Precision (2023)" data-template=".tpl-shadesOfPrecision" alt="">
-                  <img src="assets/notGlitch.png" data-title="/NOT.GLI.TCH/H (2023)" data-template=".tpl-notGlitch" alt="">
-                  <img src="assets/hereWeAre.png" data-title="Here We Are (2022)" data-template=".tpl-hereWeAre" alt="">
+                  <img src="assets/glitchplay.png" data-title="Glitch Play (2025)" data-template=".tpl-glitchplay">
+                  <img src="assets/gNg.png" data-title="Glitch'N'Games (2024)" data-template=".tpl-gng">
+                  <img src="assets/mfru.png" data-title="MFRU (2023)" data-template=".tpl-mfru">
                 </div>
               </div>
             </div>
@@ -77,1087 +75,139 @@
             <h3 class="project-title"></h3>
           </div>
 
-          <!-- Carousel templates -->
+          <!-- templates -->
           <template class="tpl-glitchplay">
-            <p>
-              Glitch Play is my MFA thesis in Interactive Media and Game Development. It investigates engaging with glitches as a form of play that reveals and enables the ability to renegotiate with the structure of digital systems.
-              You can <a href="https://archive.org/details/glitch_play" target="_blank" rel="noreferrer">read it here.</a>
-            </p>
+            <p>Glitch Play is my MFA thesis exploring glitch as play.</p>
           </template>
 
           <template class="tpl-gng">
-            <p>
-              This exhibition explored the intertwined histories of glitch art and video games, featuring 40+ artists from over 5 countries, across two Pittsburgh venues.
-            </p>
-            <p>
-              As producer, curator, and organizer alongside John Bumstead and Nick Liberatore, I developed the show's conceptual framework and programmed workshops, discussions, and live demonstrations.
-            </p>
-            <p>
-              I created and moderated the Discussion Game, a participatory conversation format that gathered artists, theorists, and gamers to explore themes of play, control, and system disruption.
-            </p>
+            <p>Glitch'N'Games explored glitch + games across venues.</p>
           </template>
 
           <template class="tpl-mfru">
-            <p>
-              This panel of digital artists was brought together in Maribor, Slovenia to discuss digital archiving for community by community for
-              <a href="https://www.mfru.org/events/panel-sustainability-and-autonomy-of-digital-art" target="_blank" rel="noreferrer">MFRU 2023.</a>
-            </p>
-            <p>
-              My IRL contributions to the discussion were not so much about my experience as an artist, but rather as a Do-It-Together (DIT) media archivist who is currently organizing, with a couple others— a free, downloadable, public access digital archive for the Glitch Art community.
-            </p>
-            <p>
-              Those of us working on this project believe that the more you rely on open software, the more accessible an archive becomes. That community projects can operate with more integrity when they remain unaffiliated with any institution(s). And most of all, we actively go against writing any “defining narrative(s),” but rather aim to offer an index of searchable artists and artists’ works, as well as any affiliated history, to enable many narratives to overlap, web and be formed by people of the community, in hopes for a more holistic history to be available to those who care to have it.
-            </p>
-          </template>
-
-          <template class="tpl-shadesOfPrecision">
-            <p>
-              I was asked to review a self-curated selection from the <a href="https://fubar.space/2023/shades-of-precision/" target="_blank" rel="noreferrer">2023 /'FU:BAR/ EXPO.</a> To challenge my own biases, I read only each artist's description before viewing their work, hoping connections would emerge organically. Several pieces focused on control and deliberacy, a theme that felt especially compelling in the context of glitches. It was rewarding to discover that many of my selections came from artists I already admire.
-            </p>
-            <p>
-              The exhibition illustrates precision and chaos as collaborators. From Tomasz Sulej's meticulous GLIC codec to APIACOAB's pixel-perfect narratives, deliberate control amplifies disorder, transforming glitches into intentional expression.
-            </p>
-          </template>
-
-          <template class="tpl-notGlitch">
-            <p>
-              /NOT.GLI.TCH/H was held at the University of Chicago. I presented a talk about online community through the lens of my involvement with Glitch Artists Collective (GAC), likely the world’s largest Glitch Art community.
-            </p>
-            <p>
-              GAC was established in 2013 on Facebook first (though is also on Instagram, Twitter, and Tumblr) and I initially became involved as an artist near the end of 2014, later becoming curator, which I still am, and occasionally an admin. My talk discussed the aesthetic evolutions of glitch within the community, what questions the community concerns/ed themselves with, the importance of earnest connection + IRL gatherings, and the protective trust based + open-source principles that sets GAC apart from other internet communities.
-            </p>
-          </template>
-
-          <template class="tpl-hereWeAre">
-            <p>
-              This discussion was had during the third iteration of GlitchArtIsDead, first shown in Poland in 2015. I was one of the main organizers and curators for GAID III, which featured just over 100 artists from 13 countries, and received a grant from the Southwest Minnesota Arts Council. I moderated this roundtable discussion with Dr. Michael Betancourt, an artist curated into the show whom I asked to also lead this discussion, along with others, including Jamie Fenton, John Bumstead, Aleksandra Pieńkosz, Sabato Visconti, Kaspar Ravel, Sky Goodman and more. The conversation traced glitch art's evolution from 1980s-90s technical accidents to intentional symbolic works that challenge digital boundaries. Participants shared personal experiences with digital disruptions and explored how Glitch Art addresses themes of authenticity, community values, and resistance to commercial frameworks. We examined the physical materiality of digital art and discussed how the movement builds creative resilience within increasingly regulated digital landscapes.
-            </p>
-            <p>
-              <a href="assets/HereWeAre_GAID3_2022.pdf" target="_blank" rel="noreferrer">Read the text script for "Here We Are"</a>
-            </p>
-            <p>
-              Photo taken by <a href="https://www.instagram.com/platinumjimjam/" target="_blank" rel="noreferrer">Jim Jam</a>
-            </p>
+            <p>MFRU panel on digital archiving and community systems.</p>
           </template>
         </div>
 
-        <div class="practice-controls">
-          <button id="practiceReset" class="practice-reset" type="button" aria-label="Reset practice windows" title="Reset">↺</button>
-          <span class="practice-label">Practice</span>
-        </div>
-
-        <div id="practiceDesktop" class="practice-desktop" aria-label="Draggable practice windows"></div>
-
-        <!-- Practice templates -->
-        <template id="tpl-colourorgan">
-          <p>Colour Organ is a digital implementation of Alexander Wallace Rimington's color-music theory, where audio frequencies trigger corresponding colored lights arranged in a 5x7 grid representing octaves and scales. The installation backlit a semi-translucent screen with 35 individual point lights programmed to respond to specific frequency ranges, creating a visual orchestration of the ROYGBIV spectrum synchronized to sound.</p>
-        </template>
-
-        <template id="tpl-discussiongame">
-          <p>Discussion Game was a participatory conversation game that I developed and moderated for Glitch'N'Games’24. Featuring artists, theorists, and gamers including Jamie Fenton, Nick Briz, Sabato Visconti, Kaspar Ravel, and more, the conversation used prompt cards to guide an open-ended dialogue on glitch, control, and play. Topics ranged from quantum logic to surveillance culture, pedagogical theory to personal glitch histories. Rather than defining the glitch, the session treated it as a generative lens—where system instability became a site for shared interpretation, critique, and improvisation.</p>
-          <p>
-            <a href="assets/gNg_DiscussionGame_BeeNix2024.pdf" target="_blank" rel="noreferrer">Read the text script for "Discussion Game"</a>
-          </p>
-          <p>Photo taken by <a href="http://nickbriz.com/" target="_blank" rel="noreferrer">Nick Briz</a></p>
-        </template>
-
-        <template id="tpl-uncanny">
-          <p>An Uncanny Scene is a virtual environment exploring the aesthetic of curious discomfort, where familiar elements become estranged and eerie.</p>
-        </template>
-
-        <template id="tpl-drawing">
-          <p>Since 2014, I’ve created looping rotoscoped animations intended to hold a viewer in an evocative moment of intra/interpersonal reflections. These animations are often combined with analog &amp; digital glitch techniques as methodological expressions of engaging as an interpretive system within systems. Positioning myself (and by extension a viewer) as an interpreter embedded within larger systemic boundaries and ruptures.</p>
-          <p>Naturally, I also draw still images from time to time too.</p>
-        </template>
-
-        <template id="tpl-fabrication">
-          <p>Most people know me for my digital/analog works, though since 2016, my fabrication practice has been my primary job. I've grown from supporting others’ projects to independently leading design/build work. My experience bridges traditional craft and modern digital tools, allowing me to translate ideas into durable, interactive pieces across a range of contexts.</p>
-        </template>
-
-        <template id="tpl-lightsleeper">
-          <p>Light Sleeper, Heavy Dreamer was a collaborative live performance with <a href="https://royb0t.bandcamp.com/" target="_blank" rel="noreferrer">royb0t</a> exploring memory through glitched digital landscapes and otherworldly music. The interactive piece guided audiences through dream-like environments, combining visual breaks with atmospheric sound.</p>
-        </template>
-
-      </section>
-
-      <!-- Talking with Others -->
-      <section id="talking" class="section">
-        <h2>Talking with Others</h2>
-
-        <div class="talking-wrap">
-          <div class="talking-pixels-wrap">
-            <div class="talking-row" id="talkingRow" aria-label="Pixel links">
-
-              <button class="talk-pixel" type="button"
-                data-title="Glitch Art practices and trends in Glitch Artists Collective, 2023"
-                data-description="Thomas Collet and myself discuss our experiences within the evolution of Glitch Art and GAC."
-                data-href="https://youtu.be/_ICD8aVnprA?si=Tiu5CcWe98S6U4Cl"
-                style="background:#ff8800"
-                aria-label="Collet and GAC"></button>
-
-              <button class="talk-pixel" type="button"
-                data-title="A.I. and Online Communities: Art, Bodies, and Systems, 2025"
-                data-description="This conversation brings together artist-researcher J. Rosenbaum and theorist-artist Michael Betancourt for a wide-ranging discussion on how AI is reshaping identity, perception, power, and social life"
-                data-href="https://www.youtube.com/watch?v=u7pGPptqkjs"
-                style="background:#ffd24f"
-                aria-label="A.I. and Online Communities"></button>
-
-              <button class="talk-pixel" type="button"
-                data-title="Gork, 2025"
-                data-description="A conversation between myself and Gork, an Oregon-based multimedia artist."
-                data-href="https://youtu.be/2FZ3mJfzuf0?si=g4EBKb28IAzq4tcS"
-                style="background:#7a5cff"
-                aria-label="Gork"></button>
-
-              <button class="talk-pixel" type="button"
-                data-title="Scanlines.xyz: maintaining an online forum for the analog video community, 2025"
-                data-description="Conversation with the creators of Scanlines about their community forum dedicated to DIY video synthesis and experimental media."
-                data-href="https://youtu.be/pT5MtQJTCVA"
-                style="background:#b7ff5a"
-                aria-label="Scanlines.xyz"></button>
-
-              <button class="talk-pixel" type="button"
-                data-title="Totally not a Speedrun /’fubar/ 2022"
-                data-description="Me and Kaspar Ravel give an interactive talk within the 3D environment of /'fubar/ 2022 where we discuss techniques, history, and personal observations of the exhibition."
-                data-href="https://www.youtube.com/watch?v=tWp3CEuwzdE"
-                style="background:#ff4fd8"
-                aria-label="Totally not a Speedrun /’fubar/ 2022"></button>
-
-              <button class="talk-pixel" type="button"
-                data-title="Slowrun /fu:bar/ 2021"
-                data-description="Discussing /'fubar/ past and present, Kaspar Ravel and I guide you through the exhibition via selected works."
-                data-href="https://www.youtube.com/live/q7vPZkCKukQ"
-                style="background:#17a2b8"
-                aria-label="Slowrun /fu:bar/ 2021"></button>
-
-            </div>
-          </div>
-
-          <div class="talking-info">
-            <div class="talking-title" id="talkingTitle">Tap a pixel.</div>
-            <div class="talking-description" id="talkingDescription"></div>
-            <a class="talking-open" id="talkingOpen" href="#" target="_blank" rel="noreferrer">Open ↗</a>
-          </div>
-        </div>
-      </section>
-
-      <!-- About -->
-      <section id="about" class="section">
-        <h2>About</h2>
-
-        <div class="about-layout">
-          <div>
-            <p>I’m Bee Nix, aka Suture Blue.</p>
-            <p>
-              As a system amongst systems, I trace how internal states entangle with
-              the larger technosocial worlds by interweaving play, technology, and social structures.
-              Time-based and experiential works tend to be what I make the most.
-            </p>
-
-            <a class="cv-link" href="assets/BeeNix_CV_2026.pdf" target="_blank" rel="noreferrer">View CV</a>
-          </div>
-
-          <div class="about-meta">
-            <p>
-              <strong>Currently</strong><br>
-              Residing in Pittsburgh, PA;
-              Working in the exhibits department at the Children's Museum as a designer/builder;
-              Practicing maintaining center; Trying to get Glitch'N'Games 2 going;
-              Creating art, curating things, talking to others.
-            </p>
-
-            <p>
-              <strong>Contact</strong><br>
-              sutureblue@protonmail.com
-            </p>
-          </div>
-        </div>
       </section>
 
     </main>
-
-    <footer class="site-footer">
-      <div class="license-footer">
-        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">
-          <img src="assets/cc.png" alt="Creative Commons" class="cc-icon" />
-        </a>
-        <span>2025</span>
-      </div>
-
-      <span class="footer-note">Hosted on GitHub Pages</span>
-    </footer>
-
   </div>
 
-  <!-- GLOBAL TEXT POPUP -->
-  <div id="contentModal" class="content-modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="content-shell" role="document">
-      <div class="content-toolbar">
-        <button id="contentNavPrev" class="content-nav-btn" type="button" aria-label="Previous item">‹</button>
-        <button id="contentClose" class="content-close" type="button" aria-label="Close popup">×</button>
-        <div id="contentTitle" class="content-title"></div>
-        <button id="contentNavNext" class="content-nav-btn" type="button" aria-label="Next item">›</button>
-      </div>
-
-      <div id="contentBody" class="content-body"></div>
-    </div>
-  </div>
-
-  <!-- GLOBAL GALLERY MODAL -->
-  <div id="galleryModal" class="gallery-modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="gallery-shell" role="document">
-      <div class="gallery-toolbar">
-        <button id="galleryClose" class="gallery-close" type="button" aria-label="Close gallery">×</button>
-        <div id="galleryTitle" class="gallery-title"></div>
-      </div>
-
-      <div class="gallery-stage" id="galleryStage" aria-label="Gallery content">
-        <div id="galleryViewer" class="gallery-viewer"></div>
-        <div id="galleryThumbs" class="gallery-thumbs" aria-label="Gallery thumbnails"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- IMAGE LIGHTBOX -->
-  <div id="imageLightbox" class="image-lightbox" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="image-lightbox-shell" role="document">
-      <div class="image-lightbox-frame">
-        <img id="imageLightboxImg" src="" alt="">
-        <div id="imageLightboxCaption" class="image-lightbox-caption"></div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    /* ---------- Global content popup ---------- */
-    (() => {
-      const modal = document.getElementById("contentModal");
-      const closeBtn = document.getElementById("contentClose");
-      const prevBtn = document.getElementById("contentNavPrev");
-      const nextBtn = document.getElementById("contentNavNext");
-      const titleEl = document.getElementById("contentTitle");
-      const body = document.getElementById("contentBody");
-
-      let lastFocus = null;
-      let navItems = null;
-      let navIndex = -1;
-      let navController = null;
-
-      function renderCurrentNavItem() {
-        if (!Array.isArray(navItems) || navIndex < 0 || navIndex >= navItems.length) return;
-        const item = navItems[navIndex];
-        titleEl.textContent = item.title || "";
-        body.innerHTML = item.html || "";
-        prevBtn.disabled = navItems.length <= 1;
-        nextBtn.disabled = navItems.length <= 1;
-      }
-
-      function openContent(title, html, options = {}) {
-        lastFocus = document.activeElement;
-        navItems = Array.isArray(options.items) ? options.items : null;
-        navIndex = typeof options.index === "number" ? options.index : -1;
-        navController = typeof options.onNavigate === "function" ? options.onNavigate : null;
-
-        if (navItems && navItems.length) {
-          renderCurrentNavItem();
-        } else {
-          titleEl.textContent = title || "";
-          body.innerHTML = html || "";
-          prevBtn.disabled = true;
-          nextBtn.disabled = true;
-        }
-
-        modal.classList.add("active");
-        modal.setAttribute("aria-hidden", "false");
-        closeBtn.focus({ preventScroll: true });
-      }
-
-      function openContentBySelector(selector, title = "", options = {}) {
-        if (!selector) return;
-        const tpl = document.querySelector(selector);
-        if (!tpl) return;
-        openContent(title, tpl.innerHTML, options);
-      }
-
-      function closeContent() {
-        modal.classList.remove("active");
-        modal.setAttribute("aria-hidden", "true");
-        titleEl.textContent = "";
-        body.innerHTML = "";
-        navItems = null;
-        navIndex = -1;
-        navController = null;
-        if (lastFocus) lastFocus.focus({ preventScroll: true });
-      }
-
-      function goPrev() {
-        if (navController) {
-          const nextIndex = navController("prev");
-          if (typeof nextIndex === "number") navIndex = nextIndex;
-        } else if (navItems && navItems.length > 1) {
-          navIndex = (navIndex - 1 + navItems.length) % navItems.length;
-        }
-        renderCurrentNavItem();
-      }
-
-      function goNext() {
-        if (navController) {
-          const nextIndex = navController("next");
-          if (typeof nextIndex === "number") navIndex = nextIndex;
-        } else if (navItems && navItems.length > 1) {
-          navIndex = (navIndex + 1) % navItems.length;
-        }
-        renderCurrentNavItem();
-      }
-
-      document.addEventListener("click", (e) => {
-        const trigger = e.target.closest(".popup-link[data-popup-target]");
-        if (!trigger) return;
-        e.preventDefault();
-        openContentBySelector(
-          trigger.dataset.popupTarget,
-          trigger.dataset.popupTitle || ""
-        );
-      });
-
-      closeBtn.addEventListener("click", closeContent);
-      prevBtn.addEventListener("click", goPrev);
-      nextBtn.addEventListener("click", goNext);
-
-      document.addEventListener("keydown", (e) => {
-        if (!modal.classList.contains("active")) return;
-
-        if (e.key === "Escape") {
-          closeContent();
-        } else if (e.key === "ArrowLeft") {
-          goPrev();
-        } else if (e.key === "ArrowRight") {
-          goNext();
-        }
-      });
-
-      window.__openContent = openContent;
-      window.__openContentBySelector = openContentBySelector;
-    })();
-
-    /* ---------- Image Lightbox ---------- */
-    (() => {
-      const modal = document.getElementById("imageLightbox");
-      const img = document.getElementById("imageLightboxImg");
-      const caption = document.getElementById("imageLightboxCaption");
-
-      let lastFocus = null;
-
-      function openLightbox(src, alt = "", title = "") {
-        lastFocus = document.activeElement;
-        img.src = src || "";
-        img.alt = alt || "";
-        caption.textContent = title || alt || "";
-        modal.classList.add("active");
-        modal.setAttribute("aria-hidden", "false");
-      }
-
-      function closeLightbox() {
-        modal.classList.remove("active");
-        modal.setAttribute("aria-hidden", "true");
-        img.src = "";
-        img.alt = "";
-        caption.textContent = "";
-        if (lastFocus) lastFocus.focus({ preventScroll: true });
-      }
-
-      img.addEventListener("click", closeLightbox);
-
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) closeLightbox();
-      });
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal.classList.contains("active")) {
-          closeLightbox();
-        }
-      });
-
-      window.__openImageLightbox = openLightbox;
-      window.__closeImageLightbox = closeLightbox;
-    })();
-
-    /* ---------- Gallery Modal ---------- */
-    (() => {
-      const modal = document.getElementById("galleryModal");
-      const closeBtn = document.getElementById("galleryClose");
-      const titleEl = document.getElementById("galleryTitle");
-      const viewer = document.getElementById("galleryViewer");
-      const thumbs = document.getElementById("galleryThumbs");
-
-      let items = [];
-      let activeIndex = 0;
-      let lastFocus = null;
-
-      function getThumbLabel(item, index) {
-        if (item.type === "video") return item.thumbLabel || `Video ${index + 1}`;
-        return item.title || `Image ${index + 1}`;
-      }
-
-      function renderViewer() {
-        viewer.innerHTML = "";
-
-        if (!items.length || activeIndex < 0 || activeIndex >= items.length) return;
-
-        const item = items[activeIndex];
-        const shell = document.createElement("div");
-        shell.className = "gallery-feature";
-
-        if (item.type === "video") {
-          shell.innerHTML = `
-            <div class="gallery-video-frame">
-              <iframe
-                src="${item.src}"
-                title="${item.title || "Embedded video"}"
-                loading="lazy"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen
-                webkitallowfullscreen="true"
-                mozallowfullscreen="true">
-              </iframe>
-            </div>
-            ${item.caption ? `<div class="gallery-feature-caption">${item.caption}</div>` : ``}
-          `;
-        } else {
-          shell.innerHTML = `
-            <button class="gallery-feature-image-wrap" type="button" aria-label="Open image larger">
-              <img class="gallery-feature-image" src="${item.src}" alt="${item.title || ""}">
-              ${item.title ? `<div class="gallery-feature-caption">${item.title}</div>` : ``}
-            </button>
-          `;
-
-          const btn = shell.querySelector(".gallery-feature-image-wrap");
-          btn.addEventListener("click", () => {
-            window.__openImageLightbox(item.src, item.title || "", item.title || "");
-          });
-        }
-
-        viewer.appendChild(shell);
-      }
-
-      function renderThumbs() {
-        thumbs.innerHTML = "";
-
-        if (!items.length) return;
-
-        thumbs.classList.toggle("is-hidden", items.length <= 1);
-
-        items.forEach((item, index) => {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "gallery-thumb";
-          if (index === activeIndex) btn.classList.add("is-active");
-          btn.setAttribute("aria-label", `Show ${getThumbLabel(item, index)}`);
-
-          if (item.type === "video") {
-            btn.innerHTML = `
-              <div class="gallery-thumb-video">
-                <span class="gallery-thumb-play">▶</span>
-                <span class="gallery-thumb-label">${getThumbLabel(item, index)}</span>
-              </div>
-            `;
-          } else {
-            btn.innerHTML = `<img src="${item.src}" alt="${item.title || ""}">`;
-          }
-
-          btn.addEventListener("click", () => {
-            activeIndex = index;
-            renderViewer();
-            renderThumbs();
-          });
-
-          thumbs.appendChild(btn);
-        });
-      }
-
-      function openGallery(newItems, title = "", startIndex = 0) {
-        items = Array.isArray(newItems) ? newItems : [];
-        activeIndex = Math.max(0, Math.min(startIndex, items.length - 1));
-        lastFocus = document.activeElement;
-
-        titleEl.textContent = title || "";
-
-        modal.classList.add("active");
-        modal.setAttribute("aria-hidden", "false");
-
-        renderViewer();
-        renderThumbs();
-
-        closeBtn.focus({ preventScroll: true });
-      }
-
-      function closeGallery() {
-        modal.classList.remove("active");
-        modal.setAttribute("aria-hidden", "true");
-        viewer.innerHTML = "";
-        thumbs.innerHTML = "";
-        thumbs.classList.remove("is-hidden");
-        titleEl.textContent = "";
-        items = [];
-        activeIndex = 0;
-
-        if (lastFocus) lastFocus.focus({ preventScroll: true });
-      }
-
-      closeBtn.addEventListener("click", closeGallery);
-
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) closeGallery();
-      });
-
-      document.addEventListener("keydown", (e) => {
-        if (!modal.classList.contains("active")) return;
-
-        if (e.key === "Escape") {
-          closeGallery();
-        } else if (e.key === "ArrowRight" && items.length > 1) {
-          activeIndex = (activeIndex + 1) % items.length;
-          renderViewer();
-          renderThumbs();
-        } else if (e.key === "ArrowLeft" && items.length > 1) {
-          activeIndex = (activeIndex - 1 + items.length) % items.length;
-          renderViewer();
-          renderThumbs();
-        }
-      });
-
-      window.__openSnakeGallery = openGallery;
-    })();
-
-    /* ---------- Carousel ---------- */
-    document.querySelectorAll(".work-item").forEach((workItem) => {
-      const carousel = workItem.querySelector(".carousel");
-
-      const titleEl = workItem.querySelector(".project-title");
-      const centerImg = carousel.querySelector(".carousel-center-img");
-      const centerArea = carousel.querySelector(".carousel-center");
-
-      const leftStackEl = carousel.querySelector(".carousel-stack.left");
-      const rightStackEl = carousel.querySelector(".carousel-stack.right");
-
-      const btnLeft = carousel.querySelector(".carousel-btn.left");
-      const btnRight = carousel.querySelector(".carousel-btn.right");
-
-      const sourceImgs = Array.from(carousel.querySelectorAll(".carousel-sources img"));
-      const projects = sourceImgs.map(img => ({
-        src: img.getAttribute("src"),
-        title: img.dataset.title || "Untitled",
-        template: img.dataset.template || ""
-      }));
-
-      let center = 0;
-      let leftStack = [];
-      let rightStack = projects.map((_, i) => i).slice(1);
-
-      function buildPopupItems() {
-        return projects.map((project) => {
-          const tpl = document.querySelector(project.template);
-          return {
-            title: project.title,
-            html: tpl ? tpl.innerHTML : ""
-          };
-        });
-      }
-
-      function updateMeta(index) {
-        titleEl.textContent = projects[index].title;
-      }
-
-      function renderStacks() {
-        leftStackEl.innerHTML = "";
-        rightStackEl.innerHTML = "";
-
-        leftStack.forEach((idx, i) => {
-          const card = document.createElement("div");
-          card.className = "stack-card";
-          card.style.setProperty("--stack-i", i);
-          card.innerHTML = `<img src="${projects[idx].src}" alt="">`;
-          leftStackEl.appendChild(card);
-        });
-
-        rightStack.forEach((idx, i) => {
-          const card = document.createElement("div");
-          card.className = "stack-card";
-          card.style.setProperty("--stack-i", i);
-          card.innerHTML = `<img src="${projects[idx].src}" alt="">`;
-          rightStackEl.appendChild(card);
-        });
-
-        centerImg.src = projects[center].src;
-        centerImg.alt = projects[center].title;
-        updateMeta(center);
-
-        btnLeft.disabled = leftStack.length === 0;
-        btnRight.disabled = rightStack.length === 0;
-      }
-
-      function goNext() {
-        if (!rightStack.length) return center;
-        leftStack.unshift(center);
-        center = rightStack.shift();
-        renderStacks();
-        return center;
-      }
-
-      function goPrev() {
-        if (!leftStack.length) return center;
-        rightStack.unshift(center);
-        center = leftStack.shift();
-        renderStacks();
-        return center;
-      }
-
-      function openPopup() {
-        const current = projects[center];
-        if (!current.template) return;
-
-        const popupItems = buildPopupItems();
-
-        window.__openContent(current.title, popupItems[center].html, {
-          items: popupItems,
-          index: center,
-          onNavigate: (direction) => {
-            if (direction === "prev") return goPrev();
-            if (direction === "next") return goNext();
-            return center;
-          }
-        });
-      }
-
-      btnLeft.onclick = goPrev;
-      btnRight.onclick = goNext;
-
-      centerArea.addEventListener("click", openPopup);
-      centerArea.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          openPopup();
-        }
-      });
-
-      titleEl.style.cursor = "pointer";
-      titleEl.addEventListener("click", openPopup);
-
-      renderStacks();
+<script>
+/* =========================
+   CAROUSEL + INLINE OVERLAY
+========================= */
+
+document.querySelectorAll(".work-item").forEach((workItem) => {
+  const carousel = workItem.querySelector(".carousel");
+
+  const titleEl = workItem.querySelector(".project-title");
+  const centerImg = carousel.querySelector(".carousel-center-img");
+  const centerArea = carousel.querySelector(".carousel-center");
+
+  const leftStackEl = carousel.querySelector(".carousel-stack.left");
+  const rightStackEl = carousel.querySelector(".carousel-stack.right");
+
+  const btnLeft = carousel.querySelector(".carousel-btn.left");
+  const btnRight = carousel.querySelector(".carousel-btn.right");
+
+  const overlay = carousel.querySelector(".carousel-overlay");
+  const overlayText = carousel.querySelector(".carousel-overlay-text");
+  const overlayTitle = carousel.querySelector(".carousel-overlay-title");
+  const minBtn = carousel.querySelector(".carousel-min");
+
+  const projects = Array.from(
+    carousel.querySelectorAll(".carousel-sources img")
+  ).map(img => ({
+    src: img.src,
+    title: img.dataset.title,
+    template: img.dataset.template
+  }));
+
+  let center = 0;
+  let leftStack = [];
+  let rightStack = projects.map((_, i) => i).slice(1);
+
+  function updateMeta() {
+    titleEl.textContent = projects[center].title;
+  }
+
+  function renderStacks() {
+    leftStackEl.innerHTML = "";
+    rightStackEl.innerHTML = "";
+
+    leftStack.forEach((idx, i) => {
+      const el = document.createElement("div");
+      el.className = "stack-card";
+      el.style.setProperty("--stack-i", i);
+      el.innerHTML = `<img src="${projects[idx].src}">`;
+      leftStackEl.appendChild(el);
     });
 
-    /* ---------- Practice Windows ---------- */
-    (() => {
-      const desktop = document.getElementById("practiceDesktop");
-      const resetBtn = document.getElementById("practiceReset");
-      if (!desktop || !resetBtn) return;
+    rightStack.forEach((idx, i) => {
+      const el = document.createElement("div");
+      el.className = "stack-card";
+      el.style.setProperty("--stack-i", i);
+      el.innerHTML = `<img src="${projects[idx].src}">`;
+      rightStackEl.appendChild(el);
+    });
+
+    centerImg.src = projects[center].src;
+    updateMeta();
+  }
+
+  function updateOverlay() {
+    if (!overlay.classList.contains("active")) return;
+
+    const p = projects[center];
+    const tpl = document.querySelector(p.template);
+
+    overlayText.innerHTML = tpl ? tpl.innerHTML : "";
+    overlayTitle.textContent = p.title;
+  }
+
+  function next() {
+    if (!rightStack.length) return;
+    leftStack.unshift(center);
+    center = rightStack.shift();
+    renderStacks();
+    updateOverlay();
+  }
+
+  function prev() {
+    if (!leftStack.length) return;
+    rightStack.unshift(center);
+    center = leftStack.shift();
+    renderStacks();
+    updateOverlay();
+  }
+
+  function openOverlay() {
+    const p = projects[center];
+    const tpl = document.querySelector(p.template);
+
+    overlayText.innerHTML = tpl ? tpl.innerHTML : "";
+    overlayTitle.textContent = p.title;
+
+    overlay.classList.add("active");
+  }
+
+  function closeOverlay() {
+    overlay.classList.remove("active");
+  }
+
+  btnLeft.onclick = prev;
+  btnRight.onclick = next;
+
+  centerArea.onclick = openOverlay;
+  titleEl.onclick = openOverlay;
+
+  minBtn.onclick = closeOverlay;
+
+  renderStacks();
+});
+</script>
 
-      const PRACTICE = [
-        { id:"drawing",        src:"assets/Drawing_1.png",        title:"Animations & Drawings", hasGallery: true },
-        { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication", hasGallery: true },
-        { id:"lightsleeper",   src:"assets/LightSleeper_1.png",   title:"Light Sleeper, Heavy Dreamer (2020)", hasGallery: true },
-        { id:"colourorgan",    src:"assets/ColourOrgan_1.png",    title:"Colour Organ (2021)", hasGallery: true },
-        { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"An Uncanny Scene (2022)", hasGallery: true },
-        { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game (2024)", hasGallery: false },
-      ];
-
-      const GALLERY_DATA = {
-        colourorgan: [
-          {
-            type: "video",
-            src: "https://archive.org/embed/bee-nix-colour-organ",
-            title: "Colour Organ (2021)",
-            caption: "Colour Organ — embedded from Internet Archive.",
-            thumbLabel: "Video"
-          },
-          {
-            type: "image",
-            src: "assets/ColourOrgan_1.png",
-            title: "Colour Organ — Photo 1"
-          },
-          {
-            type: "image",
-            src: "assets/ColourOrgan_2.png",
-            title: "Colour Organ — Photo 2"
-          },
-          {
-            type: "image",
-            src: "assets/ColourOrgan_3.png",
-            title: "Colour Organ — Photo 3"
-          }
-        ],
-
-        lightsleeper: [
-          {
-            type: "video",
-            src: "https://www.youtube.com/embed/R0VyONd6Eko",
-            title: "Light Sleeper, Heavy Dreamer (2020)",
-            caption: "Light Sleeper, Heavy Dreamer — YouTube embed.",
-            thumbLabel: "Video"
-          }
-        ],
-
-        uncanny: [
-          {
-            type: "video",
-            src: "https://archive.org/embed/bee-nix-an-uncanny-scene",
-            title: "An Uncanny Scene (2022)",
-            caption: "An Uncanny Scene — embedded from Internet Archive.",
-            thumbLabel: "Video"
-          }
-        ],
-
-        fabrication: [
-          {
-            type: "image",
-            src: "assets/Fabrication_1.png",
-            title: "Fabrication — Photo 1"
-          },
-          {
-            type: "image",
-            src: "assets/Fabrication_2.png",
-            title: "Fabrication — Photo 2"
-          },
-          {
-            type: "image",
-            src: "assets/Fabrication_3.png",
-            title: "Fabrication — Photo 3"
-          }
-        ],
-
-        drawing: [
-          {
-            type: "image",
-            src: "assets/Drawing_1.png",
-            title: "Animations & Drawings — View 1"
-          },
-          {
-            type: "image",
-            src: "assets/Drawing_2.png",
-            title: "Animations & Drawings — View 2"
-          },
-          {
-            type: "image",
-            src: "assets/Drawing_3.png",
-            title: "Animations & Drawings — View 3"
-          }
-        ],
-
-        discussiongame: [
-          {
-            type: "image",
-            src: "assets/DiscussionGame_1.png",
-            title: "Discussion Game — View 1"
-          },
-          {
-            type: "image",
-            src: "assets/DiscussionGame_2.png",
-            title: "Discussion Game — View 2"
-          },
-          {
-            type: "image",
-            src: "assets/DiscussionGame_3.png",
-            title: "Discussion Game — View 3"
-          }
-        ]
-      };
-
-      const mqMobile = window.matchMedia("(max-width: 760px)");
-      const isMobile = () => mqMobile.matches;
-
-      let zTop = 10;
-
-      function getTemplateHTML(id) {
-        const tpl = document.getElementById(`tpl-${id}`);
-        return tpl ? tpl.innerHTML : `<p><strong>${id}</strong></p>`;
-      }
-
-      function buildWindowGalleryItems(item) {
-        return GALLERY_DATA[item.id] || [
-          { type: "image", src: item.src, title: item.title }
-        ];
-      }
-
-      function bringToFront(win) { win.style.zIndex = String(++zTop); }
-      function randBetween(min, max) { return min + Math.random() * (max - min); }
-      function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
-
-      function computeSplayPositions(count) {
-        const WIN_W = 300;
-        const BAR_H = 34;
-        const IMG_H = 250;
-        const WIN_H = BAR_H + IMG_H;
-
-        const rect = desktop.getBoundingClientRect();
-        const deskW = Math.max(320, rect.width || 320);
-        const deskH = Math.max(520, rect.height || 520);
-
-        const startX  = 30;
-        const startY  = 24;
-        const stepX   = 140;
-        const stepY   = 10;
-        const zigAmp  = 26;
-        const jitterX = 14;
-        const jitterY = 10;
-
-        const minX = 8;
-        const minY = 8;
-        const maxX = Math.max(minX, Math.floor(deskW - WIN_W - 8));
-        const maxY = Math.max(minY, Math.floor(deskH - WIN_H - 8));
-
-        const pos = [];
-        for (let i = 0; i < count; i++) {
-          const zig = (i % 2 === 0) ? -zigAmp : zigAmp;
-
-          let x = startX + i * stepX + randBetween(-jitterX, jitterX);
-          let y = startY + i * stepY + zig + randBetween(-jitterY, jitterY);
-
-          x = clamp(x, minX, maxX);
-          y = clamp(y, minY, maxY);
-
-          pos.push({ x, y });
-        }
-        return pos;
-      }
-
-      function applyDesktopPosition(win) {
-        const x = parseFloat(win.dataset.x || "0");
-        const y = parseFloat(win.dataset.y || "0");
-        win.style.left = x + "px";
-        win.style.top = y + "px";
-      }
-
-      function applyMobilePosition(win) {
-        win.style.left = "";
-        win.style.top = "";
-      }
-
-      function syncModeClass() {
-        if (isMobile()) desktop.classList.add("is-mobile");
-        else desktop.classList.remove("is-mobile");
-
-        const wins = Array.from(desktop.querySelectorAll(".pwin"));
-        wins.forEach(win => {
-          if (isMobile()) applyMobilePosition(win);
-          else applyDesktopPosition(win);
-        });
-      }
-
-      function createWindow(item) {
-        const win = document.createElement("div");
-        win.className = "pwin";
-        win.dataset.id = item.id;
-        win.style.zIndex = String(++zTop);
-
-        win.innerHTML = `
-          <div class="pwin-bar" role="toolbar">
-            <button class="pwin-close" type="button" aria-label="Close window">×</button>
-            <div class="pwin-title" title="${item.title}">${item.title}</div>
-          </div>
-
-          <div class="pwin-body" role="button" tabindex="0" aria-label="Open description">
-            <img src="${item.src}" alt="${item.title}">
-          </div>
-
-          <div class="pwin-overlay" aria-hidden="true">
-            <div class="pwin-overlay-bar">
-              <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
-              ${item.hasGallery !== false ? `
-                <button class="popup-link pwin-gallery-link" type="button">open gallery ↗</button>
-              ` : ``}
-            </div>
-
-            <div class="pwin-overlay-scroll">
-              <div class="pwin-overlay-text"></div>
-            </div>
-          </div>
-        `;
-
-        const bar = win.querySelector(".pwin-bar");
-        const close = win.querySelector(".pwin-close");
-        const body = win.querySelector(".pwin-body");
-
-        const overlay = win.querySelector(".pwin-overlay");
-        const minBtn = win.querySelector(".pwin-min");
-        const overlayScroll = win.querySelector(".pwin-overlay-scroll");
-        const overlayText = win.querySelector(".pwin-overlay-text");
-        const galleryLink = win.querySelector(".pwin-gallery-link");
-
-        function openOverlay(e) {
-          if (e) e.stopPropagation();
-          bringToFront(win);
-
-          overlayText.innerHTML = getTemplateHTML(item.id);
-          overlay.classList.add("active");
-          overlay.setAttribute("aria-hidden", "false");
-          overlayScroll.scrollTop = 0;
-
-          minBtn.focus({ preventScroll: true });
-        }
-
-        function closeOverlay(e) {
-          if (e) e.stopPropagation();
-          overlay.classList.remove("active");
-          overlay.setAttribute("aria-hidden", "true");
-        }
-
-        close.addEventListener("click", (e) => {
-          e.stopPropagation();
-          if (isMobile()) {
-            win.classList.add("removing");
-            setTimeout(() => win.remove(), 140);
-          } else {
-            win.remove();
-          }
-        });
-
-        win.addEventListener("pointerdown", () => bringToFront(win));
-
-        body.addEventListener("click", openOverlay);
-        body.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === " ") openOverlay(e);
-        });
-
-        minBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
-        minBtn.addEventListener("click", closeOverlay);
-
-        if (galleryLink) {
-          galleryLink.addEventListener("pointerdown", (e) => e.stopPropagation());
-          galleryLink.addEventListener("click", (e) => {
-            e.stopPropagation();
-            window.__openSnakeGallery(buildWindowGalleryItems(item), item.title, 0);
-          });
-        }
-
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
-        });
-
-        bar.addEventListener("pointerdown", (e) => {
-          if (isMobile()) return;
-          if (e.target.closest(".pwin-close")) return;
-
-          e.preventDefault();
-          bringToFront(win);
-
-          const rectDesk = desktop.getBoundingClientRect();
-          const rectWin = win.getBoundingClientRect();
-
-          const startX = e.clientX;
-          const startY = e.clientY;
-
-          const startLeft = rectWin.left - rectDesk.left;
-          const startTop  = rectWin.top - rectDesk.top;
-
-          win.setPointerCapture(e.pointerId);
-
-          function onMove(ev) {
-            const dx = ev.clientX - startX;
-            const dy = ev.clientY - startY;
-
-            const nextLeft = startLeft + dx;
-            const nextTop  = startTop + dy;
-
-            win.style.left = nextLeft + "px";
-            win.style.top  = nextTop + "px";
-
-            win.dataset.x = String(nextLeft);
-            win.dataset.y = String(nextTop);
-          }
-
-          function onUp() {
-            try { win.releasePointerCapture(e.pointerId); } catch (_) {}
-            win.removeEventListener("pointermove", onMove);
-            win.removeEventListener("pointerup", onUp);
-            win.removeEventListener("pointercancel", onUp);
-          }
-
-          win.addEventListener("pointermove", onMove);
-          win.addEventListener("pointerup", onUp);
-          win.addEventListener("pointercancel", onUp);
-        });
-
-        return win;
-      }
-
-      function populate() {
-        desktop.innerHTML = "";
-
-        const wins = PRACTICE.map(item => {
-          const w = createWindow(item);
-          desktop.appendChild(w);
-          return w;
-        });
-
-        const placeDesktop = () => {
-          if (isMobile()) {
-            syncModeClass();
-            return;
-          }
-
-          const positions = computeSplayPositions(wins.length);
-          wins.forEach((win, i) => {
-            win.dataset.x = String(positions[i].x);
-            win.dataset.y = String(positions[i].y);
-            applyDesktopPosition(win);
-          });
-
-          syncModeClass();
-        };
-
-        requestAnimationFrame(() => requestAnimationFrame(placeDesktop));
-      }
-
-      resetBtn.addEventListener("click", populate);
-      populate();
-
-      let resizeTimer = null;
-      window.addEventListener("resize", () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(syncModeClass, 120);
-      });
-
-      mqMobile.addEventListener?.("change", syncModeClass);
-    })();
-
-    /* ---------- Talking with Others ---------- */
-    (() => {
-      const row = document.getElementById("talkingRow");
-      const titleEl = document.getElementById("talkingTitle");
-      const descEl = document.getElementById("talkingDescription");
-      const openEl = document.getElementById("talkingOpen");
-      if (!row || !titleEl || !descEl || !openEl) return;
-
-      function setActive(btn) {
-        row.querySelectorAll(".talk-pixel.is-active")
-          .forEach(b => b.classList.remove("is-active"));
-
-        btn.classList.add("is-active");
-
-        const title = btn.dataset.title || "—";
-        const description = btn.dataset.description || "";
-        const href = btn.dataset.href || "#";
-        const color = btn.style.background || getComputedStyle(btn).backgroundColor;
-
-        titleEl.textContent = title;
-        descEl.textContent = description;
-
-        openEl.href = href;
-        openEl.setAttribute("aria-disabled", href === "#" ? "true" : "false");
-        openEl.style.setProperty("--active-color", color);
-      }
-
-      row.addEventListener("click", (e) => {
-        const btn = e.target.closest(".talk-pixel");
-        if (!btn) return;
-        setActive(btn);
-      });
-
-      const first = row.querySelector(".talk-pixel");
-      if (first) setActive(first);
-    })();
-  </script>
 </body>
 </html>
