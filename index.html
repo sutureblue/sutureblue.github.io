@@ -61,6 +61,17 @@
 
                 <button class="carousel-btn right" type="button" aria-label="Next project">›</button>
 
+                <!-- Inline info overlay — sits over the carousel image -->
+                <div class="carousel-info-overlay" aria-hidden="true" role="region" aria-label="Project info">
+                  <div class="carousel-info-bar">
+                    <button class="carousel-info-close" type="button" aria-label="Close info">×</button>
+                    <span class="carousel-info-title"></span>
+                  </div>
+                  <div class="carousel-info-scroll">
+                    <div class="carousel-info-body"></div>
+                  </div>
+                </div>
+
                 <div class="carousel-sources" hidden>
                   <img src="assets/glitchplay.png" data-title="Glitch Play (2025)" data-template=".tpl-glitchplay" alt="">
                   <img src="assets/gNg.png" data-title="Glitch'N'Games (2024)" data-template=".tpl-gng" alt="">
@@ -106,7 +117,7 @@
               My IRL contributions to the discussion were not so much about my experience as an artist, but rather as a Do-It-Together (DIT) media archivist who is currently organizing, with a couple others— a free, downloadable, public access digital archive for the Glitch Art community.
             </p>
             <p>
-              Those of us working on this project believe that the more you rely on open software, the more accessible an archive becomes. That community projects can operate with more integrity when they remain unaffiliated with any institution(s). And most of all, we actively go against writing any “defining narrative(s),” but rather aim to offer an index of searchable artists and artists’ works, as well as any affiliated history, to enable many narratives to overlap, web and be formed by people of the community, in hopes for a more holistic history to be available to those who care to have it.
+              Those of us working on this project believe that the more you rely on open software, the more accessible an archive becomes. That community projects can operate with more integrity when they remain unaffiliated with any institution(s). And most of all, we actively go against writing any "defining narrative(s)," but rather aim to offer an index of searchable artists and artists' works, as well as any affiliated history, to enable many narratives to overlap, web and be formed by people of the community, in hopes for a more holistic history to be available to those who care to have it.
             </p>
           </template>
 
@@ -121,7 +132,7 @@
 
           <template class="tpl-notGlitch">
             <p>
-              /NOT.GLI.TCH/H was held at the University of Chicago. I presented a talk about online community through the lens of my involvement with Glitch Artists Collective (GAC), likely the world’s largest Glitch Art community.
+              /NOT.GLI.TCH/H was held at the University of Chicago. I presented a talk about online community through the lens of my involvement with Glitch Artists Collective (GAC), likely the world's largest Glitch Art community.
             </p>
             <p>
               GAC was established in 2013 on Facebook first (though is also on Instagram, Twitter, and Tumblr) and I initially became involved as an artist near the end of 2014, later becoming curator, which I still am, and occasionally an admin. My talk discussed the aesthetic evolutions of glitch within the community, what questions the community concerns/ed themselves with, the importance of earnest connection + IRL gatherings, and the protective trust based + open-source principles that sets GAC apart from other internet communities.
@@ -154,7 +165,7 @@
         </template>
 
         <template id="tpl-discussiongame">
-          <p>Discussion Game was a participatory conversation game that I developed and moderated for Glitch'N'Games’24. Featuring artists, theorists, and gamers including Jamie Fenton, Nick Briz, Sabato Visconti, Kaspar Ravel, and more, the conversation used prompt cards to guide an open-ended dialogue on glitch, control, and play. Topics ranged from quantum logic to surveillance culture, pedagogical theory to personal glitch histories. Rather than defining the glitch, the session treated it as a generative lens—where system instability became a site for shared interpretation, critique, and improvisation.</p>
+          <p>Discussion Game was a participatory conversation game that I developed and moderated for Glitch'N'Games'24. Featuring artists, theorists, and gamers including Jamie Fenton, Nick Briz, Sabato Visconti, Kaspar Ravel, and more, the conversation used prompt cards to guide an open-ended dialogue on glitch, control, and play. Topics ranged from quantum logic to surveillance culture, pedagogical theory to personal glitch histories. Rather than defining the glitch, the session treated it as a generative lens—where system instability became a site for shared interpretation, critique, and improvisation.</p>
           <p>
             <a href="assets/gNg_DiscussionGame_BeeNix2024.pdf" target="_blank" rel="noreferrer">Read the text script for "Discussion Game"</a>
           </p>
@@ -166,12 +177,12 @@
         </template>
 
         <template id="tpl-drawing">
-          <p>Since 2014, I’ve created looping rotoscoped animations intended to hold a viewer in an evocative moment of intra/interpersonal reflections. These animations are often combined with analog &amp; digital glitch techniques as methodological expressions of engaging as an interpretive system within systems. Positioning myself (and by extension a viewer) as an interpreter embedded within larger systemic boundaries and ruptures.</p>
+          <p>Since 2014, I've created looping rotoscoped animations intended to hold a viewer in an evocative moment of intra/interpersonal reflections. These animations are often combined with analog &amp; digital glitch techniques as methodological expressions of engaging as an interpretive system within systems. Positioning myself (and by extension a viewer) as an interpreter embedded within larger systemic boundaries and ruptures.</p>
           <p>Naturally, I also draw still images from time to time too.</p>
         </template>
 
         <template id="tpl-fabrication">
-          <p>Most people know me for my digital/analog works, though since 2016, my fabrication practice has been my primary job. I've grown from supporting others’ projects to independently leading design/build work. My experience bridges traditional craft and modern digital tools, allowing me to translate ideas into durable, interactive pieces across a range of contexts.</p>
+          <p>Most people know me for my digital/analog works, though since 2016, my fabrication practice has been my primary job. I've grown from supporting others' projects to independently leading design/build work. My experience bridges traditional craft and modern digital tools, allowing me to translate ideas into durable, interactive pieces across a range of contexts.</p>
         </template>
 
         <template id="tpl-lightsleeper">
@@ -217,11 +228,11 @@
                 aria-label="Scanlines.xyz"></button>
 
               <button class="talk-pixel" type="button"
-                data-title="Totally not a Speedrun /’fubar/ 2022"
+                data-title="Totally not a Speedrun /'fubar/ 2022"
                 data-description="Me and Kaspar Ravel give an interactive talk within the 3D environment of /'fubar/ 2022 where we discuss techniques, history, and personal observations of the exhibition."
                 data-href="https://www.youtube.com/watch?v=tWp3CEuwzdE"
                 style="background:#ff4fd8"
-                aria-label="Totally not a Speedrun /’fubar/ 2022"></button>
+                aria-label="Totally not a Speedrun /'fubar/ 2022"></button>
 
               <button class="talk-pixel" type="button"
                 data-title="Slowrun /fu:bar/ 2021"
@@ -247,7 +258,7 @@
 
         <div class="about-layout">
           <div>
-            <p>I’m Bee Nix, aka Suture Blue.</p>
+            <p>I'm Bee Nix, aka Suture Blue.</p>
             <p>
               As a system amongst systems, I trace how internal states entangle with
               the larger technosocial worlds by interweaving play, technology, and social structures.
@@ -289,7 +300,7 @@
 
   </div>
 
-  <!-- GLOBAL TEXT POPUP -->
+  <!-- GLOBAL TEXT POPUP (kept for any future popup-link usage) -->
   <div id="contentModal" class="content-modal" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="content-shell" role="document">
       <div class="content-toolbar">
@@ -426,14 +437,9 @@
 
       document.addEventListener("keydown", (e) => {
         if (!modal.classList.contains("active")) return;
-
-        if (e.key === "Escape") {
-          closeContent();
-        } else if (e.key === "ArrowLeft") {
-          goPrev();
-        } else if (e.key === "ArrowRight") {
-          goNext();
-        }
+        if (e.key === "Escape") closeContent();
+        else if (e.key === "ArrowLeft") goPrev();
+        else if (e.key === "ArrowRight") goNext();
       });
 
       window.__openContent = openContent;
@@ -473,9 +479,7 @@
       });
 
       document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal.classList.contains("active")) {
-          closeLightbox();
-        }
+        if (e.key === "Escape" && modal.classList.contains("active")) closeLightbox();
       });
 
       window.__openImageLightbox = openLightbox;
@@ -634,16 +638,20 @@
     /* ---------- Carousel ---------- */
     document.querySelectorAll(".work-item").forEach((workItem) => {
       const carousel = workItem.querySelector(".carousel");
-
       const titleEl = workItem.querySelector(".project-title");
       const centerImg = carousel.querySelector(".carousel-center-img");
       const centerArea = carousel.querySelector(".carousel-center");
-
       const leftStackEl = carousel.querySelector(".carousel-stack.left");
       const rightStackEl = carousel.querySelector(".carousel-stack.right");
-
       const btnLeft = carousel.querySelector(".carousel-btn.left");
       const btnRight = carousel.querySelector(".carousel-btn.right");
+
+      // Inline info overlay elements
+      const infoOverlay = carousel.querySelector(".carousel-info-overlay");
+      const infoTitle = carousel.querySelector(".carousel-info-title");
+      const infoBody = carousel.querySelector(".carousel-info-body");
+      const infoClose = carousel.querySelector(".carousel-info-close");
+      const infoScroll = carousel.querySelector(".carousel-info-scroll");
 
       const sourceImgs = Array.from(carousel.querySelectorAll(".carousel-sources img"));
       const projects = sourceImgs.map(img => ({
@@ -655,16 +663,6 @@
       let center = 0;
       let leftStack = [];
       let rightStack = projects.map((_, i) => i).slice(1);
-
-      function buildPopupItems() {
-        return projects.map((project) => {
-          const tpl = document.querySelector(project.template);
-          return {
-            title: project.title,
-            html: tpl ? tpl.innerHTML : ""
-          };
-        });
-      }
 
       function updateMeta(index) {
         titleEl.textContent = projects[index].title;
@@ -698,52 +696,64 @@
         btnRight.disabled = rightStack.length === 0;
       }
 
+      function closeOverlay() {
+        infoOverlay.classList.remove("active");
+        infoOverlay.setAttribute("aria-hidden", "true");
+      }
+
+      function openOverlay() {
+        const current = projects[center];
+        if (!current.template) return;
+        const tpl = document.querySelector(current.template);
+        if (!tpl) return;
+
+        infoTitle.textContent = current.title;
+        infoBody.innerHTML = tpl.innerHTML;
+        infoScroll.scrollTop = 0;
+
+        infoOverlay.classList.add("active");
+        infoOverlay.setAttribute("aria-hidden", "false");
+        infoClose.focus({ preventScroll: true });
+      }
+
       function goNext() {
-        if (!rightStack.length) return center;
+        if (!rightStack.length) return;
+        closeOverlay();
         leftStack.unshift(center);
         center = rightStack.shift();
         renderStacks();
-        return center;
       }
 
       function goPrev() {
-        if (!leftStack.length) return center;
+        if (!leftStack.length) return;
+        closeOverlay();
         rightStack.unshift(center);
         center = leftStack.shift();
         renderStacks();
-        return center;
       }
 
-      function openPopup() {
-        const current = projects[center];
-        if (!current.template) return;
+      infoClose.addEventListener("click", closeOverlay);
 
-        const popupItems = buildPopupItems();
-
-        window.__openContent(current.title, popupItems[center].html, {
-          items: popupItems,
-          index: center,
-          onNavigate: (direction) => {
-            if (direction === "prev") return goPrev();
-            if (direction === "next") return goNext();
-            return center;
-          }
-        });
-      }
+      // Prevent close-button clicks bubbling up to the centerArea click handler
+      infoClose.addEventListener("pointerdown", (e) => e.stopPropagation());
 
       btnLeft.onclick = goPrev;
       btnRight.onclick = goNext;
 
-      centerArea.addEventListener("click", openPopup);
+      centerArea.addEventListener("click", openOverlay);
       centerArea.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          openPopup();
+          openOverlay();
         }
       });
 
       titleEl.style.cursor = "pointer";
-      titleEl.addEventListener("click", openPopup);
+      titleEl.addEventListener("click", openOverlay);
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && infoOverlay.classList.contains("active")) closeOverlay();
+      });
 
       renderStacks();
     });
