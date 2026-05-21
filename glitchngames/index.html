@@ -11,7 +11,9 @@
 
 <body>
 
-<nav class="side-nav">
+<div class="scanlines"></div>
+
+<nav class="top-nav">
   <a href="#hero">START</a>
   <a href="#about">INFO</a>
   <a href="#friday">FRIDAY</a>
@@ -19,25 +21,28 @@
   <a href="#contact">CONTACT</a>
 </nav>
 
-<section id="hero" class="snap-section hero">
+<button id="upArrow" class="section-arrow up">▲</button>
+<button id="downArrow" class="section-arrow down">▼</button>
 
-  <div class="noise"></div>
+<section id="hero" class="snap-section">
 
-  <div class="hero-content">
+  <div class="section-inner hero-inner">
+
     <h1>GLITCH'N'GAMES 2</h1>
 
-    <p class="tagline">
+    <div class="hero-subtitle">
       Art • Games • Glitches • Systems
-    </p>
+    </div>
 
-    <p>
+    <div class="hero-date">
       October 2–3, 2026<br>
       Chicago
-    </p>
+    </div>
 
-    <a href="#about" class="button">
+    <a href="#about" id="enterButton" class="enter-button">
       ENTER
     </a>
+
   </div>
 
 </section>
@@ -55,20 +60,16 @@
       <h2>What Is This?</h2>
 
       <p>
-        Glitch'N'Games 2 explores the shared histories of
-        glitch art and video games.
+        Glitch'N'Games 2 explores the shared histories
+        of glitch art and video games.
       </p>
 
       <p>
         This second iteration focuses on physical engagement
         with systems, bringing together artists, game makers,
         performers, and theorists through exhibitions,
-        competitions, talks, performances, and collaborative play.
-      </p>
-
-      <p>
-        Curated and produced by Bee Nix (SutureBlue)
-        with the help of everyone involved.
+        competitions, talks, performances,
+        and collaborative play.
       </p>
 
     </div>
@@ -79,55 +80,66 @@
 
 <section id="friday" class="snap-section">
 
-  <div class="content">
+  <div class="section-inner">
 
     <h2>Friday Exhibition</h2>
 
-    <p class="event-meta">
+    <div class="event-meta">
       Logan Arcade<br>
       Chicago<br>
       October 2, 2026<br>
-      6:00–10:00 PM
-    </p>
+      6:00 PM – 10:00 PM
+    </div>
 
-    <a href="#" class="button ticket-button">
+    <a href="#" class="ticket-button">
       GET EARLY BIRD TICKETS
     </a>
 
-    <div class="card-grid">
+    <div class="arcade-grid">
 
-      <div class="card">
-        <h3>Featured Artists</h3>
-
-        <ul>
-          <li>Allen Riley</li>
-          <li>DRUGS TM</li>
-          <li>Gork</li>
-          <li>Jacob Roufa</li>
-          <li>Sky Goodman</li>
-          <li>jonCates</li>
-        </ul>
+      <div class="arcade-box">
+        <div class="arcade-title">ALLEN RILEY</div>
       </div>
 
-      <div class="card">
-        <h3>Special Events</h3>
-
-        <p>
-          Glitch Tekken Competition<br>
-          hosted by DRUGS TM
-        </p>
-
-        <p>
-          Performances by<br>
-          Royb0t & SutureBlue<br>
-          CoCoJoey
-        </p>
-
-        <p>
-          Special Appearance<br>
-          Rob Sheridan
-        </p>
+      <div class="arcade-box">
+        <div class="arcade-title">DRUGS TM</div>
+        <div class="arcade-sub">
+          GLITCH TEKKEN
+        </div>
       </div>
+
+      <div class="arcade-box">
+        <div class="arcade-title">GORK</div>
+      </div>
+
+      <div class="arcade-box">
+        <div class="arcade-title">JACOB ROUFA</div>
+      </div>
+
+      <div class="arcade-box">
+        <div class="arcade-title">SKY GOODMAN</div>
+      </div>
+
+      <div class="arcade-box">
+        <div class="arcade-title">jonCates</div>
+      </div>
+
+    </div>
+
+    <div class="special-events">
+
+      <h3>SPECIAL EVENTS</h3>
+
+      <p>
+        Performances by<br>
+        Royb0t & SutureBlue<br>
+        CoCoJoey
+      </p>
+
+      <p>
+        Special Appearance<br>
+        Rob Sheridan
+      </p>
 
     </div>
 
@@ -137,50 +149,83 @@
 
 <section id="saturday" class="snap-section">
 
-  <div class="content split">
+  <div class="split-layout">
 
-    <div class="card">
+    <div class="window">
 
-      <h2>Discussion Session</h2>
+      <div class="window-bar">
+        SATURDAY_DISCUSSION.exe
+      </div>
 
-      <p>
-        Earlier in the day<br>
-        Location TBD
-      </p>
+      <div class="window-content">
 
-      <ul>
-        <li>Allen Riley</li>
-        <li>RezidualVizualz</li>
-        <li>jonCates</li>
-      </ul>
+        <h2>Discussion Session</h2>
 
-      <p>
-        Discussion Game<br>
-        Nick Briz & Bee Nix
-      </p>
+        <p>
+          Earlier in the day<br>
+          Location TBD
+        </p>
+
+        <div class="mini-grid">
+
+          <div class="mini-box">
+            ALLEN RILEY
+          </div>
+
+          <div class="mini-box">
+            REZIDUALVIZUALZ
+          </div>
+
+          <div class="mini-box">
+            jonCates
+          </div>
+
+          <div class="mini-box">
+            NICK BRIZ
+          </div>
+
+          <div class="mini-box">
+            BEE NIX
+          </div>
+
+        </div>
+
+        <p>
+          Discussion Game
+        </p>
+
+      </div>
 
     </div>
 
-    <div class="card">
+    <div class="window">
 
-      <h2>Jamie Fenton Gathering</h2>
+      <div class="window-bar">
+        JAMIE_FENTON.exe
+      </div>
 
-      <p>
-        Chicago Game Space
-      </p>
+      <div class="window-content">
 
-      <p>
-        An evening honoring the work
-        and influence of Jamie Fenton.
-      </p>
+        <h2>Saturday Evening Gathering</h2>
 
-      <p>
-        Invite Only
-      </p>
+        <p>
+          Chicago Game Space
+        </p>
 
-      <p>
-        Ask about attendance.
-      </p>
+        <p>
+          An evening honoring the work and influence
+          of Jamie Fenton.
+        </p>
+
+        <p>
+          Invite Only
+        </p>
+
+        <p>
+          Ask about attendance.
+        </p>
+
+      </div>
 
     </div>
 
@@ -190,29 +235,112 @@
 
 <section id="contact" class="snap-section">
 
-  <div class="content center">
+  <div class="section-inner">
 
-    <h2>Glitch'N'Games 2</h2>
+    <h2>GLITCH'N'GAMES 2</h2>
 
-    <p>
-      Follow for updates.
-    </p>
+    <div class="contact-links">
 
-    <div class="links">
-
-      <a href="#">Instagram</a>
-      <a href="#">Tickets</a>
-      <a href="mailto:youremail@example.com">Email</a>
+      <a href="#">INSTAGRAM</a>
+      <a href="#">TICKETS</a>
+      <a href="mailto:your@email.com">EMAIL</a>
 
     </div>
 
-    <p class="footer-note">
-      Produced by Bee Nix / SutureBlue
-    </p>
+    <div class="footer-text">
+      Chicago • October 2026
+    </div>
 
   </div>
 
 </section>
+
+<script>
+
+const sections =
+[
+  ...document.querySelectorAll('.snap-section')
+];
+
+const upArrow =
+document.getElementById('upArrow');
+
+const downArrow =
+document.getElementById('downArrow');
+
+let currentSection = 0;
+
+function updateArrows()
+{
+  if(currentSection === 0)
+  {
+    upArrow.style.display = "none";
+  }
+  else
+  {
+    upArrow.style.display = "block";
+  }
+
+  if(currentSection === sections.length - 1)
+  {
+    downArrow.style.display = "none";
+  }
+  else
+  {
+    downArrow.style.display = "block";
+  }
+}
+
+const observer =
+new IntersectionObserver(
+(entries)=>
+{
+  entries.forEach(entry =>
+  {
+    if(entry.isIntersecting)
+    {
+      currentSection =
+      sections.indexOf(entry.target);
+
+      updateArrows();
+    }
+  });
+},
+{
+  threshold:0.6
+});
+
+sections.forEach(section =>
+observer.observe(section));
+
+upArrow.addEventListener('click',() =>
+{
+  if(currentSection > 0)
+  {
+    sections[currentSection - 1]
+    .scrollIntoView(
+    {
+      behavior:'smooth'
+    });
+  }
+});
+
+downArrow.addEventListener('click',() =>
+{
+  if(currentSection <
+     sections.length - 1)
+  {
+    sections[currentSection + 1]
+    .scrollIntoView(
+    {
+      behavior:'smooth'
+    });
+  }
+});
+
+updateArrows();
+
+</script>
 
 </body>
 </html>
