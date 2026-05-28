@@ -115,6 +115,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 .modal-window{width:min(500px,90vw);max-height:70vh;background:rgba(3,3,12,.98);border:1px solid rgba(255,229,0,.3);border-radius:3px;display:flex;flex-direction:column;position:relative;}
 .modal-bar{background:#000;padding:.6rem 2.5rem .6rem 1rem;border-bottom:1px solid rgba(255,229,0,.18);color:var(--yellow);font-size:.7rem;letter-spacing:.1em;flex-shrink:0;}
 .modal-body{padding:1.4rem;overflow-y:auto;flex:1;font-family:var(--body);font-size:.95rem;color:rgba(255,255,255,.85);line-height:1.9;}
+.modal-img{width:100%;display:block;border-radius:3px;margin-bottom:1rem;object-fit:cover;max-height:220px;}
 .modal-body p{margin-bottom:.75rem;}
 .modal-body p:last-child{margin-bottom:0;}
 .modal-body a{color:var(--cyan);text-decoration:none;}
@@ -206,7 +207,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
               <div class="arcade-box" onclick="openModal('JACOB ROUFA')"><div class="arcade-title">JACOB ROUFA</div></div>
               <div class="arcade-box" onclick="openModal('SKY GOODMAN')"><div class="arcade-title">SKY GOODMAN</div></div>
               <div class="arcade-box" onclick="openModal('JONCATES')"><div class="arcade-title">jonCates</div></div>
-              <div class="arcade-box" onclick="openModal('ANDY WALLACE')"><div class="arcade-title">ANDY WALLACE</div></div>
               <div class="arcade-box" onclick="openModal('REZIDUALVIZUALZ')"><div class="arcade-title">REZIDUALVIZUALZ</div></div>
             </div>
           </div>
@@ -230,7 +230,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
               <div class="name-item" onclick="openModal('ALLEN RILEY SAT')">Allen Riley</div>
               <div class="name-item" onclick="openModal('JONCATES SAT')">jonCates</div>
               <div class="name-item" onclick="openModal('REZIDUALVIZUALZ SAT')">RezidualVizualz</div>
-              <div class="name-item" onclick="openModal('NICK BRIZ + BEE NIX')">Nick Briz + Bee Nix</div>
+              <div class="name-item" onclick="openModal('POTENTIAL DISCUSSION GAME')">Potential Discussion Game</div>
             </div>
           </div>
 
@@ -330,16 +330,37 @@ const POP = {
 
   'GLITCH GAME COMPETITION': `<p>The Glitch Game Competition takes place on a circuit bent PS2, hosted by the DRUGS&trade; team.</p><p>More information on how to sign up and prizes will be announced closer to the date.</p>`,
 
-  'NICK BRIZ + BEE NIX': `<p>Discussion participants. Bios coming soon.</p>`,
+  'POTENTIAL DISCUSSION GAME': `<p>Round Table Discussion is a definite, whether it will be a game is not yet known.</p>`,
 
   'JAMIE FENTON': `<p>Jamie Fenton is a foundational figure in both early video games and glitch art. As a programmer in the 1970s and 1980s, she worked on the Bally Astrocade home console, created the arcade game <em>Gorf</em>, and later co-created <em>VideoWorks</em>, the software that became <em>Macromedia Director</em>.</p><p>She is especially known for co-creating <em>Digital TV Dinner</em> (1978), one of the earliest and most influential works of glitch art. By intentionally disrupting a Bally Astrocade while it was running, she transformed video game errors and system failures into artistic imagery, helping establish glitches as a legitimate creative medium.</p>`,
 
 };
 
+const IMG = {
+  'ROB SHERIDAN':            'assets/rob_sheridan.png',
+  'ALLEN & ANDY':            'assets/allen_and_andy.png',
+  'ALLEN RILEY SAT':         'assets/allen_riley_saturday.png',
+  'DRUGS':                   'assets/drugs.png',
+  'GORK':                    'assets/gork.png',
+  'JACOB ROUFA':             'assets/jacob_roufa.png',
+  'JONCATES':                'assets/joncates_friday.png',
+  'JONCATES SAT':            'assets/joncates_saturday.png',
+  'REZIDUALVIZUALZ':         'assets/rezidualvizualz_friday.png',
+  'REZIDUALVIZUALZ SAT':     'assets/rezidualvizualz_saturday.png',
+  'SKY GOODMAN':             'assets/sky_goodman.png',
+  'COCOJOEY':                'assets/cocojoey.png',
+  'ROYB0T & SUTUREBLUE':     'assets/royb0t_and_sutureblue.png',
+  'GLITCH GAME COMPETITION': 'assets/glitch_game_competition.png',
+  'POTENTIAL DISCUSSION GAME':'assets/potential_discussion_game.png',
+  'JAMIE FENTON':            'assets/jamie_fenton.png',
+};
+
 function openModal(key){
   const bio = POP[key] || '<p>Info coming soon.</p>';
+  const src = IMG[key];
+  const imgHtml = src ? `<img src="${src}" alt="${key}" class="modal-img">` : '';
   document.getElementById('modal-bar').textContent = key;
-  document.getElementById('modal-body').innerHTML = bio;
+  document.getElementById('modal-body').innerHTML = imgHtml + bio;
   document.getElementById('modal').classList.add('open');
 }
 function closeModal(){document.getElementById('modal').classList.remove('open');}
