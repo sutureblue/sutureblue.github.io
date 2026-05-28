@@ -274,30 +274,38 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
           <div class="card-name cyan" style="font-size:1.1rem;letter-spacing:.14em;">ROB SHERIDAN</div>
         </div>
 
-        <p class="sub-heading">FEATURED ARTISTS</p>
-        <div class="arcade-grid">
-          <div class="arcade-box" onclick="openModal('ALLEN RILEY')"><div class="arcade-title">ALLEN RILEY</div></div>
-          <div class="arcade-box" onclick="openModal('DRUGS\u2122')"><div class="arcade-title">DRUGS&trade;</div></div>
-          <div class="arcade-box" onclick="openModal('GORK')"><div class="arcade-title">GORK</div></div>
-          <div class="arcade-box" onclick="openModal('JACOB ROUFA')"><div class="arcade-title">JACOB ROUFA</div></div>
-          <div class="arcade-box" onclick="openModal('SKY GOODMAN')"><div class="arcade-title">SKY GOODMAN</div></div>
-          <div class="arcade-box" onclick="openModal('JONCATES')"><div class="arcade-title">jonCates</div></div>
-          <div class="arcade-box" onclick="openModal('ANDY WALLACE')"><div class="arcade-title">ANDY WALLACE</div></div>
-          <div class="arcade-box" onclick="openModal('REZIDUALVIZUALZ')"><div class="arcade-title">REZIDUALVIZUALZ</div></div>
-        </div>
+        <div class="split-layout" style="margin-top:.4rem;text-align:left;">
 
-        <p class="sub-heading">LIVE EVENTS</p>
-        <div class="special-grid">
-          <div class="special-card" onclick="openModal('GLITCH GAME COMPETITION')">
-            <div class="card-name">GLITCH GAME COMPETITION</div>
-            <div class="card-sub">on circuit bent PS2</div>
+          <div class="robo-panel">
+            <p class="sub-heading" style="margin-top:0;">FEATURED ARTISTS</p>
+            <div class="arcade-grid" style="grid-template-columns:repeat(2,1fr);">
+              <div class="arcade-box" onclick="openModal('ALLEN RILEY')"><div class="arcade-title">ALLEN RILEY</div></div>
+              <div class="arcade-box" onclick="openModal('DRUGS\u2122')"><div class="arcade-title">DRUGS&trade;</div></div>
+              <div class="arcade-box" onclick="openModal('GORK')"><div class="arcade-title">GORK</div></div>
+              <div class="arcade-box" onclick="openModal('JACOB ROUFA')"><div class="arcade-title">JACOB ROUFA</div></div>
+              <div class="arcade-box" onclick="openModal('SKY GOODMAN')"><div class="arcade-title">SKY GOODMAN</div></div>
+              <div class="arcade-box" onclick="openModal('JONCATES')"><div class="arcade-title">jonCates</div></div>
+              <div class="arcade-box" onclick="openModal('ANDY WALLACE')"><div class="arcade-title">ANDY WALLACE</div></div>
+              <div class="arcade-box" onclick="openModal('REZIDUALVIZUALZ')"><div class="arcade-title">REZIDUALVIZUALZ</div></div>
+            </div>
           </div>
-          <div class="special-card" onclick="openModal('ROYB0T &amp; SUTUREBLUE')">
-            <div class="card-name">ROYB0T &amp; SUTUREBLUE</div>
+
+          <div class="robo-panel">
+            <p class="sub-heading" style="margin-top:0;">LIVE EVENTS</p>
+            <div class="special-grid" style="grid-template-columns:1fr;">
+              <div class="special-card" onclick="openModal('GLITCH GAME COMPETITION')">
+                <div class="card-name">GLITCH GAME COMPETITION</div>
+                <div class="card-sub">on circuit bent PS2</div>
+              </div>
+              <div class="special-card" onclick="openModal('ROYB0T &amp; SUTUREBLUE')">
+                <div class="card-name">ROYB0T &amp; SUTUREBLUE</div>
+              </div>
+              <div class="special-card" onclick="openModal('COCOJOEY')">
+                <div class="card-name">COCOJOEY</div>
+              </div>
+            </div>
           </div>
-          <div class="special-card" onclick="openModal('COCOJOEY')">
-            <div class="card-name">COCOJOEY</div>
-          </div>
+
         </div>
       </div>
     </div>
@@ -323,7 +331,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 
           <div class="robo-panel">
             <p class="panel-title">SATURDAY EVENING</p>
-            <p class="panel-meta">6 &ndash; 10pm &nbsp;&middot;&nbsp; Chicago Game Space</p>
+            <img src="assets/cgs.png" alt="Chicago Game Space" style="max-width:124px;width:100%;height:auto;display:block;margin:.5rem 0 .6rem;">
+            <p class="panel-meta">6 &ndash; 10pm</p>
             <p class="robo-body" style="margin-top:.4rem;">
               A gathering honoring the work and influence of programmer and digital artist,
               <span class="robo-link" onclick="openModal('JAMIE FENTON')">Jamie Fenton</span>.
@@ -342,10 +351,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
       <div class="robo-section" style="max-width:600px;">
         <div class="robo-title">INFO</div>
         <p class="robo-body">
-          Glitch&rsquo;N&rsquo;Games is an exhibition of the shared histories of glitch art and video games.
+          Glitch&rsquo;N&rsquo;Games is a multi-day exploration of the shared histories of glitch art and video games.
         </p>
         <p class="robo-body">
-          This second iteration focuses on physical engagement with systems, bringing together artists, game makers, circuit benders, and theorists through competitions, installations, discussions, performances, and collaborative play.
+          Glitch’N’Games is a multi-day exploration of the shared histories and evolving cultures of glitch art and video games.
+
+This second iteration, taking place across Chicago, focuses on physical engagement with systems, bringing together artists, game makers, circuit benders, and theorists through competition, installations, discussions, performances, and collaborative play.
+
+Chicago is a uniquely fitting home for this project. The city exists at a historic crossroads of both glitch art and arcade culture: from early glitch artists and educators, to Bally, Williams, and Midway, to landmark games such as Mortal Kombat and Defender. It is also home to Jamie Fenton, creator of Digital TV Dinner on the Bally Astrocade, which is widely recognized as the first glitch artwork.
         </p>
         <p class="robo-body">
           You can read more about the first iteration of this exhibition and the overall motivation in my thesis,
@@ -397,7 +410,7 @@ const POP = {
   'REZIDUALVIZUALZ':        'Bio and links coming soon.',
   'COCOJOEY':               'Performance info coming soon.',
   'ROYB0T & SUTUREBLUE':    'Performance info coming soon.',
-  'GLITCH GAME COMPETITION':'Glitch game competition on a circuit bent PS2 console. More info coming soon.',
+  'GLITCH GAME COMPETITION':'Glitch game competition on circuit bent PS2. More info coming soon.',
   'ROB SHERIDAN':           'Bio and info coming soon.',
   'NICK BRIZ + BEE NIX':    'Bios coming soon.',
   'JAMIE FENTON':           'Jamie Fenton is a foundational figure in both early video games and glitch art. As a programmer in the 1970s and 1980s, she worked on the Bally Astrocade home console, created the arcade game <em>Gorf</em>, and later co-created <em>VideoWorks</em>, the software that became <em>Macromedia Director</em>. She is especially known for co-creating <em>Digital TV Dinner</em> (1978), one of the earliest and most influential works of glitch art. By intentionally disrupting a Bally Astrocade while it was running, she transformed video game errors and system failures into artistic imagery, helping establish glitches as a legitimate creative medium.',
