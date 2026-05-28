@@ -150,38 +150,58 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 .sub-heading{color:var(--yellow);font-size:.68rem;letter-spacing:.22em;margin:1.2rem 0 .7rem;opacity:.8;}
 
 /* ── ARTIST GRID ── */
-.arcade-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.65rem;margin:1rem 0;}
+.arcade-grid{display:grid;gap:.65rem;margin:.5rem 0;}
 .arcade-box{
-  min-height:80px;display:flex;flex-direction:column;
+  min-height:70px;display:flex;flex-direction:column;
   justify-content:center;align-items:center;text-align:center;
   border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.02);
-  cursor:pointer;transition:.2s;padding:.75rem;border-radius:3px;
+  cursor:pointer;transition:.2s;padding:.65rem;border-radius:3px;
+  overflow:hidden;
 }
 .arcade-box:hover{transform:translateY(-2px);border-color:var(--yellow);box-shadow:0 0 14px rgba(255,229,0,.18);}
-.arcade-title{font-size:.72rem;letter-spacing:.1em;}
+.arcade-title{font-size:.68rem;letter-spacing:.08em;word-break:break-word;}
 
 /* ── SPECIAL EVENT CARDS ── */
-.special-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.65rem;margin-top:.7rem;}
+.special-grid{display:grid;grid-template-columns:1fr;gap:.65rem;margin-top:.5rem;}
 .special-card{
   padding:.9rem 1rem;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.02);
   cursor:pointer;transition:.2s;border-radius:3px;text-align:center;
-  display:flex;flex-direction:column;justify-content:center;min-height:80px;
+  display:flex;flex-direction:column;justify-content:center;min-height:70px;
 }
 .special-card:hover{border-color:var(--purple);box-shadow:0 0 14px rgba(170,68,255,.2);transform:translateY(-2px);}
 .special-card.is-cyan{border-color:rgba(23,162,184,.3);background:rgba(23,162,184,.03);}
 .special-card.is-cyan:hover{border-color:var(--cyan);box-shadow:0 0 14px rgba(23,162,184,.2);}
-.card-name{font-size:.82rem;letter-spacing:.1em;color:#fff;}
+.card-name{font-size:.8rem;letter-spacing:.1em;color:#fff;}
 .card-name.cyan{color:var(--cyan);text-shadow:0 0 10px rgba(23,162,184,.4);}
 .card-sub{font-size:.6rem;color:var(--muted);margin-top:.3rem;letter-spacing:.06em;}
 
-/* ── SATURDAY PANELS ── */
+/* ── SATURDAY SPLIT (flex, wraps cleanly) ── */
 .split-layout{display:flex;gap:1rem;flex-wrap:wrap;width:100%;}
 .robo-panel{
   flex:1;min-width:230px;padding:1.1rem;
   border:1px solid rgba(255,255,255,.09);
   background:rgba(255,255,255,.018);border-radius:3px;
-  display:flex;flex-direction:column;
+  display:flex;flex-direction:column;overflow:hidden;
 }
+
+/* ── FRIDAY SPLIT (CSS grid — no overlap possible) ── */
+.friday-split{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:1rem;
+  width:100%;
+  margin-top:.4rem;
+  text-align:left;
+}
+.friday-panel{
+  padding:1.1rem;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,.018);border-radius:3px;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  min-width:0;
+}
+
 .panel-title{color:var(--yellow);font-size:.75rem;letter-spacing:.15em;margin-bottom:.6rem;}
 .panel-meta{color:rgba(255,255,255,.75);font-size:.72rem;margin-bottom:.85rem;line-height:2.2;letter-spacing:.04em;}
 .panel-note{color:var(--green);font-size:.65rem;letter-spacing:.08em;margin-bottom:.65rem;}
@@ -192,17 +212,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 }
 .name-item:hover{border-color:var(--yellow);color:var(--yellow);}
 
-/* ── INFO/CONTACT ── */
+/* ── INFO ── */
 .info-email{
   display:inline-block;color:var(--cyan);font-size:.9rem;
-  letter-spacing:.06em;text-decoration:none;margin:.4rem 0 1rem;transition:.2s;
-  font-family:var(--body);
+  letter-spacing:.06em;text-decoration:none;margin:.4rem 0 1rem;transition:.2s;font-family:var(--body);
 }
 .info-email:hover{color:#fff;text-shadow:0 0 8px var(--cyan);}
-.thanks-note{
-  font-family:var(--body);font-size:.9rem;
-  color:rgba(255,255,255,.35);margin-top:1.2rem;font-style:italic;line-height:1.8;
-}
+.thanks-note{font-family:var(--body);font-size:.9rem;color:rgba(255,255,255,.35);margin-top:1.2rem;font-style:italic;line-height:1.8;}
 
 /* ── MODAL ── */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:500;align-items:center;justify-content:center;}
@@ -212,7 +228,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
   border:1px solid rgba(255,229,0,.3);border-radius:3px;display:flex;flex-direction:column;position:relative;
 }
 .modal-bar{background:#000;padding:.6rem 2.5rem .6rem 1rem;border-bottom:1px solid rgba(255,229,0,.18);color:var(--yellow);font-size:.66rem;letter-spacing:.1em;flex-shrink:0;}
-.modal-body{padding:1.4rem;overflow-y:auto;flex:1;font-family:var(--body);font-size:.95rem;color:rgba(255,255,255,.85);line-height:1.9;font-weight:400;}
+.modal-body{padding:1.4rem;overflow-y:auto;flex:1;font-family:var(--body);font-size:.95rem;color:rgba(255,255,255,.85);line-height:1.9;}
 .modal-body::-webkit-scrollbar{width:3px;}
 .modal-body::-webkit-scrollbar-thumb{background:rgba(255,229,0,.2);}
 .modal-body em{font-style:italic;color:rgba(255,255,255,.95);}
@@ -222,9 +238,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 .section::-webkit-scrollbar{width:2px;}
 .section::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);}
 
-@media(max-width:580px){
+@media(max-width:540px){
   #top-nav a{font-size:.52rem;letter-spacing:.1em;}
-  .arcade-grid{grid-template-columns:repeat(2,1fr);}
+  .friday-split{grid-template-columns:1fr;}
   .split-layout{flex-direction:column;}
 }
 
@@ -264,21 +280,20 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
       <div class="robo-section" style="text-align:center;">
         <div class="robo-title">FRIDAY EXHIBITION</div>
         <img src="assets/LoganLogo.png" alt="Logan Arcade" style="max-width:180px;width:50%;display:block;margin:.2rem auto .7rem;">
-        <p class="event-meta">
-          October 2, 2026 &nbsp;&middot;&nbsp; 6:00 PM &ndash; 10:00 PM
-        </p>
-        <a href="#TICKET_LINK_HERE" class="btn btn-yellow" style="margin-bottom:1.4rem;display:inline-block;">GET EARLY BIRD TICKETS</a>
+        <p class="event-meta">October 2, 2026 &nbsp;&middot;&nbsp; 6:00 PM &ndash; 10:00 PM</p>
+        <a href="#TICKET_LINK_HERE" class="btn btn-yellow" style="margin-bottom:1.2rem;display:inline-block;">GET EARLY BIRD TICKETS</a>
 
         <p class="sub-heading">SPECIAL APPEARANCE</p>
-        <div class="special-card is-cyan" onclick="openModal('ROB SHERIDAN')" style="padding:1.6rem;width:100%;margin-bottom:.4rem;">
+        <div class="special-card is-cyan" onclick="openModal('ROB SHERIDAN')" style="padding:1.6rem;width:100%;margin-bottom:.6rem;">
           <div class="card-name cyan" style="font-size:1.1rem;letter-spacing:.14em;">ROB SHERIDAN</div>
         </div>
 
-        <div class="split-layout" style="margin-top:.4rem;text-align:left;">
+        <!-- CSS grid prevents any overlap between the two panels -->
+        <div class="friday-split">
 
-          <div class="robo-panel">
+          <div class="friday-panel">
             <p class="sub-heading" style="margin-top:0;">FEATURED ARTISTS</p>
-            <div class="arcade-grid" style="grid-template-columns:repeat(2,1fr);">
+            <div class="arcade-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));">
               <div class="arcade-box" onclick="openModal('ALLEN RILEY')"><div class="arcade-title">ALLEN RILEY</div></div>
               <div class="arcade-box" onclick="openModal('DRUGS\u2122')"><div class="arcade-title">DRUGS&trade;</div></div>
               <div class="arcade-box" onclick="openModal('GORK')"><div class="arcade-title">GORK</div></div>
@@ -290,9 +305,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
             </div>
           </div>
 
-          <div class="robo-panel">
+          <div class="friday-panel">
             <p class="sub-heading" style="margin-top:0;">LIVE EVENTS</p>
-            <div class="special-grid" style="grid-template-columns:1fr;">
+            <div class="special-grid">
               <div class="special-card" onclick="openModal('GLITCH GAME COMPETITION')">
                 <div class="card-name">GLITCH GAME COMPETITION</div>
                 <div class="card-sub">on circuit bent PS2</div>
@@ -338,7 +353,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
               <span class="robo-link" onclick="openModal('JAMIE FENTON')">Jamie Fenton</span>.
             </p>
             <p class="panel-note" style="margin-top:auto;padding-top:.8rem;">
-              Invite Only &mdash; Ask About Attendance
+              Community-focused Programming
             </p>
           </div>
 
@@ -346,19 +361,18 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
       </div>
     </div>
 
-    <!-- INFO (merged with contact) -->
+    <!-- INFO -->
     <div class="section" id="about">
       <div class="robo-section" style="max-width:600px;">
         <div class="robo-title">INFO</div>
         <p class="robo-body">
-          Glitch&rsquo;N&rsquo;Games is a multi-day exploration of the shared histories of glitch art and video games.
+          Glitch&rsquo;N&rsquo;Games is a multi-day exploration of the shared histories and evolving cultures of glitch art and video games.
         </p>
         <p class="robo-body">
-          Glitch’N’Games is a multi-day exploration of the shared histories and evolving cultures of glitch art and video games.
-
-This second iteration, taking place across Chicago, focuses on physical engagement with systems, bringing together artists, game makers, circuit benders, and theorists through competition, installations, discussions, performances, and collaborative play.
-
-Chicago is a uniquely fitting home for this project. The city exists at a historic crossroads of both glitch art and arcade culture: from early glitch artists and educators, to Bally, Williams, and Midway, to landmark games such as Mortal Kombat and Defender. It is also home to Jamie Fenton, creator of Digital TV Dinner on the Bally Astrocade, which is widely recognized as the first glitch artwork.
+          This second iteration, taking place across Chicago, focuses on physical engagement with systems, bringing together artists, game makers, circuit benders, and theorists through competition, installations, discussions, performances, and collaborative play.
+        </p>
+        <p class="robo-body">
+          Chicago is a uniquely fitting home for this project. The city exists at a historic crossroads of both glitch art and arcade culture: from early glitch artists and educators, to Bally, Williams, and Midway, to landmark games such as Mortal Kombat and Defender. It is also home to Jamie Fenton, creator of Digital TV Dinner on the Bally Astrocade, which is widely recognized as the first glitch artwork.
         </p>
         <p class="robo-body">
           You can read more about the first iteration of this exhibition and the overall motivation in my thesis,
@@ -398,7 +412,6 @@ Chicago is a uniquely fitting home for this project. The city exists at a histor
 
 <script>
 
-/* ── POPUP CONTENT ── fill in bios below ── */
 const POP = {
   'ALLEN RILEY':            'Bio and links coming soon.',
   'DRUGS\u2122':            'Bio and links coming soon.',
@@ -416,25 +429,21 @@ const POP = {
   'JAMIE FENTON':           'Jamie Fenton is a foundational figure in both early video games and glitch art. As a programmer in the 1970s and 1980s, she worked on the Bally Astrocade home console, created the arcade game <em>Gorf</em>, and later co-created <em>VideoWorks</em>, the software that became <em>Macromedia Director</em>. She is especially known for co-creating <em>Digital TV Dinner</em> (1978), one of the earliest and most influential works of glitch art. By intentionally disrupting a Bally Astrocade while it was running, she transformed video game errors and system failures into artistic imagery, helping establish glitches as a legitimate creative medium.',
 };
 
-function openModal(key) {
-  const bio = POP[key] || 'Info coming soon.';
-  document.getElementById('modal-bar').textContent = key;
-  document.getElementById('modal-body').innerHTML = '<p>' + bio + '</p>';
+function openModal(key){
+  const bio=POP[key]||'Info coming soon.';
+  document.getElementById('modal-bar').textContent=key;
+  document.getElementById('modal-body').innerHTML='<p>'+bio+'</p>';
   document.getElementById('modal').classList.add('open');
 }
-function closeModal() { document.getElementById('modal').classList.remove('open'); }
-function handleModalClick(e) { if (e.target.id === 'modal') closeModal(); }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+function handleModalClick(e){if(e.target.id==='modal')closeModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
 /* ── DOT BORDER ── */
-const canvas = document.getElementById('border');
-const ctx    = canvas.getContext('2d');
-let dots = [], dotR = 12, N = 0;
-const pal = [
-  [255,30,30],[255,100,0],[255,200,0],[120,255,0],
-  [0,255,80],[0,255,220],[0,140,255],[60,0,255],
-  [180,0,255],[255,0,160]
-];
+const canvas=document.getElementById('border');
+const ctx=canvas.getContext('2d');
+let dots=[],dotR=12,N=0;
+const pal=[[255,30,30],[255,100,0],[255,200,0],[120,255,0],[0,255,80],[0,255,220],[0,140,255],[60,0,255],[180,0,255],[255,0,160]];
 function getColor(i,t){
   const o=((i/N)+t*0.35)%1,tp=o*pal.length,pi=Math.floor(tp)%pal.length,f=tp-Math.floor(tp);
   const a=pal[pi],b=pal[(pi+1)%pal.length];
@@ -477,7 +486,7 @@ buildDots();
 requestAnimationFrame(frame);
 let rT;window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(buildDots,120);});
 
-/* ── SECTION NAVIGATION ── */
+/* ── NAVIGATION ── */
 const sections=[...document.querySelectorAll('.section')];
 const navLinks=[...document.querySelectorAll('#top-nav a')];
 const pipDots=[...document.querySelectorAll('.pip-dot')];
