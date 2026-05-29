@@ -166,6 +166,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
         <p class="hero-date">October 2&ndash;3, 2026<br>Chicago</p>
         <button class="btn btn-cyan" onclick="goTo(1)">CONTINUE</button>
         <p style="margin-top:.9rem;font-size:.78rem;color:rgba(255,255,255,.45);font-family:var(--body);letter-spacing:.04em;">Also: <span class="robo-link" onclick="goTo(4)" style="font-size:.82rem;">Video Sync</span> in Minneapolis, Sept 26&ndash;27 &#x2197;</p>
+        <p style="margin-top:.4rem;font-size:.78rem;color:rgba(255,255,255,.45);font-family:var(--body);letter-spacing:.04em;">Also: <span class="robo-link" onclick="goTo(5)" style="font-size:.82rem;">/'FU:BAR/</span> in Croatia, Oct 3 &#x2197;</p>
       </div>
     </div>
 
@@ -306,7 +307,27 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
       </div>
     </div>
 
-  </div>
+
+    <!-- FUBAR -->
+    <div class="section" id="fubar">
+      <div class="robo-section" style="max-width:600px;">
+        <div class="robo-title">/'FU:BAR/</div>
+        <p class="robo-body">
+          Also starting this weekend, on October 3rd, is /'FU:BAR/'s week-long IRL festival in Croatia.
+        </p>
+        <p class="robo-body">
+          FUBAR is the longest running digital arts festival dedicated to unstable media, having over a decade of events, workshops, presentations, and gatherings that magnetize together artists, hackers, and educators from all over the world, both online and offline. This year they&rsquo;re focused on the topic of COLLECTIVISM, and are releasing their archive!
+        </p>
+        <p class="robo-body">
+          For more information, check out their website: <a href="https://fubar.space/" target="_blank" rel="noopener">fubar.space &#x2192;</a>
+        </p>
+        <p class="robo-body">
+          Recently, Jason and Debora Bernagozzi of Signal Culture visited to talk about the inner workings and importance of modularity as both technical and community concepts: <a href="https://fubar.space/2026/signal-culture-talk/" target="_blank" rel="noopener">Signal Culture Talk &#x2192;</a>
+        </p>
+      </div>
+    </div>
+
+    </div>
 
   <div id="bottom-nav">
     <button class="nav-arrow" id="left-arrow">&#9668;</button>
@@ -316,6 +337,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
       <span class="pip-dot" data-idx="2"></span>
       <span class="pip-dot" data-idx="3"></span>
       <span class="pip-dot" data-idx="4"></span>
+      <span class="pip-dot" data-idx="5"></span>
     </div>
     <button class="nav-arrow" id="right-arrow">&#9658;</button>
   </div>
@@ -412,10 +434,11 @@ const ctx=canvas.getContext('2d');
 let dots=[],dotR=12,N=0;
 const pal=[[255,30,30],[255,100,0],[255,200,0],[120,255,0],[0,255,80],[0,255,220],[0,140,255],[60,0,255],[180,0,255],[255,0,160]];
 const palVS=[[255,229,0],[255,200,30],[230,110,70],[185,42,95],[150,28,78],[185,42,95],[230,110,70],[255,200,30]];
+const palFUBAR=[[195,135,255],[220,105,255],[255,90,195],[255,75,155],[255,90,195],[220,105,255]];
 function getColor(i,t,p){p=p||pal;const o=((i/N)+t*0.35)%1,tp=o*p.length,pi=Math.floor(tp)%p.length,f=tp-Math.floor(tp);const a=p[pi],b=p[(pi+1)%p.length];return[Math.round(a[0]+(b[0]-a[0])*f),Math.round(a[1]+(b[1]-a[1])*f),Math.round(a[2]+(b[2]-a[2])*f)];}
 function buildDots(){const W=canvas.width=window.innerWidth,H=canvas.height=window.innerHeight;dotR=Math.max(7,Math.min(14,Math.round(Math.min(W,H)/52)));const gap=Math.max(4,Math.round(dotR*0.45)),step=dotR*2+gap,px=dotR+4,py=dotR+4,iW=W-2*px,iH=H-2*py;N=Math.floor(2*(iW+iH)/step);const as=2*(iW+iH)/N;dots=[];for(let i=0;i<N;i++){const d=i*as;let x,y;if(d<iW){x=px+d;y=py;}else if(d<iW+iH){x=px+iW;y=py+(d-iW);}else if(d<2*iW+iH){x=px+iW-(d-iW-iH);y=py+iH;}else{x=px;y=py+iH-(d-2*iW-iH);}dots.push([x,y]);}const inset=(dotR+4)*2,s=document.getElementById('screen');s.style.top=s.style.left=inset+'px';s.style.right=s.style.bottom=inset+'px';}
 let t0=null;
-function frame(ts){if(!t0)t0=ts;const t=(ts-t0)/1000;ctx.fillStyle='#000';ctx.fillRect(0,0,canvas.width,canvas.height);const cp=current===4?palVS:pal;
+function frame(ts){if(!t0)t0=ts;const t=(ts-t0)/1000;ctx.fillStyle='#000';ctx.fillRect(0,0,canvas.width,canvas.height);const cp=current===4?palVS:current===5?palFUBAR:pal;
 for(let i=0;i<dots.length;i++){const[x,y]=dots[i],[r,g,b]=getColor(i,t,cp),col=`rgb(${r},${g},${b})`;ctx.shadowColor=col;ctx.shadowBlur=7;ctx.fillStyle=col;ctx.beginPath();ctx.arc(x,y,dotR,0,Math.PI*2);ctx.fill();}ctx.shadowBlur=0;requestAnimationFrame(frame);}
 buildDots();requestAnimationFrame(frame);
 let rT;window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(buildDots,120);});
