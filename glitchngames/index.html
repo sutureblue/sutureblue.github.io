@@ -90,6 +90,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 .card-name{font-size:.8rem;letter-spacing:.1em;color:#fff;}
 .card-name.cyan{color:var(--cyan);text-shadow:0 0 10px rgba(23,162,184,.4);}
 .card-sub{font-size:.6rem;color:var(--muted);margin-top:.3rem;letter-spacing:.06em;}
+.card-time{font-size:.6rem;color:rgba(255,255,255,.55);letter-spacing:.06em;margin-bottom:.25rem;font-family:var(--font);}
 
 .split-layout{display:flex;gap:1rem;flex-wrap:wrap;width:100%;}
 .robo-panel{flex:1;min-width:230px;padding:1.1rem;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.018);border-radius:3px;display:flex;flex-direction:column;overflow:hidden;}
@@ -149,7 +150,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
     <a data-idx="1">FRIDAY</a>
     <a data-idx="2">SATURDAY</a>
     <a data-idx="3">INFO</a>
-    <a data-idx="4">VIDEO SYNC</a>
   </nav>
 
   <span id="version">V2.0</span>
@@ -161,10 +161,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
       <div class="hero-inner">
         <h1>GLITCH'N'GAMES</h1>
         <p class="hero-subtitle">A multi-day exploration of glitch art, video games, experimental media, and playable systems.</p>
-        <p class="hero-subtitle" style="margin-bottom:1.2rem;">Featuring exhibitions, performances, talks, competition, and installations across Chicago.</p>
+        <p class="hero-subtitle" style="margin-bottom:1.2rem;">Featuring exhibitions, performances, talks, competitions, and installations across Chicago.</p>
         <a href="#TICKET_LINK_HERE" class="btn-pill" style="margin-bottom:1.2rem;display:inline-block;">GET EARLY BIRD TICKETS</a>
         <p class="hero-date">October 2&ndash;3, 2026<br>Chicago</p>
         <button class="btn btn-cyan" onclick="goTo(1)">CONTINUE</button>
+        <p style="margin-top:.9rem;font-size:.6rem;color:rgba(255,255,255,.28);font-family:var(--body);letter-spacing:.04em;">Also: <span class="robo-link" onclick="goTo(4)" style="font-size:.6rem;">Video Sync</span> in Minneapolis, Sept 26&ndash;27 &#x2197;</p>
       </div>
     </div>
 
@@ -177,48 +178,43 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
         <p class="event-meta">October 2, 2026 &nbsp;&middot;&nbsp; 6:00 PM &ndash; 10:00 PM</p>
         <a href="#TICKET_LINK_HERE" class="btn btn-yellow" style="margin-bottom:1.2rem;display:inline-block;">GET EARLY BIRD TICKETS</a>
 
-        <p class="sub-heading">SPECIAL APPEARANCE</p>
-        <div class="special-card is-cyan" onclick="openModal('ROB SHERIDAN')" style="padding:1.6rem;width:100%;margin-bottom:.6rem;">
-          <div class="card-name cyan" style="font-size:1.1rem;letter-spacing:.14em;">ROB SHERIDAN</div>
+        <p class="sub-heading">FEATURED ARTISTS</p>
+        <div class="arcade-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));">
+          <div class="arcade-box" onclick="openModal('ALLEN & ANDY')"><div class="arcade-title">ALLEN RILEY &amp;<br>ANDY WALLACE</div></div>
+          <div class="arcade-box" onclick="openModal('DRUGS')"><div class="arcade-title">DRUGS&trade;</div></div>
+          <div class="arcade-box" onclick="openModal('GORK')"><div class="arcade-title">GORK</div></div>
+          <div class="arcade-box" onclick="openModal('JACOB ROUFA')"><div class="arcade-title">JACOB ROUFA</div></div>
+          <div class="arcade-box" onclick="openModal('SKY GOODMAN')"><div class="arcade-title">SKY GOODMAN</div></div>
+          <div class="arcade-box" onclick="openModal('JONCATES')"><div class="arcade-title">jonCates</div></div>
+          <div class="arcade-box" onclick="openModal('JAMES CONNOLLY')"><div class="arcade-title">JAMES CONNOLLY</div></div>
+          <div class="arcade-box" onclick="openModal('REZIDUALVIZUALZ')"><div class="arcade-title">REZIDUALVIZUALZ</div></div>
         </div>
 
-        <div class="friday-split">
-
-          <div class="friday-panel">
-            <p class="sub-heading" style="margin-top:0;">LIVE EVENTS</p>
-            <div class="special-grid">
-              <div class="special-card" onclick="openModal('GLITCH GAME COMPETITION')">
-                <div class="card-name">GLITCH GAME COMPETITION</div>
-                <div class="card-sub">on circuit bent PS2</div>
-              </div>
-              <div class="special-card" onclick="openModal('ROYB0T & SUTUREBLUE')">
-                <div class="card-name">ROYB0T &amp; SUTUREBLUE</div>
-              </div>
-              <div class="special-card" onclick="openModal('COCOJOEY')">
-                <div class="card-name">COCOJOEY</div>
-              </div>
-            </div>
+        <p class="sub-heading">LIVE EVENTS</p>
+        <div class="special-grid">
+          <div class="special-card" onclick="openModal('GLITCH GAME COMPETITION')">
+            <div class="card-time">&#x1F7E0; 7:00 PM</div>
+            <div class="card-name">GLITCH GAME COMPETITION</div>
+            <div class="card-sub">on circuit bent PS2 &nbsp;&middot;&nbsp; in-person sign-up from 6pm</div>
           </div>
-
-          <div class="friday-panel">
-            <p class="sub-heading" style="margin-top:0;">FEATURED ARTISTS</p>
-            <div class="arcade-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));">
-              <div class="arcade-box" onclick="openModal('ALLEN & ANDY')"><div class="arcade-title">ALLEN RILEY &amp;<br>ANDY WALLACE</div></div>
-              <div class="arcade-box" onclick="openModal('DRUGS')"><div class="arcade-title">DRUGS&trade;</div></div>
-              <div class="arcade-box" onclick="openModal('GORK')"><div class="arcade-title">GORK</div></div>
-              <div class="arcade-box" onclick="openModal('JACOB ROUFA')"><div class="arcade-title">JACOB ROUFA</div></div>
-              <div class="arcade-box" onclick="openModal('SKY GOODMAN')"><div class="arcade-title">SKY GOODMAN</div></div>
-              <div class="arcade-box" onclick="openModal('JONCATES')"><div class="arcade-title">jonCates</div></div>
-              <div class="arcade-box" onclick="openModal('JAMES CONNOLLY')"><div class="arcade-title">JAMES CONNOLLY</div></div>
-              <div class="arcade-box" onclick="openModal('REZIDUALVIZUALZ')"><div class="arcade-title">REZIDUALVIZUALZ</div></div>
-            </div>
+          <div class="special-card" onclick="openModal('ROYB0T & SUTUREBLUE')">
+            <div class="card-time">&#x1F7E3; 8:30 PM</div>
+            <div class="card-name">ROYB0T &amp; SUTUREBLUE</div>
           </div>
+          <div class="special-card" onclick="openModal('COCOJOEY')">
+            <div class="card-time">&#x1F534; 9:15 PM</div>
+            <div class="card-name">COCOJOEY</div>
+          </div>
+        </div>
 
+        <p class="sub-heading">SPECIAL APPEARANCE</p>
+        <div class="special-card is-cyan" onclick="openModal('ROB SHERIDAN')" style="padding:1.6rem;width:100%;">
+          <div class="card-name cyan" style="font-size:1.1rem;letter-spacing:.14em;">ROB SHERIDAN</div>
         </div>
       </div>
     </div>
 
-    <!-- SATURDAY -->
+        <!-- SATURDAY -->
     <div class="section" id="saturday">
       <div class="robo-section" style="max-width:860px;">
         <div class="robo-title">SATURDAY</div>
@@ -268,7 +264,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
           Chicago is a uniquely fitting home for this project. The city exists at a historic crossroads of both glitch art and arcade culture: from early glitch artists and educators, to Bally, Williams, and Midway, to landmark games such as Mortal Kombat and Defender. It is also home to Jamie Fenton, creator of Digital TV Dinner on the Bally Astrocade, which is widely recognized as the first glitch artwork.
         </p>
         <p class="robo-body">
-          You can read more about the first iteration of this exhibition and the overall motivation in the thesis,
+          You can read more about the first iteration of this exhibition and the overall motivation in my thesis,
           <a href="https://archive.org/details/glitch_play" target="_blank"><em>Glitch Play</em></a>.
           Until a gallery is made for this first event, <span class="robo-link" onclick="openModal('GNG1 ARTISTS')">here is a list</span> of all of the artists that participated.
         </p>
@@ -334,7 +330,7 @@ const POP = {
 
   'ALLEN RILEY SAT': `<p>Artist, educator, and curator Allen Riley specializes in socially interactive video, media art, and learning.</p><p>On Saturday, Allen will discuss his dissertation, <em>The Imagination Synthesizer</em>, through a presentation exploring the history and future of video as a social medium.</p><p><a href="https://allen-riley.com/" target="_blank" rel="noopener">allen-riley.com &#x2192;</a></p>`,
 
-  'DRUGS': `<p>Turning retro consoles into visual synthesizers, the DRUGS&trade; team is all about bringing people together over impressive circuit bending feats and video games. They&rsquo;ll be doing a brand new console drop for this event, showcasing multiple installations of their builds, and Colston Byrd will be leading the glitch game tournament!</p><p><a href="https://www.instagram.com/drugstm_" target="_blank" rel="noopener">@drugstm_ on Instagram &#x2192;</a></p>`,
+  'DRUGS': `<p>Turning retro consoles into visual synthesizers, the DRUGS&trade; team is all about bringing people together over impressive circuit bending feats and video games. They&rsquo;ll be doing a brand new console drop for this event, showcasing multiple installations of their builds, and Colston Byrd will be hosting the glitch game tournament!</p><p><a href="https://www.instagram.com/drugstm_" target="_blank" rel="noopener">@drugstm_ on Instagram &#x2192;</a></p>`,
 
   'GORK': `<p>Mixed media artist Gork primarily creates digital collage, video art, animations, and circuit bent cameras. For GLITCH'N'GAMES, Gork will be doing an interactive installation and showcasing their bent PS1.</p><p><a href="https://www.gorkworx.com/" target="_blank" rel="noopener">gorkworx.com &#x2192;</a></p>`,
 
@@ -405,10 +401,12 @@ const canvas=document.getElementById('border');
 const ctx=canvas.getContext('2d');
 let dots=[],dotR=12,N=0;
 const pal=[[255,30,30],[255,100,0],[255,200,0],[120,255,0],[0,255,80],[0,255,220],[0,140,255],[60,0,255],[180,0,255],[255,0,160]];
-function getColor(i,t){const o=((i/N)+t*0.35)%1,tp=o*pal.length,pi=Math.floor(tp)%pal.length,f=tp-Math.floor(tp);const a=pal[pi],b=pal[(pi+1)%pal.length];return[Math.round(a[0]+(b[0]-a[0])*f),Math.round(a[1]+(b[1]-a[1])*f),Math.round(a[2]+(b[2]-a[2])*f)];}
+const palVS=[[255,229,0],[255,200,30],[230,110,70],[185,42,95],[150,28,78],[185,42,95],[230,110,70],[255,200,30]];
+function getColor(i,t,p){p=p||pal;const o=((i/N)+t*0.35)%1,tp=o*p.length,pi=Math.floor(tp)%p.length,f=tp-Math.floor(tp);const a=p[pi],b=p[(pi+1)%p.length];return[Math.round(a[0]+(b[0]-a[0])*f),Math.round(a[1]+(b[1]-a[1])*f),Math.round(a[2]+(b[2]-a[2])*f)];}
 function buildDots(){const W=canvas.width=window.innerWidth,H=canvas.height=window.innerHeight;dotR=Math.max(7,Math.min(14,Math.round(Math.min(W,H)/52)));const gap=Math.max(4,Math.round(dotR*0.45)),step=dotR*2+gap,px=dotR+4,py=dotR+4,iW=W-2*px,iH=H-2*py;N=Math.floor(2*(iW+iH)/step);const as=2*(iW+iH)/N;dots=[];for(let i=0;i<N;i++){const d=i*as;let x,y;if(d<iW){x=px+d;y=py;}else if(d<iW+iH){x=px+iW;y=py+(d-iW);}else if(d<2*iW+iH){x=px+iW-(d-iW-iH);y=py+iH;}else{x=px;y=py+iH-(d-2*iW-iH);}dots.push([x,y]);}const inset=(dotR+4)*2,s=document.getElementById('screen');s.style.top=s.style.left=inset+'px';s.style.right=s.style.bottom=inset+'px';}
 let t0=null;
-function frame(ts){if(!t0)t0=ts;const t=(ts-t0)/1000;ctx.fillStyle='#000';ctx.fillRect(0,0,canvas.width,canvas.height);for(let i=0;i<dots.length;i++){const[x,y]=dots[i],[r,g,b]=getColor(i,t),col=`rgb(${r},${g},${b})`;ctx.shadowColor=col;ctx.shadowBlur=7;ctx.fillStyle=col;ctx.beginPath();ctx.arc(x,y,dotR,0,Math.PI*2);ctx.fill();}ctx.shadowBlur=0;requestAnimationFrame(frame);}
+function frame(ts){if(!t0)t0=ts;const t=(ts-t0)/1000;ctx.fillStyle='#000';ctx.fillRect(0,0,canvas.width,canvas.height);const cp=current===4?palVS:pal;
+for(let i=0;i<dots.length;i++){const[x,y]=dots[i],[r,g,b]=getColor(i,t,cp),col=`rgb(${r},${g},${b})`;ctx.shadowColor=col;ctx.shadowBlur=7;ctx.fillStyle=col;ctx.beginPath();ctx.arc(x,y,dotR,0,Math.PI*2);ctx.fill();}ctx.shadowBlur=0;requestAnimationFrame(frame);}
 buildDots();requestAnimationFrame(frame);
 let rT;window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(buildDots,120);});
 
@@ -424,11 +422,11 @@ function goTo(idx,force){
   if(idx<0||idx>=sections.length)return;
   if(idx===current&&!force)return;
   sections[current].classList.remove('active');
-  navLinks[current].classList.remove('active');
+  if(navLinks[current])navLinks[current].classList.remove('active');
   pipDots[current].classList.remove('active');
   current=idx;
   sections[current].classList.add('active');
-  navLinks[current].classList.add('active');
+  if(navLinks[current])navLinks[current].classList.add('active');
   pipDots[current].classList.add('active');
   sections[current].scrollTop=0;
   leftBtn.disabled=current===0;
