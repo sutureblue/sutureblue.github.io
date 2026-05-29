@@ -81,6 +81,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 .arcade-box{min-height:70px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.02);cursor:pointer;transition:.2s;padding:.65rem;border-radius:3px;overflow:hidden;}
 .arcade-box:hover{transform:translateY(-2px);border-color:var(--yellow);box-shadow:0 0 14px rgba(255,229,0,.18);}
 .arcade-title{font-size:.68rem;letter-spacing:.08em;word-break:break-word;}
+.arcade-desc{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:.3rem;line-height:1.4;font-family:var(--body);font-weight:400;}
 
 .special-grid{display:grid;grid-template-columns:1fr;gap:.65rem;margin-top:.5rem;}
 .special-card{padding:.9rem 1rem;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.02);cursor:pointer;transition:.2s;border-radius:3px;text-align:center;display:flex;flex-direction:column;justify-content:center;min-height:70px;}
@@ -127,6 +128,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 .modal-close{position:absolute;top:.4rem;right:.7rem;background:none;border:none;color:rgba(255,255,255,.45);cursor:pointer;font-size:.85rem;font-family:var(--font);transition:.2s;z-index:10;}
 .modal-close:hover{color:#fff;}
 
+#videosync .robo-body{font-size:1.8rem;color:var(--yellow);line-height:1.6;}
+#videosync .robo-body a{color:var(--cyan);}
 .section::-webkit-scrollbar{width:2px;}
 .section::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);}
 
@@ -160,8 +163,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
     <div class="section" id="hero">
       <div class="hero-inner">
         <h1>GLITCH'N'GAMES</h1>
-        <p class="hero-subtitle">A multi-day exploration of glitch art, video games, experimental media, and playable systems.</p>
-        <p class="hero-subtitle" style="margin-bottom:1.2rem;">Featuring exhibitions, performances, talks, competitions, and installations across Chicago.</p>
+        <p class="hero-subtitle" style="margin-bottom:1.2rem;">A multi-day exploration of glitch art and video games &mdash; exhibitions, performances, talks, competition, and installations across Chicago.</p>
         <a href="#TICKET_LINK_HERE" class="btn-pill" style="margin-bottom:1.2rem;display:inline-block;">GET EARLY BIRD TICKETS</a>
         <p class="hero-date">October 2&ndash;3, 2026<br>Chicago</p>
         <button class="btn btn-cyan" onclick="goTo(1)">CONTINUE</button>
@@ -226,11 +228,23 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
             <p class="panel-meta">11am &ndash; 2pm &nbsp;&middot;&nbsp; Location TBD</p>
             <p class="panel-note">Free &middot; Limited Space</p>
             <a href="https://forms.gle/3eCH2EsmqVbcvvZQ6" target="_blank" rel="noopener" class="btn btn-yellow" style="font-size:.58rem;padding:.5rem 1rem;display:inline-block;margin-bottom:.8rem;text-align:center;line-height:1.4;">Get notified when<br>registration opens</a>
-            <div class="name-list">
-              <div class="name-item" onclick="openModal('ALLEN RILEY SAT')">Allen Riley</div>
-              <div class="name-item" onclick="openModal('JONCATES SAT')">jonCates</div>
-              <div class="name-item" onclick="openModal('REZIDUALVIZUALZ SAT')">RezidualVizualz</div>
-              <div class="name-item" onclick="openModal('POTENTIAL DISCUSSION GAME')">Potential Discussion Game</div>
+            <div class="arcade-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));margin-top:.4rem;">
+              <div class="arcade-box" onclick="openModal('ALLEN RILEY SAT')">
+                <div class="arcade-title">ALLEN RILEY</div>
+                <div class="arcade-desc">The Imagination Synthesizer &mdash; history and future of video as social medium</div>
+              </div>
+              <div class="arcade-box" onclick="openModal('JONCATES SAT')">
+                <div class="arcade-title">jonCates</div>
+                <div class="arcade-desc">Glitch Art at the heart of Kentucky Route Zero</div>
+              </div>
+              <div class="arcade-box" onclick="openModal('REZIDUALVIZUALZ SAT')">
+                <div class="arcade-title">RezidualVizualz</div>
+                <div class="arcade-desc">Deeper dive into ProjectOBJ for PS2</div>
+              </div>
+              <div class="arcade-box" onclick="openModal('POTENTIAL DISCUSSION GAME')">
+                <div class="arcade-title">DISCUSSION GAME?</div>
+                <div class="arcade-desc">Round table discussion &mdash; format TBD</div>
+              </div>
             </div>
           </div>
 
@@ -272,7 +286,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
           Please reach out directly with any questions:
         </p>
         <a href="mailto:sutureblue@gmail.com" class="info-email">sutureblue@gmail.com</a>
-        <p class="thanks-note">A list of all those who deserve special thanks to come&hellip;</p>
       </div>
     </div>
 
