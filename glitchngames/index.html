@@ -88,6 +88,41 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 .special-card:hover{border-color:var(--purple);box-shadow:0 0 14px rgba(170,68,255,.2);transform:translateY(-2px);}
 .special-card.is-cyan{border-color:rgba(23,162,184,.3);background:rgba(23,162,184,.03);}
 .special-card.is-cyan:hover{border-color:var(--cyan);box-shadow:0 0 14px rgba(23,162,184,.2);}
+
+.live-events-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:.65rem;
+  margin-top:.5rem;
+}
+
+.event-orange{
+  background:rgba(255,140,0,.045);
+  border-color:rgba(255,140,0,.18);
+}
+.event-orange:hover{
+  border-color:rgba(255,140,0,.5);
+  box-shadow:0 0 14px rgba(255,140,0,.15);
+}
+
+.event-purple{
+  background:rgba(170,68,255,.045);
+  border-color:rgba(170,68,255,.18);
+}
+.event-purple:hover{
+  border-color:rgba(170,68,255,.5);
+  box-shadow:0 0 14px rgba(170,68,255,.15);
+}
+
+.event-red{
+  background:rgba(255,60,60,.045);
+  border-color:rgba(255,60,60,.18);
+}
+.event-red:hover{
+  border-color:rgba(255,60,60,.5);
+  box-shadow:0 0 14px rgba(255,60,60,.15);
+}
+  
 .card-name{font-size:.8rem;letter-spacing:.1em;color:#fff;}
 .card-name.cyan{color:var(--cyan);text-shadow:0 0 10px rgba(23,162,184,.4);}
 .card-sub{font-size:.6rem;color:var(--muted);margin-top:.3rem;letter-spacing:.06em;}
@@ -135,6 +170,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
   #top-nav a{font-size:.52rem;letter-spacing:.1em;}
   .friday-split{grid-template-columns:1fr;}
   .split-layout{flex-direction:column;}
+  .live-events-grid{grid-template-columns:1fr;}
 }
 
 </style>
@@ -186,21 +222,27 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
         </div>
 
         <p class="sub-heading">LIVE EVENTS</p>
-        <div class="special-grid">
-          <div class="special-card" onclick="openModal('GLITCH GAME COMPETITION')">
-            <div class="card-time">&#x1F7E0; 7:00 PM</div>
-            <div class="card-name">GLITCH GAME COMPETITION</div>
-            <div class="card-sub">on circuit bent DRUGS&trade; console &nbsp;&middot;&nbsp; in-person sign-up from 6pm</div>
-          </div>
-          <div class="special-card" onclick="openModal('ROYB0T & SUTUREBLUE')">
-            <div class="card-time">&#x1F7E3; 8:30 PM</div>
-            <div class="card-name">ROYB0T &amp; SUTUREBLUE</div>
-          </div>
-          <div class="special-card" onclick="openModal('COCOJOEY')">
-            <div class="card-time">&#x1F534; 9:15 PM</div>
-            <div class="card-name">COCOJOEY</div>
-          </div>
-        </div>
+        <div class="live-events-grid">
+
+  <div class="special-card event-orange" onclick="openModal('GLITCH GAME COMPETITION')">
+    <div class="card-time">7:00 PM</div>
+    <div class="card-name">GLITCH GAME COMPETITION</div>
+    <div class="card-sub">
+      on circuit bent DRUGS™ console
+    </div>
+  </div>
+
+  <div class="special-card event-purple" onclick="openModal('ROYB0T & SUTUREBLUE')">
+    <div class="card-time">8:30 PM</div>
+    <div class="card-name">ROYB0T &amp; SUTUREBLUE</div>
+  </div>
+
+  <div class="special-card event-red" onclick="openModal('COCOJOEY')">
+    <div class="card-time">9:15 PM</div>
+    <div class="card-name">COCOJOEY</div>
+  </div>
+
+</div>
 
         <p class="sub-heading">FEATURED ARTISTS</p>
         <div class="arcade-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));">
@@ -220,7 +262,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
     <div class="section" id="saturday">
       <div class="robo-section" style="max-width:860px;">
         <div class="robo-title">SATURDAY</div>
-        <p class="robo-body" style="text-align:center;font-style:italic;opacity:.8;margin-bottom:1.2rem;">Roundtable discussion, artist presentations, collaborative play, and a celebration of Jamie Fenton&rsquo;s legacy.</p>
+        <p class="robo-body" style="text-align:center;font-style:italic;opacity:.8;margin-bottom:1.2rem;">Roundtable discussion, artist presentations, collaborative play, and a celebration of Jamie Fenton’s work and continued experimentation.</p>
         <div class="split-layout">
 
           <div class="robo-panel">
@@ -242,8 +284,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
                 <div class="arcade-desc">Deeper dive into ProjectOBJ for PS2</div>
               </div>
               <div class="arcade-box" onclick="openModal('POTENTIAL DISCUSSION GAME')">
-                <div class="arcade-title">DISCUSSION GAME?</div>
-                <div class="arcade-desc">Round table discussion &mdash; format TBD</div>
+                <div class="arcade-title">DISCUSSION GAME</div>
+                <div class="arcade-desc">Join in for a generative conversation experience</div>
               </div>
             </div>
           </div>
@@ -255,7 +297,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
             <p class="panel-meta">6 &ndash; 10pm</p>
             <p class="panel-note">Community-Focused Programming</p>
             <p class="robo-body" style="margin-top:.2rem;">
-              A gathering honoring the work and influence of programmer and digital artist,
+             A gathering centered around the work, influence, and continued experimentation of programmer and digital artist,
               <span class="robo-link" onclick="openModal('JAMIE FENTON')">Jamie Fenton</span>.
             </p>
           </div>
@@ -387,7 +429,7 @@ const POP = {
 
   'GLITCH GAME COMPETITION': `<p>The Glitch Game Competition takes place on a circuit bent DRUGS&trade; console, hosted by Colston Byrd of the DRUGS&trade; team.</p><p>More information on how to sign up and prizes will be announced closer to the date.</p>`,
 
-  'POTENTIAL DISCUSSION GAME': `<p>Round Table Discussion is a definite, whether it will be a game is not yet known.</p>`,
+  'DISCUSSION GAME': `<p>A participatory discussion experience exploring glitch art, games, and experimental media through structured conversation and collective play.</p>`,
 
 
   'GNG1 ARTISTS': `<div style="columns:2;column-gap:1.2rem;font-family:var(--body);font-size:.95rem;line-height:2.1;">Big Pauper<br>Catie Reynolds<br>Danyrus<br>Dawnia Darkstone<br>Drain<br>DRUGS_TM<br>Eddie Lohmeyer<br>Estelle Flores<br>Geist<br>Hellmalware<br>Jael Whiteney Brothers<br>Jamie Fenton<br>James Usill<br>jpupper<br>jonCates<br>JPEGSTRIPES<br>Kaspar Ravel<br>Kevin Mercer<br>Mati&aacute;s Vilaplana Stark<br>Max Capacity<br>Mazin<br>Micah Alhadeff<br>Mony&eacute; Ford<br>Nick Briz<br>Nilson Carroll<br>Ras Alhague<br>Sabato Visconti<br>sgt_slaughtermelon<br>Sky Goodman<br>Suture Blue<br>Thorne Brandt<br>Viscous</div>`,
@@ -411,7 +453,7 @@ const IMG = {
   'COCOJOEY':                'assets/cocojoey.png',
   'ROYB0T & SUTUREBLUE':     'assets/royb0t_and_sutureblue.png',
   'GLITCH GAME COMPETITION': 'assets/glitch_game_competition.png',
-  'POTENTIAL DISCUSSION GAME':'assets/potential_discussion_game.png',
+  ' DISCUSSION GAME':'assets/potential_discussion_game.png',
   'JAMES CONNOLLY':          'assets/james_connolly.png',
   'GNG1 ARTISTS':            'assets/gng1_artists.png',
   'JAMIE FENTON':            'assets/jamie_fenton.png',
