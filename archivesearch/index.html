@@ -339,6 +339,12 @@
     word-break: break-word;
   }
 
+  #system-note-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 2px;
+  }
+
   #profile-right {
     display: flex;
     flex-direction: column;
@@ -394,6 +400,39 @@
     color: var(--text-muted);
     border-top: 1px solid var(--border);
     padding-top: 6px;
+  }
+  /* =====================
+     MOBILE
+     ===================== */
+  @media (max-width: 600px) {
+
+    #content {
+      flex-direction: column;
+    }
+
+    #suggestions {
+      width: 100%;
+    }
+
+    #suggestions.hidden {
+      display: none;
+    }
+
+    #profile-body {
+      grid-template-columns: 1fr;
+    }
+
+    .suggestion-item {
+      padding: 12px 10px;
+    }
+
+    #search-btn {
+      padding: 6px 12px;
+    }
+
+    #font-controls-label {
+      display: none;
+    }
   }
 </style>
 </head>
@@ -723,7 +762,7 @@ function renderProfile() {
     profileMethods[selections[1]] + ' ' +
     profileDestinations[selections[2]] + '.';
 
-  systemNoteEl.textContent = 'SYSTEM NOTE: ' + systemNote;
+  systemNoteEl.innerHTML = '<span id="system-note-label">SYSTEM NOTE:</span>' + systemNote;
 
   // Decay Rate flagged dark red when high (>=80)
   metricsEl.innerHTML =
