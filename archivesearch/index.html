@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVESEARCH™</title>
+<style>
+  /* =====================
+     WINDOWS 98/XP PALETTE
+     ===================== */
+  :root {
+    --bg:           #D4D0C8;
+    --surface:      #FFFFFF;
+    --surface-dim:  #ECE9D8;
+    --border:       #808080;
+    --border-light: #FFFFFF;
+    --border-dark:  #404040;
+    --text:         #000000;
+    --text-dim:     #444444;
+    --text-muted:   #666666;
+    --btn:          #D4D0C8;
+    --btn-hover:    #B8B4AC;
+    --highlight:    #000080;
+    --highlight-fg: #FFFFFF;
+    --font:         'Courier New', Courier, monospace;
+    --scale:        1;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    font-family: var(--font);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* =====================
+     FONT SIZE SCALE
+     All sizes multiply by --scale via calc()
+     ===================== */
+  body { font-size: calc(13px * var(--scale)); }
+  body.font-small  { --scale: 0.82; }
+  body.font-normal { --scale: 1;    }
+  body.font-large  { --scale: 1.22; }
+
+  /* =====================
+     LAYOUT
+     ===================== */
+  #app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: clamp(16px, 3vw, 40px);
+  }
+
+  /* =====================
+     TOP BAR: header + font controls
+     ===================== */
+  #top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: clamp(12px, 2vw, 20px);
+  }
+
+  #header {}
+
+  #title {
+    font-size: calc(2em * var(--scale));
+    font-weight: bold;
+    letter-spacing: 0.02em;
+  }
+
+  #subtitle {
+    font-size: calc(0.82em * var(--scale));
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* =====================
+     FONT SIZE CONTROLS
+     ===================== */
+  #font-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  #font-controls-label {
+    font-size: calc(0.75em * var(--scale));
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  #font-buttons {
+    display: flex;
+    gap: 4px;
+  }
+
+  .font-btn {
+    font-family: var(--font);
+    background: var(--btn);
+    color: var(--text);
+    border-top: 2px solid var(--border-light);
+    border-left: 2px solid var(--border-light);
+    border-bottom: 2px solid var(--border-dark);
+    border-right: 2px solid var(--border-dark);
+    cursor: pointer;
+    padding: 2px 8px;
+    line-height: 1.4;
+  }
+
+  .font-btn:hover { background: var(--btn-hover); }
+
+  .font-btn:active,
+  .font-btn.active {
+    border-top: 2px solid var(--border-dark);
+    border-left: 2px solid var(--border-dark);
+    border-bottom: 2px solid var(--border-light);
+    border-right: 2px solid var(--border-light);
+    background: var(--btn-hover);
+  }
+
+  .font-btn.sz-small  { font-size: 10px; }
+  .font-btn.sz-normal { font-size: 13px; }
+  .font-btn.sz-large  { font-size: 16px; }
+
+  /* =====================
+     SEARCH ROW
+     ===================== */
+  #search-row {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+    margin-bottom: 6px;
+  }
+
+  #search-box {
+    flex: 1;
+    padding: 6px 10px;
+    font-family: var(--font);
+    font-size: calc(0.95em * var(--scale));
+    color: var(--text);
+    background: var(--surface);
+    border-top: 2px solid var(--border);
+    border-left: 2px solid var(--border);
+    border-bottom: 2px solid var(--border-light);
+    border-right: 2px solid var(--border-light);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #search-box.placeholder { color: #999; }
+
+  #search-btn {
+    padding: 6px clamp(10px, 1.5vw, 18px);
+    font-family: var(--font);
+    font-size: calc(0.85em * var(--scale));
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    background: var(--btn);
+    color: var(--text);
+    cursor: pointer;
+    border-top: 2px solid var(--border-light);
+    border-left: 2px solid var(--border-light);
+    border-bottom: 2px solid var(--border-dark);
+    border-right: 2px solid var(--border-dark);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  #search-btn:hover { background: var(--btn-hover); }
+
+  #search-btn:active {
+    border-top: 2px solid var(--border-dark);
+    border-left: 2px solid var(--border-dark);
+    border-bottom: 2px solid var(--border-light);
+    border-right: 2px solid var(--border-light);
+  }
+
+  /* =====================
+     STATUS
+     ===================== */
+  #status {
+    font-size: calc(0.85em * var(--scale));
+    color: var(--text-dim);
+    margin-bottom: clamp(10px, 2vw, 20px);
+    min-height: 1.4em;
+  }
+
+  /* =====================
+     MAIN CONTENT AREA
+     ===================== */
+  #content {
+    display: flex;
+    gap: clamp(16px, 3vw, 40px);
+    flex: 1;
+    align-items: flex-start;
+  }
+
+  /* =====================
+     SUGGESTIONS (LEFT)
+     ===================== */
+  #suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: clamp(140px, 22vw, 240px);
+    flex-shrink: 0;
+  }
+
+  #suggestions.hidden {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .suggestion-item {
+    padding: 7px 10px;
+    font-family: var(--font);
+    font-size: calc(0.9em * var(--scale));
+    background: var(--surface-dim);
+    border-top: 2px solid var(--border-light);
+    border-left: 2px solid var(--border-light);
+    border-bottom: 2px solid var(--border-dark);
+    border-right: 2px solid var(--border-dark);
+    cursor: pointer;
+    color: var(--text);
+  }
+
+  .suggestion-item:hover {
+    background: var(--highlight);
+    color: var(--highlight-fg);
+  }
+
+  /* =====================
+     RIGHT PANEL
+     ===================== */
+  #right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 2vw, 20px);
+    min-width: 0;
+  }
+
+  /* =====================
+     FRAGMENTS
+     ===================== */
+  #fragments-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #fragments-label {
+    font-size: calc(1em * var(--scale));
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+
+  #fragments-label.hidden { display: none; }
+
+  .fragment-box {
+    padding: 7px 10px;
+    background: var(--surface);
+    border-top: 2px solid var(--border);
+    border-left: 2px solid var(--border);
+    border-bottom: 2px solid var(--border-light);
+    border-right: 2px solid var(--border-light);
+    font-size: calc(0.9em * var(--scale));
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  /* =====================
+     PROFILE PANEL
+     ===================== */
+  #profile-panel {
+    background: var(--surface);
+    border-top: 2px solid var(--border-light);
+    border-left: 2px solid var(--border-light);
+    border-bottom: 2px solid var(--border-dark);
+    border-right: 2px solid var(--border-dark);
+    padding: clamp(12px, 2vw, 20px);
+    display: none;
+  }
+
+  #profile-panel.visible { display: block; }
+
+  #profile-title {
+    font-size: calc(1.1em * var(--scale));
+    font-weight: bold;
+    margin-bottom: clamp(10px, 1.5vw, 16px);
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #profile-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(10px, 2vw, 20px);
+  }
+
+  #profile-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  #profile-id {
+    font-size: calc(0.85em * var(--scale));
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  #profile-sentence {
+    font-size: calc(0.95em * var(--scale));
+    line-height: 1.8;
+  }
+
+  #system-note {
+    font-size: calc(0.8em * var(--scale));
+    color: var(--text-muted);
+    margin-top: 12px;
+    line-height: 1.6;
+    word-break: break-word;
+  }
+
+  #profile-right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  #metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: calc(0.85em * var(--scale));
+    gap: 8px;
+  }
+
+  .metric-label { color: var(--text-dim); }
+  .metric-value { font-weight: bold; white-space: nowrap; }
+  .metric-value.high { color: #8B0000; }
+
+  /* =====================
+     FAILURE STATE
+     ===================== */
+  #profile-failed {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  #profile-failed.visible { display: flex; }
+
+  #profile-failed p {
+    font-size: calc(0.9em * var(--scale));
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  #profile-failed p:first-child {
+    font-weight: bold;
+    color: var(--text);
+  }
+
+  /* =====================
+     FOOTER
+     ===================== */
+  #footer {
+    margin-top: clamp(16px, 2.5vw, 28px);
+    font-size: calc(0.78em * var(--scale));
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    padding-top: 6px;
+  }
+</style>
+</head>
+<body class="font-normal">
+<div id="app">
+
+  <div id="top-bar">
+    <div id="header">
+      <div id="title">ARCHIVESEARCH&#8482;</div>
+
+    </div>
+    <div id="font-controls">
+      <div id="font-controls-label">TEXT SIZE</div>
+      <div id="font-buttons">
+        <button class="font-btn sz-small"  data-size="small">A</button>
+        <button class="font-btn sz-normal active" data-size="normal">A</button>
+        <button class="font-btn sz-large"  data-size="large">A</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="search-row">
+    <div id="search-box" class="placeholder">Search Archive...</div>
+    <button id="search-btn">SEARCH</button>
+  </div>
+
+  <div id="status">Enter search terms to begin retrieval.</div>
+
+  <div id="content">
+
+    <div id="suggestions" class="hidden"></div>
+
+    <div id="right-panel">
+
+      <div id="fragments-section">
+        <div id="fragments-label" class="hidden">Recovered Fragments</div>
+        <div id="fragments-list"></div>
+      </div>
+
+      <div id="profile-panel">
+        <div id="profile-title">PROFILE GENERATED</div>
+
+        <div id="profile-failed">
+          <p>PROFILE GENERATION FAILED</p>
+          <p>Insufficient data to construct user model.</p>
+          <p>No comparable entries located.</p>
+          <p>This record will not be retained.</p>
+        </div>
+
+        <div id="profile-body">
+          <div id="profile-left">
+            <div id="profile-id"></div>
+            <div id="profile-sentence"></div>
+          </div>
+          <div id="profile-right">
+            <div id="metrics"></div>
+            <div id="system-note"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="footer">ArchiveSearch&#8482; v2.1 &nbsp;|&nbsp; Last Indexed: 2003 &nbsp;|&nbsp; Metadata Services Enabled</div>
+
+</div>
+
+<script>
+// =============================================
+// DATA
+// =============================================
+
+const memoryOptions = [
+  "childhood", "first game", "friend", "screenshot", "username", "lost"
+];
+
+const artifactTree = {
+  "childhood":  ["paper", "save file", "cartridge", "avatar", "lost"],
+  "first game": ["cartridge", "save file", "forum post", "paper", "lost"],
+  "friend":     ["forum post", "avatar", "paper", "save file", "lost"],
+  "screenshot": ["save file", "avatar", "forum post", "paper", "lost"],
+  "username":   ["avatar", "forum post", "save file", "paper", "lost"],
+  "lost":       ["paper", "save file", "avatar", "forum post", "lost"]
+};
+
+const communityTree = {
+  "paper":      ["chatroom", "party", "guild", "lost"],
+  "save file":  ["leaderboard", "guild", "reputation", "lost"],
+  "cartridge":  ["party", "guild", "chatroom", "lost"],
+  "forum post": ["chatroom", "reputation", "guild", "lost"],
+  "avatar":     ["reputation", "leaderboard", "chatroom", "lost"],
+  "lost":       ["chatroom", "guild", "party", "lost"]
+};
+
+const stage1Fragments = {
+  "childhood":  "Directory dated. Contents inaccessible.",
+  "first game": "Installation file present. License expired.",
+  "friend":     "Contact entry exists. Last seen: unknown.",
+  "screenshot": "Timestamp intact. Surrounding data absent.",
+  "username":   "Handle located across 4 archived platforms.",
+  "lost":       "Query returned no memory type."
+};
+
+const stage2Fragments = {
+  "paper":      "Physical document scanned. Handwriting unverified.",
+  "save file":  "Checkpoint recorded. No subsequent activity.",
+  "cartridge":  "Hardware catalogued. Compatibility uncertain.",
+  "forum post": "Thread archived. Original poster uncontactable.",
+  "avatar":     "Image file present. Account deactivated.",
+  "lost":       "Artifact class not found in index."
+};
+
+const stage3Fragments = {
+  "chatroom":    "Log recovered. Participants no longer registered.",
+  "leaderboard": "Entry persists. Platform decommissioned.",
+  "guild":       "Membership active. Server offline.",
+  "reputation":  "Feedback score preserved. Voting closed.",
+  "party":       "Formation recorded. Duration: temporary.",
+  "lost":        "Community type not present in database."
+};
+
+const profileMotivations = {
+  "childhood":  "caches deprecated environments",
+  "first game": "pings points of origin",
+  "friend":     "keeps open connections to silent hosts",
+  "screenshot": "commits moments without context",
+  "username":   "indexes persistent handles",
+  "lost":       "queries endpoints that no longer resolve"
+};
+
+const profileMethods = {
+  "paper":      "via physical records",
+  "save file":  "via preserved states",
+  "cartridge":  "via object-bound memory",
+  "forum post": "via recovered thread",
+  "avatar":     "via proxy",
+  "lost":       "through gaps in the index"
+};
+
+const profileDestinations = {
+  "chatroom":    "seeking unrecoverable dialogue",
+  "leaderboard": "seeking deprecated rank",
+  "guild":       "seeking dissolved belonging",
+  "reputation":  "seeking unverifiable signal",
+  "party":       "seeking temporary formation",
+  "lost":        "seeking what was never indexed"
+};
+
+const systemNotes = [
+  "This profile has been accessed before.",
+  "Similar records were deleted in 2011.",
+  "No living users match this pattern.",
+  "This entry has not been viewed in 14 years.",
+  "One associated account remains active.",
+  "Origin platform no longer exists.",
+  "This search was conducted 3 times previously.",
+  "Closest match: [REDACTED]",
+  "Archive flagged this record for review. Review never occurred.",
+  "Retention period exceeded. Record preserved in error."
+];
+
+// =============================================
+// STATE
+// =============================================
+
+let stage         = 0;
+let selections    = [];
+let searchFocused = false;
+let currentOptions= memoryOptions;
+let systemNote    = "";
+let indexCoverage = 0;
+let dataIntegrity = 0;
+let decayRate     = 0;
+
+// =============================================
+// DOM REFS
+// =============================================
+
+const body          = document.body;
+const searchBox     = document.getElementById('search-box');
+const searchBtn     = document.getElementById('search-btn');
+const statusEl      = document.getElementById('status');
+const suggestionsEl = document.getElementById('suggestions');
+const fragmentsLabel= document.getElementById('fragments-label');
+const fragmentsList = document.getElementById('fragments-list');
+const profilePanel  = document.getElementById('profile-panel');
+const profileFailed = document.getElementById('profile-failed');
+const profileBody   = document.getElementById('profile-body');
+const profileId     = document.getElementById('profile-id');
+const profileSent   = document.getElementById('profile-sentence');
+const systemNoteEl  = document.getElementById('system-note');
+const metricsEl     = document.getElementById('metrics');
+
+// =============================================
+// HELPERS
+// =============================================
+
+function rand(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function nudge(n) {
+  return n % 5 === 0 ? n + rand(1, 3) : n;
+}
+
+function getSearchString() {
+  return selections.map(s => '[' + s + ']').join(' ');
+}
+
+// Metrics respond to selections:
+// - Each 'lost' raises Decay Rate and lowers Index Coverage
+// - Non-lost selections raise Data Integrity slightly
+function generateMetrics() {
+  const lostCount = selections.filter(s => s === 'lost').length;
+
+  // Base ranges
+  let covBase  = rand(45, 67);
+  let intBase  = rand(50, 79);
+  let decBase  = rand(60, 78);
+
+  // Each 'lost' selection: coverage drops, decay climbs
+  covBase  = Math.max(18, covBase  - (lostCount * rand(10, 16)));
+  intBase  = Math.max(22, intBase  - (lostCount * rand(7,  12)));
+  decBase  = Math.min(97, decBase  + (lostCount * rand(6,  11)));
+
+  indexCoverage = nudge(covBase);
+  dataIntegrity = nudge(intBase);
+  decayRate     = nudge(decBase);
+}
+
+function profileID() {
+  return selections
+    .join('')
+    .split('')
+    .reduce((a, c) => a + c.charCodeAt(0), 0);
+}
+
+function metric(label, value, high) {
+  return `<div class="metric-row">
+    <span class="metric-label">${label}</span>
+    <span class="metric-value${high ? ' high' : ''}">${value}</span>
+  </div>`;
+}
+
+// =============================================
+// RENDER
+// =============================================
+
+function renderSearchBox() {
+  const str = getSearchString();
+  if (str.length === 0) {
+    searchBox.textContent = 'Search Archive...';
+    searchBox.classList.add('placeholder');
+  } else {
+    searchBox.textContent = str;
+    searchBox.classList.remove('placeholder');
+  }
+}
+
+function renderSuggestions() {
+  suggestionsEl.innerHTML = '';
+  if (!searchFocused || stage >= 3) {
+    suggestionsEl.classList.add('hidden');
+    return;
+  }
+  suggestionsEl.classList.remove('hidden');
+  for (const opt of currentOptions) {
+    const el = document.createElement('div');
+    el.className = 'suggestion-item';
+    el.textContent = opt;
+    el.addEventListener('click', () => selectOption(opt));
+    suggestionsEl.appendChild(el);
+  }
+}
+
+function renderFragments() {
+  fragmentsList.innerHTML = '';
+
+  // Hide label until first selection
+  if (selections.length === 0) {
+    fragmentsLabel.classList.add('hidden');
+    return;
+  }
+  fragmentsLabel.classList.remove('hidden');
+
+  for (let i = 0; i < selections.length; i++) {
+    const choice = selections[i];
+    const text =
+      i === 0 ? stage1Fragments[choice] :
+      i === 1 ? stage2Fragments[choice] :
+                stage3Fragments[choice];
+    const box = document.createElement('div');
+    box.className = 'fragment-box';
+    box.textContent = text;
+    fragmentsList.appendChild(box);
+  }
+}
+
+function renderProfile() {
+  if (stage < 3) {
+    profilePanel.classList.remove('visible');
+    return;
+  }
+
+  profilePanel.classList.add('visible');
+
+  const lostCount = selections.filter(s => s === 'lost').length;
+
+  if (lostCount === 3) {
+    profileFailed.classList.add('visible');
+    profileBody.style.display = 'none';
+    return;
+  }
+
+  profileFailed.classList.remove('visible');
+  profileBody.style.display = 'grid';
+
+  profileId.textContent = 'ARCHIVE PROFILE #' + profileID();
+
+  profileSent.textContent =
+    'This user ' + profileMotivations[selections[0]] + ' ' +
+    profileMethods[selections[1]] + ' ' +
+    profileDestinations[selections[2]] + '.';
+
+  systemNoteEl.textContent = 'SYSTEM NOTE: ' + systemNote;
+
+  // Decay Rate flagged dark red when high (>=80)
+  metricsEl.innerHTML =
+    metric('Index Coverage', indexCoverage + '%', indexCoverage < 35) +
+    metric('Data Integrity', dataIntegrity + '%', dataIntegrity < 40) +
+    metric('Decay Rate',     decayRate + '%',     decayRate >= 80);
+}
+
+function render() {
+  renderSearchBox();
+  renderSuggestions();
+  renderFragments();
+  renderProfile();
+}
+
+// =============================================
+// ACTIONS
+// =============================================
+
+function selectOption(choice) {
+  selections.push(choice);
+  searchFocused = false;
+
+  if (stage === 0) currentOptions = artifactTree[choice];
+  else if (stage === 1) currentOptions = communityTree[choice];
+
+  stage++;
+
+  if (stage === 1)      statusEl.textContent = 'Memory indexed.';
+  else if (stage === 2) statusEl.textContent = 'Artifact catalogued.';
+  else if (stage === 3) {
+    statusEl.textContent  = 'Generating profile...';
+    searchBtn.textContent = 'NEW QUERY';
+    generateMetrics();
+    systemNote = pick(systemNotes);
+  }
+
+  render();
+}
+
+function restart() {
+  stage          = 0;
+  selections     = [];
+  searchFocused  = false;
+  currentOptions = memoryOptions;
+  systemNote     = '';
+  indexCoverage  = 0;
+  dataIntegrity  = 0;
+  decayRate      = 0;
+  statusEl.textContent  = 'Enter search terms to begin retrieval.';
+  searchBtn.textContent = 'SEARCH';
+  render();
+}
+
+// =============================================
+// EVENTS
+// =============================================
+
+searchBox.addEventListener('click', () => {
+  if (stage >= 3) return;
+  searchFocused = true;
+  render();
+});
+
+searchBtn.addEventListener('click', () => {
+  if (stage >= 3) restart();
+});
+
+document.addEventListener('click', (e) => {
+  if (
+    searchFocused &&
+    !searchBox.contains(e.target) &&
+    !suggestionsEl.contains(e.target)
+  ) {
+    searchFocused = false;
+    render();
+  }
+});
+
+// Font size controls
+document.querySelectorAll('.font-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const size = btn.dataset.size;
+    body.className = 'font-' + size;
+    document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// =============================================
+// INIT
+// =============================================
+
+render();
+</script>
+</body>
+</html>
