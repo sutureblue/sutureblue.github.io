@@ -50,11 +50,14 @@
   body.font-normal { --scale: 1;    }
   body.font-large  { --scale: 1.22; }
 
+  @media (max-width: 600px) {
+    body.font-large { --scale: 1.1; }
+  }
+
   /* =====================
      LAYOUT
      ===================== */
   #app {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     padding: clamp(16px, 3vw, 40px);
@@ -76,6 +79,13 @@
     font-size: calc(2em * var(--scale));
     font-weight: bold;
     letter-spacing: 0.02em;
+  }
+
+  #title .tm {
+    font-size: 0.55em;
+    vertical-align: super;
+    letter-spacing: 0;
+    margin-left: 3px;
   }
 
   #subtitle {
@@ -369,6 +379,14 @@
   .metric-value { font-weight: bold; white-space: nowrap; }
   .metric-value.high { color: #8B0000; }
 
+  .decay-statement {
+    font-size: calc(0.8em * var(--scale));
+    color: var(--text-muted);
+    margin-top: 6px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
   /* =====================
      FAILURE STATE
      ===================== */
@@ -441,7 +459,7 @@
 
   <div id="top-bar">
     <div id="header">
-      <div id="title">ARCHIVESEARCH&#8482;</div>
+      <div id="title">ARCHIVESEARCH<span class="tm">&#8482;</span></div>
 
     </div>
     <div id="font-controls">
@@ -764,11 +782,17 @@ function renderProfile() {
 
   systemNoteEl.innerHTML = '<span id="system-note-label">SYSTEM NOTE:</span>' + systemNote;
 
-  // Decay Rate flagged dark red when high (>=80)
-  metricsEl.innerHTML =
-    metric('Index Coverage', indexCoverage + '%', indexCoverage < 35) +
-    metric('Data Integrity', dataIntegrity + '%', dataIntegrity < 40) +
-    metric('Decay Rate',     decayRate + '%',     decayRate >= 80);
+  // Decay rate statement responds to severity
+  function decayStatement(rate) {
+    if (rate >= 95) return "This entry has outlasted its retention period.";
+    if (rate >= 91) return "This record was not designed to persist.";
+    if (rate >= 86) return "Decay accelerated by repeated access.";
+    if (rate >= 80) return "Signal weakening. No backup located.";
+    return "This data degrades with each retrieval.";
+  }
+
+  metricsEl.innerHTML = metric('Decay Rate', decayRate + '%', decayRate >= 80) +
+    '<div class="decay-statement">' + decayStatement(decayRate) + '</div>';
 }
 
 function render() {
