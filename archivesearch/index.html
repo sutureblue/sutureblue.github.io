@@ -682,9 +682,9 @@ function getSearchString() {
 function generateMetrics() {
   const lostCount = selections.filter(s => s === 'lost').length;
 
-  // Full range base — lost selections push decay up
-  let decBase = rand(28, 82);
-  decBase = Math.min(97, decBase + (lostCount * rand(5, 10)));
+  // Spread evenly across 60–97 so all tiers are reachable
+  let decBase = rand(60, 97);
+  decBase = Math.min(97, decBase + (lostCount * rand(3, 8)));
   decayRate = nudge(decBase);
 }
 
@@ -869,7 +869,7 @@ function selectOption(choice) {
   if (stage === 1)      statusEl.textContent = 'Memory indexed.';
   else if (stage === 2) statusEl.textContent = 'Artifact catalogued.';
   else if (stage === 3) {
-    statusEl.textContent  = 'Generating profile...';
+    statusEl.textContent  = 'Retrieval complete. Options nullified.';
     searchBtn.textContent = 'NEW QUERY';
     generateMetrics();
     systemNote = pick(systemNotes);
