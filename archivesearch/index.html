@@ -494,10 +494,6 @@
         <div id="profile-title">PROFILE GENERATED</div>
 
         <div id="profile-failed">
-          <p>PROFILE GENERATION FAILED</p>
-          <p>Insufficient data to construct user model.</p>
-          <p>No comparable entries located.</p>
-          <p>This record will not be retained.</p>
         </div>
 
         <div id="profile-body">
@@ -600,6 +596,13 @@ const profileDestinations = {
   "lost":        "seeking what was never indexed"
 };
 
+const failureNotes = [
+  "Closest match: [REDACTED]",
+  "This search was conducted before. No result was saved then either.",
+  "Some records are not lost. They were never made.",
+  "Index cannot profile what was not indexed."
+];
+
 const systemNotes = [
   "This profile has been accessed before.",
   "Similar records were deleted in 2011.",
@@ -610,7 +613,17 @@ const systemNotes = [
   "This search was conducted 3 times previously.",
   "Closest match: [REDACTED]",
   "Archive flagged this record for review. Review never occurred.",
-  "Retention period exceeded. Record preserved in error."
+  "Retention period exceeded. Record preserved in error.",
+  "This user's last login predates the current index.",
+  "Associated username flagged as abandoned.",
+  "File modified after account closure.",
+  "No forwarding address on record.",
+  "Backup copy exists. Location unknown.",
+  "This record was queried once before. No profile was saved.",
+  "Marked for deletion in 2007. Deletion did not occur.",
+  "Cross-reference returns zero results.",
+  "User-generated content removed. Metadata retained.",
+  "This entry contains a broken link."
 ];
 
 // =============================================
@@ -622,8 +635,6 @@ let selections    = [];
 let searchFocused = false;
 let currentOptions= memoryOptions;
 let systemNote    = "";
-let indexCoverage = 0;
-let dataIntegrity = 0;
 let decayRate     = 0;
 
 // =============================================
@@ -671,19 +682,10 @@ function getSearchString() {
 function generateMetrics() {
   const lostCount = selections.filter(s => s === 'lost').length;
 
-  // Base ranges
-  let covBase  = rand(45, 67);
-  let intBase  = rand(50, 79);
-  let decBase  = rand(60, 78);
-
-  // Each 'lost' selection: coverage drops, decay climbs
-  covBase  = Math.max(18, covBase  - (lostCount * rand(10, 16)));
-  intBase  = Math.max(22, intBase  - (lostCount * rand(7,  12)));
-  decBase  = Math.min(97, decBase  + (lostCount * rand(6,  11)));
-
-  indexCoverage = nudge(covBase);
-  dataIntegrity = nudge(intBase);
-  decayRate     = nudge(decBase);
+  // Full range base — lost selections push decay up
+  let decBase = rand(28, 82);
+  decBase = Math.min(97, decBase + (lostCount * rand(5, 10)));
+  decayRate = nudge(decBase);
 }
 
 function profileID() {
@@ -765,6 +767,41 @@ function renderProfile() {
   const lostCount = selections.filter(s => s === 'lost').length;
 
   if (lostCount === 3) {
+    const failureVersions = [
+      [
+        "PROFILE GENERATION FAILED",
+        "Insufficient data to construct user model.",
+        "No comparable entries located.",
+        "This record will not be retained."
+      ],
+      [
+        "PROFILE GENERATION FAILED",
+        "Query path returned no recoverable data.",
+        "User pattern does not exist in index.",
+        "Record closed."
+      ],
+      [
+        "PROFILE GENERATION FAILED",
+        "Search terms resolved to absence.",
+        "Nothing to archive."
+      ]
+    ];
+
+    const version = pick(failureVersions);
+
+    profileFailed.innerHTML = version.map((line, i) =>
+      `<p>${line}</p>`
+    ).join('') +
+    `<div class="metric-row" style="margin-top:12px">
+      <span class="metric-label">Decay Rate</span>
+      <span class="metric-value high">∅</span>
+    </div>` +
+    `<div class="decay-statement" style="margin-top:4px">This record will not be retained.</div>` +
+    `<div id="system-note" style="margin-top:12px">` +
+      `<span id="system-note-label">SYSTEM NOTE:</span>` +
+      pick(failureNotes) +
+    `</div>`;
+
     profileFailed.classList.add('visible');
     profileBody.style.display = 'none';
     return;
@@ -784,11 +821,27 @@ function renderProfile() {
 
   // Decay rate statement responds to severity
   function decayStatement(rate) {
-    if (rate >= 95) return "This entry has outlasted its retention period.";
-    if (rate >= 91) return "This record was not designed to persist.";
-    if (rate >= 86) return "Decay accelerated by repeated access.";
-    if (rate >= 80) return "Signal weakening. No backup located.";
-    return "This data degrades with each retrieval.";
+    const tier =
+      rate >= 95 ? [
+        "This entry has outlasted its retention period.",
+        "Archive notes: do not attempt restoration."
+      ] :
+      rate >= 91 ? [
+        "This record was not designed to persist.",
+        "Read errors detected. Proceeding anyway."
+      ] :
+      rate >= 86 ? [
+        "Decay accelerated by repeated access.",
+        "Compression applied. Original no longer recoverable."
+      ] :
+      rate >= 80 ? [
+        "Signal weakening. No backup located.",
+        "This record exists in name only."
+      ] : [
+        "This data degrades with each retrieval.",
+        "Retrieval confirmed. Integrity not guaranteed."
+      ];
+    return pick(tier);
   }
 
   metricsEl.innerHTML = metric('Decay Rate', decayRate + '%', decayRate >= 80) +
@@ -833,9 +886,9 @@ function restart() {
   searchFocused  = false;
   currentOptions = memoryOptions;
   systemNote     = '';
-  indexCoverage  = 0;
-  dataIntegrity  = 0;
   decayRate      = 0;
+  profileFailed.innerHTML = '';
+  profileFailed.classList.remove('visible');
   statusEl.textContent  = 'Enter search terms to begin retrieval.';
   searchBtn.textContent = 'SEARCH';
   render();
