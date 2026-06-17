@@ -6,7 +6,7 @@
 <title>ARCHIVESEARCH™</title>
 <style>
   /* =====================
-     WINDOWS 98/XP PALETTE
+     windows 98/XP palette
      ===================== */
   :root {
     --bg:           #D4D0C8;
@@ -42,8 +42,7 @@
   }
 
   /* =====================
-     FONT SIZE SCALE
-     All sizes multiply by --scale via calc()
+     scaling font sizes
      ===================== */
   body { font-size: calc(13px * var(--scale)); }
   body.font-small  { --scale: 0.82; }
@@ -55,7 +54,7 @@
   }
 
   /* =====================
-     LAYOUT
+     layout
      ===================== */
   #app {
     display: flex;
@@ -64,7 +63,7 @@
   }
 
   /* =====================
-     TOP BAR: header + font controls
+     top bar: header and footer
      ===================== */
   #top-bar {
     display: flex;
@@ -95,7 +94,7 @@
   }
 
   /* =====================
-     FONT SIZE CONTROLS
+     font size controls
      ===================== */
   #font-controls {
     display: flex;
@@ -145,7 +144,7 @@
   .font-btn.sz-large  { font-size: 16px; }
 
   /* =====================
-     SEARCH ROW
+     search row
      ===================== */
   #search-row {
     display: flex;
@@ -201,7 +200,7 @@
   }
 
   /* =====================
-     STATUS
+     status
      ===================== */
   #status {
     font-size: calc(0.85em * var(--scale));
@@ -211,7 +210,7 @@
   }
 
   /* =====================
-     MAIN CONTENT AREA
+     main content area
      ===================== */
   #content {
     display: flex;
@@ -221,7 +220,7 @@
   }
 
   /* =====================
-     SUGGESTIONS (LEFT)
+     suggestions (placed on the left side)
      ===================== */
   #suggestions {
     display: flex;
@@ -255,7 +254,7 @@
   }
 
   /* =====================
-     RIGHT PANEL
+     right side panel
      ===================== */
   #right-panel {
     flex: 1;
@@ -266,7 +265,7 @@
   }
 
   /* =====================
-     FRAGMENTS
+     fragment notes
      ===================== */
   #fragments-section {
     display: flex;
@@ -295,7 +294,7 @@
   }
 
   /* =====================
-     PROFILE PANEL
+     generated profile panel
      ===================== */
   #profile-panel {
     background: var(--surface);
@@ -388,7 +387,7 @@
   }
 
   /* =====================
-     FAILURE STATE
+     failure state
      ===================== */
   #profile-failed {
     display: none;
@@ -410,7 +409,7 @@
   }
 
   /* =====================
-     FOOTER
+     footer
      ===================== */
   #footer {
     margin-top: clamp(16px, 2.5vw, 28px);
@@ -420,7 +419,7 @@
     padding-top: 6px;
   }
   /* =====================
-     MOBILE
+     make it adjust/stack on mobile
      ===================== */
   @media (max-width: 600px) {
 
@@ -517,7 +516,7 @@
 
 <script>
 // =============================================
-// DATA
+// data - options - search terms - poetry bits
 // =============================================
 
 const memoryOptions = [
@@ -627,7 +626,7 @@ const systemNotes = [
 ];
 
 // =============================================
-// STATE
+// decay state
 // =============================================
 
 let stage         = 0;
@@ -638,7 +637,7 @@ let systemNote    = "";
 let decayRate     = 0;
 
 // =============================================
-// DOM REFS
+// dom refs
 // =============================================
 
 const body          = document.body;
@@ -657,7 +656,7 @@ const systemNoteEl  = document.getElementById('system-note');
 const metricsEl     = document.getElementById('metrics');
 
 // =============================================
-// HELPERS
+// a little help
 // =============================================
 
 function rand(min, max) {
@@ -676,13 +675,11 @@ function getSearchString() {
   return selections.map(s => '[' + s + ']').join(' ');
 }
 
-// Metrics respond to selections:
-// - Each 'lost' raises Decay Rate and lowers Index Coverage
-// - Non-lost selections raise Data Integrity slightly
+// metric response to lost selections
 function generateMetrics() {
   const lostCount = selections.filter(s => s === 'lost').length;
 
-  // Spread evenly across 60–97 so all tiers are reachable
+  // trying to make all tiers more reachable
   let decBase = rand(60, 97);
   decBase = Math.min(97, decBase + (lostCount * rand(3, 8)));
   decayRate = nudge(decBase);
@@ -703,7 +700,7 @@ function metric(label, value, high) {
 }
 
 // =============================================
-// RENDER
+// render render render
 // =============================================
 
 function renderSearchBox() {
@@ -736,7 +733,7 @@ function renderSuggestions() {
 function renderFragments() {
   fragmentsList.innerHTML = '';
 
-  // Hide label until first selection
+  // hide "fragments" until after first selection
   if (selections.length === 0) {
     fragmentsLabel.classList.add('hidden');
     return;
@@ -817,7 +814,7 @@ function renderProfile() {
 
   systemNoteEl.innerHTML = '<span id="system-note-label">SYSTEM NOTE:</span>' + systemNote;
 
-  // Decay rate statement responds to severity
+  // decay rate statement responds to severity
   function decayStatement(rate) {
     const tier =
       rate >= 95 ? [
@@ -854,7 +851,7 @@ function render() {
 }
 
 // =============================================
-// ACTIONS
+// actionnn
 // =============================================
 
 function selectOption(choice) {
@@ -893,7 +890,7 @@ function restart() {
 }
 
 // =============================================
-// EVENTS
+// events
 // =============================================
 
 searchBox.addEventListener('click', () => {
@@ -917,7 +914,7 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// Font size controls
+// more font size control stuff
 document.querySelectorAll('.font-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const size = btn.dataset.size;
@@ -926,10 +923,6 @@ document.querySelectorAll('.font-btn').forEach(btn => {
     btn.classList.add('active');
   });
 });
-
-// =============================================
-// INIT
-// =============================================
 
 render();
 </script>
