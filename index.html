@@ -1,1182 +1,1305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>hello there.</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="assets/favicon.png" type="image/png" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Bee Nix // Suture Blue</title>
+  <link rel="icon" href="assets/favicon.png" type="image/png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #050f0f;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Share Tech Mono', monospace;
+      user-select: none;
+    }
+
+    /* ── WRAP (full viewport) ─────────────────────────── */
+    .wrap {
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      background: #050f0f;
+    }
+
+    .wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(10,124,140,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,124,140,0.06) 1px, transparent 1px);
+      background-size: 22px 22px;
+      pointer-events: none;
+    }
+
+    /* corner marks */
+    .corner {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-color: rgba(10,124,140,0.3);
+      border-style: solid;
+      border-width: 0;
+    }
+    .corner.tl { top: 10px; left: 10px; border-top-width: 1.5px; border-left-width: 1.5px; }
+    .corner.tr { top: 10px; right: 10px; border-top-width: 1.5px; border-right-width: 1.5px; }
+    .corner.bl { bottom: 10px; left: 10px; border-bottom-width: 1.5px; border-left-width: 1.5px; }
+    .corner.br { bottom: 10px; right: 10px; border-bottom-width: 1.5px; border-right-width: 1.5px; }
+
+    /* ── ORBIT BUTTONS ───────────────────────────────────── */
+    .orbit-btn {
+      position: absolute;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 30;
+      font-family: 'Share Tech Mono', monospace;
+      transform: translate(-50%, -50%);
+      pointer-events: auto;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+
+    /* Nav arrow — white fill, larger, below panels */
+    #backArrow {
+      background: #ffffff;
+      border: 2px solid #0a7c8c;
+      color: #0a7c8c;
+      font-size: 22px;
+      width: 44px;
+      height: 44px;
+      display: none;
+      z-index: 15;
+    }
+    #backArrow.vis { display: flex; }
+    #backArrow:hover { background: #0a7c8c; color: #ffffff; }
+
+    /* Theme button — no background, just a swatch dot, always on top */
+    #themeBtn {
+      background: none;
+      border: none;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      padding: 0;
+      z-index: 40;
+    }
+    .theme-swatch {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      background: #0a7c8c;
+      pointer-events: none;
+      transition: border-color 0.2s;
+    }
+    #themeBtn:hover .theme-swatch { border-color: rgba(255,255,255,0.8); }
+
+    @keyframes rainbow-spin {
+      0%   { background: hsl(0,70%,60%); }
+      14%  { background: hsl(50,80%,58%); }
+      28%  { background: hsl(110,65%,48%); }
+      42%  { background: hsl(170,70%,48%); }
+      57%  { background: hsl(220,70%,62%); }
+      71%  { background: hsl(270,65%,60%); }
+      85%  { background: hsl(320,70%,58%); }
+      100% { background: hsl(360,70%,60%); }
+    }
+    .theme-swatch.rainbow { animation: rainbow-spin 3s linear infinite; }
+
+    /* Rainbow page-wide glow pulse — applied to wrap via JS */
+    @keyframes rainbow-bg {
+      0%   { background-color: #0a0308; }
+      14%  { background-color: #080a03; }
+      28%  { background-color: #03080a; }
+      42%  { background-color: #03050a; }
+      57%  { background-color: #06030a; }
+      71%  { background-color: #0a0308; }
+      85%  { background-color: #0a0605; }
+      100% { background-color: #0a0308; }
+    }
+
+    /* ── VIEWS ────────────────────────────────────────── */
+    .view {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.35s;
+    }
+    .view.hidden { opacity: 0; pointer-events: none; }
+    .view svg { width: 100%; height: 100%; display: block; }
+
+    /* ── SVG INTERACTIVITY ────────────────────────────── */
+    .nd { cursor: pointer; }
+    .nd:hover .nhalo { opacity: 1; }
+    .nhalo { opacity: 0; transition: opacity 0.2s; }
+    .tr { transition: stroke 0.4s, stroke-opacity 0.4s, filter 0.4s; }
+    .tr.lit {
+      stroke: #0a7c8c;
+      stroke-opacity: 1;
+      filter: drop-shadow(0 0 4px rgba(10,124,140,0.7));
+    }
+
+    /* ── PANEL ────────────────────────────────────────── */
+    .panel {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(100% - 80px);
+      max-width: 480px;
+      max-height: calc(100% - 60px);
+      background: var(--sp-bg, rgba(4,14,14,0.98));
+      border: 1px solid var(--sp-bd, rgba(10,124,140,0.5));
+      border-radius: 10px;
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      z-index: 20;
+    }
+    .panel.vis {
+      display: flex;
+      animation: pop 0.2s ease forwards;
+    }
+    @keyframes pop {
+      from { opacity: 0; transform: translate(-50%, -50%) scale(0.97); }
+      to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .p-header {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--sp-hbg, rgba(10,124,140,0.15));
+      border-bottom: 1px solid var(--sp-hbd, rgba(10,124,140,0.4));
+      padding: 9px 12px;
+    }
+    .p-header-title {
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: var(--sp-tx, rgba(94,200,212,0.95));
+      font-weight: 700;
+    }
+    .p-close {
+      background: #ffffff;
+      border: 2px solid var(--sp-link, #0a7c8c);
+      border-radius: 4px;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sp-link, #0a7c8c);
+      font-size: 13px;
+      cursor: pointer;
+      font-family: 'Share Tech Mono', monospace;
+      line-height: 1;
+      padding: 0;
+      transition: background 0.18s, color 0.18s;
+      flex-shrink: 0;
+    }
+    .p-close:hover { background: var(--sp-link, #0a7c8c); color: #ffffff; }
+
+    .panel-body {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      padding: 16px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--sp-acc, rgba(10,124,140,0.4)) transparent;
+    }
+    .panel-body::-webkit-scrollbar { width: 4px; }
+    .panel-body::-webkit-scrollbar-thumb { background: var(--sp-acc, rgba(10,124,140,0.4)); border-radius: 2px; }
+
+    .panel-inner { display: flex; gap: 14px; align-items: flex-start; }
+    .panel-text  { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
+
+    .p-desc {
+      font-size: 13px;
+      color: var(--sp-desc, rgba(180,225,220,0.9));
+      line-height: 1.7;
+      white-space: pre-line;
+      letter-spacing: 0.3px;
+    }
+    .p-more {
+      align-self: flex-start;
+      margin-top: 12px;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--sp-link, #0a7c8c);
+      background: #ffffff;
+      border: 2px solid var(--sp-link, #0a7c8c);
+      border-radius: 4px;
+      padding: 5px 12px;
+      cursor: pointer;
+      font-family: 'Share Tech Mono', monospace;
+      transition: background 0.18s, color 0.18s;
+      white-space: nowrap;
+    }
+    .p-more:hover { background: var(--sp-link, #0a7c8c); color: #ffffff; }
+
+    .panel-img {
+      flex: 0 0 auto;
+      width: clamp(100px, 28%, 160px);
+      min-height: 130px;
+      max-height: 200px;
+      align-self: stretch;
+      border-radius: 6px;
+      border: 1px solid var(--sp-bd, rgba(10,124,140,0.4));
+      background: var(--sp-ibg, #0a1e1e);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .panel-img img  { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .img-ph {
+      font-size: 10px;
+      color: var(--sp-ph, rgba(10,124,140,0.5));
+      text-align: center;
+      letter-spacing: 1px;
+      line-height: 2;
+      padding: 10px;
+    }
+
+    /* ── SUB-ITEM PANEL (detail panel for sub-nodes) ───── */
+    .sub-panel {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(100% - 60px);
+      max-width: 520px;
+      max-height: calc(100% - 60px);
+      background: var(--sp-bg, rgba(4,14,14,0.98));
+      border: 1px solid var(--sp-bd, rgba(10,124,140,0.5));
+      border-radius: 10px;
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      z-index: 25;
+    }
+    .sub-panel.vis { display: flex; animation: pop 0.2s ease forwards; }
+    .sub-panel .p-header { flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; background: var(--sp-hbg, rgba(10,124,140,0.15)); border-bottom: 1px solid var(--sp-hbd, rgba(10,124,140,0.4)); padding: 9px 12px; }
+    .sub-panel .p-header-title { font-size: 12px; letter-spacing: 2px; color: var(--sp-tx, rgba(94,200,212,0.95)); font-weight: 700; }
+    .sub-panel-body { flex: 1 1 auto; overflow-y: auto; padding: 16px; scrollbar-width: thin; scrollbar-color: var(--sp-acc, rgba(10,124,140,0.4)) transparent; }
+    .sub-panel-body::-webkit-scrollbar { width: 4px; }
+    .sub-panel-body::-webkit-scrollbar-thumb { background: var(--sp-acc, rgba(10,124,140,0.4)); border-radius: 2px; }
+    .sub-panel-inner { display: flex; flex-direction: column; gap: 14px; }
+    .sub-panel-text { font-size: 12px; color: var(--sp-desc, rgba(180,225,220,0.9)); line-height: 1.7; letter-spacing: 0.3px; white-space: pre-line; }
+    .sub-panel-text a { color: var(--sp-link, #0a7c8c); text-decoration: none; border-bottom: 1px solid var(--sp-bd, rgba(10,124,140,0.4)); }
+    .sub-panel-text a:hover { color: var(--sp-tx, #5ec8d4); }
+    .sub-panel-img { width: 100%; max-height: 180px; border-radius: 6px; border: 1px solid var(--sp-bd, rgba(10,124,140,0.35)); background: var(--sp-ibg, #0a1e1e); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .sub-panel-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .sub-panel-embed { width: 100%; aspect-ratio: 16/9; border-radius: 6px; overflow: hidden; border: 1px solid var(--sp-bd, rgba(10,124,140,0.35)); background: #000; }
+    .sub-panel-embed iframe { width: 100%; height: 100%; border: none; display: block; }
+    .sub-panel-img-ph { font-size: 10px; color: var(--sp-ph, rgba(10,124,140,0.5)); text-align: center; letter-spacing: 1px; padding: 20px; }
+
+    /* sub-board node hover */
+    .sub-nd { cursor: pointer; }
+    .sub-nd:hover rect, .sub-nd:hover text { opacity: 0.8; }
+    .sub-nd rect { transition: opacity 0.15s; }
+
+    /* about CV link */
+    .cv-link {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: #0a7c8c;
+      background: #ffffff;
+      border: 2px solid #0a7c8c;
+      border-radius: 4px;
+      padding: 4px 10px;
+      text-decoration: none;
+      font-family: 'Share Tech Mono', monospace;
+      transition: background 0.18s, color 0.18s;
+    }
+    .cv-link:hover { background: #0a7c8c; color: #ffffff; }
+
+    /* ── WRITING LINKS (sub-board corner bullets) ──────── */
+    .writing-links {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 10;
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .writing-links.vis { display: flex; }
+    .writing-links a {
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--sp-link, #0a7c8c);
+      text-decoration: none;
+      font-family: 'Share Tech Mono', monospace;
+      border-bottom: 1px solid var(--sp-bd, rgba(10,124,140,0.3));
+      transition: color 0.15s;
+      line-height: 1.6;
+    }
+    .writing-links a::before { content: "· "; opacity: 0.6; }
+    .writing-links a:hover { color: var(--sp-tx, #5ec8d4); }
+    .writing-links-label {
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: var(--sp-ph, rgba(10,124,140,0.5));
+      font-family: 'Share Tech Mono', monospace;
+      margin-bottom: 2px;
+    }
+  </style>
 </head>
-
 <body>
-  <div class="page">
+<div class="wrap" id="wrap">
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
 
-    <div class="top">
-      <header class="site-header">
-        <video class="header-image" autoplay muted loop playsinline>
-          <source src="assets/icon.webm" type="video/webm">
-          <source src="assets/icon.mp4" type="video/mp4">
-        </video>
-      </header>
+  <!-- orbit buttons — positioned by JS around center node -->
+  <button class="orbit-btn" id="themeBtn" onclick="cycleTheme()"><span class="theme-swatch" id="themeSwatch"></span></button>
+  <button class="orbit-btn" id="backArrow" onclick="goHome()">←</button>
 
-      <section class="hero">
-        <h1>Bee Nix // Suture Blue</h1>
-        <p>Thinking. Creating. Playing.</p>
-        <p>Animations. Interactives. Games. Lectures.</p>
-        <p>This is under construction, mind the filler...and the gaps...</p>
-                <div class="social-icons">
-    <a href="https://www.instagram.com/suture.blue" target="_blank" rel="noopener noreferrer">
-        <img src="assets/instagram.png">
-    </a>
+  <!-- ══════════════════════════════════════════════
+       MAIN VIEW
+  ══════════════════════════════════════════════ -->
+  <div id="viewMain" class="view">
+    <svg viewBox="0 0 660 520" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="gl"><feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="glb"><feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <!-- MAKING/THINKING top-left → center right-angle -->
+      <polyline id="tr-making-thinking"   class="tr" points="220,150 220,216 294,216 294,260" fill="none" stroke="rgba(10,124,140,0.2)" stroke-width="2" stroke-linecap="square"/>
+      <!-- GATHERING/SHARING right → center -->
+      <polyline id="tr-gathering-sharing" class="tr" points="468,260 366,260"                 fill="none" stroke="rgba(10,124,140,0.2)" stroke-width="2" stroke-linecap="square"/>
+      <!-- DISCUSSING bottom → center -->
+      <polyline id="tr-discussing"        class="tr" points="330,304 330,370"                 fill="none" stroke="rgba(10,124,140,0.2)" stroke-width="2" stroke-linecap="square"/>
+      <!-- junction dot -->
+      <circle cx="294" cy="216" r="3" fill="rgba(10,124,140,0.25)"/>
+      <!-- CENTER -->
+      <g class="nd" onclick="activateCenter()">
+        <circle cx="330" cy="260" r="54" fill="none" stroke="rgba(10,124,140,0.16)" stroke-width="1.2" stroke-dasharray="5 3"/>
+        <circle cx="330" cy="260" r="46" fill="#071515" stroke="#0a7c8c" stroke-width="1.5" filter="url(#gl)"/>
+        <circle class="nhalo" id="h-center" cx="330" cy="260" r="52" fill="none" stroke="#0a7c8c" stroke-width="2" filter="url(#glb)"/>
+        <circle cx="330" cy="260" r="38" fill="#0a1e1e"/>
+        <text x="330" y="253" text-anchor="middle" font-size="14" fill="#5ec8d4" letter-spacing="2" font-family="'Share Tech Mono',monospace">BEE NIX</text>
+        <text x="330" y="271" text-anchor="middle" font-size="10" fill="rgba(94,200,212,0.5)" letter-spacing="1" font-family="'Share Tech Mono',monospace">SUTURE.BLUE</text>
+      </g>
+      <!-- MAKING/THINKING — IC chip, top-left -->
+      <g class="nd" id="nd-making_thinking" onclick="activateNode('making_thinking')">
+        <rect x="162" y="112" width="116" height="56" rx="3" fill="#071515" stroke="rgba(10,124,140,0.3)" stroke-width="1"/>
+        <rect class="nhalo" id="h-making_thinking" x="157" y="107" width="126" height="66" rx="5" fill="none" stroke="#0a7c8c" stroke-width="1.5" filter="url(#glb)"/>
+        <path d="M162,132 Q156,140 162,148" fill="none" stroke="rgba(10,124,140,0.4)" stroke-width="1"/>
+        <line x1="162" y1="122" x2="148" y2="122" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="162" y1="132" x2="148" y2="132" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="162" y1="142" x2="148" y2="142" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="162" y1="152" x2="148" y2="152" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="278" y1="122" x2="292" y2="122" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="278" y1="132" x2="292" y2="132" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="278" y1="142" x2="292" y2="142" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="278" y1="152" x2="292" y2="152" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <text x="220" y="134" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">MAKING /</text>
+        <text x="220" y="150" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">THINKING</text>
+      </g>
+      <!-- GATHERING/SHARING — Transistor, right, mirrored (arrow points left) -->
+      <g class="nd" id="nd-gathering_sharing" onclick="activateNode('gathering_sharing')">
+        <circle cx="516" cy="260" r="30" fill="#071515" stroke="rgba(10,124,140,0.3)" stroke-width="1"/>
+        <circle class="nhalo" id="h-gathering_sharing" cx="516" cy="260" r="36" fill="none" stroke="#0a7c8c" stroke-width="1.5" filter="url(#glb)"/>
+        <!-- base lead from right -->
+        <line x1="546" y1="260" x2="532" y2="260" stroke="rgba(10,124,140,0.55)" stroke-width="1.5"/>
+        <!-- vertical bar on right side -->
+        <line x1="532" y1="246" x2="532" y2="274" stroke="rgba(10,124,140,0.55)" stroke-width="2"/>
+        <!-- collector: bar→upper-left, then up -->
+        <line x1="532" y1="250" x2="512" y2="236" stroke="rgba(10,124,140,0.55)" stroke-width="1.5"/>
+        <line x1="512" y1="236" x2="512" y2="226" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <!-- emitter: bar→lower-left, arrow, then down -->
+        <line x1="532" y1="270" x2="512" y2="284" stroke="rgba(10,124,140,0.55)" stroke-width="1.5"/>
+        <line x1="512" y1="284" x2="512" y2="294" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <!-- arrow on emitter pointing lower-left -->
+        <polygon points="517,280 512,284 516,289" fill="rgba(10,124,140,0.65)"/>
+        <!-- trace connection to center on left -->
+        <line x1="486" y1="260" x2="468" y2="260" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <!-- label -->
+        <text x="516" y="254" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">GATHERING /</text>
+        <text x="516" y="268" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">SHARING</text>
+      </g>
+      <!-- DISCUSSING — Crystal, bottom -->
+      <g class="nd" id="nd-discussing" onclick="activateNode('discussing')">
+        <rect x="286" y="370" width="88" height="32" rx="3" fill="#071515" stroke="rgba(10,124,140,0.4)" stroke-width="1.2"/>
+        <rect class="nhalo" id="h-discussing" x="281" y="365" width="98" height="42" rx="5" fill="none" stroke="#0a7c8c" stroke-width="1.5" filter="url(#glb)"/>
+        <line x1="304" y1="365" x2="304" y2="407" stroke="rgba(10,124,140,0.6)" stroke-width="2"/>
+        <line x1="356" y1="365" x2="356" y2="407" stroke="rgba(10,124,140,0.6)" stroke-width="2"/>
+        <line x1="286" y1="386" x2="272" y2="386" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="374" y1="386" x2="388" y2="386" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="330" y1="370" x2="330" y2="367" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <text x="330" y="386" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">DISCUSSING</text>
+      </g>
+      <text x="100" y="68" font-family="'Share Tech Mono',monospace" font-size="9" fill="rgba(10,124,140,0.16)">VCC</text>
+      <line x1="108" y1="71" x2="108" y2="82" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <line x1="100" y1="82" x2="116" y2="82" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <line x1="102" y1="86" x2="114" y2="86" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <line x1="104" y1="90" x2="112" y2="90" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <text x="536" y="450" font-family="'Share Tech Mono',monospace" font-size="9" fill="rgba(10,124,140,0.16)">GND</text>
+      <line x1="544" y1="453" x2="544" y2="464" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <line x1="536" y1="464" x2="552" y2="464" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <line x1="538" y1="468" x2="550" y2="468" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <line x1="540" y1="472" x2="548" y2="472" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+    </svg>
+  </div>
+  <!-- SUB VIEW — SVG built dynamically by buildSubBoard() -->
+  <div id="viewSub" class="view hidden">
+    <!-- Writing links shown for making_thinking sub-board -->
+    <div class="writing-links" id="writingLinks"></div>
+    <svg id="svgSub" viewBox="0 0 660 520" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="gl2">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glb2">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <!-- nodes injected by buildSubBoard() -->
+    </svg>
+  </div>
 
-    <a href="https://www.linkedin.com/in/bee-nix/" target="_blank" rel="noopener noreferrer">
-        <img src="assets/linkedin.png">
-    </a>
+  <!-- ══════════════════════════════════════════════
+       INFO PANEL
+  ══════════════════════════════════════════════ -->
+  <div class="panel" id="panel">
+    <div class="p-header">
+      <span class="p-header-title" id="pHeaderTitle">–</span>
+      <button class="p-close" onclick="closePanel()">×</button>
+    </div>
+    <div class="panel-body">
+      <div class="panel-inner">
+        <div class="panel-text">
+          <div class="p-desc" id="pDesc">–</div>
+          <button class="p-more" id="pMore" onclick="drillIn()">CLICK HERE FOR MORE</button>
+        </div>
+        <div class="panel-img" id="pImgWrap">
+          <div class="img-ph" id="pImgPh">[ IMAGE ]</div>
+          <img id="pImg" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover"/>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-      </section>
+
+  <!-- SUB-ITEM DETAIL PANEL -->
+  <div class="sub-panel" id="subPanel">
+    <div class="p-header">
+      <span class="p-header-title" id="subPanelTitle">–</span>
+      <button class="p-close" onclick="closeSubPanel()">×</button>
     </div>
-
-    <main>
-
-      <!-- PRACTICE -->
-      <section id="practice" class="section">
-        <h2></h2>
-
-        <div class="work-item">
-          <div class="glow-card">
-            <div class="glow-card-inner">
-
-              <div class="carousel">
-                <button class="carousel-btn left" type="button" aria-label="Previous project">‹</button>
-
-                <div class="carousel-stage">
-                  <div class="carousel-stack left"></div>
-
-                  <div class="carousel-center" role="button" tabindex="0" aria-label="Open project details">
-                    <img class="carousel-center-img" src="assets/gNg.png" alt="">
-                  </div>
-
-                  <div class="carousel-stack right"></div>
-                </div>
-
-                <button class="carousel-btn right" type="button" aria-label="Next project">›</button>
-
-                <!-- Inline info overlay — sits over the carousel image -->
-                <div class="carousel-info-overlay" aria-hidden="true" role="region" aria-label="Project info">
-                  <div class="carousel-info-bar">
-                    <button class="carousel-info-close" type="button" aria-label="Close info">×</button>
-                    <span class="carousel-info-title"></span>
-                  </div>
-                  <div class="carousel-info-scroll">
-                    <div class="carousel-info-body"></div>
-                  </div>
-                </div>
-
-                <div class="carousel-sources" hidden>
-                  <img src="assets/gNg2.png" data-title="Glitch'N'Games (2026)" data-template=".tpl-gng2" alt="">
-                  <img src="assets/glitchplay.png" data-title="Glitch Play (2025)" data-template=".tpl-glitchplay" alt="">
-                  <img src="assets/gNg.png" data-title="Glitch'N'Games (2024)" data-template=".tpl-gng" alt="">
-                  <img src="assets/mfru.png" data-title="MFRU (2023)" data-template=".tpl-mfru" alt="">
-                  <img src="assets/shadesOfPrecision.png" data-title="Shades Of Precision (2023)" data-template=".tpl-shadesOfPrecision" alt="">
-                  <img src="assets/notGlitch.png" data-title="/NOT.GLI.TCH/H (2023)" data-template=".tpl-notGlitch" alt="">
-                  <img src="assets/hereWeAre.png" data-title="Here We Are (2022)" data-template=".tpl-hereWeAre" alt="">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="work-meta">
-            <h3 class="project-title"></h3>
-          </div>
-
-          <!-- Carousel templates -->
-              <template class="tpl-gng2">
-              <p>
-                This second iteration takes place October 2–3, 2026 across Chicago, bringing together artists, game makers, circuit benders, performers, and theorists whose work engages play, error, systems, and experimental media.
-              </p>
-              <p>
-                <a href="https://suture.blue/glitchngames" target="_blank" rel="noreferrer">For tickets & more information.</a>
-              </p>
-              <p>Produced and curated by me.</p>
-              </template>
-          
-          <template class="tpl-glitchplay">
-            <p>
-              Glitch Play is my MFA thesis in Interactive Media and Game Development. It investigates engaging with glitches as a form of play that reveals and enables the ability to renegotiate with the structure of digital systems.
-              You can <a href="https://archive.org/details/glitch_play" target="_blank" rel="noreferrer">read it here.</a>
-            </p>
-          </template>
-
-          <template class="tpl-gng">
-            <p>
-              This exhibition explored the intertwined histories of glitch art and video games, featuring 40+ artists from over 5 countries, across two Pittsburgh venues.
-            </p>
-            <p>
-              As producer, curator, and organizer alongside John Bumstead and Nick Liberatore, I developed the show's conceptual framework and programmed workshops, discussions, and live demonstrations.
-            </p>
-            <p>
-              I created and moderated the Discussion Game, a participatory conversation format that gathered artists, theorists, and gamers to explore themes of play, control, and system disruption.
-            </p>
-          </template>
-
-          <template class="tpl-mfru">
-            <p>
-              This panel of digital artists was brought together in Maribor, Slovenia to discuss digital archiving for community by community for
-              <a href="https://www.mfru.org/events/panel-sustainability-and-autonomy-of-digital-art" target="_blank" rel="noreferrer">MFRU 2023.</a>
-            </p>
-            <p>
-              My IRL contributions to the discussion were not so much about my experience as an artist, but rather as a Do-It-Together (DIT) media archivist who is currently organizing, with a couple others— a free, downloadable, public access digital archive for the Glitch Art community.
-            </p>
-            <p>
-              Those of us working on this project believe that the more you rely on open software, the more accessible an archive becomes. That community projects can operate with more integrity when they remain unaffiliated with any institution(s). And most of all, we actively go against writing any "defining narrative(s)," but rather aim to offer an index of searchable artists and artists' works, as well as any affiliated history, to enable many narratives to overlap, web and be formed by people of the community, in hopes for a more holistic history to be available to those who care to have it.
-            </p>
-          </template>
-
-          <template class="tpl-shadesOfPrecision">
-            <p>
-              I was asked to review a self-curated selection from the <a href="https://fubar.space/2023/shades-of-precision/" target="_blank" rel="noreferrer">2023 /'FU:BAR/ EXPO.</a> To challenge my own biases, I read only each artist's description before viewing their work, hoping connections would emerge organically. Several pieces focused on control and deliberacy, a theme that felt especially compelling in the context of glitches. It was rewarding to discover that many of my selections came from artists I already admire.
-            </p>
-            <p>
-              The exhibition illustrates precision and chaos as collaborators. From Tomasz Sulej's meticulous GLIC codec to APIACOAB's pixel-perfect narratives, deliberate control amplifies disorder, transforming glitches into intentional expression.
-            </p>
-          </template>
-
-          <template class="tpl-notGlitch">
-            <p>
-              /NOT.GLI.TCH/H was held at the University of Chicago. I presented a talk about online community through the lens of my involvement with Glitch Artists Collective (GAC), likely the world's largest Glitch Art community.
-            </p>
-            <p>
-              GAC was established in 2013 on Facebook first (though is also on Instagram, Twitter, and Tumblr) and I initially became involved as an artist near the end of 2014, later becoming curator, which I still am, and occasionally an admin. My talk discussed the aesthetic evolutions of glitch within the community, what questions the community concerns/ed themselves with, the importance of earnest connection + IRL gatherings, and the protective trust based + open-source principles that sets GAC apart from other internet communities.
-            </p>
-          </template>
-
-          <template class="tpl-hereWeAre">
-            <p>
-              This discussion was had during the third iteration of GlitchArtIsDead, first shown in Poland in 2015. I was one of the main organizers and curators for GAID III, which featured just over 100 artists from 13 countries, and received a grant from the Southwest Minnesota Arts Council. I moderated this roundtable discussion with Dr. Michael Betancourt, an artist curated into the show whom I asked to also lead this discussion, along with others, including Jamie Fenton, John Bumstead, Aleksandra Pieńkosz, Sabato Visconti, Kaspar Ravel, Sky Goodman and more. The conversation traced glitch art's evolution from 1980s-90s technical accidents to intentional symbolic works that challenge digital boundaries. Participants shared personal experiences with digital disruptions and explored how Glitch Art addresses themes of authenticity, community values, and resistance to commercial frameworks. We examined the physical materiality of digital art and discussed how the movement builds creative resilience within increasingly regulated digital landscapes.
-            </p>
-            <p>
-              <a href="assets/HereWeAre_GAID3_2022.pdf" target="_blank" rel="noreferrer">Read the text script for "Here We Are"</a>
-            </p>
-            <p>
-              Photo taken by <a href="https://www.instagram.com/platinumjimjam/" target="_blank" rel="noreferrer">Jim Jam</a>
-            </p>
-          </template>
-        </div>
-
-        <div class="practice-controls">
-          <button id="practiceReset" class="practice-reset" type="button" aria-label="Reset practice windows" title="Reset">↺</button>
-          <span class="practice-label">Practice</span>
-        </div>
-
-        <div id="practiceDesktop" class="practice-desktop" aria-label="Draggable practice windows"></div>
-
-        <!-- Practice templates -->
-        <template id="tpl-colourorgan">
-          <p>Colour Organ is a digital implementation of Alexander Wallace Rimington's color-music theory, where audio frequencies trigger corresponding colored lights arranged in a 5x7 grid representing octaves and scales. The installation backlit a semi-translucent screen with 35 individual point lights programmed to respond to specific frequency ranges, creating a visual orchestration of the ROYGBIV spectrum synchronized to sound.</p>
-        </template>
-
-        <template id="tpl-discussiongame">
-          <p>Discussion Game was a participatory conversation game that I developed and moderated for Glitch'N'Games'24. Featuring artists, theorists, and gamers including Jamie Fenton, Nick Briz, Sabato Visconti, Kaspar Ravel, and more, the conversation used prompt cards to guide an open-ended dialogue on glitch, control, and play. Topics ranged from quantum logic to surveillance culture, pedagogical theory to personal glitch histories. Rather than defining the glitch, the session treated it as a generative lens—where system instability became a site for shared interpretation, critique, and improvisation.</p>
-          <p>
-            <a href="assets/gNg_DiscussionGame_BeeNix2024.pdf" target="_blank" rel="noreferrer">Read the text script for "Discussion Game"</a>
-          </p>
-          <p>Photo taken by <a href="http://nickbriz.com/" target="_blank" rel="noreferrer">Nick Briz</a></p>
-        </template>
-
-        <template id="tpl-uncanny">
-          <p>An Uncanny Scene is a virtual environment exploring the aesthetic of curious discomfort, where familiar elements become estranged and eerie.</p>
-        </template>
-
-        <template id="tpl-drawing">
-          <p>Since 2014, I've created looping rotoscoped animations intended to hold a viewer in an evocative moment of intra/interpersonal reflections. These animations are often combined with analog &amp; digital glitch techniques as methodological expressions of engaging as an interpretive system within systems. Positioning myself (and by extension a viewer) as an interpreter embedded within larger systemic boundaries and ruptures.</p>
-          <p>Naturally, I also draw still images from time to time too.</p>
-        </template>
-
-        <template id="tpl-fabrication">
-          <p>Most people know me for my digital/analog works, though since 2016, my fabrication practice has been my primary job. I've grown from supporting others' projects to independently leading design/build work. My experience bridges traditional craft and modern digital tools, allowing me to translate ideas into durable, interactive pieces across a range of contexts.</p>
-        </template>
-
-        <template id="tpl-lightsleeper">
-          <p>Light Sleeper, Heavy Dreamer was a collaborative live performance with <a href="https://royb0t.bandcamp.com/" target="_blank" rel="noreferrer">royb0t</a> exploring memory through glitched digital landscapes and otherworldly music. The interactive piece guided audiences through dream-like environments, combining visual breaks with atmospheric sound.</p>
-        </template>
-
-      </section>
-
-      <!-- Talking with Others -->
-      <section id="talking" class="section">
-        <h2>Talking with Others</h2>
-
-        <div class="talking-wrap">
-          <div class="talking-pixels-wrap">
-            <div class="talking-row" id="talkingRow" aria-label="Pixel links">
-
-              <button class="talk-pixel" type="button"
-                data-title="Glitch Art practices and trends in Glitch Artists Collective, 2023"
-                data-description="Thomas Collet and myself discuss our experiences within the evolution of Glitch Art and GAC."
-                data-href="https://youtu.be/_ICD8aVnprA?si=Tiu5CcWe98S6U4Cl"
-                style="background:#ff8800"
-                aria-label="Collet and GAC"></button>
-
-              <button class="talk-pixel" type="button"
-                data-title="A.I. and Online Communities: Art, Bodies, and Systems, 2025"
-                data-description="This conversation brings together artist-researcher J. Rosenbaum and theorist-artist Michael Betancourt for a wide-ranging discussion on how AI is reshaping identity, perception, power, and social life"
-                data-href="https://www.youtube.com/watch?v=u7pGPptqkjs"
-                style="background:#ffd24f"
-                aria-label="A.I. and Online Communities"></button>
-
-              <button class="talk-pixel" type="button"
-                data-title="Gork, 2025"
-                data-description="A conversation between myself and Gork, an Oregon-based multimedia artist."
-                data-href="https://youtu.be/2FZ3mJfzuf0?si=g4EBKb28IAzq4tcS"
-                style="background:#7a5cff"
-                aria-label="Gork"></button>
-
-              <button class="talk-pixel" type="button"
-                data-title="Scanlines.xyz: maintaining an online forum for the analog video community, 2025"
-                data-description="Conversation with the creators of Scanlines about their community forum dedicated to DIY video synthesis and experimental media."
-                data-href="https://youtu.be/pT5MtQJTCVA"
-                style="background:#b7ff5a"
-                aria-label="Scanlines.xyz"></button>
-
-              <button class="talk-pixel" type="button"
-                data-title="Totally not a Speedrun /'fubar/ 2022"
-                data-description="Me and Kaspar Ravel give an interactive talk within the 3D environment of /'fubar/ 2022 where we discuss techniques, history, and personal observations of the exhibition."
-                data-href="https://www.youtube.com/watch?v=tWp3CEuwzdE"
-                style="background:#ff4fd8"
-                aria-label="Totally not a Speedrun /'fubar/ 2022"></button>
-
-              <button class="talk-pixel" type="button"
-                data-title="Slowrun /fu:bar/ 2021"
-                data-description="Discussing /'fubar/ past and present, Kaspar Ravel and I guide you through the exhibition via selected works."
-                data-href="https://www.youtube.com/live/q7vPZkCKukQ"
-                style="background:#17a2b8"
-                aria-label="Slowrun /fu:bar/ 2021"></button>
-
-            </div>
-          </div>
-
-          <div class="talking-info">
-            <div class="talking-title" id="talkingTitle">Tap a pixel.</div>
-            <div class="talking-description" id="talkingDescription"></div>
-            <a class="talking-open" id="talkingOpen" href="#" target="_blank" rel="noreferrer">Open ↗</a>
-          </div>
-        </div>
-      </section>
-
-      <!-- About -->
-      <section id="about" class="section">
-        <h2>About</h2>
-
-        <div class="about-layout">
-          <div>
-            <p>I'm Bee Nix, aka Suture Blue.</p>
-            <p>
-              I am a new media artist, curator, and researcher working across interactive and time-based media. My practice examines play, systems, and emergent behavior through digital and physical forms.
-            </p>
-
-            <a class="cv-link" href="assets/BeeNix_CV_2026.pdf" target="_blank" rel="noreferrer">View CV</a>
-          </div>
-
-          <div class="about-meta">
-            <p>
-              <strong>Currently</strong><br>
-              Residing in Pittsburgh, PA;
-              Working in the exhibits department at the Children's Museum as a designer/builder;
-              Practicing maintaining center; Producing Glitch'N'Games 2;
-              Creating art, researching, talking to people...
-            </p>
-
-            <p>
-              <strong>Contact</strong><br>
-              sutureblue@protonmail.com
-            </p>
-          </div>
-        </div>
-      </section>
-
-    </main>
-
-    <footer class="site-footer">
-      <div class="license-footer">
-        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">
-          <img src="assets/cc.png" alt="Creative Commons" class="cc-icon" />
-        </a>
-        <span>2025</span>
-      </div>
-
-      <span class="footer-note">Hosted on GitHub Pages</span>
-    </footer>
-
-  </div>
-
-  <!-- GLOBAL TEXT POPUP (kept for any future popup-link usage) -->
-  <div id="contentModal" class="content-modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="content-shell" role="document">
-      <div class="content-toolbar">
-        <button id="contentNavPrev" class="content-nav-btn" type="button" aria-label="Previous item">‹</button>
-        <button id="contentClose" class="content-close" type="button" aria-label="Close popup">×</button>
-        <div id="contentTitle" class="content-title"></div>
-        <button id="contentNavNext" class="content-nav-btn" type="button" aria-label="Next item">›</button>
-      </div>
-
-      <div id="contentBody" class="content-body"></div>
+    <div class="sub-panel-body">
+      <div class="sub-panel-inner" id="subPanelInner"></div>
     </div>
   </div>
 
-  <!-- GLOBAL GALLERY MODAL -->
-  <div id="galleryModal" class="gallery-modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="gallery-shell" role="document">
-      <div class="gallery-toolbar">
-        <button id="galleryClose" class="gallery-close" type="button" aria-label="Close gallery">×</button>
-        <div id="galleryTitle" class="gallery-title"></div>
-      </div>
-
-      <div class="gallery-stage" id="galleryStage" aria-label="Gallery content">
-        <div id="galleryViewer" class="gallery-viewer"></div>
-        <div id="galleryThumbs" class="gallery-thumbs" aria-label="Gallery thumbnails"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- IMAGE LIGHTBOX -->
-  <div id="imageLightbox" class="image-lightbox" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="image-lightbox-shell" role="document">
-      <div class="image-lightbox-frame">
-        <img id="imageLightboxImg" src="" alt="">
-        <div id="imageLightboxCaption" class="image-lightbox-caption"></div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    /* ---------- Global content popup ---------- */
-    (() => {
-      const modal = document.getElementById("contentModal");
-      const closeBtn = document.getElementById("contentClose");
-      const prevBtn = document.getElementById("contentNavPrev");
-      const nextBtn = document.getElementById("contentNavNext");
-      const titleEl = document.getElementById("contentTitle");
-      const body = document.getElementById("contentBody");
-
-      let lastFocus = null;
-      let navItems = null;
-      let navIndex = -1;
-      let navController = null;
-
-      function renderCurrentNavItem() {
-        if (!Array.isArray(navItems) || navIndex < 0 || navIndex >= navItems.length) return;
-        const item = navItems[navIndex];
-        titleEl.textContent = item.title || "";
-        body.innerHTML = item.html || "";
-        prevBtn.disabled = navItems.length <= 1;
-        nextBtn.disabled = navItems.length <= 1;
-      }
-
-      function openContent(title, html, options = {}) {
-        lastFocus = document.activeElement;
-        navItems = Array.isArray(options.items) ? options.items : null;
-        navIndex = typeof options.index === "number" ? options.index : -1;
-        navController = typeof options.onNavigate === "function" ? options.onNavigate : null;
-
-        if (navItems && navItems.length) {
-          renderCurrentNavItem();
-        } else {
-          titleEl.textContent = title || "";
-          body.innerHTML = html || "";
-          prevBtn.disabled = true;
-          nextBtn.disabled = true;
-        }
-
-        modal.classList.add("active");
-        modal.setAttribute("aria-hidden", "false");
-        closeBtn.focus({ preventScroll: true });
-      }
-
-      function openContentBySelector(selector, title = "", options = {}) {
-        if (!selector) return;
-        const tpl = document.querySelector(selector);
-        if (!tpl) return;
-        openContent(title, tpl.innerHTML, options);
-      }
-
-      function closeContent() {
-        modal.classList.remove("active");
-        modal.setAttribute("aria-hidden", "true");
-        titleEl.textContent = "";
-        body.innerHTML = "";
-        navItems = null;
-        navIndex = -1;
-        navController = null;
-        if (lastFocus) lastFocus.focus({ preventScroll: true });
-      }
-
-      function goPrev() {
-        if (navController) {
-          const nextIndex = navController("prev");
-          if (typeof nextIndex === "number") navIndex = nextIndex;
-        } else if (navItems && navItems.length > 1) {
-          navIndex = (navIndex - 1 + navItems.length) % navItems.length;
-        }
-        renderCurrentNavItem();
-      }
-
-      function goNext() {
-        if (navController) {
-          const nextIndex = navController("next");
-          if (typeof nextIndex === "number") navIndex = nextIndex;
-        } else if (navItems && navItems.length > 1) {
-          navIndex = (navIndex + 1) % navItems.length;
-        }
-        renderCurrentNavItem();
-      }
-
-      document.addEventListener("click", (e) => {
-        const trigger = e.target.closest(".popup-link[data-popup-target]");
-        if (!trigger) return;
-        e.preventDefault();
-        openContentBySelector(
-          trigger.dataset.popupTarget,
-          trigger.dataset.popupTitle || ""
-        );
-      });
-
-      closeBtn.addEventListener("click", closeContent);
-      prevBtn.addEventListener("click", goPrev);
-      nextBtn.addEventListener("click", goNext);
-
-      document.addEventListener("keydown", (e) => {
-        if (!modal.classList.contains("active")) return;
-        if (e.key === "Escape") closeContent();
-        else if (e.key === "ArrowLeft") goPrev();
-        else if (e.key === "ArrowRight") goNext();
-      });
-
-      window.__openContent = openContent;
-      window.__openContentBySelector = openContentBySelector;
-    })();
-
-    /* ---------- Image Lightbox ---------- */
-    (() => {
-      const modal = document.getElementById("imageLightbox");
-      const img = document.getElementById("imageLightboxImg");
-      const caption = document.getElementById("imageLightboxCaption");
-
-      let lastFocus = null;
-
-      function openLightbox(src, alt = "", title = "") {
-        lastFocus = document.activeElement;
-        img.src = src || "";
-        img.alt = alt || "";
-        caption.textContent = title || alt || "";
-        modal.classList.add("active");
-        modal.setAttribute("aria-hidden", "false");
-      }
-
-      function closeLightbox() {
-        modal.classList.remove("active");
-        modal.setAttribute("aria-hidden", "true");
-        img.src = "";
-        img.alt = "";
-        caption.textContent = "";
-        if (lastFocus) lastFocus.focus({ preventScroll: true });
-      }
-
-      img.addEventListener("click", closeLightbox);
-
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) closeLightbox();
-      });
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal.classList.contains("active")) closeLightbox();
-      });
-
-      window.__openImageLightbox = openLightbox;
-      window.__closeImageLightbox = closeLightbox;
-    })();
-
-    /* ---------- Gallery Modal ---------- */
-    (() => {
-      const modal = document.getElementById("galleryModal");
-      const closeBtn = document.getElementById("galleryClose");
-      const titleEl = document.getElementById("galleryTitle");
-      const viewer = document.getElementById("galleryViewer");
-      const thumbs = document.getElementById("galleryThumbs");
-
-      let items = [];
-      let activeIndex = 0;
-      let lastFocus = null;
-
-      function getThumbLabel(item, index) {
-        if (item.type === "video") return item.thumbLabel || `Video ${index + 1}`;
-        return item.title || `Image ${index + 1}`;
-      }
-
-      function renderViewer() {
-        viewer.innerHTML = "";
-
-        if (!items.length || activeIndex < 0 || activeIndex >= items.length) return;
-
-        const item = items[activeIndex];
-        const shell = document.createElement("div");
-        shell.className = "gallery-feature";
-
-        if (item.type === "video") {
-          shell.innerHTML = `
-            <div class="gallery-video-frame">
-              <iframe
-                src="${item.src}"
-                title="${item.title || "Embedded video"}"
-                loading="lazy"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen
-                webkitallowfullscreen="true"
-                mozallowfullscreen="true">
-              </iframe>
-            </div>
-            ${item.caption ? `<div class="gallery-feature-caption">${item.caption}</div>` : ``}
-          `;
-        } else {
-          shell.innerHTML = `
-            <button class="gallery-feature-image-wrap" type="button" aria-label="Open image larger">
-              <img class="gallery-feature-image" src="${item.src}" alt="${item.title || ""}">
-              ${item.title ? `<div class="gallery-feature-caption">${item.title}</div>` : ``}
-            </button>
-          `;
-
-          const btn = shell.querySelector(".gallery-feature-image-wrap");
-          btn.addEventListener("click", () => {
-            window.__openImageLightbox(item.src, item.title || "", item.title || "");
-          });
-        }
-
-        viewer.appendChild(shell);
-      }
-
-      function renderThumbs() {
-        thumbs.innerHTML = "";
-
-        if (!items.length) return;
-
-        thumbs.classList.toggle("is-hidden", items.length <= 1);
-
-        items.forEach((item, index) => {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "gallery-thumb";
-          if (index === activeIndex) btn.classList.add("is-active");
-          btn.setAttribute("aria-label", `Show ${getThumbLabel(item, index)}`);
-
-          if (item.type === "video") {
-            btn.innerHTML = `
-              <div class="gallery-thumb-video">
-                <span class="gallery-thumb-play">▶</span>
-                <span class="gallery-thumb-label">${getThumbLabel(item, index)}</span>
-              </div>
-            `;
-          } else {
-            btn.innerHTML = `<img src="${item.src}" alt="${item.title || ""}">`;
-          }
-
-          btn.addEventListener("click", () => {
-            activeIndex = index;
-            renderViewer();
-            renderThumbs();
-          });
-
-          thumbs.appendChild(btn);
-        });
-      }
-
-      function openGallery(newItems, title = "", startIndex = 0) {
-        items = Array.isArray(newItems) ? newItems : [];
-        activeIndex = Math.max(0, Math.min(startIndex, items.length - 1));
-        lastFocus = document.activeElement;
-
-        titleEl.textContent = title || "";
-
-        modal.classList.add("active");
-        modal.setAttribute("aria-hidden", "false");
-
-        renderViewer();
-        renderThumbs();
-
-        closeBtn.focus({ preventScroll: true });
-      }
-
-      function closeGallery() {
-        modal.classList.remove("active");
-        modal.setAttribute("aria-hidden", "true");
-        viewer.innerHTML = "";
-        thumbs.innerHTML = "";
-        thumbs.classList.remove("is-hidden");
-        titleEl.textContent = "";
-        items = [];
-        activeIndex = 0;
-
-        if (lastFocus) lastFocus.focus({ preventScroll: true });
-      }
-
-      closeBtn.addEventListener("click", closeGallery);
-
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) closeGallery();
-      });
-
-      document.addEventListener("keydown", (e) => {
-        if (!modal.classList.contains("active")) return;
-
-        if (e.key === "Escape") {
-          closeGallery();
-        } else if (e.key === "ArrowRight" && items.length > 1) {
-          activeIndex = (activeIndex + 1) % items.length;
-          renderViewer();
-          renderThumbs();
-        } else if (e.key === "ArrowLeft" && items.length > 1) {
-          activeIndex = (activeIndex - 1 + items.length) % items.length;
-          renderViewer();
-          renderThumbs();
-        }
-      });
-
-      window.__openSnakeGallery = openGallery;
-    })();
-
-    /* ---------- Carousel ---------- */
-    document.querySelectorAll(".work-item").forEach((workItem) => {
-      const carousel = workItem.querySelector(".carousel");
-      const titleEl = workItem.querySelector(".project-title");
-      const centerImg = carousel.querySelector(".carousel-center-img");
-      const centerArea = carousel.querySelector(".carousel-center");
-      const leftStackEl = carousel.querySelector(".carousel-stack.left");
-      const rightStackEl = carousel.querySelector(".carousel-stack.right");
-      const btnLeft = carousel.querySelector(".carousel-btn.left");
-      const btnRight = carousel.querySelector(".carousel-btn.right");
-
-      // Inline info overlay elements
-      const infoOverlay = carousel.querySelector(".carousel-info-overlay");
-      const infoTitle = carousel.querySelector(".carousel-info-title");
-      const infoBody = carousel.querySelector(".carousel-info-body");
-      const infoClose = carousel.querySelector(".carousel-info-close");
-      const infoScroll = carousel.querySelector(".carousel-info-scroll");
-
-      const sourceImgs = Array.from(carousel.querySelectorAll(".carousel-sources img"));
-      const projects = sourceImgs.map(img => ({
-        src: img.getAttribute("src"),
-        title: img.dataset.title || "Untitled",
-        template: img.dataset.template || ""
-      }));
-
-      let center = 0;
-      let leftStack = [];
-      let rightStack = projects.map((_, i) => i).slice(1);
-
-      function updateMeta(index) {
-        titleEl.textContent = projects[index].title;
-      }
-
-      function renderStacks() {
-        leftStackEl.innerHTML = "";
-        rightStackEl.innerHTML = "";
-
-        leftStack.forEach((idx, i) => {
-          const card = document.createElement("div");
-          card.className = "stack-card";
-          card.style.setProperty("--stack-i", i);
-          card.innerHTML = `<img src="${projects[idx].src}" alt="">`;
-          leftStackEl.appendChild(card);
-        });
-
-        rightStack.forEach((idx, i) => {
-          const card = document.createElement("div");
-          card.className = "stack-card";
-          card.style.setProperty("--stack-i", i);
-          card.innerHTML = `<img src="${projects[idx].src}" alt="">`;
-          rightStackEl.appendChild(card);
-        });
-
-        centerImg.src = projects[center].src;
-        centerImg.alt = projects[center].title;
-        updateMeta(center);
-
-        btnLeft.disabled = leftStack.length === 0;
-        btnRight.disabled = rightStack.length === 0;
-      }
-
-      function closeOverlay() {
-        infoOverlay.classList.remove("active");
-        infoOverlay.setAttribute("aria-hidden", "true");
-      }
-
-      function openOverlay() {
-        const current = projects[center];
-        if (!current.template) return;
-        const tpl = document.querySelector(current.template);
-        if (!tpl) return;
-
-        infoTitle.textContent = current.title;
-        infoBody.innerHTML = tpl.innerHTML;
-        infoScroll.scrollTop = 0;
-
-        infoOverlay.classList.add("active");
-        infoOverlay.setAttribute("aria-hidden", "false");
-        infoClose.focus({ preventScroll: true });
-      }
-
-      function goNext() {
-        if (!rightStack.length) return;
-        closeOverlay();
-        leftStack.unshift(center);
-        center = rightStack.shift();
-        renderStacks();
-      }
-
-      function goPrev() {
-        if (!leftStack.length) return;
-        closeOverlay();
-        rightStack.unshift(center);
-        center = leftStack.shift();
-        renderStacks();
-      }
-
-      infoClose.addEventListener("click", closeOverlay);
-
-      // Prevent close-button clicks bubbling up to the centerArea click handler
-      infoClose.addEventListener("pointerdown", (e) => e.stopPropagation());
-
-      btnLeft.onclick = goPrev;
-      btnRight.onclick = goNext;
-
-      centerArea.addEventListener("click", openOverlay);
-      centerArea.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          openOverlay();
-        }
-      });
-
-      titleEl.style.cursor = "pointer";
-      titleEl.addEventListener("click", openOverlay);
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && infoOverlay.classList.contains("active")) closeOverlay();
-      });
-
-      renderStacks();
+<script>
+// ── CONTENT DATA ─────────────────────────────────────
+const nodes = {
+  making_thinking: {
+    title: 'MAKING / THINKING',
+    desc: 'Animations, games, performances,\ninteractive fabrication.\n\nThoughts on play, unstable media,\nand cybernetics critique.',
+    img: 'assets/Making.png',
+    traces: ['tr-making-thinking'],
+    backPos: { side: 'bottom-right', arrow: '\u2198' },
+    writingLinks: [
+      { label: 'Glitch Play', url: 'https://archive.org/details/glitch_play' },
+      { label: 'The Error as a Form of Art', url: 'https://mangrovia.info/en/glitch-art-error/' },
+      { label: 'Shades Of Precision', url: 'https://fubar.space/2023/shades-of-precision/' }
+    ],
+    sub: {
+      center: 'MAKING / THINKING',
+      items: [
+        { l: 'ANIMATIONS', body: "Since 2014, I've created looping rotoscope animations combined with analog & digital glitch techniques. My animations have been shown globally in Miami, Minneapolis, Chicago, Iran, Croatia, and all around the internet.\n\n<a href='https://www.instagram.com/suture.blue' target='_blank'>View more on my instagram here \u2192</a>", localvideo: 'assets/icon.mp4' },
+        { l: 'LIGHT SLEEPER', body: "Light Sleeper, Heavy Dreamer (2020) was a collaborative live performance with <a href='https://royb0t.bandcamp.com/' target='_blank'>royb0t</a> exploring memory through glitched digital landscapes and otherworldly music. The interactive piece guided audiences through dream-like environments, combining visual breaks with atmospheric sound.", embed: 'https://www.youtube.com/embed/R0VyONd6Eko' },
+        { l: 'COLOUR ORGAN', body: "Colour Organ is a digital implementation of Alexander Wallace Rimington's color-music theory, where audio frequencies trigger corresponding colored lights arranged in a 5x7 grid representing octaves and scales. The installation backlit a semi-translucent screen with 35 individual point lights programmed to respond to specific frequency ranges, creating a visual orchestration of the ROYGBIV spectrum synchronized to sound.", embed: 'https://archive.org/embed/bee-nix-colour-organ', imgBelow: 'assets/ColourOrgan.png' },
+        { l: 'UNCANNY SCENE', body: "An Uncanny Scene is a virtual environment exploring the aesthetic of curious discomfort where familiar elements become estranged.", embed: 'https://archive.org/embed/bee-nix-an-uncanny-scene' },
+        { l: 'GOO IN THE BOX', body: "The essay treats \"goo\" and \"boxes\" as the same substance in different states, arguing that stable-seeming structures (rules, categories, definitions) are just as unstable as goo. When we don't notice the work holding structures together, they look solid and self-sustaining. One learns to handle instability in lieu of control.\n\n<a href='GOO_ESSAY_URL' target='_blank'>Read/Listen to the essay here →</a>\n\n<a href='https://sutureblue.itch.io/put-the-goo-in-the-box' target='_blank'>Play the accompanying physics toy here →</a>", img: 'assets/GooInBox_01.png' },
+        { l: 'DISCUSSION GAME', body: "Discussion Game was a participatory conversation game that I developed and moderated for GLITCH'N'GAMES 2024. The conversation used prompt cards to guide an open-ended dialogue on glitch, control, and play.\n\n<a href='assets/gNg_DiscussionGame_BeeNix2024.pdf' target='_blank'>Read the text script here →</a>\n\nPhoto taken by <a href='https://nickbriz.com/' target='_blank'>Nick Briz</a>.", img: 'assets/DiscussionGame.png' }
+      ]
+    }
+  },
+    gathering_sharing: {
+    title: 'GATHERING / SHARING',
+    desc: 'Community events, curation,\nlectures and mentoring.\nHelping make spaces that bring people together.',
+    img: 'assets/GAC.png',
+    traces: ['tr-gathering-sharing'],
+    backPos: { side: 'left', arrow: '\u2190' },
+    sub: {
+      center: 'GATHERING / SHARING',
+      items: [
+        { l: 'GLITCH ARTISTS COLLECTIVE', body: "I've been an artist/admin/curator with GAC for over ten years. Acting as a community hub that connects glitch artists globally together, me and several others continue to volunteer our time to create public spaces and shared resources related to Glitch Art and unstable media.", img: 'assets/GAC.png' },
+        { l: "GLITCH'N'GAMES", body: "Engaging with the glitches of a system is a form of play — the basis of my MFA thesis and the catalyst for this exhibition series.\n\nGNG'24 happened at LIKELIKE Arcade, Pittsburgh. GNG'26 will be happening the first weekend of October in Chicago. <a href='https://suture.blue/glitchngames/' target='_blank'>Get tickets or sign up for events here \u2192</a>", imgPair: ['assets/GNG_24.png', 'assets/GNG_26.png'] },
+        { l: 'GLITCHARTISDEAD III', body: "GAID III happened in 2022, at the KK Berge Art Gallery, funded in part by the Southwest Minnesota Arts Council. Acting as the 'Glitch Manager', I helped curate/produce this exhibition: 100+ artists from 13 countries, with several lectures and workshops.\n\nThis event happened in tandem with Prairie Fyre. The GAIDIII organizer team also includes Miles Taylor, Kaspar Ravel, and Aleksandra Pie\u0144kosz.", img: 'assets/GAIDIII.png' },
+        { l: 'MUSEUM GO ROUND', body: "An musically interactive zoetrope + praxinoscope sculpture. This is a project I've been working on as a part of a much larger exhibit being created between Children's Museum of Pittsburgh and Fred Rogers Production.", img: 'assets/MGR.png' },
+        { l: 'MFRU 2023', body: "With MFRU 2023, I was invited to be part of a panel in Maribor, Slovenia to discuss digital archiving for community by community.\n\nMy contributions were not so much about my experience as an artist, but rather as a Do-It-Together media archivist currently organizing a free, downloadable, digital public access archive for the Glitch Art community.\n\n<a href='https://www.mfru.org/events/panel-sustainability-and-autonomy-of-digital-art' target='_blank'>More information here \u2192</a>", img: 'assets/MFRU2023.png' }
+      ]
+    }
+  },
+    discussing: {
+    title: 'DISCUSSING',
+    desc: `Recorded conversations with artists, theorists, and community members.\n\nThese discussions happen primarily through my involvement with Glitch Artists Collective and /'FU:BAR/, who I've been connected to as an artist/curator/organizer for 10+ years.`,
+    img: 'assets/FubarGAC.png',
+    traces: ['tr-discussing'],
+    backPos: { side: 'top', arrow: '↑' },
+    sub: {
+      center: 'DISCUSSING',
+      items: [
+              { l: 'HERE WE ARE', body: `This discussion was had during the third iteration of GlitchArtIsDead. Moderating this roundtable with Dr. Michael Betancourt, we traced Glitch Art's evolution from 1980s-90s technical accidents to intentional symbolic works that challenge digital boundaries.\n\n<a href='assets/HereWeAre_GAID3_2022.pdf' target='_blank'>Read the text script →</a>\n\nPhoto taken by <a href='https://www.instagram.com/platinumjimjam/' target='_blank'>Jim Jam</a>.`, img: 'assets/HereWeAre.png' },
+        { l: 'A.I. AND ONLINE COMMUNITIES', body: `This conversation brings together artist-researcher J. Rosenbaum and theorist-artist Michael Betancourt to examine how AI is reshaping identity, perception, power, and social life.\n\n<a href="https://youtu.be/u7pGPptqkjs?si=YGMdiqdXwLRTzJeA" target="_blank">Watch here →</a>`, embed: 'https://www.youtube.com/embed/u7pGPptqkjs' },
+        { l: 'SCANLINES.XYZ', body: `Scanlines.xyz creators Paloma Kop, Andrei Jay, and Tim Caldwell reflect on the origins and evolution of their community-driven forum dedicated to DIY video synthesis and experimental media.\n\n<a href="https://youtu.be/pT5MtQJTCVA?si=VF8x_bZKyUgvP4KN" target="_blank">Watch here →</a>`, embed: 'https://www.youtube.com/embed/pT5MtQJTCVA' },
+        { l: 'ART TRENDS IN GAC', body: `Thomas Collet (<a href="http://chepertom.net/" target="_blank">chepertom.net</a>), an admin from Glitch Artists Collective, speaks with glitch artist and curator Bee Nix to discuss art practices and trends in Glitch Art.\n\n<a href="https://youtu.be/_ICD8aVnprA?si=lWcNkPl-P5IPQLZi" target="_blank">Watch here →</a>`, embed: 'https://www.youtube.com/embed/_ICD8aVnprA' },
+        { l: 'GORK', body: `A conversation between GAC curator Bee Nix and Oregon-based multimedia artist Gork on collage, glitch, circuit bending, myth-making, creative doubt, collaboration, and what it means to make work that's shared and witnessed.\n\n<a href="https://youtu.be/2FZ3mJfzuf0?si=5E55Z5Gbl1Uw6vhT" target="_blank">Watch here →</a>`, embed: 'https://www.youtube.com/embed/2FZ3mJfzuf0' },
+        { l: 'TOTALLY NOT A SPEEDRUN', body: `Me and Kaspar Ravel give an interactive talk within the 3D environment of /'FU:BAR/ 2022 where we discuss techniques, history, and personal observations of the exhibition.\n\n<a href="https://www.youtube.com/watch?v=tWp3CEuwzdE" target="_blank">Watch here →</a>`, embed: 'https://www.youtube.com/embed/tWp3CEuwzdE' },
+        { l: 'SLOWRUN', body: `Discussing /'FU:BAR/ past and present, Kaspar Ravel and I guide you through the exhibition via selected works.\n\n<a href="https://www.youtube.com/live/q7vPZkCKukQ" target="_blank">Watch here →</a>`, embed: 'https://www.youtube.com/embed/q7vPZkCKukQ' }
+      ]
+    }
+  }
+};
+
+const about = {
+  title: 'BEE NIX // SUTURE.BLUE',
+  desc: 'New media artist-researcher working across interactive and time-based media, heavily focused on unstable media, animation, sculptures and games.\n\nI design/build/curate/critique play, systems, and emergent behavior as a way to negotiate our engagement with the digital and electronic structures we embed with.\n\nPittsburgh, PA\nsutureblue@gmail.com',
+  img: 'assets/bee_01.png',
+  cv: 'assets/BeeNix_CV_2026.pdf'
+}
+
+let activeId = null, inSub = false, currentSide = null;
+
+// Reposition arrow on resize if sub-view is active
+window.addEventListener('resize', () => {
+  if (inSub && currentSide) positionBackArrow(currentSide);
+});
+
+function clearTraces() {
+  document.querySelectorAll('.tr').forEach(t => t.classList.remove('lit'));
+  document.querySelectorAll('.nhalo').forEach(h => h.classList.remove('on'));
+}
+
+function closePanel() {
+  document.getElementById('panel').classList.remove('vis');
+  clearTraces();
+  activeId = null;
+}
+
+function setImage(src) {
+  const img = document.getElementById('pImg');
+  const ph  = document.getElementById('pImgPh');
+  if (src) {
+    img.src = src; img.style.display = 'block'; ph.style.display = 'none';
+  } else {
+    img.style.display = 'none';
+    ph.style.display = 'flex';
+    ph.style.alignItems = 'center';
+    ph.style.justifyContent = 'center';
+  }
+}
+
+// ── ORBIT SYSTEM ──────────────────────────────────────
+// Center node in viewBox: cx=330, cy=260, r=46
+const VB_CX = 330, VB_CY = 260, VB_R = 46;
+
+// Angle map: 0=top, clockwise
+// Angles: 0=top, 90=right, 180=bottom, 270=left (clockwise)
+// These match the original screen-edge positions:
+//   making (left side)  → arrow points →  so return comes from right = 90°
+//   sharing (right side)→ arrow points ← so return comes from left  = 270°
+//   thinking (top-left) → return from bottom-right = 135°
+//   gathering (top-right)→ return from bottom-left = 225°
+//   discussing (bottom) → return from top = 0°
+const SIDE_ANGLES = {
+  'right':        90,
+  'bottom-right': 135,
+  'bottom':       180,
+  'bottom-left':  225,
+  'left':         270,
+  'top-left':     315,
+  'top':          0,
+  'top-right':    45,
+};
+
+const THEME_ANGLE  = 45;   // theme btn: top-right of inner orbit
+const INNER_SCALE  = 1.44; // theme button orbit (25% bigger node + 15% further out)
+const OUTER_SCALE  = 2.5;  // nav arrow orbit
+
+function vbToScreen(vbX, vbY) {
+  const svgEl = document.querySelector('.view:not(.hidden) svg');
+  if (!svgEl) return null;
+  try {
+    const pt = svgEl.createSVGPoint();
+    pt.x = vbX; pt.y = vbY;
+    const ctm = svgEl.getScreenCTM();
+    if (!ctm) return null;
+    const sp = pt.matrixTransform(ctm);
+    const wr = document.getElementById('wrap').getBoundingClientRect();
+    return { x: sp.x - wr.left, y: sp.y - wr.top };
+  } catch(e) { return null; }
+}
+
+function orbitPoint(angleDeg, scale) {
+  // 0=top, clockwise. Convert to standard math angle (0=right, CCW).
+  const rad = (angleDeg - 90) * Math.PI / 180;
+  const r   = VB_R * scale;
+  return vbToScreen(
+    VB_CX + r * Math.cos(rad),
+    VB_CY + r * Math.sin(rad)
+  );
+}
+
+function placeBtn(btn, angleDeg, scale) {
+  const pos = orbitPoint(angleDeg, scale);
+  if (!pos) return;
+  btn.style.left = pos.x + 'px';
+  btn.style.top  = pos.y + 'px';
+}
+
+function positionAllOrbitBtns() {
+  placeBtn(document.getElementById('themeBtn'),  THEME_ANGLE, INNER_SCALE);
+  if (currentSide !== null) {
+    const angle = SIDE_ANGLES[currentSide] !== undefined ? SIDE_ANGLES[currentSide] : 270;
+    placeBtn(document.getElementById('backArrow'), angle, OUTER_SCALE);
+  }
+}
+
+function positionBackArrow(side) {
+  currentSide = side;
+  positionAllOrbitBtns();
+}
+
+window.addEventListener('resize', positionAllOrbitBtns);
+document.getElementById('viewMain').addEventListener('transitionend', positionAllOrbitBtns);
+document.getElementById('viewSub').addEventListener('transitionend', positionAllOrbitBtns);
+requestAnimationFrame(() => requestAnimationFrame(positionAllOrbitBtns));
+
+// ── THEMES ────────────────────────────────────────────
+const THEMES = [
+  { name:'teal',     swatch:'#0a7c8c', rainbow:false,
+    bg:'#050f0f', bg2:'#071515', bg3:'#0a1e1e',
+    acc:'#0a7c8c', glow:'rgba(10,124,140,0.7)',  grid:'rgba(10,124,140,0.06)',
+    tx:'#5ec8d4',  txs:'rgba(94,200,212,0.5)',
+    tr_c:'rgba(10,124,140,0.2)', ns:'rgba(10,124,140,0.4)',
+    jc:'rgba(10,124,140,0.3)',   brd:'rgba(10,124,140,0.3)',
+    pBg:'rgba(4,14,14,0.98)',    pBd:'rgba(10,124,140,0.5)',
+    hBg:'rgba(10,124,140,0.15)',hBd:'rgba(10,124,140,0.4)',
+    desc:'rgba(180,225,220,0.9)', iBg:'#0a1e1e', iBd:'rgba(10,124,140,0.4)', ph:'rgba(10,124,140,0.5)'
+  },
+  { name:'amber',    swatch:'#c47a00', rainbow:false,
+    bg:'#0f0b02', bg2:'#181004', bg3:'#211606',
+    acc:'#c47a00', glow:'rgba(196,122,0,0.7)',   grid:'rgba(196,122,0,0.06)',
+    tx:'#e0a83c',  txs:'rgba(224,168,60,0.5)',
+    tr_c:'rgba(196,122,0,0.2)', ns:'rgba(196,122,0,0.4)',
+    jc:'rgba(196,122,0,0.3)',   brd:'rgba(196,122,0,0.3)',
+    pBg:'rgba(15,11,2,0.98)',   pBd:'rgba(196,122,0,0.5)',
+    hBg:'rgba(196,122,0,0.15)',hBd:'rgba(196,122,0,0.4)',
+    desc:'rgba(224,190,140,0.9)', iBg:'#211606', iBd:'rgba(196,122,0,0.4)', ph:'rgba(196,122,0,0.5)'
+  },
+  { name:'violet',   swatch:'#7a4fbd', rainbow:false,
+    bg:'#080610', bg2:'#0e0a1a', bg3:'#150f24',
+    acc:'#7a4fbd', glow:'rgba(122,79,189,0.7)',  grid:'rgba(122,79,189,0.06)',
+    tx:'#b48edc',  txs:'rgba(180,142,220,0.5)',
+    tr_c:'rgba(122,79,189,0.2)', ns:'rgba(122,79,189,0.4)',
+    jc:'rgba(122,79,189,0.3)',   brd:'rgba(122,79,189,0.3)',
+    pBg:'rgba(8,6,16,0.98)',     pBd:'rgba(122,79,189,0.5)',
+    hBg:'rgba(122,79,189,0.15)',hBd:'rgba(122,79,189,0.4)',
+    desc:'rgba(200,175,230,0.9)', iBg:'#150f24', iBd:'rgba(122,79,189,0.4)', ph:'rgba(122,79,189,0.5)'
+  },
+  { name:'phosphor', swatch:'#1a8c3a', rainbow:false,
+    bg:'#030f06', bg2:'#06150a', bg3:'#091f0e',
+    acc:'#1a8c3a', glow:'rgba(26,140,58,0.7)',   grid:'rgba(26,140,58,0.06)',
+    tx:'#4dcc72',  txs:'rgba(77,204,114,0.5)',
+    tr_c:'rgba(26,140,58,0.2)', ns:'rgba(26,140,58,0.4)',
+    jc:'rgba(26,140,58,0.3)',   brd:'rgba(26,140,58,0.3)',
+    pBg:'rgba(3,15,6,0.98)',    pBd:'rgba(26,140,58,0.5)',
+    hBg:'rgba(26,140,58,0.15)',hBd:'rgba(26,140,58,0.4)',
+    desc:'rgba(160,220,175,0.9)', iBg:'#091f0e', iBd:'rgba(26,140,58,0.4)', ph:'rgba(26,140,58,0.5)'
+  },
+  { name:'rainbow',  swatch:null, rainbow:true,
+    bg:'#060308', bg2:'#0c0612', bg3:'#12081a',
+    acc:'#cc44aa', glow:'rgba(204,68,170,0.7)',  grid:'rgba(180,80,200,0.06)',
+    tx:'#e080d0',  txs:'rgba(224,128,208,0.5)',
+    tr_c:'rgba(180,80,200,0.2)', ns:'rgba(180,80,200,0.4)',
+    jc:'rgba(180,80,200,0.3)',   brd:'rgba(180,80,200,0.3)',
+    pBg:'rgba(6,3,8,0.98)',     pBd:'rgba(180,80,200,0.5)',
+    hBg:'rgba(180,80,200,0.15)',hBd:'rgba(180,80,200,0.4)',
+    desc:'rgba(220,190,230,0.9)', iBg:'#12081a', iBd:'rgba(180,80,200,0.4)', ph:'rgba(180,80,200,0.5)'
+  }
+];
+
+let themeIndex = 0;
+
+// ── Store original SVG attribute values ONCE on first load ──
+// We snapshot every relevant SVG element so applyTheme always
+// works from the originals, not from whatever the last theme set.
+let svgSnapshot = null;
+
+function snapshotSVG() {
+  svgSnapshot = [];
+  document.querySelectorAll('svg *').forEach((el, i) => {
+    el.dataset.snapIdx = i;
+    const snap = { idx: i, tag: el.tagName };
+    ['fill','stroke','r'].forEach(a => {
+      const v = el.getAttribute(a);
+      if (v !== null) snap[a] = v;
     });
+    snap.classList = [...el.classList];
+    svgSnapshot.push(snap);
+  });
+}
 
-    /* ---------- Practice Windows ---------- */
-    (() => {
-      const desktop = document.getElementById("practiceDesktop");
-      const resetBtn = document.getElementById("practiceReset");
-      if (!desktop || !resetBtn) return;
+function applyTheme(t) {
+  // Snapshot originals on first theme change
+  if (!svgSnapshot) snapshotSVG();
 
-      const PRACTICE = [
-        { id:"drawing",        src:"assets/Drawing_1.png",        title:"Animations & Drawings", hasGallery: true },
-        { id:"fabrication",    src:"assets/Fabrication_1.png",    title:"Fabrication", hasGallery: true },
-        { id:"lightsleeper",   src:"assets/LightSleeper_1.png",   title:"Light Sleeper, Heavy Dreamer (2020)", hasGallery: true },
-        { id:"colourorgan",    src:"assets/ColourOrgan_1.png",    title:"Colour Organ (2021)", hasGallery: true },
-        { id:"uncanny",        src:"assets/Uncanny_1.png",        title:"An Uncanny Scene (2022)", hasGallery: true },
-        { id:"discussiongame", src:"assets/DiscussionGame_1.png", title:"Discussion Game (2024)", hasGallery: false },
-      ];
+  // Backgrounds
+  document.body.style.background = t.bg;
+  document.querySelector('.wrap').style.background = t.bg;
 
-      const GALLERY_DATA = {
-        colourorgan: [
-          {
-            type: "video",
-            src: "https://archive.org/embed/bee-nix-colour-organ",
-            title: "Colour Organ (2021)",
-            caption: "Colour Organ — embedded from Internet Archive.",
-            thumbLabel: "Video"
-          },
-          {
-            type: "image",
-            src: "assets/ColourOrgan_1.png",
-            title: "Colour Organ — Photo 1"
-          },
-          {
-            type: "image",
-            src: "assets/ColourOrgan_2.png",
-            title: "Colour Organ — Photo 2"
-          },
-          {
-            type: "image",
-            src: "assets/ColourOrgan_3.png",
-            title: "Colour Organ — Photo 3"
-          }
-        ],
+  // Grid
+  let gs = document.getElementById('dyn-grid');
+  if (!gs) { gs = document.createElement('style'); gs.id = 'dyn-grid'; document.head.appendChild(gs); }
+  gs.textContent = `.wrap::before{background-image:linear-gradient(${t.grid} 1px,transparent 1px),linear-gradient(90deg,${t.grid} 1px,transparent 1px)!important}`;
 
-        lightsleeper: [
-          {
-            type: "video",
-            src: "https://www.youtube.com/embed/R0VyONd6Eko",
-            title: "Light Sleeper, Heavy Dreamer (2020)",
-            caption: "Light Sleeper, Heavy Dreamer — YouTube embed.",
-            thumbLabel: "Video"
-          }
-        ],
+  // Corners
+  document.querySelectorAll('.corner').forEach(c => c.style.borderColor = t.brd);
 
-        uncanny: [
-          {
-            type: "video",
-            src: "https://archive.org/embed/bee-nix-an-uncanny-scene",
-            title: "An Uncanny Scene (2022)",
-            caption: "An Uncanny Scene — embedded from Internet Archive.",
-            thumbLabel: "Video"
-          }
-        ],
+  // Walk the snapshot — remap from original values
+  svgSnapshot.forEach(snap => {
+    const el = document.querySelector(`[data-snap-idx="${snap.idx}"]`);
+    if (!el) return;
+    const cls = snap.classList || [];
+    const origFill   = snap.fill   || '';
+    const origStroke = snap.stroke || '';
+    const r = parseFloat(snap.r || '0');
 
-        fabrication: [
-          {
-            type: "image",
-            src: "assets/Fabrication_1.png",
-            title: "Fabrication — Photo 1"
-          },
-          {
-            type: "image",
-            src: "assets/Fabrication_2.png",
-            title: "Fabrication — Photo 2"
-          },
-          {
-            type: "image",
-            src: "assets/Fabrication_3.png",
-            title: "Fabrication — Photo 3"
-          }
-        ],
+    // nhalo rings
+    if (cls.includes('nhalo')) { el.setAttribute('stroke', t.acc); return; }
 
-        drawing: [
-          {
-            type: "image",
-            src: "assets/Drawing_1.png",
-            title: "Animations & Drawings — View 1"
-          },
-          {
-            type: "image",
-            src: "assets/Drawing_2.png",
-            title: "Animations & Drawings — View 2"
-          },
-          {
-            type: "image",
-            src: "assets/Drawing_3.png",
-            title: "Animations & Drawings — View 3"
-          }
-        ],
+    // Polylines (traces)
+    if (snap.tag === 'polyline') {
+      if (!el.classList.contains('lit')) el.setAttribute('stroke', t.tr_c);
+      return;
+    }
 
-        discussiongame: [
-          {
-            type: "image",
-            src: "assets/DiscussionGame_1.png",
-            title: "Discussion Game — View 1"
-          },
-          {
-            type: "image",
-            src: "assets/DiscussionGame_2.png",
-            title: "Discussion Game — View 2"
-          },
-          {
-            type: "image",
-            src: "assets/DiscussionGame_3.png",
-            title: "Discussion Game — View 3"
-          }
-        ]
-      };
+    // Junction dots — small circles with rgba fill
+    if (snap.tag === 'circle' && r <= 4 && origFill.startsWith('rgba')) {
+      el.setAttribute('fill', t.jc); return;
+    }
 
-      const mqMobile = window.matchMedia("(max-width: 760px)");
-      const isMobile = () => mqMobile.matches;
+    // Outer dashed ring — large circle, fill=none
+    if (snap.tag === 'circle' && r >= 50 && origFill === 'none') {
+      el.setAttribute('stroke', t.brd); return;
+    }
 
-      let zTop = 10;
+    // Main pad circles (r=46,38) and component body circles (r=30 transistor)
+    if (snap.tag === 'circle' && r >= 28 && origFill.match(/^#0[0-9a-f]/i)) {
+      // Large pad: stroke gets accent; inner dark: no stroke change
+      if (r >= 44) { el.setAttribute('stroke', t.acc); el.setAttribute('fill', t.bg2); }
+      else if (r >= 36) { el.setAttribute('stroke', t.acc); el.setAttribute('fill', t.bg3); }
+      else { el.setAttribute('fill', t.bg2); } // transistor body — no stroke override (uses rgba)
+      return;
+    }
 
-      function getTemplateHTML(id) {
-        const tpl = document.getElementById(`tpl-${id}`);
-        return tpl ? tpl.innerHTML : `<p><strong>${id}</strong></p>`;
+    // Rects (node bodies)
+    if (snap.tag === 'rect') {
+      if (origFill.match(/^#0[0-9a-f]/i)) el.setAttribute('fill', t.bg2);
+      if (origStroke.startsWith('rgba'))   el.setAttribute('stroke', t.ns);
+      return;
+    }
+
+    // Lines (pins, plates)
+    if (snap.tag === 'line') {
+      if (origStroke.startsWith('rgba')) el.setAttribute('stroke', t.ns);
+      return;
+    }
+
+    // Paths (coils, transistor)
+    if (snap.tag === 'path') {
+      if (origStroke.startsWith('rgba')) el.setAttribute('stroke', t.ns);
+      return;
+    }
+
+    // Polygon (transistor arrow)
+    if (snap.tag === 'polygon') { el.setAttribute('fill', t.ns); return; }
+
+    // Text
+    if (snap.tag === 'text') {
+      if (origFill === '#ffffff') return; // white node labels stay white
+      if (origFill === 'none')   return;
+      // Teal-ish text → main text color
+      if (origFill === '#5ec8d4' || origFill.startsWith('rgba(94,200')) {
+        el.setAttribute('fill', t.tx); return;
       }
-
-      function buildWindowGalleryItems(item) {
-        return GALLERY_DATA[item.id] || [
-          { type: "image", src: item.src, title: item.title }
-        ];
+      // Sub text
+      if (origFill.startsWith('rgba')) { el.setAttribute('fill', t.txs); return; }
+      // Flavor VCC/GND text
+      if (origFill.startsWith('rgba') || origFill === '#5ec8d4') {
+        el.setAttribute('fill', t.txs);
       }
+      return;
+    }
+  });
 
-      function bringToFront(win) { win.style.zIndex = String(++zTop); }
-      function randBetween(min, max) { return min + Math.random() * (max - min); }
-      function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+  // Set panel CSS vars on root so all panels update
+  const r = document.documentElement;
+  r.style.setProperty('--sp-bg',   t.pBg);
+  r.style.setProperty('--sp-bd',   t.pBd);
+  r.style.setProperty('--sp-hbg',  t.hBg);
+  r.style.setProperty('--sp-hbd',  t.hBd);
+  r.style.setProperty('--sp-tx',   t.tx);
+  r.style.setProperty('--sp-acc',  t.ns);
+  r.style.setProperty('--sp-desc', t.desc);
+  r.style.setProperty('--sp-link', t.acc);
+  r.style.setProperty('--sp-ibg',  t.iBg);
+  r.style.setProperty('--sp-ph',   t.ph);
 
-      function computeSplayPositions(count) {
-        const WIN_W = 300;
-        const BAR_H = 34;
-        const IMG_H = 250;
-        const WIN_H = BAR_H + IMG_H;
+  // Dynamic styles for lit traces, button hovers
+  let ts = document.getElementById('dyn-tr');
+  if (!ts) { ts = document.createElement('style'); ts.id = 'dyn-tr'; document.head.appendChild(ts); }
+  ts.textContent = `
+    .tr.lit{stroke:${t.acc}!important;filter:drop-shadow(0 0 4px ${t.glow})!important}
+    #backArrow{border-color:${t.acc}!important;color:${t.acc}!important}
+    #backArrow:hover{background:${t.acc}!important;color:#fff!important}
+    .p-close:hover,.p-more:hover{background:${t.acc}!important;color:#fff!important}
+  `;
 
-        const rect = desktop.getBoundingClientRect();
-        const deskW = Math.max(320, rect.width || 320);
-        const deskH = Math.max(520, rect.height || 520);
+  // Panel colors now handled by CSS vars (--sp-*) set above
 
-        const startX  = 30;
-        const startY  = 24;
-        const stepX   = 140;
-        const stepY   = 10;
-        const zigAmp  = 26;
-        const jitterX = 14;
-        const jitterY = 10;
+  // Swatch
+  const sw = document.getElementById('themeSwatch');
+  if (t.rainbow) { sw.classList.add('rainbow'); sw.style.background = ''; }
+  else { sw.classList.remove('rainbow'); sw.style.background = t.swatch; }
 
-        const minX = 8;
-        const minY = 8;
-        const maxX = Math.max(minX, Math.floor(deskW - WIN_W - 8));
-        const maxY = Math.max(minY, Math.floor(deskH - WIN_H - 8));
+  // Reposition orbit buttons since theme may affect layout
+  requestAnimationFrame(positionAllOrbitBtns);
+}
 
-        const pos = [];
-        for (let i = 0; i < count; i++) {
-          const zig = (i % 2 === 0) ? -zigAmp : zigAmp;
+// ── RAINBOW PAGE ANIMATION ───────────────────────────
+let rainbowFrame = null;
+let rainbowHue   = 0;
 
-          let x = startX + i * stepX + randBetween(-jitterX, jitterX);
-          let y = startY + i * stepY + zig + randBetween(-jitterY, jitterY);
+// The six color "roles" we animate simultaneously
+// Each maps to an SVG element category or UI color
+function rainbowTick() {
+  rainbowHue = (rainbowHue + 0.08) % 360; // very slow — full cycle ~75 seconds
+  const h = rainbowHue;
 
-          x = clamp(x, minX, maxX);
-          y = clamp(y, minY, maxY);
+  // Derive accent, text, trace from the hue
+  const acc  = `hsl(${h}, 70%, 45%)`;
+  const tx   = `hsl(${h}, 60%, 72%)`;
+  const txs  = `hsla(${h}, 60%, 72%, 0.5)`;
+  const tr_c = `hsla(${h}, 65%, 40%, 0.22)`;
+  const ns   = `hsla(${h}, 65%, 40%, 0.45)`;
+  const jc   = `hsla(${h}, 65%, 40%, 0.35)`;
+  const brd  = `hsla(${h}, 50%, 35%, 0.35)`;
+  const glow = `hsla(${h}, 70%, 45%, 0.7)`;
+  const grid = `hsla(${h}, 50%, 30%, 0.07)`;
+  const pBd  = `hsla(${h}, 60%, 40%, 0.5)`;
+  const hBg  = `hsla(${h}, 60%, 35%, 0.15)`;
+  const hBd  = `hsla(${h}, 60%, 40%, 0.4)`;
+  const iBd  = `hsla(${h}, 60%, 40%, 0.4)`;
+  const ph   = `hsla(${h}, 60%, 40%, 0.5)`;
 
-          pos.push({ x, y });
-        }
-        return pos;
+  // Background: very dark, barely tinted
+  const bgH  = (h + 180) % 360; // complement for bg
+  document.body.style.background = `hsl(${bgH}, 25%, 4%)`;
+  document.querySelector('.wrap').style.background = `hsl(${bgH}, 25%, 4%)`;
+
+  // Grid
+  let gs = document.getElementById('dyn-grid');
+  if (gs) gs.textContent = `.wrap::before{background-image:linear-gradient(${grid} 1px,transparent 1px),linear-gradient(90deg,${grid} 1px,transparent 1px)!important}`;
+
+  // Corners
+  document.querySelectorAll('.corner').forEach(c => c.style.borderColor = brd);
+
+  // SVG elements via snapshot
+  if (svgSnapshot) {
+    svgSnapshot.forEach(snap => {
+      const el = document.querySelector(`[data-snap-idx="${snap.idx}"]`);
+      if (!el) return;
+      const cls  = snap.classList || [];
+      const origFill   = snap.fill   || '';
+      const origStroke = snap.stroke || '';
+      const r = parseFloat(snap.r || '0');
+
+      if (cls.includes('nhalo'))                                       { el.setAttribute('stroke', acc); return; }
+      if (snap.tag === 'polyline' && !el.classList.contains('lit'))   { el.setAttribute('stroke', tr_c); return; }
+      if (snap.tag === 'circle'  && r <= 4  && origFill.startsWith('rgba')) { el.setAttribute('fill', jc); return; }
+      if (snap.tag === 'circle'  && r >= 50 && origFill === 'none')  { el.setAttribute('stroke', brd); return; }
+      if (snap.tag === 'circle'  && r >= 28 && origFill.match(/^#0[0-9a-f]/i)) {
+        if (r >= 44) { el.setAttribute('stroke', acc); el.setAttribute('fill', `hsl(${bgH},25%,5%)`); }
+        else if (r >= 36) { el.setAttribute('stroke', acc); el.setAttribute('fill', `hsl(${bgH},25%,8%)`); }
+        else { el.setAttribute('fill', `hsl(${bgH},25%,5%)`); }
+        return;
       }
-
-      function applyDesktopPosition(win) {
-        const x = parseFloat(win.dataset.x || "0");
-        const y = parseFloat(win.dataset.y || "0");
-        win.style.left = x + "px";
-        win.style.top = y + "px";
+      if (snap.tag === 'rect') {
+        if (origFill.match(/^#0[0-9a-f]/i))  el.setAttribute('fill', `hsl(${bgH},25%,5%)`);
+        if (origStroke.startsWith('rgba'))    el.setAttribute('stroke', ns);
+        return;
       }
-
-      function applyMobilePosition(win) {
-        win.style.left = "";
-        win.style.top = "";
+      if (snap.tag === 'line')    { if (origStroke.startsWith('rgba')) el.setAttribute('stroke', ns); return; }
+      if (snap.tag === 'path')    { if (origStroke.startsWith('rgba')) el.setAttribute('stroke', ns); return; }
+      if (snap.tag === 'polygon') { el.setAttribute('fill', ns); return; }
+      if (snap.tag === 'text') {
+        if (origFill === '#ffffff') return;
+        if (origFill === 'none')    return;
+        if (origFill === '#5ec8d4' || origFill.startsWith('rgba(94,200')) { el.setAttribute('fill', tx); return; }
+        if (origFill.startsWith('rgba')) { el.setAttribute('fill', txs); return; }
       }
+    });
+  }
 
-      function syncModeClass() {
-        if (isMobile()) desktop.classList.add("is-mobile");
-        else desktop.classList.remove("is-mobile");
+  // Lit traces
+  let ts = document.getElementById('dyn-tr');
+  if (ts) ts.textContent = `
+    .tr.lit{stroke:${acc}!important;filter:drop-shadow(0 0 4px ${glow})!important}
+    #backArrow{border-color:${acc}!important;color:${acc}!important}
+    #backArrow:hover{background:${acc}!important;color:#fff!important}
+    .p-close:hover,.p-more:hover{background:${acc}!important;color:#fff!important}
+  `;
 
-        const wins = Array.from(desktop.querySelectorAll(".pwin"));
-        wins.forEach(win => {
-          if (isMobile()) applyMobilePosition(win);
-          else applyDesktopPosition(win);
-        });
+  // Panel + sub-panel via CSS vars
+  const descColor = `hsla(${h},40%,85%,0.9)`;
+  const rr = document.documentElement;
+  rr.style.setProperty('--sp-bg',   `hsl(${bgH},25%,4%)`);
+  rr.style.setProperty('--sp-bd',   pBd);
+  rr.style.setProperty('--sp-hbg',  hBg);
+  rr.style.setProperty('--sp-hbd',  hBd);
+  rr.style.setProperty('--sp-tx',   tx);
+  rr.style.setProperty('--sp-acc',  ns);
+  rr.style.setProperty('--sp-desc', descColor);
+  rr.style.setProperty('--sp-link', acc);
+  rr.style.setProperty('--sp-ibg',  `hsl(${bgH},25%,5%)`);
+  rr.style.setProperty('--sp-ph',   ph);
+
+  // Keep swatch in sync with page hue
+  const sw = document.getElementById('themeSwatch');
+  if (sw) { sw.style.background = `hsl(${h}, 70%, 55%)`; sw.style.animation = 'none'; }
+
+  rainbowFrame = requestAnimationFrame(rainbowTick);
+}
+
+function startRainbow() {
+  if (rainbowFrame) return;
+  rainbowTick();
+}
+
+function stopRainbow() {
+  if (rainbowFrame) { cancelAnimationFrame(rainbowFrame); rainbowFrame = null; }
+}
+
+function cycleTheme() {
+  themeIndex = (themeIndex + 1) % THEMES.length;
+  const t = THEMES[themeIndex];
+  if (t.rainbow) { stopRainbow(); startRainbow(); } // rainbowTick owns all styling
+  else           { stopRainbow(); applyTheme(t); }
+}
+
+// Init swatch
+document.getElementById('themeSwatch').style.background = THEMES[0].swatch;
+requestAnimationFrame(() => requestAnimationFrame(positionAllOrbitBtns));
+
+function activateCenter() {
+  if (inSub) return;
+  if (activeId === '__center') { closePanel(); return; }
+  activeId = '__center';
+  clearTraces();
+  document.getElementById('h-center').classList.add('on');
+  document.getElementById('pHeaderTitle').textContent = about.title;
+  document.getElementById('pDesc').textContent = about.desc;
+  document.getElementById('pMore').style.display = 'none';
+  // Add CV link to about desc
+  const descEl = document.getElementById('pDesc');
+  descEl.innerHTML = about.desc.replace(/\n/g, '<br>') +
+    (about.cv ? `<br><br><a href="${about.cv}" target="_blank" class="cv-link">VIEW CV →</a>` : '');
+  setImage(about.img);
+  document.getElementById('panel').classList.add('vis');
+}
+
+function activateNode(id) {
+  if (inSub) return;
+  if (activeId === id) { closePanel(); return; }
+  activeId = id;
+  clearTraces();
+  const n = nodes[id];
+  n.traces.forEach(tid => {
+    const el = document.getElementById(tid);
+    if (el) el.classList.add('lit');
+  });
+  const h = document.getElementById('h-' + id);
+  if (h) h.classList.add('on');
+  document.getElementById('pHeaderTitle').textContent = n.title;
+  document.getElementById('pDesc').textContent = n.desc;
+  document.getElementById('pMore').style.display = 'inline-block';
+  setImage(n.img);
+  document.getElementById('panel').classList.add('vis');
+}
+
+function makeImg(src, extraStyle) {
+  const wrap = document.createElement('div');
+  wrap.className = 'sub-panel-img';
+  if (extraStyle) wrap.style.cssText = extraStyle;
+  const tryImg = new Image();
+  tryImg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+  tryImg.onload  = () => wrap.appendChild(tryImg);
+  tryImg.onerror = () => { wrap.innerHTML = `<div class="sub-panel-img-ph">[ ${src} ]</div>`; };
+  tryImg.src = src;
+  return wrap;
+}
+
+function openSubPanel(item) {
+  const inner = document.getElementById('subPanelInner');
+  inner.innerHTML = '';
+
+  // Embed (iframe: youtube / archive)
+  if (item.embed) {
+    const wrap = document.createElement('div');
+    wrap.className = 'sub-panel-embed';
+    wrap.innerHTML = `<iframe src="${item.embed}" allowfullscreen loading="lazy"></iframe>`;
+    inner.appendChild(wrap);
+  }
+
+  // Local video (click-to-play with controls)
+  if (item.localvideo) {
+    const wrap = document.createElement('div');
+    wrap.className = 'sub-panel-embed';
+    const vid = document.createElement('video');
+    vid.src = item.localvideo;
+    vid.controls = true;
+    vid.style.cssText = 'width:100%;height:100%;display:block;background:#000';
+    wrap.appendChild(vid);
+    inner.appendChild(wrap);
+  }
+
+  // Single image (above body text)
+  if (item.img) {
+    inner.appendChild(makeImg(item.img));
+  }
+
+  // Pair of images side by side
+  if (item.imgPair) {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:8px;width:100%';
+    item.imgPair.forEach(src => {
+      const wrap = makeImg(src, 'flex:1 1 0;min-width:0;height:140px');
+      row.appendChild(wrap);
+    });
+    inner.appendChild(row);
+  }
+
+  // Body text — strip redundant external "Watch here" link if embed/localvideo present
+  if (item.body) {
+    let bodyHTML = item.body.split('\n').join('<br>');
+    if (item.embed || item.localvideo) {
+      const parts = bodyHTML.split('<br><br>');
+      if (parts.length > 1 && parts[parts.length - 1].trim().startsWith('<a ') &&
+          /watch|view|listen/i.test(parts[parts.length - 1])) {
+        parts.pop();
+        bodyHTML = parts.join('<br><br>');
       }
+    }
+    const txt = document.createElement('div');
+    txt.className = 'sub-panel-text';
+    txt.innerHTML = bodyHTML;
+    inner.appendChild(txt);
+  }
 
-      function createWindow(item) {
-        const win = document.createElement("div");
-        win.className = "pwin";
-        win.dataset.id = item.id;
-        win.style.zIndex = String(++zTop);
+  // Image below text (e.g. Colour Organ)
+  if (item.imgBelow) {
+    inner.appendChild(makeImg(item.imgBelow));
+  }
 
-        win.innerHTML = `
-          <div class="pwin-bar" role="toolbar">
-            <button class="pwin-close" type="button" aria-label="Close window">×</button>
-            <div class="pwin-title" title="${item.title}">${item.title}</div>
-          </div>
+  document.getElementById('subPanelTitle').textContent = item.l;
+  document.getElementById('subPanel').classList.add('vis');
+}
 
-          <div class="pwin-body" role="button" tabindex="0" aria-label="Open description">
-            <img src="${item.src}" alt="${item.title}">
-          </div>
+function closeSubPanel() {
+  const sp = document.getElementById('subPanel');
+  sp.classList.remove('vis');
+  // Clear embeds to stop video playback
+  document.querySelectorAll('.sub-panel-embed iframe').forEach(f => { f.src = f.src; });
+}
 
-          <div class="pwin-overlay" aria-hidden="true">
-            <div class="pwin-overlay-bar">
-              <button class="pwin-min" type="button" aria-label="Minimize description">–</button>
-              ${item.hasGallery !== false ? `
-                <button class="popup-link pwin-gallery-link" type="button">open gallery ↗</button>
-              ` : ``}
-            </div>
+// Layout positions for sub-nodes by count
+// Each layout is an array of {x,y,tx,ty} for node placement
+// Node rect is 96w x 36h, so center x offset = 48, y offset = 18
+const SUB_LAYOUTS = {
+  // 1 item: top only
+  1: [
+    { rx:282, ry:74,  tx:330, ty:92,  trEnd:'330,214 330,110' }
+  ],
+  // 2 items: left + right
+  2: [
+    { rx:82,  ry:242, tx:130, ty:260, trEnd:'284,260 178,260' },
+    { rx:482, ry:242, tx:530, ty:260, trEnd:'376,260 482,260' }
+  ],
+  // 3 items: top + left + right  (no bottom)
+  3: [
+    { rx:282, ry:74,  tx:330, ty:92,  trEnd:'330,214 330,110' },
+    { rx:82,  ry:242, tx:130, ty:260, trEnd:'284,260 178,260' },
+    { rx:482, ry:242, tx:530, ty:260, trEnd:'376,260 482,260' }
+  ],
+  // 4 items: top + left + right + bottom
+  4: [
+    { rx:282, ry:74,  tx:330, ty:92,  trEnd:'330,214 330,110' },
+    { rx:82,  ry:242, tx:130, ty:260, trEnd:'284,260 178,260' },
+    { rx:482, ry:242, tx:530, ty:260, trEnd:'376,260 482,260' },
+    { rx:282, ry:410, tx:330, ty:428, trEnd:'330,306 330,410' }
+  ],
+  // 5 items: top + left + right + bottom + top-right
+  5: [
+    { rx:282, ry:74,  tx:330, ty:92,  trEnd:'330,214 330,110' },
+    { rx:82,  ry:242, tx:130, ty:260, trEnd:'284,260 178,260' },
+    { rx:482, ry:242, tx:530, ty:260, trEnd:'376,260 482,260' },
+    { rx:282, ry:410, tx:330, ty:428, trEnd:'330,306 330,410' },
+    { rx:472, ry:74,  tx:520, ty:92,  trEnd:'376,214 472,92' }
+  ],
+  // 6 items: 5 + top-left
+  6: [
+    { rx:282, ry:74,  tx:330, ty:92,  trEnd:'330,214 330,110' },
+    { rx:82,  ry:242, tx:130, ty:260, trEnd:'284,260 178,260' },
+    { rx:482, ry:242, tx:530, ty:260, trEnd:'376,260 482,260' },
+    { rx:282, ry:410, tx:330, ty:428, trEnd:'330,306 330,410' },
+    { rx:472, ry:74,  tx:520, ty:92,  trEnd:'376,214 472,92'  },
+    { rx:92,  ry:74,  tx:140, ty:92,  trEnd:'284,214 188,92'  }
+  ],
+  // 7 items: 6 + bottom-right
+  7: [
+    { rx:282, ry:74,  tx:330, ty:92,  trEnd:'330,214 330,110' },
+    { rx:82,  ry:242, tx:130, ty:260, trEnd:'284,260 178,260' },
+    { rx:482, ry:242, tx:530, ty:260, trEnd:'376,260 482,260' },
+    { rx:282, ry:410, tx:330, ty:428, trEnd:'330,306 330,410' },
+    { rx:472, ry:74,  tx:520, ty:92,  trEnd:'376,214 472,92'  },
+    { rx:92,  ry:74,  tx:140, ty:92,  trEnd:'284,214 188,92'  },
+    { rx:472, ry:410, tx:520, ty:428, trEnd:'376,306 472,410' }
+  ]
+};
 
-            <div class="pwin-overlay-scroll">
-              <div class="pwin-overlay-text"></div>
-            </div>
-          </div>
-        `;
+const NS = 'http://www.w3.org/2000/svg';
 
-        const bar = win.querySelector(".pwin-bar");
-        const close = win.querySelector(".pwin-close");
-        const body = win.querySelector(".pwin-body");
+function buildSubBoard(s) {
+  const svg = document.getElementById('svgSub');
+  if (!svg) { console.error('svgSub not found'); return; }
+  // Remove old dynamic content (keep defs)
+  [...svg.children].forEach(c => { if (c.tagName !== 'defs') svg.removeChild(c); });
 
-        const overlay = win.querySelector(".pwin-overlay");
-        const minBtn = win.querySelector(".pwin-min");
-        const overlayScroll = win.querySelector(".pwin-overlay-scroll");
-        const overlayText = win.querySelector(".pwin-overlay-text");
-        const galleryLink = win.querySelector(".pwin-gallery-link");
+  const items = s.items;
+  const count = Math.min(items.length, 7);
+  const layout = SUB_LAYOUTS[count] || SUB_LAYOUTS[4];
 
-        function openOverlay(e) {
-          if (e) e.stopPropagation();
-          bringToFront(win);
+  // Center node
+  const acc = '#0a7c8c'; // will get re-themed after snapshot
+  function svgEl(tag, attrs) {
+    const el = document.createElementNS(NS, tag);
+    Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k,v));
+    return el;
+  }
 
-          overlayText.innerHTML = getTemplateHTML(item.id);
-          overlay.classList.add("active");
-          overlay.setAttribute("aria-hidden", "false");
-          overlayScroll.scrollTop = 0;
+  svg.appendChild(svgEl('circle', {cx:330,cy:260,r:46,fill:'#071515',stroke:acc,'stroke-width':1.5,filter:'url(#gl2)'}));
+  svg.appendChild(svgEl('circle', {cx:330,cy:260,r:38,fill:'#0a1e1e'}));
+  const cLabel = svgEl('text', {x:330,y:260,'text-anchor':'middle','dominant-baseline':'central','font-size':14,fill:'#5ec8d4','letter-spacing':1,'font-family':"'Share Tech Mono',monospace"});
+  cLabel.id = 'subCenterLabel';
+  cLabel.textContent = s.center;
+  svg.appendChild(cLabel);
 
-          minBtn.focus({ preventScroll: true });
-        }
+  // Traces + nodes
+  layout.forEach((pos, i) => {
+    const item = items[i];
+    // Trace
+    const tr = svgEl('polyline', {class:'tr',points:pos.trEnd,fill:'none',stroke:'rgba(10,124,140,0.18)','stroke-width':2,'stroke-linecap':'square'});
+    svg.appendChild(tr);
+    // Node group
+    const g = svgEl('g', {id:'sub-n'+(i+1),cursor:'pointer'});
+    g.classList.add('sub-nd');
+    const r = svgEl('rect', {x:pos.rx,y:pos.ry,width:96,height:36,rx:3,fill:'#071515',stroke:'rgba(10,124,140,0.35)','stroke-width':1,filter:'url(#glb2)'});
+    const t = svgEl('text', {id:'sub-l'+(i+1),x:pos.tx,y:pos.ty,'text-anchor':'middle','dominant-baseline':'central','font-size':12,fill:'#ffffff','font-weight':700,'font-family':"'Share Tech Mono',monospace"});
+    t.textContent = item.l;
+    g.appendChild(r); g.appendChild(t);
+    g.addEventListener('click', () => openSubPanel(item));
+    // Hover effect
+    g.addEventListener('mouseenter', () => r.setAttribute('stroke','rgba(10,124,140,0.8)'));
+    g.addEventListener('mouseleave', () => r.setAttribute('stroke','rgba(10,124,140,0.35)'));
+    svg.appendChild(g);
+  });
 
-        function closeOverlay(e) {
-          if (e) e.stopPropagation();
-          overlay.classList.remove("active");
-          overlay.setAttribute("aria-hidden", "true");
-        }
+  // Re-snapshot after building so theme system picks up new elements
+  svgSnapshot = null;
+}
 
-        close.addEventListener("click", (e) => {
-          e.stopPropagation();
-          if (isMobile()) {
-            win.classList.add("removing");
-            setTimeout(() => win.remove(), 140);
-          } else {
-            win.remove();
-          }
-        });
+function drillIn() {
+  if (!activeId || activeId === '__center') return;
+  const n = nodes[activeId], s = n.sub;
+  buildSubBoard(s);
 
-        win.addEventListener("pointerdown", () => bringToFront(win));
+  // Writing links (top-left corner bullets for making_thinking)
+  const wl = document.getElementById('writingLinks');
+  if (n.writingLinks && n.writingLinks.length) {
+    wl.innerHTML = '<div class="writing-links-label">WRITING</div>' +
+      n.writingLinks.map(lk =>
+        `<a href="${lk.url}" target="_blank">${lk.label}</a>`
+      ).join('');
+    wl.classList.add('vis');
+  } else {
+    wl.innerHTML = '';
+    wl.classList.remove('vis');
+  }
 
-        body.addEventListener("click", openOverlay);
-        body.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === " ") openOverlay(e);
-        });
+  const trace = document.getElementById(n.traces[0]);
+  if (trace) trace.classList.add('lit');
+  setTimeout(() => {
+    const main = document.getElementById('viewMain');
+    const sub  = document.getElementById('viewSub');
+    main.style.opacity = '0'; main.style.transition = 'opacity 0.35s';
+    setTimeout(() => {
+      main.classList.add('hidden');
+      sub.classList.remove('hidden');
+      sub.style.opacity = '0'; sub.style.transition = 'opacity 0.35s';
+      requestAnimationFrame(() => requestAnimationFrame(() => { sub.style.opacity = '1'; }));
+      inSub = true;
+      const btn = document.getElementById('backArrow');
+      btn.textContent = n.backPos.arrow;
+      positionBackArrow(n.backPos.side);
+      btn.classList.add('vis');
+      closePanel();
+    }, 350);
+  }, 280);
+}
 
-        minBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
-        minBtn.addEventListener("click", closeOverlay);
+function goHome() {
+  closeSubPanel();
+  const main = document.getElementById('viewMain');
+  const sub  = document.getElementById('viewSub');
+  sub.style.opacity = '0'; sub.style.transition = 'opacity 0.3s';
+  setTimeout(() => {
+    sub.classList.add('hidden');
+    main.classList.remove('hidden');
+    main.style.opacity = '0'; main.style.transition = 'opacity 0.3s';
+    requestAnimationFrame(() => requestAnimationFrame(() => { main.style.opacity = '1'; }));
+    inSub = false; activeId = null; currentSide = null;
+    document.getElementById('backArrow').classList.remove('vis');
 
-        if (galleryLink) {
-          galleryLink.addEventListener("pointerdown", (e) => e.stopPropagation());
-          galleryLink.addEventListener("click", (e) => {
-            e.stopPropagation();
-            window.__openSnakeGallery(buildWindowGalleryItems(item), item.title, 0);
-          });
-        }
+    clearTraces();
+  }, 300);
+}
 
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape" && overlay.classList.contains("active")) closeOverlay(e);
-        });
-
-        bar.addEventListener("pointerdown", (e) => {
-          if (isMobile()) return;
-          if (e.target.closest(".pwin-close")) return;
-
-          e.preventDefault();
-          bringToFront(win);
-
-          const rectDesk = desktop.getBoundingClientRect();
-          const rectWin = win.getBoundingClientRect();
-
-          const startX = e.clientX;
-          const startY = e.clientY;
-
-          const startLeft = rectWin.left - rectDesk.left;
-          const startTop  = rectWin.top - rectDesk.top;
-
-          win.setPointerCapture(e.pointerId);
-
-          function onMove(ev) {
-            const dx = ev.clientX - startX;
-            const dy = ev.clientY - startY;
-
-            const nextLeft = startLeft + dx;
-            const nextTop  = startTop + dy;
-
-            win.style.left = nextLeft + "px";
-            win.style.top  = nextTop + "px";
-
-            win.dataset.x = String(nextLeft);
-            win.dataset.y = String(nextTop);
-          }
-
-          function onUp() {
-            try { win.releasePointerCapture(e.pointerId); } catch (_) {}
-            win.removeEventListener("pointermove", onMove);
-            win.removeEventListener("pointerup", onUp);
-            win.removeEventListener("pointercancel", onUp);
-          }
-
-          win.addEventListener("pointermove", onMove);
-          win.addEventListener("pointerup", onUp);
-          win.addEventListener("pointercancel", onUp);
-        });
-
-        return win;
-      }
-
-      function populate() {
-        desktop.innerHTML = "";
-
-        const wins = PRACTICE.map(item => {
-          const w = createWindow(item);
-          desktop.appendChild(w);
-          return w;
-        });
-
-        const placeDesktop = () => {
-          if (isMobile()) {
-            syncModeClass();
-            return;
-          }
-
-          const positions = computeSplayPositions(wins.length);
-          wins.forEach((win, i) => {
-            win.dataset.x = String(positions[i].x);
-            win.dataset.y = String(positions[i].y);
-            applyDesktopPosition(win);
-          });
-
-          syncModeClass();
-        };
-
-        requestAnimationFrame(() => requestAnimationFrame(placeDesktop));
-      }
-
-      resetBtn.addEventListener("click", populate);
-      populate();
-
-      let resizeTimer = null;
-      window.addEventListener("resize", () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(syncModeClass, 120);
-      });
-
-      mqMobile.addEventListener?.("change", syncModeClass);
-    })();
-
-    /* ---------- Talking with Others ---------- */
-    (() => {
-      const row = document.getElementById("talkingRow");
-      const titleEl = document.getElementById("talkingTitle");
-      const descEl = document.getElementById("talkingDescription");
-      const openEl = document.getElementById("talkingOpen");
-      if (!row || !titleEl || !descEl || !openEl) return;
-
-      function setActive(btn) {
-        row.querySelectorAll(".talk-pixel.is-active")
-          .forEach(b => b.classList.remove("is-active"));
-
-        btn.classList.add("is-active");
-
-        const title = btn.dataset.title || "—";
-        const description = btn.dataset.description || "";
-        const href = btn.dataset.href || "#";
-        const color = btn.style.background || getComputedStyle(btn).backgroundColor;
-
-        titleEl.textContent = title;
-        descEl.textContent = description;
-
-        openEl.href = href;
-        openEl.setAttribute("aria-disabled", href === "#" ? "true" : "false");
-        openEl.style.setProperty("--active-color", color);
-      }
-
-      row.addEventListener("click", (e) => {
-        const btn = e.target.closest(".talk-pixel");
-        if (!btn) return;
-        setActive(btn);
-      });
-
-      const first = row.querySelector(".talk-pixel");
-      if (first) setActive(first);
-    })();
-  </script>
+</script>
 </body>
 </html>
