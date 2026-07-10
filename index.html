@@ -140,7 +140,19 @@
       transition: opacity 0.35s;
     }
     .view.hidden { opacity: 0; pointer-events: none; }
-    .view svg { width: 100%; height: 100%; display: block; }
+    .view svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    max-height: 100vh;
+  }
+  /* On portrait screens, let SVG be taller than wide */
+  @media (max-aspect-ratio: 1/1) {
+    .view svg {
+      width: auto;
+      height: 100%;
+    }
+  }
 
     /* ── SVG INTERACTIVITY ────────────────────────────── */
     .nd { cursor: pointer; }
@@ -563,7 +575,7 @@ const nodes = {
   },
     gathering_sharing: {
     title: 'GATHERING / SHARING',
-    desc: 'Community events, curation,\nlectures and mentoring.\nHelping make spaces that bring people together.',
+    desc: 'Community events, curation,\nlectures and helping make spaces that bring people together.',
     img: 'assets/GAC.png',
     traces: ['tr-gathering-sharing'],
     backPos: { side: 'left', arrow: '\u2190' },
@@ -590,7 +602,7 @@ const nodes = {
               { l: 'HERE WE ARE', body: `This discussion was had during the third iteration of GlitchArtIsDead. Moderating this roundtable with Dr. Michael Betancourt, we traced Glitch Art's evolution from 1980s-90s technical accidents to intentional symbolic works that challenge digital boundaries.\n\n<a href='assets/HereWeAre_GAID3_2022.pdf' target='_blank'>Read the text script →</a>\n\nPhoto taken by <a href='https://www.instagram.com/platinumjimjam/' target='_blank'>Jim Jam</a>.`, img: 'assets/HereWeAre.png' },
         { l: 'A.I. AND ONLINE COMMUNITIES', body: `This conversation brings together artist-researcher J. Rosenbaum and theorist-artist Michael Betancourt to examine how AI is reshaping identity, perception, power, and social life.\n\n<a href="https://youtu.be/u7pGPptqkjs?si=YGMdiqdXwLRTzJeA" target="_blank">Watch here →</a>`, embed: 'https://www.youtube.com/embed/u7pGPptqkjs' },
         { l: 'SCANLINES.XYZ', body: `Scanlines.xyz creators Paloma Kop, Andrei Jay, and Tim Caldwell reflect on the origins and evolution of their community-driven forum dedicated to DIY video synthesis and experimental media.\n\n<a href="https://youtu.be/pT5MtQJTCVA?si=VF8x_bZKyUgvP4KN" target="_blank">Watch here →</a>`, embed: 'https://www.youtube.com/embed/pT5MtQJTCVA' },
-        { l: 'ART TRENDS IN GAC', body: `Thomas Collet (<a href="http://chepertom.net/" target="_blank">chepertom.net</a>), an admin from Glitch Artists Collective, speaks with glitch artist and curator Bee Nix to discuss art practices and trends in Glitch Art.\n\n<a href="https://youtu.be/_ICD8aVnprA?si=lWcNkPl-P5IPQLZi" target="_blank">Watch here →</a>`, embed: 'https://www.youtube.com/embed/_ICD8aVnprA' },
+        { l: 'ART TRENDS IN GAC', body: `Me and Thomas Collet (<a href="http://chepertom.net/" target="_blank">chepertom.net</a>), an artist and admin from Glitch Artists Collective, discuss art practices and trends in Glitch Art.\n\n<a href="https://youtu.be/_ICD8aVnprA?si=lWcNkPl-P5IPQLZi" target="_blank">Watch here →</a>`, embed: 'https://www.youtube.com/embed/_ICD8aVnprA' },
         { l: 'GORK', body: `A conversation between GAC curator Bee Nix and Oregon-based multimedia artist Gork on collage, glitch, circuit bending, myth-making, creative doubt, collaboration, and what it means to make work that's shared and witnessed.\n\n<a href="https://youtu.be/2FZ3mJfzuf0?si=5E55Z5Gbl1Uw6vhT" target="_blank">Watch here →</a>`, embed: 'https://www.youtube.com/embed/2FZ3mJfzuf0' },
         { l: 'TOTALLY NOT A SPEEDRUN', body: `Me and Kaspar Ravel give an interactive talk within the 3D environment of /'FU:BAR/ 2022 where we discuss techniques, history, and personal observations of the exhibition.\n\n<a href="https://www.youtube.com/watch?v=tWp3CEuwzdE" target="_blank">Watch here →</a>`, embed: 'https://www.youtube.com/embed/tWp3CEuwzdE' },
         { l: 'SLOWRUN', body: `Discussing /'FU:BAR/ past and present, Kaspar Ravel and I guide you through the exhibition via selected works.\n\n<a href="https://www.youtube.com/live/q7vPZkCKukQ" target="_blank">Watch here →</a>`, embed: 'https://www.youtube.com/embed/q7vPZkCKukQ' }
@@ -711,9 +723,17 @@ function positionBackArrow(side) {
 }
 
 window.addEventListener('resize', positionAllOrbitBtns);
+window.addEventListener('orientationchange', () => {
+  // SVG needs a moment to reflow after orientation change
+  setTimeout(positionAllOrbitBtns, 150);
+  setTimeout(positionAllOrbitBtns, 400);
+});
 document.getElementById('viewMain').addEventListener('transitionend', positionAllOrbitBtns);
 document.getElementById('viewSub').addEventListener('transitionend', positionAllOrbitBtns);
+// Position buttons multiple times to handle slow mobile renders
 requestAnimationFrame(() => requestAnimationFrame(positionAllOrbitBtns));
+setTimeout(positionAllOrbitBtns, 100);
+setTimeout(positionAllOrbitBtns, 500);
 
 // ── THEMES ────────────────────────────────────────────
 const THEMES = [
@@ -839,7 +859,7 @@ function applyTheme(t) {
       // Large pad: stroke gets accent; inner dark: no stroke change
       if (r >= 44) { el.setAttribute('stroke', t.acc); el.setAttribute('fill', t.bg2); }
       else if (r >= 36) { el.setAttribute('stroke', t.acc); el.setAttribute('fill', t.bg3); }
-      else { el.setAttribute('fill', t.bg2); } // transistor body — no stroke override (uses rgba)
+      else { el.setAttribute('fill', t.bg2); if (origStroke && origStroke.startsWith('rgba')) el.setAttribute('stroke', t.ns); }
       return;
     }
 
@@ -972,7 +992,7 @@ function rainbowTick() {
       if (snap.tag === 'circle'  && r >= 28 && origFill.match(/^#0[0-9a-f]/i)) {
         if (r >= 44) { el.setAttribute('stroke', acc); el.setAttribute('fill', `hsl(${bgH},25%,5%)`); }
         else if (r >= 36) { el.setAttribute('stroke', acc); el.setAttribute('fill', `hsl(${bgH},25%,8%)`); }
-        else { el.setAttribute('fill', `hsl(${bgH},25%,5%)`); }
+        else { el.setAttribute('fill', `hsl(${bgH},25%,5%)`); if (origStroke && origStroke.startsWith('rgba')) el.setAttribute('stroke', ns); }
         return;
       }
       if (snap.tag === 'rect') {
