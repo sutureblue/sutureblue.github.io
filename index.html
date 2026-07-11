@@ -102,9 +102,10 @@
       border: 1.5px solid rgba(255,255,255,0.35);
       background: #0a7c8c;
       pointer-events: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, opacity 0.2s;
+      opacity: 0.3;
     }
-    #themeBtn:hover .theme-swatch { border-color: rgba(255,255,255,0.8); }
+    #themeBtn:hover .theme-swatch { border-color: rgba(255,255,255,0.8); opacity: 0.7; }
 
     @keyframes rainbow-spin {
       0%   { background: hsl(0,70%,60%); }
@@ -141,17 +142,11 @@
     }
     .view.hidden { opacity: 0; pointer-events: none; }
     .view svg {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     display: block;
-    max-height: 100vh;
-  }
-  /* On portrait screens, let SVG be taller than wide */
-  @media (max-aspect-ratio: 1/1) {
-    .view svg {
-      width: auto;
-      height: 100%;
-    }
   }
 
     /* ── SVG INTERACTIVITY ────────────────────────────── */
@@ -243,7 +238,6 @@
       font-size: 13px;
       color: var(--sp-desc, rgba(180,225,220,0.9));
       line-height: 1.7;
-      white-space: pre-line;
       letter-spacing: 0.3px;
     }
     .p-more {
@@ -310,7 +304,7 @@
     .sub-panel-body::-webkit-scrollbar { width: 4px; }
     .sub-panel-body::-webkit-scrollbar-thumb { background: var(--sp-acc, rgba(10,124,140,0.4)); border-radius: 2px; }
     .sub-panel-inner { display: flex; flex-direction: column; gap: 14px; }
-    .sub-panel-text { font-size: 12px; color: var(--sp-desc, rgba(180,225,220,0.9)); line-height: 1.7; letter-spacing: 0.3px; white-space: pre-line; }
+    .sub-panel-text { font-size: 12px; color: var(--sp-desc, rgba(180,225,220,0.9)); line-height: 1.7; letter-spacing: 0.3px; }
     .sub-panel-text a { color: var(--sp-link, #0a7c8c); text-decoration: none; border-bottom: 1px solid var(--sp-bd, rgba(10,124,140,0.4)); }
     .sub-panel-text a:hover { color: var(--sp-tx, #5ec8d4); }
     .sub-panel-img { width: 100%; max-height: 180px; border-radius: 6px; border: 1px solid var(--sp-bd, rgba(10,124,140,0.35)); background: var(--sp-ibg, #0a1e1e); overflow: hidden; display: flex; align-items: center; justify-content: center; }
@@ -411,94 +405,88 @@
        MAIN VIEW
   ══════════════════════════════════════════════ -->
   <div id="viewMain" class="view">
-    <svg viewBox="0 0 660 520" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="gl"><feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         <filter id="glb"><feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
       </defs>
       <!-- MAKING/THINKING top-left → center right-angle -->
-      <polyline id="tr-making-thinking"   class="tr" points="220,150 220,216 294,216 294,260" fill="none" stroke="rgba(10,124,140,0.2)" stroke-width="2" stroke-linecap="square"/>
+      <polyline id="tr-making-thinking" class="tr" points="200,120 200,266 254,266 254,300" fill="none" stroke="rgba(10,124,140,0.2)" stroke-width="2" stroke-linecap="square"/>
       <!-- GATHERING/SHARING right → center -->
-      <polyline id="tr-gathering-sharing" class="tr" points="468,260 366,260"                 fill="none" stroke="rgba(10,124,140,0.2)" stroke-width="2" stroke-linecap="square"/>
+      <polyline id="tr-gathering-sharing" class="tr" points="430,300 346,300" fill="none" stroke="rgba(10,124,140,0.2)" stroke-width="2" stroke-linecap="square"/>
       <!-- DISCUSSING bottom → center -->
-      <polyline id="tr-discussing"        class="tr" points="330,304 330,370"                 fill="none" stroke="rgba(10,124,140,0.2)" stroke-width="2" stroke-linecap="square"/>
-      <!-- junction dot -->
-      <circle cx="294" cy="216" r="3" fill="rgba(10,124,140,0.25)"/>
+      <polyline id="tr-discussing"        class="tr" points="300,354 300,432" fill="none" stroke="rgba(10,124,140,0.2)" stroke-width="2" stroke-linecap="square"/>
+      <!-- junction dots -->
+      <circle cx="254" cy="266" r="3" fill="rgba(10,124,140,0.25)"/>
       <!-- CENTER -->
       <g class="nd" onclick="activateCenter()">
-        <circle cx="330" cy="260" r="54" fill="none" stroke="rgba(10,124,140,0.16)" stroke-width="1.2" stroke-dasharray="5 3"/>
-        <circle cx="330" cy="260" r="46" fill="#071515" stroke="#0a7c8c" stroke-width="1.5" filter="url(#gl)"/>
-        <circle class="nhalo" id="h-center" cx="330" cy="260" r="52" fill="none" stroke="#0a7c8c" stroke-width="2" filter="url(#glb)"/>
-        <circle cx="330" cy="260" r="38" fill="#0a1e1e"/>
-        <text x="330" y="253" text-anchor="middle" font-size="14" fill="#5ec8d4" letter-spacing="2" font-family="'Share Tech Mono',monospace">BEE NIX</text>
-        <text x="330" y="271" text-anchor="middle" font-size="10" fill="rgba(94,200,212,0.5)" letter-spacing="1" font-family="'Share Tech Mono',monospace">SUTURE.BLUE</text>
+        <circle cx="300" cy="300" r="54" fill="none" stroke="rgba(10,124,140,0.16)" stroke-width="1.2" stroke-dasharray="5 3"/>
+        <circle cx="300" cy="300" r="46" fill="#071515" stroke="#0a7c8c" stroke-width="1.5" filter="url(#gl)"/>
+        <circle class="nhalo" id="h-center" cx="300" cy="300" r="52" fill="none" stroke="#0a7c8c" stroke-width="2" filter="url(#glb)"/>
+        <circle cx="300" cy="300" r="38" fill="#0a1e1e"/>
+        <text x="300" y="293" text-anchor="middle" font-size="14" fill="#5ec8d4" letter-spacing="2" font-family="'Share Tech Mono',monospace">BEE NIX</text>
+        <text x="300" y="311" text-anchor="middle" font-size="10" fill="rgba(94,200,212,0.5)" letter-spacing="1" font-family="'Share Tech Mono',monospace">SUTURE.BLUE</text>
       </g>
       <!-- MAKING/THINKING — IC chip, top-left -->
       <g class="nd" id="nd-making_thinking" onclick="activateNode('making_thinking')">
-        <rect x="162" y="112" width="116" height="56" rx="3" fill="#071515" stroke="rgba(10,124,140,0.3)" stroke-width="1"/>
-        <rect class="nhalo" id="h-making_thinking" x="157" y="107" width="126" height="66" rx="5" fill="none" stroke="#0a7c8c" stroke-width="1.5" filter="url(#glb)"/>
-        <path d="M162,132 Q156,140 162,148" fill="none" stroke="rgba(10,124,140,0.4)" stroke-width="1"/>
-        <line x1="162" y1="122" x2="148" y2="122" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
-        <line x1="162" y1="132" x2="148" y2="132" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
-        <line x1="162" y1="142" x2="148" y2="142" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
-        <line x1="162" y1="152" x2="148" y2="152" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
-        <line x1="278" y1="122" x2="292" y2="122" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
-        <line x1="278" y1="132" x2="292" y2="132" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
-        <line x1="278" y1="142" x2="292" y2="142" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
-        <line x1="278" y1="152" x2="292" y2="152" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
-        <text x="220" y="134" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">MAKING /</text>
-        <text x="220" y="150" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">THINKING</text>
+        <rect x="142" y="92" width="116" height="56" rx="3" fill="#071515" stroke="rgba(10,124,140,0.3)" stroke-width="1"/>
+        <rect class="nhalo" id="h-making_thinking" x="137" y="87" width="126" height="66" rx="5" fill="none" stroke="#0a7c8c" stroke-width="1.5" filter="url(#glb)"/>
+        <path d="M142,112 Q136,120 142,128" fill="none" stroke="rgba(10,124,140,0.4)" stroke-width="1"/>
+        <line x1="142" y1="102" x2="128" y2="102" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="142" y1="112" x2="128" y2="112" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="142" y1="122" x2="128" y2="122" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="142" y1="132" x2="128" y2="132" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="258" y1="102" x2="272" y2="102" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="258" y1="112" x2="272" y2="112" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="258" y1="122" x2="272" y2="122" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="258" y1="132" x2="272" y2="132" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <text x="200" y="115" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">MAKING /</text>
+        <text x="200" y="131" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">THINKING</text>
       </g>
-      <!-- GATHERING/SHARING — Transistor, right, mirrored (arrow points left) -->
+      <!-- GATHERING/SHARING — Transistor, right, mirrored -->
       <g class="nd" id="nd-gathering_sharing" onclick="activateNode('gathering_sharing')">
-        <circle cx="516" cy="260" r="30" fill="#071515" stroke="rgba(10,124,140,0.3)" stroke-width="1"/>
-        <circle class="nhalo" id="h-gathering_sharing" cx="516" cy="260" r="36" fill="none" stroke="#0a7c8c" stroke-width="1.5" filter="url(#glb)"/>
-        <!-- base lead from right -->
-        <line x1="546" y1="260" x2="532" y2="260" stroke="rgba(10,124,140,0.55)" stroke-width="1.5"/>
-        <!-- vertical bar on right side -->
-        <line x1="532" y1="246" x2="532" y2="274" stroke="rgba(10,124,140,0.55)" stroke-width="2"/>
-        <!-- collector: bar→upper-left, then up -->
-        <line x1="532" y1="250" x2="512" y2="236" stroke="rgba(10,124,140,0.55)" stroke-width="1.5"/>
-        <line x1="512" y1="236" x2="512" y2="226" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
-        <!-- emitter: bar→lower-left, arrow, then down -->
-        <line x1="532" y1="270" x2="512" y2="284" stroke="rgba(10,124,140,0.55)" stroke-width="1.5"/>
-        <line x1="512" y1="284" x2="512" y2="294" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
-        <!-- arrow on emitter pointing lower-left -->
-        <polygon points="517,280 512,284 516,289" fill="rgba(10,124,140,0.65)"/>
-        <!-- trace connection to center on left -->
-        <line x1="486" y1="260" x2="468" y2="260" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
-        <!-- label -->
-        <text x="516" y="254" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">GATHERING /</text>
-        <text x="516" y="268" text-anchor="middle" dominant-baseline="central" font-size="10" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">SHARING</text>
+        <circle cx="476" cy="300" r="30" fill="#071515" stroke="rgba(10,124,140,0.3)" stroke-width="1"/>
+        <circle class="nhalo" id="h-gathering_sharing" cx="476" cy="300" r="36" fill="none" stroke="#0a7c8c" stroke-width="1.5" filter="url(#glb)"/>
+        <line x1="506" y1="300" x2="492" y2="300" stroke="rgba(10,124,140,0.55)" stroke-width="1.5"/>
+        <line x1="492" y1="286" x2="492" y2="314" stroke="rgba(10,124,140,0.55)" stroke-width="2"/>
+        <line x1="492" y1="290" x2="472" y2="276" stroke="rgba(10,124,140,0.55)" stroke-width="1.5"/>
+        <line x1="472" y1="276" x2="472" y2="266" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="492" y1="310" x2="472" y2="324" stroke="rgba(10,124,140,0.55)" stroke-width="1.5"/>
+        <line x1="472" y1="324" x2="472" y2="334" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <polygon points="477,320 472,324 476,329" fill="rgba(10,124,140,0.65)"/>
+        <line x1="446" y1="300" x2="430" y2="300" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <text x="476" y="293" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">GATHERING /</text>
+        <text x="476" y="307" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">SHARING</text>
       </g>
       <!-- DISCUSSING — Crystal, bottom -->
       <g class="nd" id="nd-discussing" onclick="activateNode('discussing')">
-        <rect x="286" y="370" width="88" height="32" rx="3" fill="#071515" stroke="rgba(10,124,140,0.4)" stroke-width="1.2"/>
-        <rect class="nhalo" id="h-discussing" x="281" y="365" width="98" height="42" rx="5" fill="none" stroke="#0a7c8c" stroke-width="1.5" filter="url(#glb)"/>
-        <line x1="304" y1="365" x2="304" y2="407" stroke="rgba(10,124,140,0.6)" stroke-width="2"/>
-        <line x1="356" y1="365" x2="356" y2="407" stroke="rgba(10,124,140,0.6)" stroke-width="2"/>
-        <line x1="286" y1="386" x2="272" y2="386" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
-        <line x1="374" y1="386" x2="388" y2="386" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
-        <line x1="330" y1="370" x2="330" y2="367" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
-        <text x="330" y="386" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">DISCUSSING</text>
+        <rect x="256" y="432" width="88" height="32" rx="3" fill="#071515" stroke="rgba(10,124,140,0.4)" stroke-width="1.2"/>
+        <rect class="nhalo" id="h-discussing" x="251" y="427" width="98" height="42" rx="5" fill="none" stroke="#0a7c8c" stroke-width="1.5" filter="url(#glb)"/>
+        <line x1="274" y1="427" x2="274" y2="469" stroke="rgba(10,124,140,0.6)" stroke-width="2"/>
+        <line x1="326" y1="427" x2="326" y2="469" stroke="rgba(10,124,140,0.6)" stroke-width="2"/>
+        <line x1="256" y1="448" x2="242" y2="448" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="344" y1="448" x2="358" y2="448" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <line x1="300" y1="432" x2="300" y2="429" stroke="rgba(10,124,140,0.4)" stroke-width="1.5"/>
+        <text x="300" y="448" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">DISCUSSING</text>
       </g>
-      <text x="100" y="68" font-family="'Share Tech Mono',monospace" font-size="9" fill="rgba(10,124,140,0.16)">VCC</text>
-      <line x1="108" y1="71" x2="108" y2="82" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
-      <line x1="100" y1="82" x2="116" y2="82" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
-      <line x1="102" y1="86" x2="114" y2="86" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
-      <line x1="104" y1="90" x2="112" y2="90" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
-      <text x="536" y="450" font-family="'Share Tech Mono',monospace" font-size="9" fill="rgba(10,124,140,0.16)">GND</text>
-      <line x1="544" y1="453" x2="544" y2="464" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
-      <line x1="536" y1="464" x2="552" y2="464" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
-      <line x1="538" y1="468" x2="550" y2="468" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
-      <line x1="540" y1="472" x2="548" y2="472" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <!-- Flavor -->
+      <text x="56" y="48" font-family="'Share Tech Mono',monospace" font-size="9" fill="rgba(10,124,140,0.16)">VCC</text>
+      <line x1="64" y1="51" x2="64" y2="62" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <line x1="56" y1="62" x2="72" y2="62" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <line x1="58" y1="66" x2="70" y2="66" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <line x1="60" y1="70" x2="68" y2="70" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <text x="506" y="548" font-family="'Share Tech Mono',monospace" font-size="9" fill="rgba(10,124,140,0.16)">GND</text>
+      <line x1="514" y1="551" x2="514" y2="562" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <line x1="506" y1="562" x2="522" y2="562" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <line x1="508" y1="566" x2="520" y2="566" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
+      <line x1="510" y1="570" x2="518" y2="570" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
     </svg>
   </div>
   <!-- SUB VIEW — SVG built dynamically by buildSubBoard() -->
   <div id="viewSub" class="view hidden">
     <!-- Writing links shown for making_thinking sub-board -->
     <div class="writing-links" id="writingLinks"></div>
-    <svg id="svgSub" viewBox="0 0 660 520" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+    <svg id="svgSub" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <filter id="gl2">
           <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="b"/>
@@ -625,7 +613,226 @@ let activeId = null, inSub = false, currentSide = null;
 // Reposition arrow on resize if sub-view is active
 window.addEventListener('resize', () => {
   if (inSub && currentSide) positionBackArrow(currentSide);
+  repositionOuterNodes();
+  setTimeout(positionAllOrbitBtns, 50);
 });
+window.addEventListener('orientationchange', () => {
+  setTimeout(() => { repositionOuterNodes(); positionAllOrbitBtns(); }, 200);
+});
+
+// Reposition outer nodes to fill available screen space
+// Center node stays at 300,300 in 600x600 viewBox
+// Outer nodes move to use more of the canvas based on aspect ratio
+function repositionOuterNodes() {
+  const ww = window.innerWidth;
+  const wh = window.innerHeight;
+  const aspect = wh / ww; // > 1 = portrait, < 1 = landscape
+
+  // Base distances from center (300,300) in viewBox units
+  // Scale outward based on aspect ratio so nodes use available space
+  // Portrait: push top/bottom further; landscape: push left/right further
+  const VX = 300, VY = 300; // center
+  const BASE_H = 190; // base horizontal offset (left/right nodes)
+  const BASE_V = 190; // base vertical offset (top/bottom nodes)
+
+  // On portrait (aspect > 1): give more vertical space
+  // On landscape (aspect < 1): give more horizontal space
+  // Clamp to keep nodes within viewBox (0 to 600)
+  const vOff = Math.min(Math.round(BASE_V * Math.max(1, aspect * 1.2)), 270);
+  const hOff = Math.min(Math.round(BASE_H * Math.max(1, (1/aspect) * 1.2)), 250);
+
+  // Node centers
+  const topY    = VY - vOff;      // MAKING/THINKING (approx)
+  const rightX  = VX + hOff;      // GATHERING/SHARING
+  const botY    = VY + vOff;      // DISCUSSING
+
+  // --- MAKING/THINKING: IC chip top-left ---
+  // chip center roughly at (200, topY), rect 116x56
+  const mtY  = topY;
+  const mtX  = 200;
+  moveRect('nd-making_thinking', mtX - 58, mtY - 28, 116, 56);
+  moveChipPins('nd-making_thinking', mtX, mtY);
+  moveTexts('nd-making_thinking', mtX, mtY - 8, mtX, mtY + 8);
+  const trMt = document.getElementById('tr-making-thinking');
+  if (trMt) trMt.setAttribute('points',
+    mtX+','+(mtY+28)+' '+mtX+','+(VY-46)+' '+(VX-46)+','+(VY-46)+' '+(VX-46)+','+VY);
+
+  // --- GATHERING/SHARING: Transistor right ---
+  const gsX = VX + hOff;
+  const gsY = VY;
+  moveCircle('nd-gathering_sharing', gsX, gsY, 30);
+  moveCircle('h-gathering_sharing', gsX, gsY, 36);
+  moveTransistorLines('nd-gathering_sharing', gsX, gsY);
+  moveTexts('nd-gathering_sharing', gsX, gsY - 7, gsX, gsY + 7);
+  const trGs = document.getElementById('tr-gathering-sharing');
+  if (trGs) trGs.setAttribute('points', (VX+46)+','+VY+' '+(gsX-30)+','+VY);
+
+  // --- DISCUSSING: Crystal bottom ---
+  const dX = VX;
+  const dY = VY + vOff;
+  moveRect('nd-discussing', dX - 44, dY - 16, 88, 32);
+  moveCrystalLines('nd-discussing', dX, dY);
+  moveTexts('nd-discussing', dX, dY, null, null);
+  const trDisc = document.getElementById('tr-discussing');
+  if (trDisc) trDisc.setAttribute('points', VX+','+(VY+46)+' '+VX+','+(dY-16));
+
+  // junction dot at MT corner
+  const junc = document.querySelector('#viewMain svg circle[r="3"]');
+  if (junc) { junc.setAttribute('cx', VX-46); junc.setAttribute('cy', VY-46); }
+
+  // Reposition orbit buttons since node positions changed
+  positionAllOrbitBtns();
+}
+
+function moveRect(groupId, x, y, w, h) {
+  const id = groupId.startsWith('nd-') ? groupId : 'nd-' + groupId;
+  const g = document.getElementById(id);
+  if (!g) return;
+  const r = g.querySelector('rect:not(.nhalo)');
+  if (r) { r.setAttribute('x',x); r.setAttribute('y',y); r.setAttribute('width',w); r.setAttribute('height',h); }
+  const nh = g.querySelector('.nhalo');
+  if (nh && nh.tagName==='rect') { nh.setAttribute('x',x-5); nh.setAttribute('y',y-5); nh.setAttribute('width',w+10); nh.setAttribute('height',h+10); }
+}
+function moveCircle(id, cx, cy, r) {
+  const el = document.getElementById(id) || document.querySelector('#nd-'+id.replace('h-','') + ' circle[r="'+r+'"]');
+  if (el) { el.setAttribute('cx',cx); el.setAttribute('cy',cy); }
+}
+function moveTexts(groupId, x1, y1, x2, y2) {
+  const g = document.getElementById(groupId);
+  if (!g) return;
+  const texts = g.querySelectorAll('text');
+  if (texts[0]) { texts[0].setAttribute('x',x1); texts[0].setAttribute('y',y1); }
+  if (texts[1] && x2 !== null) { texts[1].setAttribute('x',x2); texts[1].setAttribute('y',y2); }
+}
+function moveLine(trId, x1, y1, x2, y2) {
+  const el = document.getElementById(trId);
+  if (el) el.setAttribute('points', x1+','+y1+' '+x2+','+y2);
+}
+function movePolyline(trId, _unused, pts) {
+  const el = document.getElementById(trId);
+  if (el) el.setAttribute('points', pts.map(p=>p[0]+','+p[1]).join(' '));
+}
+function moveChipPins(groupId, cx, cy) {
+  const g = document.getElementById(groupId);
+  if (!g) return;
+  const lx = cx - 58, rx = cx + 58;
+  const lines = g.querySelectorAll('line');
+  const offsets = [-18, -6, 6, 18];
+  lines.forEach((l, i) => {
+    if (i < 4) { // left pins
+      l.setAttribute('x1',lx); l.setAttribute('y1',cy+offsets[i]);
+      l.setAttribute('x2',lx-14); l.setAttribute('y2',cy+offsets[i]);
+    } else { // right pins
+      l.setAttribute('x1',rx); l.setAttribute('y1',cy+offsets[i-4]);
+      l.setAttribute('x2',rx+14); l.setAttribute('y2',cy+offsets[i-4]);
+    }
+  });
+  const notch = g.querySelector('path');
+  if (notch) notch.setAttribute('d', 'M'+(lx)+','+(cy-12)+' Q'+(lx-6)+','+cy+' '+(lx)+','+(cy+12));
+}
+function moveTransistorLines(groupId, cx, cy) {
+  // Mirrored transistor: base enters from RIGHT side, collector/emitter exit LEFT
+  // Geometry relative to circle center (cx,cy), r=30:
+  //   bar at cx+16 (right internal bar)
+  //   base lead: (cx+46, cy) → (cx+16, cy)   [from right edge of circle]
+  //   bar: (cx+16, cy-14) → (cx+16, cy+14)
+  //   collector: (cx+16, cy-10) → (cx-4, cy-24) → (cx-4, cy-34)
+  //   emitter:   (cx+16, cy+10) → (cx-4, cy+24) → (cx-4, cy+34)
+  //   arrow polygon near emitter
+  //   trace connector: (cx-30, cy) → (cx-46, cy)  [left edge → trace]
+  const g = document.getElementById(groupId);
+  if (!g) return;
+  const lines = g.querySelectorAll('line');
+  const bar = cx + 16;
+  const arm = cx - 4;
+  const attrs = [
+    [cx+46, cy,    cx+30, cy    ],  // 0: base lead (right→bar)
+    [bar,   cy-14, bar,   cy+14 ],  // 1: vertical bar
+    [bar,   cy-10, arm,   cy-24 ],  // 2: collector diagonal
+    [arm,   cy-24, arm,   cy-34 ],  // 3: collector up
+    [bar,   cy+10, arm,   cy+24 ],  // 4: emitter diagonal
+    [arm,   cy+24, arm,   cy+34 ],  // 5: emitter down
+    [cx-30, cy,    cx-46, cy    ],  // 6: trace connector
+  ];
+  attrs.forEach(([x1,y1,x2,y2], i) => {
+    if (lines[i]) {
+      lines[i].setAttribute('x1',x1); lines[i].setAttribute('y1',y1);
+      lines[i].setAttribute('x2',x2); lines[i].setAttribute('y2',y2);
+    }
+  });
+  const poly = g.querySelector('polygon');
+  if (poly) poly.setAttribute('points',
+    (arm+5)+','+(cy+20)+' '+arm+','+(cy+24)+' '+(arm+4)+','+(cy+29));
+  // Update circle positions
+  const circles = g.querySelectorAll('circle');
+  circles.forEach(c => { c.setAttribute('cx', cx); c.setAttribute('cy', cy); });
+}
+function moveCrystalLines(groupId, cx, cy) {
+  const g = document.getElementById(groupId);
+  if (!g) return;
+  const lines = g.querySelectorAll('line');
+  // crystal plates, side leads, top entry
+  const x1=cx-26, x2=cx+26;
+  if (lines[0]) { lines[0].setAttribute('x1',x1); lines[0].setAttribute('y1',cy-16); lines[0].setAttribute('x2',x1); lines[0].setAttribute('y2',cy+16); }
+  if (lines[1]) { lines[1].setAttribute('x1',x2); lines[1].setAttribute('y1',cy-16); lines[1].setAttribute('x2',x2); lines[1].setAttribute('y2',cy+16); }
+  if (lines[2]) { lines[2].setAttribute('x1',cx-44); lines[2].setAttribute('y1',cy); lines[2].setAttribute('x2',cx-28); lines[2].setAttribute('y2',cy); }
+  if (lines[3]) { lines[3].setAttribute('x1',cx+28); lines[3].setAttribute('y1',cy); lines[3].setAttribute('x2',cx+44); lines[3].setAttribute('y2',cy); }
+  if (lines[4]) { lines[4].setAttribute('x1',cx); lines[4].setAttribute('y1',cy-16); lines[4].setAttribute('x2',cx); lines[4].setAttribute('y2',cy-19); }
+  const nh = g.querySelector('.nhalo');
+  if (nh) { nh.setAttribute('x',cx-49); nh.setAttribute('y',cy-21); }
+}
+
+// Adapt SVG layout to screen orientation
+function adaptLayout() {
+  const isPortrait = window.innerHeight > window.innerWidth;
+  const svgMain = document.querySelector('#viewMain svg');
+  const svgSub  = document.querySelector('#viewSub svg');
+
+  if (isPortrait) {
+    // Portrait: taller canvas, spread nodes vertically
+    [svgMain, svgSub].forEach(s => { if(s) s.setAttribute('viewBox','0 0 520 660'); });
+    if (svgMain) repositionMainNodes(true);
+  } else {
+    // Landscape: original
+    [svgMain, svgSub].forEach(s => { if(s) s.setAttribute('viewBox','0 0 660 520'); });
+    if (svgMain) repositionMainNodes(false);
+  }
+}
+
+function repositionMainNodes(portrait) {
+  if (portrait) {
+    // Center at 260,330 in a 520x660 canvas
+    const cx=260, cy=330;
+    // Trace: making/thinking top-left
+    setPolyline('tr-making-thinking', [[cx-40,cy-180],[cx-40,cy-114],[cx-34,cy-114],[cx-34,cy]]);
+    // Trace: gathering/sharing right  
+    setPolyline('tr-gathering-sharing', [[cx+108,cy],[cx+34,cy]]);
+    // Trace: discussing bottom
+    setPolyline('tr-discussing', [[cx,cy+44],[cx,cy+140]]);
+    // Center node
+    moveCircles('h-center',    cx, cy);
+    moveText('bee-nix-label',  cx, cy-7);
+    moveText('suture-label',   cx, cy+11);
+  } else {
+    // Restore original landscape positions
+    const cx=330, cy=260;
+    setPolyline('tr-making-thinking', [[cx-110,cy-110],[cx-110,cy-44],[cx-36,cy-44],[cx-36,cy]]);
+    setPolyline('tr-gathering-sharing', [[cx+138,cy],[cx+34,cy]]);
+    setPolyline('tr-discussing', [[cx,cy+44],[cx,cy+110]]);
+  }
+}
+
+function setPolyline(id, pts) {
+  const el = document.getElementById(id);
+  if (el) el.setAttribute('points', pts.map(p=>p.join(',')).join(' '));
+}
+function moveCircles(id, cx, cy) {
+  // move by id pattern won't work for multiple — skip, viewBox change handles scaling
+}
+function moveText(id, x, y) {
+  const el = document.getElementById(id);
+  if (el) { el.setAttribute('x', x); el.setAttribute('y', y); }
+}
 
 function clearTraces() {
   document.querySelectorAll('.tr').forEach(t => t.classList.remove('lit'));
@@ -639,21 +846,25 @@ function closePanel() {
 }
 
 function setImage(src) {
-  const img = document.getElementById('pImg');
-  const ph  = document.getElementById('pImgPh');
+  const img  = document.getElementById('pImg');
+  const ph   = document.getElementById('pImgPh');
+  const wrap = document.getElementById('pImgWrap');
   if (src) {
-    img.src = src; img.style.display = 'block'; ph.style.display = 'none';
+    img.style.display = 'none';
+    ph.style.display = 'none';
+    img.onload  = () => { img.style.display = 'block'; wrap.style.display = 'flex'; };
+    img.onerror = () => { wrap.style.display = 'none'; };
+    img.src = src;
   } else {
     img.style.display = 'none';
-    ph.style.display = 'flex';
-    ph.style.alignItems = 'center';
-    ph.style.justifyContent = 'center';
+    ph.style.display = 'none';
+    wrap.style.display = 'none';
   }
 }
 
 // ── ORBIT SYSTEM ──────────────────────────────────────
 // Center node in viewBox: cx=330, cy=260, r=46
-const VB_CX = 330, VB_CY = 260, VB_R = 46;
+const VB_CX = 300, VB_CY = 300, VB_R = 46;
 
 // Angle map: 0=top, clockwise
 // Angles: 0=top, 90=right, 180=bottom, 270=left (clockwise)
@@ -678,22 +889,23 @@ const THEME_ANGLE  = 45;   // theme btn: top-right of inner orbit
 const INNER_SCALE  = 1.44; // theme button orbit (25% bigger node + 15% further out)
 const OUTER_SCALE  = 2.5;  // nav arrow orbit
 
+// Convert viewBox coords to wrap-relative screen coords
+// Fixed 600x600 viewBox, xMidYMid meet
 function vbToScreen(vbX, vbY) {
-  const svgEl = document.querySelector('.view:not(.hidden) svg');
-  if (!svgEl) return null;
-  try {
-    const pt = svgEl.createSVGPoint();
-    pt.x = vbX; pt.y = vbY;
-    const ctm = svgEl.getScreenCTM();
-    if (!ctm) return null;
-    const sp = pt.matrixTransform(ctm);
-    const wr = document.getElementById('wrap').getBoundingClientRect();
-    return { x: sp.x - wr.left, y: sp.y - wr.top };
-  } catch(e) { return null; }
+  const wrap = document.getElementById('wrap');
+  const ww = wrap.offsetWidth;
+  const wh = wrap.offsetHeight;
+  const vbW = 600, vbH = 600;
+  const scale = Math.min(ww / vbW, wh / vbH);
+  const offX = (ww - vbW * scale) / 2;
+  const offY = (wh - vbH * scale) / 2;
+  return {
+    x: offX + vbX * scale,
+    y: offY + vbY * scale
+  };
 }
 
 function orbitPoint(angleDeg, scale) {
-  // 0=top, clockwise. Convert to standard math angle (0=right, CCW).
   const rad = (angleDeg - 90) * Math.PI / 180;
   const r   = VB_R * scale;
   return vbToScreen(
@@ -730,10 +942,15 @@ window.addEventListener('orientationchange', () => {
 });
 document.getElementById('viewMain').addEventListener('transitionend', positionAllOrbitBtns);
 document.getElementById('viewSub').addEventListener('transitionend', positionAllOrbitBtns);
-// Position buttons multiple times to handle slow mobile renders
-requestAnimationFrame(() => requestAnimationFrame(positionAllOrbitBtns));
-setTimeout(positionAllOrbitBtns, 100);
-setTimeout(positionAllOrbitBtns, 500);
+// Reposition nodes and buttons on init
+requestAnimationFrame(() => {
+  repositionOuterNodes();
+  requestAnimationFrame(() => {
+    positionAllOrbitBtns();
+    setTimeout(positionAllOrbitBtns, 200);
+    setTimeout(positionAllOrbitBtns, 500);
+  });
+});
 
 // ── THEMES ────────────────────────────────────────────
 const THEMES = [
@@ -798,6 +1015,7 @@ let svgSnapshot = null;
 
 function snapshotSVG() {
   svgSnapshot = [];
+  let maxIdx = 0;
   document.querySelectorAll('svg *').forEach((el, i) => {
     el.dataset.snapIdx = i;
     const snap = { idx: i, tag: el.tagName };
@@ -807,11 +1025,34 @@ function snapshotSVG() {
     });
     snap.classList = [...el.classList];
     svgSnapshot.push(snap);
+    maxIdx = i;
   });
+  svgSnapshot._maxIdx = maxIdx;
+}
+
+// Add only NEW elements (from sub-board) to snapshot without re-snapshotting existing
+function addNewElementsToSnapshot() {
+  if (!svgSnapshot) { snapshotSVG(); return; }
+  let i = (svgSnapshot._maxIdx || svgSnapshot.length) + 1;
+  // Find elements without a snapIdx (newly added)
+  document.querySelectorAll('svg *').forEach(el => {
+    if (el.dataset.snapIdx === undefined || el.dataset.snapIdx === '') {
+      el.dataset.snapIdx = i;
+      const snap = { idx: i, tag: el.tagName };
+      ['fill','stroke','r'].forEach(a => {
+        const v = el.getAttribute(a);
+        if (v !== null) snap[a] = v;
+      });
+      snap.classList = [...el.classList];
+      svgSnapshot.push(snap);
+      i++;
+    }
+  });
+  svgSnapshot._maxIdx = i - 1;
 }
 
 function applyTheme(t) {
-  // Snapshot originals on first theme change
+  // Use existing snapshot (taken at load time)
   if (!svgSnapshot) snapshotSVG();
 
   // Backgrounds
@@ -1058,6 +1299,12 @@ function cycleTheme() {
   else           { stopRainbow(); applyTheme(t); }
 }
 
+// Snapshot SVG and reposition nodes at load time
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => { repositionOuterNodes(); snapshotSVG(); }, 50);
+  setTimeout(() => { repositionOuterNodes(); positionAllOrbitBtns(); }, 300);
+});
+
 // Init swatch
 document.getElementById('themeSwatch').style.background = THEMES[0].swatch;
 requestAnimationFrame(() => requestAnimationFrame(positionAllOrbitBtns));
@@ -1078,6 +1325,7 @@ function activateCenter() {
     (about.cv ? `<a href="${about.cv}" target="_blank" class="cv-link">VIEW CV →</a>` : '') +
     (about.linkedin ? `<a href="${about.linkedin}" target="_blank" class="social-btn" title="LinkedIn"><img src="assets/linkedin.png" alt="LinkedIn"></a>` : '') +
     (about.instagram ? `<a href="${about.instagram}" target="_blank" class="social-btn" title="Instagram"><img src="assets/instagram.png" alt="Instagram"></a>` : '');
+  document.getElementById('pImgWrap').style.display = '';
   setImage(about.img);
   document.getElementById('panel').classList.add('vis');
 }
@@ -1095,8 +1343,9 @@ function activateNode(id) {
   const h = document.getElementById('h-' + id);
   if (h) h.classList.add('on');
   document.getElementById('pHeaderTitle').textContent = n.title;
-  document.getElementById('pDesc').textContent = n.desc;
+  document.getElementById('pDesc').innerHTML = n.desc.split('\n').join('<br>');
   document.getElementById('pMore').style.display = 'inline-block';
+  document.getElementById('pImgWrap').style.display = '';
   setImage(n.img);
   document.getElementById('panel').classList.add('vis');
 }
@@ -1193,54 +1442,47 @@ function closeSubPanel() {
 // Each layout is an array of {x,y,tx,ty} for node placement
 // Node rect is 96w x 36h, so center x offset = 48, y offset = 18
 const SUB_LAYOUTS = {
-  // 1 item: top only
   1: [
-    { rx:282, ry:74,  tx:330, ty:92,  trEnd:'330,214 330,110' }
+    { tx:300, ty:110, trEnd:'300,254 300,110' }
   ],
-  // 2 items: left + right
   2: [
-    { rx:82,  ry:242, tx:130, ty:260, trEnd:'284,260 178,260' },
-    { rx:482, ry:242, tx:530, ty:260, trEnd:'376,260 482,260' }
+    { tx:110, ty:300, trEnd:'254,300 110,300' },
+    { tx:490, ty:300, trEnd:'346,300 490,300' }
   ],
-  // 3 items: top + left + right  (no bottom)
   3: [
-    { rx:282, ry:74,  tx:330, ty:92,  trEnd:'330,214 330,110' },
-    { rx:82,  ry:242, tx:130, ty:260, trEnd:'284,260 178,260' },
-    { rx:482, ry:242, tx:530, ty:260, trEnd:'376,260 482,260' }
+    { tx:300, ty:110, trEnd:'300,254 300,110' },
+    { tx:110, ty:300, trEnd:'254,300 110,300' },
+    { tx:490, ty:300, trEnd:'346,300 490,300' }
   ],
-  // 4 items: top + left + right + bottom
   4: [
-    { rx:282, ry:74,  tx:330, ty:92,  trEnd:'330,214 330,110' },
-    { rx:82,  ry:242, tx:130, ty:260, trEnd:'284,260 178,260' },
-    { rx:482, ry:242, tx:530, ty:260, trEnd:'376,260 482,260' },
-    { rx:282, ry:410, tx:330, ty:428, trEnd:'330,306 330,410' }
+    { tx:300, ty:110, trEnd:'300,254 300,110' },
+    { tx:110, ty:300, trEnd:'254,300 110,300' },
+    { tx:490, ty:300, trEnd:'346,300 490,300' },
+    { tx:300, ty:490, trEnd:'300,346 300,490' }
   ],
-  // 5 items: top + left + right + bottom + top-right
   5: [
-    { rx:282, ry:74,  tx:330, ty:92,  trEnd:'330,214 330,110' },
-    { rx:82,  ry:242, tx:130, ty:260, trEnd:'284,260 178,260' },
-    { rx:482, ry:242, tx:530, ty:260, trEnd:'376,260 482,260' },
-    { rx:282, ry:410, tx:330, ty:428, trEnd:'330,306 330,410' },
-    { rx:472, ry:74,  tx:520, ty:92,  trEnd:'376,214 472,92' }
+    { tx:300, ty:110, trEnd:'300,254 300,110' },
+    { tx:110, ty:300, trEnd:'254,300 110,300' },
+    { tx:490, ty:300, trEnd:'346,300 490,300' },
+    { tx:300, ty:490, trEnd:'300,346 300,490' },
+    { tx:470, ty:110, trEnd:'346,254 470,110' }
   ],
-  // 6 items: 5 + top-left
   6: [
-    { rx:282, ry:74,  tx:330, ty:92,  trEnd:'330,214 330,110' },
-    { rx:82,  ry:242, tx:130, ty:260, trEnd:'284,260 178,260' },
-    { rx:482, ry:242, tx:530, ty:260, trEnd:'376,260 482,260' },
-    { rx:282, ry:410, tx:330, ty:428, trEnd:'330,306 330,410' },
-    { rx:472, ry:74,  tx:520, ty:92,  trEnd:'376,214 472,92'  },
-    { rx:92,  ry:74,  tx:140, ty:92,  trEnd:'284,214 188,92'  }
+    { tx:300, ty:110, trEnd:'300,254 300,110' },
+    { tx:110, ty:300, trEnd:'254,300 110,300' },
+    { tx:490, ty:300, trEnd:'346,300 490,300' },
+    { tx:300, ty:490, trEnd:'300,346 300,490' },
+    { tx:470, ty:110, trEnd:'346,254 470,110' },
+    { tx:130, ty:110, trEnd:'254,254 130,110' }
   ],
-  // 7 items: 6 + bottom-right
   7: [
-    { rx:282, ry:74,  tx:330, ty:92,  trEnd:'330,214 330,110' },
-    { rx:82,  ry:242, tx:130, ty:260, trEnd:'284,260 178,260' },
-    { rx:482, ry:242, tx:530, ty:260, trEnd:'376,260 482,260' },
-    { rx:282, ry:410, tx:330, ty:428, trEnd:'330,306 330,410' },
-    { rx:472, ry:74,  tx:520, ty:92,  trEnd:'376,214 472,92'  },
-    { rx:92,  ry:74,  tx:140, ty:92,  trEnd:'284,214 188,92'  },
-    { rx:472, ry:410, tx:520, ty:428, trEnd:'376,306 472,410' }
+    { tx:300, ty:110, trEnd:'300,254 300,110' },
+    { tx:110, ty:300, trEnd:'254,300 110,300' },
+    { tx:490, ty:300, trEnd:'346,300 490,300' },
+    { tx:300, ty:490, trEnd:'300,346 300,490' },
+    { tx:470, ty:110, trEnd:'346,254 470,110' },
+    { tx:130, ty:110, trEnd:'254,254 130,110' },
+    { tx:470, ty:490, trEnd:'346,346 470,490' }
   ]
 };
 
@@ -1256,6 +1498,26 @@ function buildSubBoard(s) {
   const count = Math.min(items.length, 7);
   const layout = SUB_LAYOUTS[count] || SUB_LAYOUTS[4];
 
+  // Calculate spread factor from screen aspect ratio
+  const ww2 = window.innerWidth, wh2 = window.innerHeight;
+  const asp2 = wh2 / ww2;
+  // horizontal spread: more on landscape; vertical: more on portrait
+  const hSpread = Math.max(1, Math.min(1.6, (1/asp2) * 1.3));
+  const vSpread = Math.max(1, Math.min(1.6, asp2 * 1.3));
+
+  // Apply spread to layout positions relative to center 300,300
+  const spreadLayout = layout.map(pos => {
+    const dx = pos.tx - 300;
+    const dy = pos.ty - 300;
+    const newTx = Math.round(300 + dx * hSpread);
+    const newTy = Math.round(300 + dy * vSpread);
+    // Rebuild trEnd from center edge to new node position
+    const angle = Math.atan2(dy, dx);
+    const ex = Math.round(300 + 46 * Math.cos(angle));
+    const ey = Math.round(300 + 46 * Math.sin(angle));
+    return { tx: newTx, ty: newTy, trEnd: ex+','+ey+' '+newTx+','+newTy };
+  });
+
   // Center node
   const acc = '#0a7c8c'; // will get re-themed after snapshot
   function svgEl(tag, attrs) {
@@ -1264,35 +1526,46 @@ function buildSubBoard(s) {
     return el;
   }
 
-  svg.appendChild(svgEl('circle', {cx:330,cy:260,r:46,fill:'#071515',stroke:acc,'stroke-width':1.5,filter:'url(#gl2)'}));
-  svg.appendChild(svgEl('circle', {cx:330,cy:260,r:38,fill:'#0a1e1e'}));
-  const cLabel = svgEl('text', {x:330,y:260,'text-anchor':'middle','dominant-baseline':'central','font-size':14,fill:'#5ec8d4','letter-spacing':1,'font-family':"'Share Tech Mono',monospace"});
+  svg.appendChild(svgEl('circle', {cx:300,cy:300,r:46,fill:'#071515',stroke:acc,'stroke-width':1.5,filter:'url(#gl2)'}));
+  svg.appendChild(svgEl('circle', {cx:300,cy:300,r:38,fill:'#0a1e1e'}));
+  const cLabel = svgEl('text', {x:300,y:300,'text-anchor':'middle','dominant-baseline':'central','font-size':14,fill:'#5ec8d4','letter-spacing':1,'font-family':"'Share Tech Mono',monospace"});
   cLabel.id = 'subCenterLabel';
   cLabel.textContent = s.center;
   svg.appendChild(cLabel);
 
-  // Traces + nodes
-  layout.forEach((pos, i) => {
+  // Traces + nodes — width adapts to text length
+  const FONT_SIZE = 11;
+  const CHAR_W = FONT_SIZE * 0.62; // approximate char width for Share Tech Mono
+  const PAD_X  = 16; // horizontal padding each side
+  const NODE_H = 36;
+
+  spreadLayout.forEach((pos, i) => {
     const item = items[i];
+    // Calculate adaptive width from text
+    const textW = item.l.length * CHAR_W;
+    const nodeW = Math.max(80, Math.min(220, textW + PAD_X * 2));
+    const rx = Math.round(pos.tx - nodeW / 2);
+    const ry = Math.round(pos.ty - NODE_H / 2);
+
     // Trace
     const tr = svgEl('polyline', {class:'tr',points:pos.trEnd,fill:'none',stroke:'rgba(10,124,140,0.18)','stroke-width':2,'stroke-linecap':'square'});
     svg.appendChild(tr);
+
     // Node group
     const g = svgEl('g', {id:'sub-n'+(i+1),cursor:'pointer'});
     g.classList.add('sub-nd');
-    const r = svgEl('rect', {x:pos.rx,y:pos.ry,width:96,height:36,rx:3,fill:'#071515',stroke:'rgba(10,124,140,0.35)','stroke-width':1,filter:'url(#glb2)'});
-    const t = svgEl('text', {id:'sub-l'+(i+1),x:pos.tx,y:pos.ty,'text-anchor':'middle','dominant-baseline':'central','font-size':12,fill:'#ffffff','font-weight':700,'font-family':"'Share Tech Mono',monospace"});
+    const r = svgEl('rect', {x:rx,y:ry,width:nodeW,height:NODE_H,rx:3,fill:'#071515',stroke:'rgba(10,124,140,0.35)','stroke-width':1,filter:'url(#glb2)'});
+    const t = svgEl('text', {id:'sub-l'+(i+1),x:pos.tx,y:pos.ty,'text-anchor':'middle','dominant-baseline':'central','font-size':FONT_SIZE,fill:'#ffffff','font-weight':700,'font-family':"'Share Tech Mono',monospace"});
     t.textContent = item.l;
     g.appendChild(r); g.appendChild(t);
     g.addEventListener('click', () => openSubPanel(item));
-    // Hover effect
     g.addEventListener('mouseenter', () => r.setAttribute('stroke','rgba(10,124,140,0.8)'));
     g.addEventListener('mouseleave', () => r.setAttribute('stroke','rgba(10,124,140,0.35)'));
     svg.appendChild(g);
   });
 
-  // Re-snapshot after building so theme system picks up new elements
-  svgSnapshot = null;
+  // Add new sub-board elements to existing snapshot
+  addNewElementsToSnapshot();
 }
 
 function drillIn() {
