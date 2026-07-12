@@ -1336,7 +1336,7 @@ let rainbowFrame = null;
 let rainbowHue = 0;
 
 function rainbowTick() {
-  rainbowHue = (rainbowHue + 0.08) % 360;
+  rainbowHue = (rainbowHue + 0.25) % 360;
   const h = rainbowHue;
 
   const acc  = `hsl(${h}, 70%, 45%)`;
