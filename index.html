@@ -550,7 +550,8 @@ const nodes = {
         { l: 'COLOUR ORGAN', body: "Colour Organ is a digital implementation of Alexander Wallace Rimington's color-music theory, where audio frequencies trigger corresponding colored lights arranged in a 5x7 grid representing octaves and scales. The installation backlit a semi-translucent screen with 35 individual point lights programmed to respond to specific frequency ranges, creating a visual orchestration of the ROYGBIV spectrum synchronized to sound.", embed: 'https://archive.org/embed/bee-nix-colour-organ', imgBelow: 'assets/ColourOrgan.png' },
         { l: 'UNCANNY SCENE', body: "An Uncanny Scene is a virtual environment exploring the aesthetic of curious discomfort where familiar elements become estranged.", embed: 'https://archive.org/embed/bee-nix-an-uncanny-scene' },
         { l: 'GOO IN THE BOX', body: "The essay treats \"goo\" and \"boxes\" as the same substance in different states, arguing that stable-seeming structures (rules, categories, definitions) are just as unstable as goo. When we don't notice the work holding structures together, they look solid and self-sustaining. One learns to handle instability in lieu of control.\n\n<a href='https://sutureblue.substack.com/p/put-the-goo-in-the-box' target='_blank'>Read/Listen to the essay here →</a>\n\n<a href='https://sutureblue.itch.io/put-the-goo-in-the-box' target='_blank'>Play the accompanying physics toy here →</a>", img: 'assets/GooInBox.png' },
-        { l: 'DISCUSSION GAME', body: "Discussion Game was a participatory conversation game that I developed and moderated for GLITCH'N'GAMES 2024. The conversation used prompt cards to guide an open-ended dialogue on glitch, control, and play.\n\n<a href='assets/gNg_DiscussionGame_BeeNix2024.pdf' target='_blank'>Read the text script here →</a>\n\nPhoto taken by <a href='https://nickbriz.com/' target='_blank'>Nick Briz</a>.", img: 'assets/DiscussionGame.png' }
+        { l: 'DISCUSSION GAME', body: "Discussion Game was a participatory conversation game that I developed and moderated for GLITCH'N'GAMES 2024. The conversation used prompt cards to guide an open-ended dialogue on glitch, control, and play.\n\n<a href='assets/gNg_DiscussionGame_BeeNix2024.pdf' target='_blank'>Read the text script here →</a>\n\nPhoto taken by <a href='https://nickbriz.com/' target='_blank'>Nick Briz</a>.", img: 'assets/DiscussionGame.png' },
+        { l: 'MUSEUM GO ROUND', body: "An musically interactive zoetrope + praxinoscope sculpture. This is a project I've been working on as a part of a much larger exhibit being created between Children's Museum of Pittsburgh and Fred Rogers Production.", img: 'assets/MGR.png' }
       ]
     }
   },
@@ -566,7 +567,6 @@ const nodes = {
         { l: 'GLITCH ARTISTS COLLECTIVE', body: "I've been an artist/admin/curator with GAC for over ten years. Acting as a community hub that connects glitch artists globally together, me and several others continue to volunteer our time to create public spaces and shared resources related to Glitch Art and unstable media.\n\n<a href='https://linktr.ee/glitchartistscollective' target='_blank'>To learn more about glitch art, check us out →</a>", img: 'assets/GAC.png' },
         { l: "GLITCH'N'GAMES", body: "Engaging with the glitches of a system is a form of play — the basis of my MFA thesis and the catalyst for this exhibition series.\n\nGNG'24 happened at LIKELIKE Arcade, Pittsburgh.\n\n<span style='font-size:1.15em'>GNG'26 will be happening the first weekend of October in Chicago. <a href='https://suture.blue/glitchngames/' target='_blank'>Get tickets or sign up for events here \u2192</a></span>", imgPair: ['assets/GNG_24.png', 'assets/GNG_26.png'] },
         { l: 'GLITCHARTISDEAD III', body: "GAID III happened in 2022, at the KK Berge Art Gallery, funded in part by the Southwest Minnesota Arts Council. Acting as the 'Glitch Manager', I helped curate/produce this exhibition: 100+ artists from 13 countries, with several lectures and workshops.\n\nThis event happened in tandem with Prairie Fyre. The GAIDIII organizer team also includes Miles Taylor, Kaspar Ravel, and Aleksandra Pie\u0144kosz.\n\n<a href='https://www.instagram.com/glitchartisdead/' target='_blank'>GlitchArtIsDead on Instagram →</a>", img: 'assets/GAIDIII.png' },
-        { l: 'MUSEUM GO ROUND', body: "An musically interactive zoetrope + praxinoscope sculpture. This is a project I've been working on as a part of a much larger exhibit being created between Children's Museum of Pittsburgh and Fred Rogers Production.", img: 'assets/MGR.png' },
         { l: 'MFRU 2023', body: "With MFRU 2023, I was invited to be part of a panel in Maribor, Slovenia to discuss digital archiving for community by community.\n\nMy contributions were not so much about my experience as an artist, but rather as a Do-It-Together media archivist currently organizing a free, downloadable, digital public access archive for the Glitch Art community.\n\n<a href='https://www.mfru.org/events/panel-sustainability-and-autonomy-of-digital-art' target='_blank'>More information here \u2192</a>", img: 'assets/MFRU2023.png' }
       ]
     }
@@ -604,7 +604,7 @@ const about = {
 // ══════════════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════════════
-let activeId    = null;   // currently open panel on main board
+let activeId    = null;   // currently open panel on the main board
 let activeSubId = null;   // which node's sub-board is currently displayed
 let inSub       = false;
 let currentSide = null;
@@ -612,45 +612,84 @@ let currentSide = null;
 const NS = 'http://www.w3.org/2000/svg';
 
 // ══════════════════════════════════════════════════════
-//  LAYOUT GEOMETRY — screen-pixel aware
+//  SUB-BOARD LAYOUT CONSTANTS
 // ══════════════════════════════════════════════════════
 const VB_CX = 300, VB_CY = 300, VB_R = 46;   // center node, viewBox coords
 
-const EDGE_MARGIN_PX = 100;  // every node ≥100 screen px from viewport edge
-const MIN_RADIUS_PX  = 150;  // every node ≥150 screen px from center node
-const MIN_FONT       = 8;    // never shrink labels below this
-const MAX_FONT       = 11;
+// Label typography is FIXED. Node text never shrinks — it matches the
+// main board's 11px so sub-nodes stay as readable as the top-level ones.
+const NODE_FONT   = 11;
+const CHAR_W      = NODE_FONT * 0.62;   // Share Tech Mono advance width
+const PAD_X       = 14;                 // horizontal padding inside a node box
+const LINE_H      = 15;                 // line height for wrapped labels
+const NODE_H_1    = 36;                 // box height, single line
+const NODE_H_2    = LINE_H * 2 + 12;    // box height, two lines
+const NODE_W_MIN  = 72;
+const WRAP_CHARS  = 18;                 // labels longer than this wrap to 2 lines
 
-/* Uniform scale factor between viewBox units and screen px.
-   The SVG is a fixed 600x600 viewBox with xMidYMid meet, so
-   one viewBox unit == vbScale() screen pixels on both axes. */
+// Space constraints, in SCREEN PIXELS.
+// EDGE_MARGIN_MAX is the ideal breathing room from the viewport edge; on a
+// narrow screen it relaxes toward EDGE_MARGIN_MIN so that the FONT never has
+// to shrink. Margin gives, text doesn't.
+const EDGE_MARGIN_MAX = 100;
+const EDGE_MARGIN_MIN = 24;
+const EDGE_STEP       = 2;
+const MIN_RADIUS_PX   = 100;   // nodes may come this close to the center node
+const MAX_RADIUS_VB   = 340;   // don't fling nodes absurdly far on huge screens
+
+// ── geometry helpers ────────────────────────────────
+/* Uniform scale between viewBox units and screen px. The SVG is a fixed
+   600x600 viewBox with xMidYMid meet, so one unit == vbScale() px on both axes. */
 function vbScale() {
   const wrap = document.getElementById('wrap');
   return Math.min(wrap.offsetWidth / 600, wrap.offsetHeight / 600);
 }
 function pxToVb(px) { return px / vbScale(); }
 
-/* The usable region — the viewport inset by EDGE_MARGIN_PX — expressed
-   in viewBox coords. Because 'meet' letterboxes the SVG, this rect may
-   extend beyond 0..600 on the long axis. That's intentional: it's real
-   usable space and we want nodes to spread into it. */
-function safeRectVb() {
+/* The viewport inset by `edgePx`, expressed in viewBox coords. Because 'meet'
+   letterboxes the SVG, this rect can extend past 0..600 on the long axis —
+   that space is real and usable, so nodes are allowed to spread into it. */
+function safeRectVb(edgePx) {
   const wrap = document.getElementById('wrap');
   const ww = wrap.offsetWidth, wh = wrap.offsetHeight;
   const s = vbScale();
   const offX = (ww - 600 * s) / 2;
   const offY = (wh - 600 * s) / 2;
   return {
-    x0: (EDGE_MARGIN_PX - offX) / s,
-    y0: (EDGE_MARGIN_PX - offY) / s,
-    x1: (ww - EDGE_MARGIN_PX - offX) / s,
-    y1: (wh - EDGE_MARGIN_PX - offY) / s
+    x0: (edgePx - offX) / s,
+    y0: (edgePx - offY) / s,
+    x1: (ww - edgePx - offX) / s,
+    y1: (wh - edgePx - offY) / s
   };
 }
 
-/* Evenly distribute n nodes around the circle.
-   Odd counts start dead-top; even counts get a half-step offset so no
-   node lands on a pure diagonal (keeps the ring from feeling like an X). */
+/* Split a label into at most two lines, breaking at the space nearest the
+   middle so both lines come out roughly even. Labels with no space stay
+   whole — we'd rather have one wide box than a mid-word break. */
+function wrapLabel(label) {
+  if (label.length <= WRAP_CHARS) return [label];
+  const spaces = [];
+  for (let i = 0; i < label.length; i++) if (label[i] === ' ') spaces.push(i);
+  if (!spaces.length) return [label];
+  const mid = label.length / 2;
+  let best = spaces[0];
+  for (const s of spaces) if (Math.abs(s - mid) < Math.abs(best - mid)) best = s;
+  return [label.slice(0, best), label.slice(best + 1)];
+}
+
+/* Box dimensions for a label, in viewBox units. */
+function nodeBox(label) {
+  const lines = wrapLabel(label);
+  const longest = lines.reduce((m, l) => Math.max(m, l.length), 0);
+  return {
+    lines,
+    w: Math.max(NODE_W_MIN, longest * CHAR_W + PAD_X * 2),
+    h: lines.length === 2 ? NODE_H_2 : NODE_H_1
+  };
+}
+
+/* Distribute n nodes evenly around the circle. Odd counts start dead-top;
+   even counts get a half-step offset so nothing lands on a pure diagonal. */
 function subAngles(n) {
   const step = 360 / n;
   const start = -90 + (n % 2 === 0 ? step / 2 : 0);
@@ -659,20 +698,40 @@ function subAngles(n) {
   return out;
 }
 
-/* How far out along `angle` the node's bounding box can travel before
-   any edge of the box crosses the safe rect. */
-function maxRadiusOnRay(angle, halfW, halfH, safe) {
+/* How far along `angle` a box of half-size (hw,hh) can travel from center
+   before any of its edges crosses the safe rect. */
+function maxRadiusOnRay(angle, hw, hh, safe) {
   const dx = Math.cos(angle), dy = Math.sin(angle);
   let r = Infinity;
-  if (dx >  0.0001) r = Math.min(r, (safe.x1 - halfW - VB_CX) / dx);
-  if (dx < -0.0001) r = Math.min(r, (safe.x0 + halfW - VB_CX) / dx);
-  if (dy >  0.0001) r = Math.min(r, (safe.y1 - halfH - VB_CY) / dy);
-  if (dy < -0.0001) r = Math.min(r, (safe.y0 + halfH - VB_CY) / dy);
+  if (dx >  0.0001) r = Math.min(r, (safe.x1 - hw - VB_CX) / dx);
+  if (dx < -0.0001) r = Math.min(r, (safe.x0 + hw - VB_CX) / dx);
+  if (dy >  0.0001) r = Math.min(r, (safe.y1 - hh - VB_CY) / dy);
+  if (dy < -0.0001) r = Math.min(r, (safe.y0 + hh - VB_CY) / dy);
   return r;
 }
 
 function rectsOverlap(a, b) {
   return a.x0 < b.x1 && a.x1 > b.x0 && a.y0 < b.y1 && a.y1 > b.y0;
+}
+
+// ── live theme accent, for anything painted OUTSIDE applyTheme ───────
+/* Sub-node hover strokes are written at event time, long after applyTheme
+   has run, so they can't use a captured color — they'd freeze whatever the
+   theme was when the board was built. These read the CURRENT theme instead.
+   Rainbow is a moving target, so we defer to its animated hue. */
+const HOVER_ALPHA = 0.8;
+const IDLE_ALPHA  = 0.35;
+
+function subNodeStroke(hovered) {
+  const t = THEMES[themeIndex];
+  const a = hovered ? HOVER_ALPHA : IDLE_ALPHA;
+  if (t && t.rainbow) return `hsla(${rainbowHue}, 65%, 45%, ${a})`;
+  // derive from the theme's solid accent hex
+  const hex = (t && t.acc) || '#0a7c8c';
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${a})`;
 }
 
 // ══════════════════════════════════════════════════════
@@ -816,68 +875,56 @@ function buildSubBoard(s) {
   [...svg.children].forEach(c => { if (c.tagName !== 'defs') svg.removeChild(c); });
 
   const items  = s.items;
-  const n      = items.length;
-  const angles = subAngles(n);
-  const safe   = safeRectVb();
+  const angles = subAngles(items.length);
   const minR   = pxToVb(MIN_RADIUS_PX);
 
-  // The WRITING links are a fixed HTML overlay in the top-left corner.
-  // Treat that corner as occupied so nodes get pulled off it.
-  const nodeDef  = activeSubId ? nodes[activeSubId] : null;
-  const hasLinks = !!(nodeDef && nodeDef.writingLinks && nodeDef.writingLinks.length);
-  let linkZone = null;
-  if (hasLinks) {
-    const wrap = document.getElementById('wrap');
-    const sc   = vbScale();
-    const offX = (wrap.offsetWidth  - 600 * sc) / 2;
-    const offY = (wrap.offsetHeight - 600 * sc) / 2;
-    // overlay occupies roughly 14..215 px across, 14..90 px down, + padding
-    const PAD = 14;
-    linkZone = {
-      x0: (0   - offX) / sc,
-      y0: (0   - offY) / sc,
-      x1: (215 + PAD - offX) / sc,
-      y1: (95  + PAD - offY) / sc
-    };
-  }
+  // Boxes are computed once — text size and wrapping never depend on the
+  // viewport, so a label doesn't reflow while you resize the window.
+  const boxes = items.map(it => nodeBox(it.l));
 
-  // Try progressively smaller fonts until every node fits inside the safe
-  // rect at or beyond the minimum radius. Stop at MIN_FONT (readability floor).
-  let font = MAX_FONT;
+  // Find the most generous edge margin that still fits every node.
+  // Walking DOWN from the ideal means desktop keeps its full 100px, and only
+  // cramped screens pay — by giving up margin, never by shrinking type.
   let placed = null;
-  for (let f = MAX_FONT; f >= MIN_FONT; f--) {
-    const charW = f * 0.62;
-    const padX  = 14;
-    const nodeH = Math.round(f * 3.2);
+  for (let edge = EDGE_MARGIN_MAX; edge >= EDGE_MARGIN_MIN; edge -= EDGE_STEP) {
+    const safe = safeRectVb(edge);
     const trial = angles.map((a, i) => {
-      const w  = Math.max(72, Math.min(230, items[i].l.length * charW + padX * 2));
-      const hw = w / 2, hh = nodeH / 2;
-      const rMax = maxRadiusOnRay(a, hw, hh, safe);
-      const r    = Math.max(minR, Math.min(rMax, 320));
-      return { a, w, h: nodeH, r, fits: rMax >= minR, item: items[i] };
+      const b = boxes[i];
+      const rMax = maxRadiusOnRay(a, b.w / 2, b.h / 2, safe);
+      return {
+        a, w: b.w, h: b.h, lines: b.lines, item: items[i],
+        r: Math.max(minR, Math.min(rMax, MAX_RADIUS_VB)),
+        fits: rMax >= minR
+      };
     });
-    if (trial.every(t => t.fits)) { placed = trial; font = f; break; }
+    if (trial.every(t => t.fits)) { placed = trial; break; }
   }
 
-  // Nothing fit even at MIN_FONT — hold the minimum radius and accept
-  // whatever clipping the viewport forces. Readability beats geometry.
+  // Even the tightest margin couldn't fit everything (very small viewport).
+  // Hold the radius floor and let boxes overhang rather than shrink the text.
   if (!placed) {
-    font = MIN_FONT;
-    const charW = MIN_FONT * 0.62;
-    const nodeH = Math.round(MIN_FONT * 3.2);
     placed = angles.map((a, i) => ({
-      a,
-      w: Math.max(72, Math.min(230, items[i].l.length * charW + 28)),
-      h: nodeH,
-      r: minR,
-      fits: false,
-      item: items[i]
+      a, w: boxes[i].w, h: boxes[i].h, lines: boxes[i].lines,
+      item: items[i], r: minR, fits: false
     }));
   }
 
-  // Pull any node that collides with the WRITING overlay inward along its
-  // own ray until it clears — floor at minR so it never invades the center.
-  if (linkZone) {
+  // The WRITING links are a fixed HTML overlay in the top-left corner.
+  // Treat that corner as occupied and pull any colliding node inward along
+  // its own ray until it clears — floored at minR so it can't invade center.
+  const nodeDef = activeSubId ? nodes[activeSubId] : null;
+  if (nodeDef && nodeDef.writingLinks && nodeDef.writingLinks.length) {
+    const wrap = document.getElementById('wrap');
+    const sc = vbScale();
+    const offX = (wrap.offsetWidth  - 600 * sc) / 2;
+    const offY = (wrap.offsetHeight - 600 * sc) / 2;
+    const PAD = 14;
+    const linkZone = {
+      x0: (0 - offX) / sc,
+      y0: (0 - offY) / sc,
+      x1: (215 + PAD - offX) / sc,
+      y1: (95  + PAD - offY) / sc
+    };
     const stepVb = pxToVb(6);
     placed.forEach(p => {
       for (let guard = 0; guard < 60; guard++) {
@@ -932,22 +979,36 @@ function buildSubBoard(s) {
     const rect = svgEl('rect', {
       x: Math.round(x - p.w / 2), y: Math.round(y - p.h / 2),
       width: Math.round(p.w), height: Math.round(p.h), rx: 3,
-      fill: '#071515', stroke: 'rgba(10,124,140,0.35)', 'stroke-width': 1,
+      fill: '#071515', stroke: subNodeStroke(false), 'stroke-width': 1,
       filter: 'url(#glb2)'
     });
-    const txt = svgEl('text', {
-      id: 'sub-l' + (i + 1), x, y,
-      'text-anchor': 'middle', 'dominant-baseline': 'central',
-      'font-size': font, fill: '#ffffff', 'font-weight': 700,
-      'font-family': "'Share Tech Mono',monospace"
-    });
-    txt.textContent = p.item.l;
-
     g.appendChild(rect);
-    g.appendChild(txt);
+
+    // One <text> per line, vertically centered as a block.
+    const n = p.lines.length;
+    p.lines.forEach((line, li) => {
+      const ly = n === 1 ? y : y - LINE_H / 2 + li * LINE_H;
+      const t = svgEl('text', {
+        x, y: ly,
+        'text-anchor': 'middle', 'dominant-baseline': 'central',
+        'font-size': NODE_FONT, fill: '#ffffff', 'font-weight': 700,
+        'font-family': "'Share Tech Mono',monospace"
+      });
+      t.textContent = line;
+      g.appendChild(t);
+    });
+
     g.addEventListener('click', () => openSubPanel(p.item));
-    g.addEventListener('mouseenter', () => rect.setAttribute('stroke', 'rgba(10,124,140,0.8)'));
-    g.addEventListener('mouseleave', () => rect.setAttribute('stroke', 'rgba(10,124,140,0.35)'));
+    // Mark the hovered rect with a class so the rainbow tick can keep
+    // repainting it at hover opacity while the hue drifts.
+    g.addEventListener('mouseenter', () => {
+      rect.classList.add('sub-hot');
+      rect.setAttribute('stroke', subNodeStroke(true));
+    });
+    g.addEventListener('mouseleave', () => {
+      rect.classList.remove('sub-hot');
+      rect.setAttribute('stroke', subNodeStroke(false));
+    });
     svg.appendChild(g);
   });
 
@@ -975,9 +1036,10 @@ const THEME_ANGLE = 45;
 const INNER_SCALE = 1.44;
 const OUTER_SCALE = 2.5;
 
-const BACK_BASE  = 44;   // px at scale 1
-const BACK_FONT  = 22;
+const BACK_BASE   = 44;   // px at scale 1
+const BACK_FONT   = 22;
 const SWATCH_BASE = 18;
+const THEMEBTN_BASE = 22;
 
 /* Button size multiplier, driven by the smaller viewport dimension.
    Clamped so buttons never vanish on a phone or balloon on a 4K display. */
@@ -1002,8 +1064,8 @@ function orbitPoint(angleDeg, scale) {
 }
 
 function placeBtn(btn, angleDeg, scale) {
+  if (!btn) return;
   const pos = orbitPoint(angleDeg, scale);
-  if (!pos) return;
   btn.style.left = pos.x + 'px';
   btn.style.top  = pos.y + 'px';
 }
@@ -1011,7 +1073,6 @@ function placeBtn(btn, angleDeg, scale) {
 function positionAllOrbitBtns() {
   const k = orbitBtnScale();
 
-  // size the nav arrow
   const back = document.getElementById('backArrow');
   if (back) {
     const bs = Math.round(BACK_BASE * k);
@@ -1020,7 +1081,6 @@ function positionAllOrbitBtns() {
     back.style.fontSize = Math.round(BACK_FONT * k) + 'px';
   }
 
-  // size the theme swatch
   const sw = document.getElementById('themeSwatch');
   if (sw) {
     const ss = Math.round(SWATCH_BASE * k);
@@ -1029,13 +1089,13 @@ function positionAllOrbitBtns() {
   }
   const tb = document.getElementById('themeBtn');
   if (tb) {
-    const ts = Math.round(22 * k);
+    const ts = Math.round(THEMEBTN_BASE * k);
     tb.style.width  = ts + 'px';
     tb.style.height = ts + 'px';
   }
 
-  // both buttons use translate(-50%,-50%), so the orbit anchor is the
-  // box center — resizing grows around the anchor with no drift.
+  // Both buttons use translate(-50%,-50%), so the orbit point is the box
+  // center — resizing grows the box around the anchor with no drift.
   placeBtn(tb, THEME_ANGLE, INNER_SCALE);
   if (currentSide !== null && back) {
     const angle = SIDE_ANGLES[currentSide] !== undefined ? SIDE_ANGLES[currentSide] : 270;
@@ -1131,8 +1191,8 @@ const THEMES = [
 
 let themeIndex = 0;
 
-// Snapshot original SVG attribute values so applyTheme always remaps
-// from originals rather than from whatever the last theme wrote.
+// Snapshot original SVG attribute values so applyTheme always remaps from
+// originals rather than from whatever the previous theme happened to write.
 let svgSnapshot = null;
 
 function snapshotSVG() {
@@ -1172,7 +1232,7 @@ function addNewElementsToSnapshot() {
   svgSnapshot._maxIdx = i - 1;
 }
 
-// Drop snapshot entries whose elements no longer exist (sub-board rebuilds).
+// Drop snapshot entries whose elements are gone (sub-board rebuilds).
 function pruneSnapshot() {
   if (!svgSnapshot) return;
   const max = svgSnapshot._maxIdx;
@@ -1222,7 +1282,11 @@ function applyTheme(t) {
     }
     if (snap.tag === 'rect') {
       if (origFill.match(/^#0[0-9a-f]/i)) el.setAttribute('fill', t.bg2);
-      if (origStroke.startsWith('rgba'))  el.setAttribute('stroke', t.ns);
+      if (origStroke.startsWith('rgba')) {
+        // a sub-node currently under the cursor keeps its hover brightness
+        el.setAttribute('stroke',
+          el.classList.contains('sub-hot') ? subNodeStroke(true) : t.ns);
+      }
       return;
     }
     if (snap.tag === 'line')    { if (origStroke.startsWith('rgba')) el.setAttribute('stroke', t.ns); return; }
@@ -1319,7 +1383,13 @@ function rainbowTick() {
       }
       if (snap.tag === 'rect') {
         if (origFill.match(/^#0[0-9a-f]/i)) el.setAttribute('fill', `hsl(${bgH},25%,5%)`);
-        if (origStroke.startsWith('rgba'))  el.setAttribute('stroke', ns);
+        if (origStroke.startsWith('rgba')) {
+          // hovered sub-node tracks the drifting hue at hover opacity,
+          // instead of being stomped back to idle every frame
+          el.setAttribute('stroke', el.classList.contains('sub-hot')
+            ? `hsla(${h}, 65%, 45%, ${HOVER_ALPHA})`
+            : ns);
+        }
         return;
       }
       if (snap.tag === 'line')    { if (origStroke.startsWith('rgba')) el.setAttribute('stroke', ns); return; }
@@ -1441,6 +1511,30 @@ function activateNode(id) {
   document.getElementById('panel').classList.add('vis');
 }
 
+/* Is `href` pointing at the same media that `embedSrc` already embeds?
+   Used to decide whether a trailing "Watch here →" link is redundant.
+   Content uses several YouTube URL shapes for the same video — youtu.be/ID,
+   watch?v=ID, live/ID, embed/ID — so compare extracted IDs, not raw strings.
+   Anything we can't identify returns false, i.e. keep the link. Better to
+   show a duplicate link than to silently swallow a real one. */
+function mediaKey(url) {
+  if (!url) return null;
+  let m;
+  // YouTube, any shape
+  m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|live\/|v\/))([A-Za-z0-9_-]{6,})/i);
+  if (m) return 'yt:' + m[1];
+  // Internet Archive details/embed
+  m = url.match(/archive\.org\/(?:details|embed)\/([^/?#]+)/i);
+  if (m) return 'ia:' + m[1];
+  return null;
+}
+
+function sameMedia(href, embedSrc) {
+  const a = mediaKey(href);
+  const b = mediaKey(embedSrc);
+  return a !== null && a === b;
+}
+
 function makeImg(src, extraStyle) {
   const wrap = document.createElement('div');
   wrap.className = 'sub-panel-img';
@@ -1489,14 +1583,24 @@ function openSubPanel(item) {
 
   if (item.body) {
     let bodyHTML = item.body.split('\n').join('<br>');
-    if (item.embed || item.localvideo) {
+
+    // A trailing link is only REDUNDANT if it points at the same media that's
+    // already embedded above. Matching on wording ("watch"/"view"/"listen")
+    // was wrong: it ate the Instagram link in ANIMATIONS, which says "View
+    // more on my instagram" but goes somewhere else entirely. Compare the
+    // destination instead — an off-site link survives any phrasing.
+    if (item.embed) {
       const parts = bodyHTML.split('<br><br>');
-      if (parts.length > 1 && parts[parts.length - 1].trim().startsWith('<a ') &&
-          /watch|view|listen/i.test(parts[parts.length - 1])) {
-        parts.pop();
-        bodyHTML = parts.join('<br><br>');
+      const last  = parts[parts.length - 1];
+      if (parts.length > 1 && last.trim().startsWith('<a ')) {
+        const hrefMatch = last.match(/href=['"]([^'"]+)['"]/i);
+        if (hrefMatch && sameMedia(hrefMatch[1], item.embed)) {
+          parts.pop();
+          bodyHTML = parts.join('<br><br>');
+        }
       }
     }
+
     const txt = document.createElement('div');
     txt.className = 'sub-panel-text';
     txt.innerHTML = bodyHTML;
