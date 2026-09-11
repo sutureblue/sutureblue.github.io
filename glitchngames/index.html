@@ -66,13 +66,18 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 .hero-subtitle{font-size:.78rem;letter-spacing:.2em;color:var(--cyan);margin-bottom:1rem;}
 .hero-date{font-size:1.35rem;line-height:2.1;color:rgba(255,255,255,.85);margin-bottom:1.5rem;font-family:var(--font);}
 
-/* TEASER TRIGGER */
+/* HERO TEASER TRIGGER */
 .teaser-card{display:flex;align-items:center;gap:.7rem;max-width:330px;margin:0 auto 1.3rem;padding:.5rem .95rem .5rem .6rem;border:1px solid rgba(23,162,184,.32);background:rgba(23,162,184,.04);border-radius:999px;cursor:pointer;transition:.2s;text-align:left;font-family:var(--font);}
 .teaser-card:hover,.teaser-card:focus-visible{border-color:var(--cyan);background:rgba(23,162,184,.1);box-shadow:0 0 16px rgba(23,162,184,.25);transform:translateY(-1px);outline:none;}
 .teaser-play{width:24px;height:24px;flex-shrink:0;border-radius:50%;border:1px solid rgba(23,162,184,.55);color:var(--cyan);display:flex;align-items:center;justify-content:center;font-size:.45rem;padding-left:2px;transition:.2s;}
 .teaser-card:hover .teaser-play{background:var(--cyan);color:#000;border-color:var(--cyan);}
 .teaser-label{font-size:.6rem;letter-spacing:.16em;color:#fff;line-height:1.5;}
 .teaser-sub{display:block;font-size:.78rem;letter-spacing:.06em;color:var(--muted);font-family:var(--body);font-weight:400;}
+
+/* VENUE ANNOUNCEMENT TRIGGER */
+.venue-announce{display:inline-flex;align-items:center;gap:.5rem;margin:.15rem auto .7rem;padding:.32rem .85rem .32rem .6rem;border:1px solid rgba(23,162,184,.26);background:rgba(23,162,184,.035);border-radius:999px;cursor:pointer;transition:.2s;font-family:var(--font);font-size:.53rem;letter-spacing:.15em;color:rgba(255,255,255,.78);white-space:nowrap;}
+.venue-announce:hover,.venue-announce:focus-visible{border-color:var(--cyan);background:rgba(23,162,184,.1);color:#fff;box-shadow:0 0 12px rgba(23,162,184,.2);outline:none;}
+.announce-dot{width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);flex-shrink:0;}
 
 .robo-section{width:100%;max-width:840px;}
 .robo-title{text-align:center;color:var(--yellow);font-size:.78rem;letter-spacing:.25em;margin-bottom:1.6rem;display:flex;align-items:center;justify-content:center;gap:.9rem;}
@@ -232,7 +237,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
   GET <s style="opacity:.55;">EARLY</s> REGULAR BIRD TICKETS
 </a>
 
-        <div class="teaser-card" role="button" tabindex="0" onclick="openModal('TEASER')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('TEASER');}">
+        <div class="teaser-card" role="button" tabindex="0" data-modal="TEASER">
           <span class="teaser-play">&#9654;</span>
           <span class="teaser-label">SEE THE ANNOUNCEMENT<span class="teaser-sub">Opens here, from Instagram</span></span>
         </div>
@@ -249,7 +254,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
       <div class="robo-section" style="text-align:center;">
         <div class="robo-title">FRIDAY EXHIBITION</div>
         <img src="assets/LoganLogo.png" alt="Logan Arcade" style="max-width:150px;width:50%;display:block;margin:.2rem auto .3rem;">
-        <a href="https://loganarcade.com/" target="_blank" rel="noopener" class="venue-link" style="text-align:center;">loganarcade.com &#x2192;</a>
+        <a href="https://loganarcade.com/" target="_blank" rel="noopener" class="venue-link" style="text-align:center;margin-bottom:.25rem;">loganarcade.com &#x2192;</a>
+        <div class="venue-announce" role="button" tabindex="0" data-modal="LOGAN ARCADE">
+          <span class="announce-dot"></span>SEE ANNOUNCEMENT
+        </div>
         <p class="event-meta">October 2, 2026 &nbsp;&middot;&nbsp; 6:00 PM &ndash; 10:00 PM</p>
 <a href="https://www.eventbrite.com/e/glitchngames-tickets-1990155999167"
    target="_blank"
@@ -315,6 +323,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
             <div class="venue-header">
               <div class="logo-slot"><img src="assets/NightCity.png" alt="Night City"></div>
               <a href="https://nightcity.games/" target="_blank" rel="noopener" class="venue-link" style="margin:0;">nightcity.games &#x2192;</a>
+              <div class="venue-announce" role="button" tabindex="0" data-modal="NIGHT CITY">
+                <span class="announce-dot"></span>SEE ANNOUNCEMENT
+              </div>
             </div>
             <div class="robo-panel">
               <p class="panel-title">DISCUSSION SESSION</p>
@@ -346,6 +357,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
             <div class="venue-header">
               <div class="logo-slot"><img src="assets/cgs.png" alt="Chicago Game Space"></div>
               <a href="https://www.chicagogamespace.com/" target="_blank" rel="noopener" class="venue-link" style="margin:0;">chicagogamespace.com &#x2192;</a>
+              <div class="venue-announce" role="button" tabindex="0" data-modal="CHICAGO GAMESPACE">
+                <span class="announce-dot"></span>SEE ANNOUNCEMENT
+              </div>
             </div>
             <div class="robo-panel">
               <p class="panel-title">SATURDAY EVENING</p>
@@ -521,13 +535,35 @@ const IMG = {
   'JAMIE FENTON':            'assets/jamie_fenton.png',
 };
 
-/* EMBEDDED POSTS — key: {title, src, link} */
+/* EMBEDDED INSTAGRAM POSTS
+   To add another: copy a block, change the key, the post code in both URLs,
+   and the title that shows in the modal bar. */
 const EMBED = {
+
   'TEASER': {
     title: 'ANNOUNCEMENT',
     src:   'https://www.instagram.com/p/DbBFXwokVi1/embed/captioned/',
     link:  'https://www.instagram.com/p/DbBFXwokVi1/'
   },
+
+  'LOGAN ARCADE': {
+    title: 'LOGAN ARCADE',
+    src:   'https://www.instagram.com/p/DdCtVTeEZXv/embed/captioned/',
+    link:  'https://www.instagram.com/p/DdCtVTeEZXv/'
+  },
+
+  'NIGHT CITY': {
+    title: 'NIGHT CITY',
+    src:   'https://www.instagram.com/p/DdEwSwiEe7p/embed/captioned/',
+    link:  'https://www.instagram.com/p/DdEwSwiEe7p/'
+  },
+
+  'CHICAGO GAMESPACE': {
+    title: 'CHICAGO GAMESPACE',
+    src:   'https://www.instagram.com/p/DdHZto2Efe7/embed/captioned/',
+    link:  'https://www.instagram.com/p/DdHZto2Efe7/'
+  },
+
 };
 
 function openModal(key){
@@ -559,6 +595,17 @@ function closeModal(){
   document.getElementById('modal-body').innerHTML = '';
 }
 function handleModalClick(e){if(e.target.id==='modal')closeModal();}
+
+/* Any element with data-modal opens that modal, by click or by keyboard */
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-modal]');
+  if(el)openModal(el.dataset.modal);
+});
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter'&&e.key!==' ')return;
+  const el=document.activeElement;
+  if(el&&el.dataset&&el.dataset.modal){e.preventDefault();openModal(el.dataset.modal);}
+});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
 /* DOT BORDER */
