@@ -177,11 +177,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 .modal-close:hover{color:#fff;}
 
 /* EMBED VARIANT OF THE MODAL */
-.modal-window.is-embed{width:min(430px,94vw);max-height:92vh;border-color:rgba(23,162,184,.35);}
+.modal-window.is-embed{width:min(420px,94vw);height:min(760px,92vh);max-height:92vh;border-color:rgba(23,162,184,.35);}
 .modal-window.is-embed .modal-bar{color:var(--cyan);border-bottom-color:rgba(23,162,184,.2);}
-.modal-window.is-embed .modal-body{padding:0;overflow:hidden;display:flex;flex-direction:column;}
-.embed-frame{width:100%;height:min(660px,72vh);border:0;display:block;background:#000;flex:1;}
-.embed-foot{flex-shrink:0;padding:.65rem 1rem;border-top:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.5);font-family:var(--body);font-size:.82rem;text-align:center;color:var(--muted);}
+.modal-window.is-embed .modal-body{padding:0;overflow:hidden;display:flex;flex-direction:column;min-height:0;}
+.embed-frame{width:100%;flex:1;min-height:0;border:0;display:block;background:#fff;}
+.embed-foot{flex-shrink:0;padding:.6rem 1rem;border-top:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.55);font-family:var(--body);font-size:.82rem;text-align:center;color:var(--muted);}
 .embed-foot a{color:var(--cyan);}
 
 .section::-webkit-scrollbar{width:2px;}
@@ -192,7 +192,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
   .friday-split{grid-template-columns:1fr;}
   .split-layout{flex-direction:column;}
   .live-events-grid{grid-template-columns:1fr;}
-  .embed-frame{height:min(600px,66vh);}
+  .modal-window.is-embed{height:92vh;}
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -234,7 +234,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 
         <div class="teaser-card" role="button" tabindex="0" onclick="openModal('TEASER')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('TEASER');}">
           <span class="teaser-play">&#9654;</span>
-          <span class="teaser-label">WATCH THE ANNOUNCEMENT<span class="teaser-sub">Plays here, from Instagram</span></span>
+          <span class="teaser-label">SEE THE ANNOUNCEMENT<span class="teaser-sub">Opens here, from Instagram</span></span>
         </div>
 
         <p class="hero-date">October 2&ndash;3, 2026<br>Chicago</p>
@@ -521,28 +521,29 @@ const IMG = {
   'JAMIE FENTON':            'assets/jamie_fenton.png',
 };
 
-/* EMBEDDED POSTS — key: [iframe src, public permalink] */
+/* EMBEDDED POSTS — key: {title, src, link} */
 const EMBED = {
-  'TEASER': [
-    'https://www.instagram.com/p/DbBFXwokVi1/embed/captioned/',
-    'https://www.instagram.com/p/DbBFXwokVi1/'
-  ],
+  'TEASER': {
+    title: 'ANNOUNCEMENT',
+    src:   'https://www.instagram.com/p/DbBFXwokVi1/embed/captioned/',
+    link:  'https://www.instagram.com/p/DbBFXwokVi1/'
+  },
 };
 
 function openModal(key){
-  const win  = document.getElementById('modal-window');
-  const bar  = document.getElementById('modal-bar');
-  const body = document.getElementById('modal-body');
+  const win   = document.getElementById('modal-window');
+  const bar   = document.getElementById('modal-bar');
+  const body  = document.getElementById('modal-body');
   const embed = EMBED[key];
 
   if(embed){
     win.classList.add('is-embed');
-    bar.textContent = 'ANNOUNCEMENT';
+    bar.textContent = embed.title || key;
     body.innerHTML =
-      `<iframe class="embed-frame" src="${embed[0]}" scrolling="no"
+      `<iframe class="embed-frame" src="${embed.src}" scrolling="auto"
                allow="encrypted-media; picture-in-picture; web-share"
                allowfullscreen title="Instagram post"></iframe>
-       <div class="embed-foot">Blank or blocked? <a href="${embed[1]}" target="_blank" rel="noopener">Open on Instagram &#x2197;</a></div>`;
+       <div class="embed-foot">Blank or blocked? <a href="${embed.link}" target="_blank" rel="noopener">Open on Instagram &#x2197;</a></div>`;
   } else {
     win.classList.remove('is-embed');
     const src = IMG[key];
@@ -554,8 +555,7 @@ function openModal(key){
   document.getElementById('modal').classList.add('open');
 }
 function closeModal(){
-  const m = document.getElementById('modal');
-  m.classList.remove('open');
+  document.getElementById('modal').classList.remove('open');
   document.getElementById('modal-body').innerHTML = '';
 }
 function handleModalClick(e){if(e.target.id==='modal')closeModal();}
