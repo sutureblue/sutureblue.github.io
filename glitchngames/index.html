@@ -189,6 +189,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 .embed-foot{flex-shrink:0;padding:.6rem 1rem;border-top:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.55);font-family:var(--body);font-size:.82rem;text-align:center;color:var(--muted);}
 .embed-foot a{color:var(--cyan);}
 
+/* WIDER EMBED FOR THE MAP */
+.modal-window.is-embed.is-wide{width:min(900px,94vw);height:min(680px,88vh);}
+
 .section::-webkit-scrollbar{width:2px;}
 .section::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);}
 
@@ -198,6 +201,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
   .split-layout{flex-direction:column;}
   .live-events-grid{grid-template-columns:1fr;}
   .modal-window.is-embed{height:92vh;}
+  .modal-window.is-embed.is-wide{height:85vh;}
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -243,6 +247,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
         </div>
 
         <p class="hero-date">October 2&ndash;3, 2026<br>Chicago</p>
+
+        <!-- MAP TRIGGER -->
+        <div class="venue-announce" role="button" tabindex="0" data-modal="MAP" style="margin:-.8rem auto 1.4rem;">
+          <span class="announce-dot"></span>VENUES &amp; NEARBY MAP
+        </div>
+        <br>
+
         <button class="btn btn-cyan" onclick="goTo(1)">CONTINUE</button>
         <p style="margin-top:.9rem;font-size:.92rem;color:rgba(255,255,255,.45);font-family:var(--body);letter-spacing:.04em;">Special Bonus Prizes for anyone who buys tickets for both <br>GLITCH'N'GAMES and <span class="robo-link" onclick="goTo(4)" style="font-size:.96rem;">Video Sync</span> in Minneapolis, Sept 26&ndash;27 &#x2197;</p>
         <p style="margin-top:.4rem;font-size:.92rem;color:rgba(255,255,255,.45);font-family:var(--body);letter-spacing:.04em;">Also: <span class="robo-link" onclick="goTo(5)" style="font-size:.96rem;">/'FU:BAR/</span> in Croatia, Oct 3 &#x2197;</p>
@@ -394,6 +405,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
           <a href="https://archive.org/details/glitch_play" target="_blank"><em>Glitch Play</em></a>.
           Until a gallery is made for this first event, <span class="robo-link" onclick="openModal('GNG1 ARTISTS')">here is a list</span> of all of the artists that participated.
         </p>
+        <p class="robo-body">
+          Getting around? Here&rsquo;s a <span class="robo-link" onclick="openModal('MAP')">map of the venues and nearby spots</span>.
+        </p>
         <p class="robo-body" style="margin-top:1rem;">
           Please reach out directly with any questions:
         </p>
@@ -535,9 +549,12 @@ const IMG = {
   'JAMIE FENTON':            'assets/jamie_fenton.png',
 };
 
-/* EMBEDDED INSTAGRAM POSTS
-   To add another: copy a block, change the key, the post code in both URLs,
-   and the title that shows in the modal bar. */
+/* EMBEDDED POSTS & MAPS
+   To add another: copy a block, change the key, the URLs, and the title
+   that shows in the modal bar. Optional:
+     linkLabel  - text of the footer link (defaults to "Open on Instagram")
+     wide       - true makes the popup wider (good for maps)
+     frameTitle - accessible name of the iframe */
 const EMBED = {
 
   'TEASER': {
@@ -564,6 +581,15 @@ const EMBED = {
     link:  'https://www.instagram.com/p/DdHZto2Efe7/'
   },
 
+  'MAP': {
+    title:      'VENUES & NEARBY',
+    src:        'https://www.google.com/maps/d/embed?mid=1tIexWGE3MYbXx76aIsOhXouLueFpWX4',
+    link:       'https://www.google.com/maps/d/viewer?mid=1tIexWGE3MYbXx76aIsOhXouLueFpWX4',
+    linkLabel:  'Open in Google Maps',
+    frameTitle: 'Map of venues and nearby places',
+    wide:       true
+  },
+
 };
 
 function openModal(key){
@@ -574,14 +600,15 @@ function openModal(key){
 
   if(embed){
     win.classList.add('is-embed');
+    win.classList.toggle('is-wide', !!embed.wide);
     bar.textContent = embed.title || key;
     body.innerHTML =
       `<iframe class="embed-frame" src="${embed.src}" scrolling="auto"
                allow="encrypted-media; picture-in-picture; web-share"
-               allowfullscreen title="Instagram post"></iframe>
-       <div class="embed-foot">Blank or blocked? <a href="${embed.link}" target="_blank" rel="noopener">Open on Instagram &#x2197;</a></div>`;
+               allowfullscreen title="${embed.frameTitle || 'Instagram post'}"></iframe>
+       <div class="embed-foot">Blank or blocked? <a href="${embed.link}" target="_blank" rel="noopener">${embed.linkLabel || 'Open on Instagram'} &#x2197;</a></div>`;
   } else {
-    win.classList.remove('is-embed');
+    win.classList.remove('is-embed','is-wide');
     const src = IMG[key];
     bar.textContent = key;
     body.innerHTML = (src ? `<img src="${src}" alt="${key}" class="modal-img">` : '')
