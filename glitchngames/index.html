@@ -66,6 +66,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 .hero-subtitle{font-size:.78rem;letter-spacing:.2em;color:var(--cyan);margin-bottom:1rem;}
 .hero-date{font-size:1.35rem;line-height:2.1;color:rgba(255,255,255,.85);margin-bottom:1.5rem;font-family:var(--font);}
 
+/* POST-EVENT UPDATE NOTICE */
+.update-notice{max-width:520px;margin:0 auto 1.4rem;padding:.75rem 1.1rem;border:1px solid rgba(60,255,155,.35);background:rgba(60,255,155,.045);border-radius:4px;}
+.update-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.6rem;letter-spacing:.2em;color:var(--green);}
+.update-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:updatePulse 1.6s ease-in-out infinite;}
+@keyframes updatePulse{0%,100%{opacity:1}50%{opacity:.25}}
+.update-text{display:block;margin-top:.35rem;font-family:var(--body);font-size:.92rem;color:rgba(255,255,255,.75);letter-spacing:.03em;line-height:1.5;}
+
 /* HERO TEASER TRIGGER */
 .teaser-card{display:flex;align-items:center;gap:.7rem;max-width:330px;margin:0 auto 1.3rem;padding:.5rem .95rem .5rem .6rem;border:1px solid rgba(23,162,184,.32);background:rgba(23,162,184,.04);border-radius:999px;cursor:pointer;transition:.2s;text-align:left;font-family:var(--font);}
 .teaser-card:hover,.teaser-card:focus-visible{border-color:var(--cyan);background:rgba(23,162,184,.1);box-shadow:0 0 16px rgba(23,162,184,.25);transform:translateY(-1px);outline:none;}
@@ -224,22 +231,22 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
     <a data-idx="3">INFO</a>
   </nav>
 
-  <span id="version">V2.0</span>
+  <span id="version">V2.1</span>
 
   <div id="content">
 
     <!-- START -->
     <div class="section" id="hero">
       <div class="hero-inner">
+
+        <!-- POST-EVENT NOTICE -->
+        <div class="update-notice" role="status">
+          <span class="update-tag"><span class="update-dot"></span>UPDATES UNDERWAY</span>
+          <span class="update-text">Thank you to everyone who came out! This site is being updated with photos, documentation, and more from the event.</span>
+        </div>
+
         <h1>GLITCH'N'GAMES</h1>
-        <p class="hero-subtitle" style="margin-bottom:1.2rem;">A multi-day exploration of glitch art and video games &mdash; exhibitions, performances, talks, competition, and installations across Chicago.</p>
-<a href="https://www.eventbrite.com/e/glitchngames-tickets-1990155999167"
-   target="_blank"
-   rel="noopener"
-   class="btn-pill"
-   style="margin-bottom:1.2rem;display:inline-block;">
-  GET <s style="opacity:.55;">EARLY</s> REGULAR BIRD TICKETS
-</a>
+        <p class="hero-subtitle" style="margin-bottom:1.2rem;">A multi-day exploration of glitch art and video games &mdash; exhibitions, performances, talks, competition, and installations that took place across Chicago.</p>
 
         <div class="teaser-card" role="button" tabindex="0" data-modal="TEASER">
           <span class="teaser-play">&#9654;</span>
@@ -255,8 +262,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
         <br>
 
         <button class="btn btn-cyan" onclick="goTo(1)">CONTINUE</button>
-        <p style="margin-top:.9rem;font-size:.92rem;color:rgba(255,255,255,.45);font-family:var(--body);letter-spacing:.04em;">Special Bonus Prizes for anyone who buys tickets for both <br>GLITCH'N'GAMES and <span class="robo-link" onclick="goTo(4)" style="font-size:.96rem;">Video Sync</span> in Minneapolis, Sept 26&ndash;27 &#x2197;</p>
-        <p style="margin-top:.4rem;font-size:.92rem;color:rgba(255,255,255,.45);font-family:var(--body);letter-spacing:.04em;">Also: <span class="robo-link" onclick="goTo(5)" style="font-size:.96rem;">/'FU:BAR/</span> in Croatia, Oct 3 &#x2197;</p>
+        <p style="margin-top:.9rem;font-size:.92rem;color:rgba(255,255,255,.45);font-family:var(--body);letter-spacing:.04em;">The weekend before: <span class="robo-link" onclick="goTo(4)" style="font-size:.96rem;">Video Sync</span> in Minneapolis, Sept 26&ndash;27 &#x2197;</p>
+        <p style="margin-top:.4rem;font-size:.92rem;color:rgba(255,255,255,.45);font-family:var(--body);letter-spacing:.04em;">Happening now: <span class="robo-link" onclick="goTo(5)" style="font-size:.96rem;">/'FU:BAR/</span> in Croatia, all this week &#x2197;</p>
       </div>
     </div>
 
@@ -270,13 +277,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
           <span class="announce-dot"></span>SEE ANNOUNCEMENT
         </div>
         <p class="event-meta">October 2, 2026 &nbsp;&middot;&nbsp; 6:00 PM &ndash; 10:00 PM</p>
-<a href="https://www.eventbrite.com/e/glitchngames-tickets-1990155999167"
-   target="_blank"
-   rel="noopener"
-   class="btn btn-yellow"
-   style="margin-bottom:1.2rem;display:inline-block;">
-  GET <s style="opacity:.55;">EARLY</s> REGULAR BIRD TICKETS
-</a>
 
         <p class="sub-heading">SPECIAL APPEARANCE</p>
         <div class="special-card is-cyan" onclick="openModal('ROB SHERIDAN')" style="padding:1.6rem;width:100%;">
@@ -341,8 +341,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
             <div class="robo-panel">
               <p class="panel-title">DISCUSSION SESSION</p>
               <p class="panel-meta">11am &ndash; 2pm</p>
-              <p class="panel-note">Free &middot; Limited Space</p>
-              <a href="https://www.eventbrite.com/e/glitchngames-day-2-morning-at-night-city-registration-2000320243696?aff=oddtdtcreator" target="_blank" rel="noopener" class="btn btn-yellow" style="font-size:.58rem;padding:.5rem 1rem;display:inline-block;margin-bottom:.8rem;text-align:center;line-height:1.4;">Click here to<br>register for the event!</a>
+              <p class="panel-note">Talks &middot; Presentations &middot; Collective Play</p>
               <div class="arcade-grid" style="grid-template-columns:1fr;margin-top:.4rem;">
                 <div class="arcade-box" onclick="openModal('ALLEN RILEY SAT')">
                   <div class="arcade-title">ALLEN RILEY</div>
@@ -395,7 +394,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
           Glitch&rsquo;N&rsquo;Games is a multi-day exploration of the shared histories and evolving cultures of glitch art and video games.
         </p>
         <p class="robo-body">
-          This second iteration, taking place across Chicago, focuses on physical engagement with systems, bringing together artists, game makers, circuit benders, and theorists through competition, installations, discussions, performances, and collaborative play.
+          This second iteration, which took place across Chicago on October 2&ndash;3, 2026, focused on physical engagement with systems, bringing together artists, game makers, circuit benders, and theorists through competition, installations, discussions, performances, and collaborative play.
         </p>
         <p class="robo-body">
           Chicago is a uniquely fitting home for this project. The city exists at a historic crossroads of both glitch art and arcade culture: from early glitch artists and educators, to Bally, Williams, and Midway, to landmark games such as Mortal Kombat and Defender. It is also home to Jamie Fenton, creator of Digital TV Dinner on the Bally Astrocade, which is widely recognized as the first glitch artwork.
@@ -406,7 +405,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
           Until a gallery is made for this first event, <span class="robo-link" onclick="openModal('GNG1 ARTISTS')">here is a list</span> of all of the artists that participated.
         </p>
         <p class="robo-body">
-          Getting around? Here&rsquo;s a <span class="robo-link" onclick="openModal('MAP')">map of the venues and nearby spots</span>.
+          Here&rsquo;s a <span class="robo-link" onclick="openModal('MAP')">map of the venues and nearby spots</span>.
         </p>
         <p class="robo-body" style="margin-top:1rem;">
           Please reach out directly with any questions:
@@ -420,10 +419,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
       <div class="robo-section" style="max-width:600px;">
         <img src="assets/videosync.png" alt="Video Sync" style="width:100%;border-radius:3px;margin-bottom:1.4rem;display:block;">
         <p class="robo-body">
-          The weekend before GLITCH&rsquo;N&rsquo;GAMES, September 26th &amp; 27th, Video Sync will be taking place in Minneapolis, Minnesota.
+          The weekend before GLITCH&rsquo;N&rsquo;GAMES, September 26th &amp; 27th, Video Sync took place in Minneapolis, Minnesota.
         </p>
         <p class="robo-body">
-          If you&rsquo;re able to attend both events, it is highly recommended.
+          A huge thank you to everyone who made it out to both events!
         </p>
         <p class="robo-body">
           Video Sync is an ongoing event series created by video artists for video artists, celebrating the toolmakers, performers, educators, and enthusiasts who explore video signals as a performative medium.
@@ -440,7 +439,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
       <div class="robo-section" style="max-width:600px;">
         <div class="robo-title">/'FU:BAR/</div>
         <p class="robo-body">
-          Also starting this weekend, on October 3rd, is /'FU:BAR/'s week-long IRL festival in Croatia.
+          Happening right now: /'FU:BAR/&rsquo;s week-long IRL festival in Croatia kicked off on October 3rd and runs all this week.
         </p>
         <p class="robo-body">
           FUBAR is the longest running digital arts festival dedicated to unstable media, having over a decade of events, workshops, presentations, and gatherings that magnetize together artists, hackers, and educators from all over the world, both online and offline. This year they&rsquo;re focused on the topic of COLLECTIVISM, and are releasing their archive!
@@ -483,41 +482,41 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#f5f5f5;f
 
 const POP = {
 
-  'ROB SHERIDAN': `<p>Creative Director and Visual Artist Rob Sheridan is known for his dark, experimental visual language and work across music, film, and digital media, often incorporating glitch aesthetics, technological disruption, and digital culture into his projects.</p><p>Sheridan will be making a special appearance at GLITCH'N'GAMES.</p><p><a href="https://rob-sheridan.com/" target="_blank" rel="noopener">rob-sheridan.com &#x2192;</a></p>`,
+  'ROB SHERIDAN': `<p>Creative Director and Visual Artist Rob Sheridan is known for his dark, experimental visual language and work across music, film, and digital media, often incorporating glitch aesthetics, technological disruption, and digital culture into his projects.</p><p>Sheridan made a special appearance at GLITCH'N'GAMES.</p><p><a href="https://rob-sheridan.com/" target="_blank" rel="noopener">rob-sheridan.com &#x2192;</a></p>`,
 
-  'ALLEN & ANDY': `<p>Together, Allen Riley and Andy Wallace created <em>Hypnogenesis</em> &mdash; a psychedelic space-shooter arcade game built through live video synthesis. Using a modified version of Andrei Jay&rsquo;s open-source Video Waaaves software, the game directly alters frame buffer values to generate emergent video feedback visuals as players navigate the experience. The tabletop console installation invites participants to physically engage with the system while exploring its shifting audiovisual environments.</p><p><a href="https://hypnogenesis.xyz" target="_blank" rel="noopener">hypnogenesis.xyz &#x2192;</a></p>`,
+  'ALLEN & ANDY': `<p>Together, Allen Riley and Andy Wallace created <em>Hypnogenesis</em> &mdash; a psychedelic space-shooter arcade game built through live video synthesis. Using a modified version of Andrei Jay&rsquo;s open-source Video Waaaves software, the game directly alters frame buffer values to generate emergent video feedback visuals as players navigate the experience. The tabletop console installation invited participants to physically engage with the system while exploring its shifting audiovisual environments.</p><p><a href="https://hypnogenesis.xyz" target="_blank" rel="noopener">hypnogenesis.xyz &#x2192;</a></p>`,
 
-  'ALLEN RILEY SAT': `<p>Artist, educator, and curator Allen Riley specializes in socially interactive video, media art, and learning.</p><p>On Saturday, Allen will discuss his dissertation, <em>The Imagination Synthesizer</em>, through a presentation exploring the history and future of video as a social medium.</p><p><a href="https://allen-riley.com/" target="_blank" rel="noopener">allen-riley.com &#x2192;</a></p>`,
+  'ALLEN RILEY SAT': `<p>Artist, educator, and curator Allen Riley specializes in socially interactive video, media art, and learning.</p><p>On Saturday, Allen discussed his dissertation, <em>The Imagination Synthesizer</em>, through a presentation exploring the history and future of video as a social medium.</p><p><a href="https://allen-riley.com/" target="_blank" rel="noopener">allen-riley.com &#x2192;</a></p>`,
 
-  'DRUGS': `<p>Turning retro consoles into visual synthesizers, the DRUGS&trade; team is all about bringing people together over impressive circuit bending feats and video games. They&rsquo;ll be doing a brand new console drop for this event, showcasing multiple installations of their builds, and Colston Byrd will be hosting the glitch game tournament!</p><p><a href="https://www.instagram.com/drugstm_" target="_blank" rel="noopener">@drugstm_ on Instagram &#x2192;</a></p>`,
+  'DRUGS': `<p>Turning retro consoles into visual synthesizers, the DRUGS&trade; team is all about bringing people together over impressive circuit bending feats and video games. They debuted a brand new console drop for this event, showcased multiple installations of their builds, and Colston Byrd hosted the glitch game tournament!</p><p><a href="https://www.instagram.com/drugstm_" target="_blank" rel="noopener">@drugstm_ on Instagram &#x2192;</a></p>`,
 
-  'DAWNIA DARKSTONE': `<p>Multidisciplinary new media artist working at the intersection of glitch, photography, and custom-built creative software, Darkstone (aka LetsGlitchIt) has made tutorials, curated major shows, and created tools that invite everyone to "break stuff beautifully." She will be showcasing an interactive experience.</p><p><a href="https://letsglitchit.art/" target="_blank" rel="noopener">letsglitchit.com &#x2192;</a></p>`,
+  'DAWNIA DARKSTONE': `<p>Multidisciplinary new media artist working at the intersection of glitch, photography, and custom-built creative software, Darkstone (aka LetsGlitchIt) has made tutorials, curated major shows, and created tools that invite everyone to "break stuff beautifully." She showcased an interactive experience.</p><p><a href="https://letsglitchit.art/" target="_blank" rel="noopener">letsglitchit.art &#x2192;</a></p>`,
 
-  'GORK': `<p>Mixed media artist Gork primarily creates digital collage, video art, animations, and circuit bent cameras. For GLITCH'N'GAMES, Gork will be doing an interactive installation and showcasing their bent PS1.</p><p><a href="https://www.gorkworx.com/" target="_blank" rel="noopener">gorkworx.com &#x2192;</a></p>`,
+  'GORK': `<p>Mixed media artist Gork primarily creates digital collage, video art, animations, and circuit bent cameras. For GLITCH'N'GAMES, Gork created an interactive installation and showcased their bent PS1.</p><p><a href="https://www.gorkworx.com/" target="_blank" rel="noopener">gorkworx.com &#x2192;</a></p>`,
 
-  'JACOB ROUFA': `<p><em>Hypnocade</em> is an interactive video synthesizer created by Jacob that combines arcade controls with experimental video art tools. His stand-up arcade cabinets will be installed on the floor for attendees to explore and play.</p><p><a href="https://hypnocade.art/" target="_blank" rel="noopener">hypnocade.art &#x2192;</a></p>`,
+  'JACOB ROUFA': `<p><em>Hypnocade</em> is an interactive video synthesizer created by Jacob that combines arcade controls with experimental video art tools. His stand-up arcade cabinets were installed on the floor for attendees to explore and play.</p><p><a href="https://hypnocade.art/" target="_blank" rel="noopener">hypnocade.art &#x2192;</a></p>`,
 
-  'JONCATES': `<p>A pioneering figure in glitch art and &ldquo;Dirty New Media,&rdquo; artist, educator, and organizer jonCates has helped shape the international discourse surrounding experimental media practices for decades.</p><p>For GLITCH'N'GAMES, he will release a new &#12298;&nbsp;glitch.school&nbsp;&#12299; publication titled <em>Glitch Art at the heart of Kentucky Route Zero</em>.</p><p><a href="https://www.patreon.com/cw/jonCates" target="_blank" rel="noopener">patreon.com/cw/jonCates &#x2192;</a></p>`,
+  'JONCATES': `<p>A pioneering figure in glitch art and &ldquo;Dirty New Media,&rdquo; artist, educator, and organizer jonCates has helped shape the international discourse surrounding experimental media practices for decades.</p><p>For GLITCH'N'GAMES, he released a new &#12298;&nbsp;glitch.school&nbsp;&#12299; publication titled <em>Glitch Art at the heart of Kentucky Route Zero</em>.</p><p><a href="https://www.patreon.com/cw/jonCates" target="_blank" rel="noopener">patreon.com/cw/jonCates &#x2192;</a></p>`,
 
-  'JONCATES SAT': `<p>Through a flash talk centered on his new &#12298;&nbsp;glitch.school&nbsp;&#12299; publication, jonCates will explore the relationship between glitch art and the acclaimed game <em>Kentucky Route Zero</em>.</p><p><a href="https://www.patreon.com/cw/jonCates" target="_blank" rel="noopener">patreon.com/cw/jonCates &#x2192;</a></p>`,
+  'JONCATES SAT': `<p>Through a flash talk centered on his new &#12298;&nbsp;glitch.school&nbsp;&#12299; publication, jonCates explored the relationship between glitch art and the acclaimed game <em>Kentucky Route Zero</em>.</p><p><a href="https://www.patreon.com/cw/jonCates" target="_blank" rel="noopener">patreon.com/cw/jonCates &#x2192;</a></p>`,
 
-  'REZIDUALVIZUALZ': `<p>Showing off the software he&rsquo;s been developing for the PS2 called <em>ProjectOBJ</em>, RezidualVizualz will be sharing his process of creating swappable OBJs, PNG textures, customizable controls, and other world-building homebrews.</p><p><a href="https://www.instagram.com/rezidualvizualz/" target="_blank" rel="noopener">@rezidualvizualz on Instagram &#x2192;</a></p>`,
+  'REZIDUALVIZUALZ': `<p>Showing off the software he&rsquo;s been developing for the PS2 called <em>ProjectOBJ</em>, RezidualVizualz shared his process of creating swappable OBJs, PNG textures, customizable controls, and other world-building homebrews.</p><p><a href="https://www.instagram.com/rezidualvizualz/" target="_blank" rel="noopener">@rezidualvizualz on Instagram &#x2192;</a></p>`,
 
-  'REZIDUALVIZUALZ SAT': `<p>RezidualVizualz will present a more in-depth demonstration of <em>ProjectOBJ</em>, exploring his process of creating swappable OBJs, PNG textures, customizable controls, and other experimental worldbuilding tools for the PS2.</p><p><a href="https://www.instagram.com/rezidualvizualz/" target="_blank" rel="noopener">@rezidualvizualz on Instagram &#x2192;</a></p>`,
+  'REZIDUALVIZUALZ SAT': `<p>RezidualVizualz presented a more in-depth demonstration of <em>ProjectOBJ</em>, exploring his process of creating swappable OBJs, PNG textures, customizable controls, and other experimental worldbuilding tools for the PS2.</p><p><a href="https://www.instagram.com/rezidualvizualz/" target="_blank" rel="noopener">@rezidualvizualz on Instagram &#x2192;</a></p>`,
 
-  'JAMES CONNOLLY': `<p>James Connolly is a video and new media artist who creates custom systems hybridizing analog and digital technologies. He will install his CRT Flux Phaser synthesizer, which opens up the electromagnetic materiality of cathode ray tubes for experimental exploration and play through digital algorithms.</p><p><a href="https://jameshconnolly.com/" target="_blank" rel="noopener">jameshconnolly.com &#x2192;</a></p>`,
+  'JAMES CONNOLLY': `<p>James Connolly is a video and new media artist who creates custom systems hybridizing analog and digital technologies. He installed his CRT Flux Phaser synthesizer, which opens up the electromagnetic materiality of cathode ray tubes for experimental exploration and play through digital algorithms.</p><p><a href="https://jameshconnolly.com/" target="_blank" rel="noopener">jameshconnolly.com &#x2192;</a></p>`,
 
-  'SKY GOODMAN': `<p>Multimedia artist, poet, and educator Sky Goodman&rsquo;s immersive works explore glitch aesthetics, virtual reality, and experimental media technologies. Several pieces of theirs that were created in VR will be on display during the exhibition.</p><p><a href="https://skygoodman.net/" target="_blank" rel="noopener">skygoodman.net &#x2192;</a></p>`,
+  'SKY GOODMAN': `<p>Multimedia artist, poet, and educator Sky Goodman&rsquo;s immersive works explore glitch aesthetics, virtual reality, and experimental media technologies. Several of their pieces created in VR were on display during the exhibition.</p><p><a href="https://skygoodman.net/" target="_blank" rel="noopener">skygoodman.net &#x2192;</a></p>`,
 
-  'THORNE BRANDT': `<p>Creative technologist and Director of Digital Art Demo Space (D.A.D.S.), Brandt has spent years hosting community showcases supporting interactive digital media, all the while making incredible works of his own. He will be exhibiting an interactive piece that enables the audience to play with the shape of the music it creates.</p><p><a href="https://thornebrandt.com/" target="_blank" rel="noopener">thornebrandt.com &#x2192;</a></p>`,
+  'THORNE BRANDT': `<p>Creative technologist and Director of Digital Art Demo Space (D.A.D.S.), Brandt has spent years hosting community showcases supporting interactive digital media, all the while making incredible works of his own. He exhibited an interactive piece that enabled the audience to play with the shape of the music it created.</p><p><a href="https://thornebrandt.com/" target="_blank" rel="noopener">thornebrandt.com &#x2192;</a></p>`,
 
   'COCOJOEY': `<p>Known for blending electronic, metal, jazz, and experimental music, Cocojoey combines chaotic, high-energy sounds and rhythms with playful production. Some of their songs are inspired by the games they love, and every performance transforms into an immersive spectacle that is as theatrical as it is sonically explosive.</p><p><a href="https://cocojoey.bandcamp.com/" target="_blank" rel="noopener">cocojoey.bandcamp.com &#x2192;</a></p>`,
 
-  'ROYB0T & SUTUREBLUE': `<p>Using a game made specifically for this event, SutureBlue will be performing a loosely choreographed playthrough while royb0t does all of the music and visual effects live.</p><p>They haven&rsquo;t performed together since early 2019 and are looking to make this their best show yet!</p><p><a href="https://www.youtube.com/watch?v=R0VyONd6Eko" target="_blank" rel="noopener">Watch on YouTube &#x2192;</a></p>`,
+  'ROYB0T & SUTUREBLUE': `<p>Using a game made specifically for this event, SutureBlue performed a loosely choreographed playthrough while royb0t did all of the music and visual effects live.</p><p>It was their first show together since early 2019.</p><p><em>Recording coming soon.</em></p><p><a href="https://www.youtube.com/watch?v=R0VyONd6Eko" target="_blank" rel="noopener">Watch on YouTube &#x2192;</a></p>`,
 
-  'GLITCH GAME COMPETITION': `<p>The Glitch Game Competition takes place on a circuit bent DRUGS&trade; console, hosted by Colston Byrd of the DRUGS&trade; team.</p><p>More information on how to sign up and prizes will be announced closer to the date.</p>`,
+  'GLITCH GAME COMPETITION': `<p>The Glitch Game Competition took place on a circuit bent DRUGS&trade; console, hosted by Colston Byrd of the DRUGS&trade; team.</p><p>Players competed for merch and custom-made pins awarded to 1st, 2nd, and 3rd place.</p>`,
 
-  'DISCUSSION GAME': `<p>An experimental discussion format that visualizes collective thinking. Guided by Nick Briz &amp; Bee Nix using a deck of question prompts, participants connect stories and ideas into a branching network of relationships that grows throughout the session.</p><p><a href="https://nickbriz.com/" target="_blank" rel="noopener">nickbriz.com &#x2192;</a></p><p><a href="https://suture.blue/" target="_blank" rel="noopener">suture.blue &#x2192;</a></p>`,
+  'DISCUSSION GAME': `<p>An experimental discussion format that visualizes collective thinking. Guided by Nick Briz &amp; Bee Nix using a deck of question prompts, participants connected stories and ideas into a branching network of relationships that grew throughout the session.</p><p><a href="https://nickbriz.com/" target="_blank" rel="noopener">nickbriz.com &#x2192;</a></p><p><a href="https://suture.blue/" target="_blank" rel="noopener">suture.blue &#x2192;</a></p>`,
 
 
   'GNG1 ARTISTS': `<div style="columns:2;column-gap:1.2rem;font-family:var(--body);font-size:.95rem;line-height:2.1;">Big Pauper<br>Catie Reynolds<br>Danyrus<br>Dawnia Darkstone<br>Drain<br>DRUGS_TM<br>Eddie Lohmeyer<br>Estelle Flores<br>Geist<br>Hellmalware<br>Jael Whiteney Brothers<br>Jamie Fenton<br>James Usill<br>jpupper<br>jonCates<br>JPEGSTRIPES<br>Kaspar Ravel<br>Kevin Mercer<br>Mati&aacute;s Vilaplana Stark<br>Max Capacity<br>Mazin<br>Micah Alhadeff<br>Mony&eacute; Ford<br>Nick Briz<br>Nilson Carroll<br>Ras Alhague<br>Sabato Visconti<br>sgt_slaughtermelon<br>Sky Goodman<br>Suture Blue<br>Thorne Brandt<br>Viscous</div>`,
