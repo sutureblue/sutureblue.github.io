@@ -1242,17 +1242,16 @@ function applyTheme(t) {
   paintSVG(t);
   paintChrome(t);
   const sw = document.getElementById('themeSwatch');
-  if (t.rainbow) {
-    sw.classList.add('rainbow');
-    sw.style.background = 'conic-gradient(hsl(0,70%,60%), hsl(60,80%,58%), hsl(120,65%,48%), hsl(180,70%,48%), hsl(240,70%,62%), hsl(300,65%,60%), hsl(360,70%,60%))';
-  }
-  else           { sw.classList.remove('rainbow'); sw.style.background = t.swatch; sw.style.animation = ''; }
+  sw.classList.remove('rainbow');
+  sw.style.filter = '';
+  sw.style.background = t.rainbow ? RAINBOW_SWATCH : t.swatch;
 }
 
 // ======================================================
 //  RAINBOW ANIMATION
 // ======================================================
 let rainbowFrame = null;
+const RAINBOW_SWATCH = 'conic-gradient(hsl(0,70%,60%), hsl(60,80%,58%), hsl(120,65%,48%), hsl(180,70%,48%), hsl(240,70%,62%), hsl(300,65%,60%), hsl(360,70%,60%))';
 let rainbowHue = 0;
 
 function rainbowPalette(h) {
@@ -1285,9 +1284,11 @@ function rainbowTick() {
   const c = rainbowPalette(rainbowHue);
   paintSVG(c);
   paintChrome(c);
+  // the swatch keeps its rainbow wheel and slowly turns with the hue
   const sw = document.getElementById('themeSwatch');
   sw.classList.remove('rainbow');
-  sw.style.background = `hsl(${rainbowHue}, 70%, 55%)`;
+  sw.style.background = RAINBOW_SWATCH;
+  sw.style.filter = `hue-rotate(${rainbowHue}deg)`;
   rainbowFrame = requestAnimationFrame(rainbowTick);
 }
 
@@ -1298,10 +1299,10 @@ function cycleTheme() {
   themeIndex = (themeIndex + 1) % THEMES.length;
   const t = THEMES[themeIndex];
   stopRainbow();
-  // respect reduced-motion: show rainbow as a static palette
-  const still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (t.rainbow && !still) startRainbow();
-  else                     applyTheme(t);
+  // the rainbow is a slow color fade the visitor chooses, so it runs
+  // even with "reduce motion" on (nothing on the page moves)
+  if (t.rainbow) startRainbow();
+  else           applyTheme(t);
 }
 
 // ======================================================
