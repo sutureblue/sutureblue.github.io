@@ -579,7 +579,7 @@
         <text x="300" y="448" text-anchor="middle" dominant-baseline="central" font-size="11" fill="#ffffff" font-weight="700" letter-spacing="1" font-family="'Share Tech Mono',monospace">DISCUSSING</text>
       </g>
       <!-- Flavor -->
-      <g aria-hidden="true">
+      <g id="flavor" aria-hidden="true">
         <text x="56" y="48" font-family="'Share Tech Mono',monospace" font-size="9" fill="rgba(10,124,140,0.16)">VCC</text>
         <line x1="64" y1="51" x2="64" y2="62" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
         <line x1="56" y1="62" x2="72" y2="62" stroke="rgba(10,124,140,0.13)" stroke-width="1"/>
@@ -748,7 +748,7 @@ const nodes = {
           body: "Engaging with the glitches of a system is a form of play: the basis of my MFA thesis and the catalyst for GLITCH'N'GAMES, an exhibition series I produce and curate that places glitch art in the arcades and game spaces alongside the culture that produced it.\n\n<em>GNG'26</em> took place October 2–3, 2026, with sixteen artists across three venues in Logan Square, Chicago. Friday at Logan Arcade filled the arcade floor with playable installations, a glitch game tournament on a circuit-bent " + L(SITES.drugs, 'DRUGS™') + " console, a special appearance by Rob Sheridan, and live performances by royb0t x SutureBlue and Cocojoey. Saturday morning at Night City brought " + GO('discussing', 'talks') + " from " + L(SITES.allen, 'Allen Riley') + ", " + L(SITES.joncates, 'jonCates') + ", and " + L(SITES.rezidual, 'RezidualVizualz') + ", streamed with /'FU:BAR/, followed by the Discussion Game. The weekend closed at Chicago Gamespace with an evening around the work of Jamie Fenton, and Ms. GORF running publicly for the first time since 1982.\n\n<em>GNG'24</em> brought 40+ artists from more than five countries to two Pittsburgh venues, including LIKELIKE Arcade, co-organized with John Bumstead and Nick Liberatore.\n\n" + A('https://suture.blue/glitchngames/', 'Artists and documentation from GNG\'26'),
           imgPair: ['assets/GNG_26.png', 'assets/GNG_24.png'] },
         { l: "/'FU:BAR/", kind: 'FESTIVAL',
-          body: "/'FU:BAR/ is the longest-running festival dedicated to glitch art and unstable media, based in Zagreb, Croatia, and run by artists for artists since 2015. In 2026 it became the first international biennial of variable and glitch art, under the theme Collectivism.\n\nFor the 2026 biennale, I curated the online discussions and produced the podcast: five <em>Conversations on Collectivism</em>, plus the GLITCH'N'GAMES talks streamed from Chicago. You'll find them all under " + GO('discussing', 'DISCUSSING') + ".\n\nEarlier work with /'FU:BAR/ includes guided talks through the 2022 exhibition with " + L(SITES.kaspar, 'Kaspar Ravel') + ", the curatorial text " + L('https://fubar.space/2023/shades-of-precision/', 'Shades of Precision') + " (2023), and moderating " + L('https://fubar.space/2024/how-to-not-to-why-to-digital-archiving/', 'How To/Not To/Why To: Digital Archiving') + " (2024).\n\n" + A('https://fubar.space/', 'fubar.space'),
+          body: "/'FU:BAR/ is the longest-running festival dedicated to glitch art and unstable media, based in Zagreb, Croatia, and run by artists for artists since 2015. In 2026 it became the first international biennial of variable and glitch art, under the theme Collectivism.\n\nFor the 2026 biennale, I curated the online discussions and produced the podcast: five <em>Conversations on Collectivism</em>, plus the GLITCH'N'GAMES talks streamed from Chicago. You'll find them all under " + GO('discussing', 'DISCUSSING') + ".\n\nEarlier work with /'FU:BAR/ includes guided talks through the 2022 exhibition with " + L(SITES.kaspar, 'Kaspar Ravel') + ", the curatorial text " + L('https://fubar.space/2023/shades-of-precision/', 'Shades of Precision') + " (2023), moderating " + L('https://fubar.space/2024/how-to-not-to-why-to-digital-archiving/', 'How To/Not To/Why To: Digital Archiving') + " with Stanford curator Henry Lowood (2024), and " + GO('discussing', 'A.I. and Online Communities') + ", a conversation with J. Rosenbaum and Michael Betancourt.\n\n" + A('https://fubar.space/', 'fubar.space'),
           img: 'assets/FubarGAC.png' },
         { l: 'GLITCH ARTISTS COLLECTIVE', kind: 'COMMUNITY',
           body: "I've been an artist/admin/curator with GAC for over ten years. Acting as a community hub that connects glitch artists globally, several of us continue to volunteer our time to create public spaces and shared resources related to glitch art and unstable media.\n\n" + A('https://linktr.ee/glitchartistscollective', 'Learn more about glitch art and GAC'),
@@ -1142,7 +1142,7 @@ let svgSnapshot = null;
 function snapshotSVG() {
   svgSnapshot = [];
   document.querySelectorAll('#viewMain svg *').forEach(el => {
-    const snap = { el, tag: el.tagName, cls: [...el.classList] };
+    const snap = { el, tag: el.tagName, cls: [...el.classList], flavor: !!el.closest('#flavor') };
     ['fill', 'stroke', 'r'].forEach(a => {
       const v = el.getAttribute(a);
       if (v !== null) snap[a] = v;
@@ -1154,8 +1154,16 @@ function snapshotSVG() {
 /* Recolor the board. `c` holds the palette roles used below. */
 function paintSVG(c) {
   if (!svgSnapshot) snapshotSVG();
+  // VCC / GND marks: keep them faint in every theme
+  const flavor = document.getElementById('flavor');
+  if (flavor) {
+    flavor.setAttribute('opacity', '0.33');
+    flavor.querySelectorAll('line').forEach(l => l.setAttribute('stroke', c.ns));
+    flavor.querySelectorAll('text').forEach(t => t.setAttribute('fill', c.ns));
+  }
   svgSnapshot.forEach(s => {
     const el = s.el;
+    if (s.flavor) return;
     const fill = s.fill || '', stroke = s.stroke || '';
     const r = parseFloat(s.r || '0');
 
@@ -1234,7 +1242,10 @@ function applyTheme(t) {
   paintSVG(t);
   paintChrome(t);
   const sw = document.getElementById('themeSwatch');
-  if (t.rainbow) { sw.classList.add('rainbow'); sw.style.background = ''; }
+  if (t.rainbow) {
+    sw.classList.add('rainbow');
+    sw.style.background = 'conic-gradient(hsl(0,70%,60%), hsl(60,80%,58%), hsl(120,65%,48%), hsl(180,70%,48%), hsl(240,70%,62%), hsl(300,65%,60%), hsl(360,70%,60%))';
+  }
   else           { sw.classList.remove('rainbow'); sw.style.background = t.swatch; sw.style.animation = ''; }
 }
 
