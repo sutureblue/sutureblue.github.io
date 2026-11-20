@@ -372,13 +372,14 @@
       display: grid;
       gap: 14px;
       width: 100%;
-      max-width: 860px;
+      max-width: 720px;
       max-height: 100%;
       overflow-y: auto;
       padding: 4px;
       scrollbar-width: thin;
       scrollbar-color: var(--sp-acc, rgba(10,124,140,0.4)) transparent;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      /* at most 3 cards per row (fewer on narrow screens) */
+      grid-template-columns: repeat(auto-fill, minmax(max(150px, calc((100% - 28px) / 3)), 1fr));
       /* keep rows at full size so the grid scrolls instead of squashing
          cells (aspect-ratio + overflow:hidden lets thumbnails collapse) */
       grid-auto-rows: max-content;
