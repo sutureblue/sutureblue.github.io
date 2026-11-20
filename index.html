@@ -719,14 +719,20 @@ const nodes = {
           embed: 'https://archive.org/embed/bee-nix-colour-organ', imgBelow: 'assets/ColourOrgan.png' },
         { l: 'UNCANNY SCENE', kind: 'VIRTUAL',
           body: "An Uncanny Scene is a virtual environment exploring the aesthetic of curious discomfort, where familiar elements become estranged.\n\n<em>Built in Unreal Engine</em>, with all Blueprint scripting by me.",
-          embed: 'https://archive.org/embed/bee-nix-an-uncanny-scene' }
+          embed: 'https://archive.org/embed/bee-nix-an-uncanny-scene', thumb: 'assets/UncannyScene.png' },
+        { l: 'EXQUISITE GLITCH 2.1 [COVID-19 EDITION]', kind: 'COLLAB VIDEO',
+          body: "A collective video by more than twenty glitch artists, made as the COVID-19 pandemic began, as an attempt to capture a collective, authentic feeling of that moment.\n\nI helped put it together and edited the video.",
+          embed: 'https://player.vimeo.com/video/408396440', thumb: 'assets/EG21.png' },
+        { l: 'REJECTING INSTRUCTION [EG2.0]', kind: 'COLLAB VIDEO',
+          body: "A collaborative Exquisite Glitch video by glitch artists that remixes A Computer Glossary, the Eames Office's 1968 educational film, and parodies its oversimplified take on computer science.\n\nI contributed several segments, glitching and rotoscoping over the footage.",
+          embed: 'https://player.vimeo.com/video/263914519', thumb: 'assets/EG20.png' }
       ]},
       { label: 'WRITING', items: [
-        { l: 'GLITCH PLAY', kind: 'THESIS',
+        { l: 'GLITCH PLAY', kind: 'THESIS', thumb: 'assets/GlitchPlay.png',
           body: "Glitch Play is my MFA thesis in Interactive Media and Game Development. It investigates engaging with glitches as a form of play that reveals, and enables us to renegotiate, the structure of digital systems. It's also the premise behind GLITCH'N'GAMES.\n\n" + A('https://archive.org/details/glitch_play', 'Read the full thesis') },
-        { l: 'THE ERROR AS A FORM OF ART', kind: 'INTERVIEW',
+        { l: 'THE ERROR AS A FORM OF ART', kind: 'INTERVIEW', thumb: 'assets/ErrorAsArt.png',
           body: "The Error as a Form of Art: an interview with Mangrovia.\n\n" + A('https://mangrovia.info/en/glitch-art-error/', 'Read the full piece') },
-        { l: 'SHADES OF PRECISION', kind: 'ESSAY',
+        { l: 'SHADES OF PRECISION', kind: 'ESSAY', thumb: 'assets/ShadesOfPrecision.png',
           body: "Shades of Precision is a curatorial text written for the /'FU:BAR/ 2023 exhibition. It looks at the idea that precision runs against the spirit of glitch, and argues that, once understood, precision is a deliberate tool that lets an artist interlace disorder with ingenuity.\n\n" + A('https://fubar.space/2023/shades-of-precision/', 'Read the full piece') }
       ]}
     ]
@@ -762,7 +768,7 @@ const nodes = {
     desc: "Recorded conversations with artists, theorists, organizers, and community members.\n\nThese happen through my work with /'FU:BAR/, where I curate the online discussions, Glitch Artists Collective, and GLITCH'N'GAMES.",
     traces: ['tr-discussing'],
     sections: [
-      { label: "/'FU:BAR/ 2K26 · CONVERSATIONS ON COLLECTIVISM", items: [
+      { label: "/'FU:BAR/ 2K26 · CONVERSATIONS ON COLLECTIVISM \u00b7 RECORDED & EDITED BY ME", items: [
         { l: 'RÉGINE DEBATTY', kind: 'TALK', yt: VIDEOS.fubar_regine,
           body: "<em>We Just Need to Coordinate.</em> Writer, curator, and critic Régine Debatty, the blogger behind We Make Money Not Art since 2004, on two decades of writing about art and technology, and what it would take for scattered acts of resistance to become collective.\n\n" + A('https://we-make-money-not-art.com/', 'We Make Money Not Art') + watchLine(VIDEOS.fubar_regine, PLAYLISTS.fubar2k26) },
         { l: 'FREAKSCENE', kind: 'TALK', yt: VIDEOS.fubar_freakscene,
@@ -774,13 +780,13 @@ const nodes = {
         { l: 'GEERT LOVINK', kind: 'TALK', yt: VIDEOS.fubar_lovink,
           body: "<em>Free Cooperation.</em> Geert Lovink of the Institute of Network Cultures on free cooperation, and how groups can organize beyond the platforms.\n\nI first came to Geert's work through The ABC of Tactical Media, and his writing on networks and internet criticism has shaped how I think about the spaces we build online and off.\n\n" + A('http://www.networkcultures.org/', 'Institute of Network Cultures') + watchLine(VIDEOS.fubar_lovink, PLAYLISTS.fubar2k26) }
       ]},
-      { label: "GLITCH'N'GAMES 2026 · TALKS AT NIGHT CITY", items: [
+      { label: "GLITCH'N'GAMES 2026 · TALKS AT NIGHT CITY \u00b7 RECORDED & EDITED BY ME", items: [
         { l: 'ALLEN RILEY', kind: 'TALK', yt: VIDEOS.gng_allen,
-          body: "<em>The Imagination Synthesizer.</em> Artist, game designer, and UC Santa Cruz PhD candidate " + L(SITES.allen, 'Allen Riley') + " shares research on the history and future of video as a social medium: how its capacity for feedback across time and space made it the core of mediated social life, and what that means as infrastructure shifts toward AI and surveillance.\n\nStreamed with /'FU:BAR/.\n\n" + A(SITES.allen, 'allen-riley.com') + watchLine(VIDEOS.gng_allen, PLAYLISTS.gng26) },
+          body: "<em>The Imagination Synthesizer.</em> Artist, game designer, and UC Santa Cruz PhD candidate Allen Riley shares research on the history and future of video as a social medium: how its capacity for feedback across time and space made it the core of mediated social life, and what that means as infrastructure shifts toward AI and surveillance.\n\nStreamed with /'FU:BAR/.\n\n" + A(SITES.allen, 'allen-riley.com') + watchLine(VIDEOS.gng_allen, PLAYLISTS.gng26) },
         { l: 'jonCates', kind: 'TALK', yt: VIDEOS.gng_joncates,
-          body: "<em>Glitch Art at the Heart of Kentucky Route Zero.</em> " + L(SITES.joncates, 'jonCates') + " on the glitch art running through Kentucky Route Zero, presented alongside the release of his new publication.\n\nStreamed with /'FU:BAR/.\n\n" + A(SITES.joncates, 'glitch.school') + watchLine(VIDEOS.gng_joncates, PLAYLISTS.gng26) },
+          body: "<em>Glitch Art at the Heart of Kentucky Route Zero.</em> jonCates on the glitch art running through Kentucky Route Zero, presented alongside the release of his new publication.\n\nStreamed with /'FU:BAR/.\n\n" + A(SITES.joncates, 'glitch.school') + watchLine(VIDEOS.gng_joncates, PLAYLISTS.gng26) },
         { l: 'REZIDUALVIZUALZ', kind: 'TALK', yt: VIDEOS.gng_rezidual,
-          body: "<em>Building and Glitching a PlayStation 2 from Scratch.</em> " + L(SITES.rezidual, 'RezidualVizualz') + " of " + L(SITES.drugs, 'DRUGS™') + " takes a deeper dive into Project OBJ for PS2.\n\nStreamed with /'FU:BAR/.\n\n" + A(SITES.rezidual, 'RezidualVizualz on Instagram') + watchLine(VIDEOS.gng_rezidual, PLAYLISTS.gng26) }
+          body: "<em>Building and Glitching a PlayStation 2 from Scratch.</em> RezidualVizualz of DRUGS™ takes a deeper dive into Project OBJ for PS2.\n\nStreamed with /'FU:BAR/.\n\n" + A(SITES.rezidual, 'RezidualVizualz on Instagram') + watchLine(VIDEOS.gng_rezidual, PLAYLISTS.gng26) }
       ]},
       { label: 'EARLIER CONVERSATIONS', items: [
         { l: 'HERE WE ARE', kind: 'ROUNDTABLE',
